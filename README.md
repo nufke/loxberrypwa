@@ -6,7 +6,7 @@ This is an [Ionic](https://ionicframework.com/) based PWA to be installed on the
 
 **NOTE: The current version is not production ready.**
 
-## installation
+## Installation
 
 Make sure you have the `nodejs`, `Ionic`, `Angular` and `http-server` packages installed
 ```

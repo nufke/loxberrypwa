@@ -1,0 +1,36 @@
+ion-card {
+  margin: 0;
+  border-radius: 5px;
+}
+
+ion-card-content {
+  margin: 0;
+  padding: 0;
+}
+
+ion-item {
+  --inner-border-width: 0px;
+  --padding-start: 10px;
+  --padding-end: 3px;
+  --inner-padding-end: 10px;
+  --color: var(--ion-text-color, #2c2c2c);
+}
+
+ion-icon {
+  margin: 0 auto; // center
+  font-size: 32px;
+  margin-top: 20px; // TODO vertial align
+}
+
+ion-label {
+  margin: 0;
+  
+  h1 {
+    font-size: 16px;
+    line-height: 1.2;
+  }  
+  h2 {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+}

@@ -1,0 +1,55 @@
+ion-card {
+  margin: 0;
+  border-radius: 5px;
+}
+
+ion-card-content {
+  margin: 0;
+  padding: 0;
+}
+
+ion-item {
+  --inner-border-width: 0px;
+  --padding-start: 10px;
+  --padding-end: 3px;
+  --inner-padding-end: 3px;
+  --color: var(--ion-text-color, #2c2c2c);
+  margin: 10px 0 10px 0;
+}
+
+ion-icon {
+  margin: 0 auto; // center
+  padding: 0;
+}
+
+ion-label {
+  margin: 0 0 0 10px;
+
+  h1 {
+    font-size: 16px;
+    line-height: 1.2;
+  }  
+  h2 {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+}
+
+ion-toggle {
+  margin-right: 10px;
+}
+
+ion-fab-button {
+  margin-left: 2px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  --border-radius: 40px;
+  --background: var(--ion-avatar-bg-color, #d7d8da);
+  --box-shadow: 0px;
+  --background-activated:var(--ion-color-primary, #000000);
+  --background-activated-opacity: 100%;
+}
+
+.ion-activated {
+  --transform: scale(1.0); // disable animation of dab button
+}
