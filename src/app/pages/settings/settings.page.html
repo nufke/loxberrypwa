@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form (ngSubmit)="save_settings()" [formGroup]="credentials">
+    <div class="input-group">
+      <ion-item>
+        <ion-label position="floating" color="medium">LoxBerry MQTT Broker IP Address</ion-label>
+        <ion-input placeholder="IP Address" formControlName="mqtt_ipaddress"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" color="medium">LoxBerry MQTT Broker Websocket Port</ion-label>
+        <ion-input placeholder="Port" formControlName="mqtt_port"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" color="medium">LoxBerry MQTT Broker Username</ion-label>
+        <ion-input placeholder="Username" formControlName="mqtt_username"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" color="medium">LoxBerry MQTT Broker Password</ion-label>
+        <ion-input type="password" placeholder="Password" formControlName="mqtt_passw"></ion-input>
+      </ion-item>
+    </div>
+    <ion-button type="submit" expand="block" [disabled]="!credentials.valid">Save settings</ion-button>
+  </form>
+</ion-content>

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { IMqttMessage, MqttService } from 'ngx-mqtt';
+import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { util } from 'node-forge' // TODO check package
 import { Control, Category, Room } from '../interfaces/datamodel'
+import { StorageService } from '../services/storage.service';
 
 @Injectable({  
   providedIn: 'root'
@@ -20,12 +21,11 @@ export class LoxBerry {
  
   private registered_topics: string[] = [];
   
-  private mqttUsername: string = '';
-  private mqttPW: string = '';
-  private mqttPort: string = '';
-  private loxberryIP: string = '';
-
-  private mqttConnected: boolean = false;
+  private loxberryMqttIP: string = '';
+  private loxberryMqttPort: string = '';
+  private loxberryMqttUsername: string = '';
+  private loxberryMqttPassw: string = '';
+  private loxberryMqttConnected: boolean = false;
 
   // TODO move to app configuration
   private registered_topic_prefix = 'loxberry/app';
@@ -43,29 +43,45 @@ export class LoxBerry {
   }
 
   constructor(private http: HttpClient,
-              private mqttService: MqttService ) 
+    private mqttService: MqttService,
+    private storageService: StorageService)
   {
-    // TODO fetch data from LoxBerry (localhost)
-    this.loxberryIP = '127.0.0.1'; 
-    this.mqttUsername = 'myname';
-    this.mqttPort = '12';
-    this.mqttPW = 'mypw';
+    this.storageService.getSettings().subscribe( settings => { 
+      if (settings) {
+        this.loxberryMqttIP = settings.loxberryMqttIP;
+        this.loxberryMqttPort = settings.loxberryMqttPort;
+        this.loxberryMqttUsername = settings.loxberryMqttUsername;
+        this.loxberryMqttPassw = settings.loxberryMqttPassw;
 
-    this.connectToMqtt();
-    this.registerTopic(this.registered_topic_prefix+'/settings/set');
+        // only connect if all configuration options are valid
+        if (!this.loxberryMqttConnected 
+             && this.loxberryMqttUsername 
+             && this.loxberryMqttPassw 
+             && this.loxberryMqttIP 
+             && this.loxberryMqttPort) { 
+          this.connectToMqtt();
+          this.registerTopic(this.registered_topic_prefix+'/settings/set');
+        }
+      }
+    });
+
+    this.mqttService.state.subscribe((s: MqttConnectionState) => {
+      const status = s === MqttConnectionState.CONNECTED ? 'connected' : 'disconnected';
+      console.log('LoxBerry Mqtt client connection status: ', status);
+  });
   }
 
   private connectToMqtt() 
   {
-    console.log('connectToMqtt');
+    console.log('Connecting to LoxBerry Mqtt Broker...');
     this.mqttService.connect(
     {
-      username: this.mqttUsername,
-      password: this.mqttPW,
-      hostname: this.loxberryIP,
-      port: Number(this.mqttPort)
+      username: this.loxberryMqttUsername,
+      password: this.loxberryMqttPassw,
+      hostname: this.loxberryMqttIP,
+      port: Number(this.loxberryMqttPort)
     });
-    this.mqttConnected = true;
+    this.loxberryMqttConnected = true;
   }
 
   private findTopic(data: any, val:string) {
@@ -76,10 +92,13 @@ export class LoxBerry {
   }
 
   private registerTopic(topic: string) {
+    console.log('Register to topic: ', topic);
     this.subscription.push( this.mqttService.observe(topic)
       .subscribe((message: IMqttMessage) => {
         let mqtt_topic = message.topic.substring(0, message.topic.length - 5); // trim last characters from string
         let msg = message.payload.toString();
+        console.log('topic received:', msg);
+
         if (msg.length == 0 )
           this.flushData();
         else
@@ -139,10 +158,10 @@ export class LoxBerry {
     this.categoriesSubject.next(this.categories); 
     this.roomsSubject.next(this.rooms); 
 
-    let control_sub_topics = [ "/name", "/icon/name", "/icon/href", "/icon/color",
+    let control_sub_topics = [ "/name", "/icon/href", "/icon/color",
        "/type", "/category", "/room", "/is_favorite", "/is_visible", "/is_protected", "/order",
        "/state/value", "/state/format", "/state/color" ];
-    let cat_room_sub_topics = [ "/name", "/icon/name", "/icon/href", "/icon/color", "/image",
+    let cat_room_sub_topics = [ "/name", "/icon/href", "/icon/color", "/image",
       "/is_visible", "/is_protected", "/order" ];
 
     this.registerSubTopics(this.controls, this.controlsSubject, 'control', control_sub_topics);

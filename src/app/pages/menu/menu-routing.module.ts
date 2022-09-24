@@ -8,6 +8,10 @@ const routes: Routes = [
     component: MenuPage,
     children: [
       {
+        path: 'settings',
+        loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
+      },
+      {
         path: 'about',
         loadChildren: () => import('../about/about.module').then(m => m.AboutPageModule)
       },

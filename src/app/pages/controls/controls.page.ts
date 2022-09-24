@@ -14,7 +14,7 @@ export class ControlsPage implements OnInit, OnDestroy {
   public controls: Control[] = [];
   public categories: Category[] = [];
   public rooms: Room[] = [];
-  
+
   public items: any[];
   
   private filtered_categories: string[];
