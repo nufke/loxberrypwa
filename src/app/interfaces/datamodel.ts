@@ -2,8 +2,7 @@ export interface Control {
   topic: string,
   name: string,
   icon: {
-    name: string,
-    href?: string,
+    href: string,
     color?: string
   }
   type: string,
@@ -27,11 +26,10 @@ export interface Category {
   topic: string,
   name: string,
   icon: {
-    name: string,
-    href?: string,
+    href: string,
     color?: string
   }
-  image: string,
+  image?: string,
   is_visible?: Boolean,
   is_protected?: Boolean,
   order?: number
@@ -41,11 +39,10 @@ export interface Room {
   topic: string,
   name: string,
   icon: {
-    name: string,
-    href?: string,
+    href: string,
     color?: string
   }
-  image: string,
+  image?: string,
   is_visible?: Boolean,
   is_protected?: Boolean,
   order?: number

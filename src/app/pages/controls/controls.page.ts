@@ -47,18 +47,18 @@ export class ControlsPage implements OnInit, OnDestroy {
     }
 
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
-    this.controls = controls;
+      this.controls = controls;
 
-    this.filtered_categories = controls
-      .map(item => item.category )
-      .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
+      this.filtered_categories = controls
+        .map(item => item.category )
+        .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
 
-    this.filtered_rooms = controls
-      .map(item => item.room )
-      .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
+      this.filtered_rooms = controls
+        .map(item => item.room )
+        .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
 
-    this.updateControlState(controls);
-  });
+      this.updateControlState(controls);
+    });
     
     this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories
@@ -202,7 +202,7 @@ export class ControlsPage implements OnInit, OnDestroy {
     else {
       control.state.value = "1";
     }
-    this.LoxBerryService.sendMessage(control);
+    this.LoxBerryService.sendMessage(control); 
   }
 
 }

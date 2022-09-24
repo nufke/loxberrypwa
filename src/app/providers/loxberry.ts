@@ -107,6 +107,7 @@ export class LoxBerry {
   }
 
   private flushData() {
+    console.log("flush structure...");
     this.controls = [];
     this.categories = [];
     this.rooms = [];
