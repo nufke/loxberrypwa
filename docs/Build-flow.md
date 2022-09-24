@@ -1,3 +1,5 @@
+# Build flow
+
 Make sure you have the `nodejs`, `Ionic`, `Angular` and `http-server` packages installed
 ```
 npm i -g @ionic/cli

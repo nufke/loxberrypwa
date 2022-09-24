@@ -6,7 +6,7 @@ This is an [Ionic](https://ionicframework.com/) based PWA to be installed on the
 
 This App will interact with the LoxBerry MQTT Broker to enable the creation of a dynamic user interface with contols defined per rooms and category. The controls defined in this App will get their own MQTT topic and control interface, enabling interaction and integration with other  platforms such as Node-RED or IOBroker.
 
-The concept of a Progressive Web App is used to offer a light-weight development and deployment platform. Obviously, the build flow could be extended to create a stand-alone app for mobile usage.
+The concept of a Progressive Web App is used to offer a light-weight development and deployment platform. Obviously, the build flow could be extended to create a stand-alone app for mobile or desktop usage.
 
 **NOTE: The current version is not production ready.**
 
@@ -17,8 +17,8 @@ Make sure you have the `nodejs`, `Ionic`, `Angular` and `http-server` packages i
 npm i -g @ionic/cli
 npm i -g @angular/cli
 npm i -g http-server
-
 ```
+
 Clone the repository:
 ```
 git clone https://github.com/nufke/loxberrypwa.git
