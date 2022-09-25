@@ -1,25 +1,50 @@
 # Build flow
 
-Make sure you have the `nodejs`, `Ionic`, `Angular` and `http-server` packages installed
+Make sure you have the packages `nodejs`, `Ionic`, `Angular` and `http-server` installed:
 ```
 npm i -g @ionic/cli
 npm i -g @angular/cli
 npm i -g http-server
-
 ```
-Clone the repository:
+
+Clone this repository:
 ```
 git clone https://github.com/nufke/loxberrypwa.git
 ```
 
-When you would like to use local icons and images, you can store them in the directories `loxberrypwa/src/assets/icons` and `loxberrypwa/src/assets/images` and reference to these directories in the JSON structure, see this [example](https://github.com/nufke/loxberrypwa/wiki/Example). 
+## Build and test the PWA
 
-Build the web package and launch a web server:
+You can build and test the PWA as follows:
 ```
 cd loxberrypwa
 npm i
 ionic build --prod
-http-server www
+http-server -p 8080 www
 ```
 
-NOTE: You can build the PWA on your preferred platform (e.g. Linux desktop) and copy the `www` directory to your LoxBerry / Raspberry Pi. In this case, the minimal requirement for the LoxBerry / Raspberry Pi is to have `nodejs` and `http-server` available.
+The PWA is now accessible for testing via a web-browser at `http://localhost:8080`.
+
+## Configure the App and load a structure via MQTT
+
+First, the MQTT settings should be configured. Open the menu `Settings` and specify the LoxBerry IP address (which is also the MQTT broker IP address), the MQTT broker websocket port, username and password. If necessary, check the MQTT Gateway (2.x) settings on your LoxBerry.  
+
+After the configuration, you can 'upload' the controls, rooms and categories to the App, by sending a JSON structure to the MQTT topic `/loxberry/app/settings/set`:
+```
+/loxberry/app/settings/set     -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }  
+```  
+An [example](https://github.com/nufke/loxberrypwa/wiki/Example) is given on the wiki. The data model of the JSON obects is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model).
+
+After sending the JSON structure, you should see all elements in the App. You can make updates to any of the elements in the JSON structure at any time, by using the same MQTT topic `/loxberry/app/settings/set`. The updates are incremental, which means changes to existing objects will be changed or overridden and old objects remain available. To flush all elements in the App, an empty string message should be sent to `/loxberry/app/settings/set`.
+
+When you would like to use local icons and images, you can store them in the directories `assets/icons` and `assets/images` and reference to these directories in the JSON structure, see the [example](https://github.com/nufke/loxberrypwa/wiki/Example).
+Alternatively, you can also make use of URLs to your favorite icons and images in the JSON structure, e.g. `http:/myserver.org/my_image.svg`.
+
+**TIP**: It is recommended to reuse the icons stored on your Loxone Miniserver, located in `<miniserver IP>/web/images.zip`.
+
+## Deploy the PWA
+
+After building and testing the PWA on your development platform (e.g. Linux desktop), copy the `www` directory to your production server (e.g. LoxBerry or Raspberry Pi) and update the configuration of your webserver (e.g. Apache2) to get access to PWA. Alternatively, you could use `nodejs` and `http-server` to launch the PWA.
+
+## More information
+
+More information can be found on the [wiki](https://github.com/nufke/loxberrypwa/wiki)

@@ -8,7 +8,7 @@ To initialize the App with a structure, send it over MQTT to topic `/loxberry/ap
 /loxberry/app/settings/set     -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }  
 ```
 
-Update to the structure is *incremental*, which means changes to existing objects will be overridden and old objects remain available. To flush all objects in the structure, an empty string message should be sent to `/loxberry/app/settings/set`.
+Update to the structure is *incremental*, which means changes to existing objects will be overridden and old objects remain available. To flush all elements in the App, an empty string message should be sent to `/loxberry/app/settings/set`.
 
 ```json
 {
