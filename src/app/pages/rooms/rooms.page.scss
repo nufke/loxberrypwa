@@ -6,6 +6,7 @@ ion-card {
 ion-card-content {
   margin: 0;
   padding: 0;
+  margin-bottom: 12px;  // TODO vertial align
 }
 
 ion-item {
@@ -16,21 +17,16 @@ ion-item {
   --color: var(--ion-text-color, #2c2c2c);
 }
 
-ion-label {
-  margin: 0; 
-  
-  h1 {
-    font-size: 16px;
-    line-height: 1.2;
-  }  
-  h2 {
-    font-size: 16px;
-    line-height: 1.2;
-  }
-}
-
 ion-icon {
   margin: 0 auto;
-  font-size: 32px;
+  font-size: 42px;
   margin-top: 20px; // TODO vertial align
+}
+
+ion-label {
+  margin: 0; 
+  h1 {
+    font-size: 18px;
+    line-height: 1.2;
+  }  
 }

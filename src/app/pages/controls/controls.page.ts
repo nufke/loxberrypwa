@@ -109,7 +109,7 @@ export class ControlsPage implements OnInit, OnDestroy {
 
   public filter(item: any, label: any) : Control[] {
     let filtered_items =  item.filter( resp => { return (resp[this.domain] == this.itemName) && 
-      (resp[this.key] == label.name ) });
+      (resp[this.key] == label.name ) && (resp['is_visible'] == true) });
     return filtered_items.sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) });
 }
 
@@ -120,10 +120,10 @@ export class ControlsPage implements OnInit, OnDestroy {
   private updateControlState(control: any)
   {
     control.forEach( item => {
-      if (item.type === 'switch') {
-        item.state._toggle = (item.state.value == '1');
-        item.state._message = item.state._toggle ? "On" : "Off";
+      if ((item.type === 'switch') || (item.type === 'intercom') || (item.type === 'light')) {
+        item.state._message = ''; // no status displayed
       }
+
       if (item.type === 'radio') {
         if (item.state.states) {
           let val = parseInt(item.state.value);
@@ -141,7 +141,21 @@ export class ControlsPage implements OnInit, OnDestroy {
     this.LoxBerryService.sendMessage(control);
   }
 
-  pushed_radio($event, control) {
+  pushed_light($event, control) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    console.log('pushed light', control);
+  }
+
+  pushed_radio_up($event, control) {
+    this.pushed_radio($event, control, true)
+  }
+
+  pushed_radio_down($event, control) {
+    this.pushed_radio($event, control, false)
+  }
+
+  pushed_radio($event, control, up) {
     $event.preventDefault();
     $event.stopPropagation();
     console.log('pushed radio', control);
@@ -149,11 +163,15 @@ export class ControlsPage implements OnInit, OnDestroy {
     if (control.state.states) // process only if there are radio states
     {
       let val = parseInt(control.state.value);
-      console.log(val);
-      if (val == (control.state.states.length-1))
-        val = 0;
+      let min, max;
+      if (up) { max = control.state.states.length-1; min = 0; }
+        else { max = 0; min = control.state.states.length-1; }
+
+      if (val == max)
+        val = min;
       else
-        val++;
+        if (up) val++; 
+        else val--;
     
       control.state.value = String(val);
       this.LoxBerryService.sendMessage(control);
