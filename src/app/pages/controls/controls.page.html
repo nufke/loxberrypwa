@@ -25,7 +25,7 @@
           <ion-card mode="ios">
             <ion-card-content>
               <ion-item>
-                <ion-icon src="{{control.icon.href}}" ></ion-icon>
+                <ion-icon color="{{control.icon._active_color}}" src="{{control.icon.href}}" ></ion-icon>
                 <ion-label>
                   <h1>{{control.name}}</h1>
                   <h2 *ngIf="control.state._message !== ''">{{control.state._message}}</h2>
@@ -80,7 +80,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="control.type === 'switch'">
-                    <ion-toggle mode="ios" [(ngModel)]="control.state._toggle" (click)="toggle($event, control)">
+                    <ion-toggle color="primary" mode="ios" [(ngModel)]="control.state._toggle" (click)="toggle($event, control)">
                     </ion-toggle>
                 </ng-container>
 

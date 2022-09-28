@@ -3,7 +3,8 @@ export interface Control {
   name: string,
   icon: {
     href: string,
-    color?: string
+    color?: string,
+    _active_color: string // INTERNAL USE ONLY, NOT PART OF API
   }
   type: string,
   room: string,

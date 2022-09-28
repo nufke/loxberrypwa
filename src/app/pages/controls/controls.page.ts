@@ -26,7 +26,8 @@ export class ControlsPage implements OnInit, OnDestroy {
 
   public itemName: string;
   public key: string;
-  
+  public icon_color: string;
+
   private controlsSub: Subscription;
   private categoriesSub: Subscription;
   private roomsSub: Subscription;
@@ -123,7 +124,6 @@ export class ControlsPage implements OnInit, OnDestroy {
       if ((item.type === 'switch') || (item.type === 'intercom') || (item.type === 'light')) {
         item.state._message = ''; // no status displayed
       }
-
       if (item.type === 'radio') {
         if (item.state.states) {
           let val = parseInt(item.state.value);
@@ -216,9 +216,11 @@ export class ControlsPage implements OnInit, OnDestroy {
 
     if (control.state._toggle) {
       control.state.value = "0";
+      control.icon._active_color = control.icon.color;
     }
     else {
       control.state.value = "1";
+      control.icon._active_color = "primary";
     }
     this.LoxBerryService.sendMessage(control); 
   }
