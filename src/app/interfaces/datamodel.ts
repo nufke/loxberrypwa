@@ -1,5 +1,5 @@
 export interface Control {
-  topic: string,
+  uuid: string,
   name: string,
   icon: {
     href: string,
@@ -24,7 +24,7 @@ export interface Control {
 }
 
 export interface Category {
-  topic: string,
+  uuid: string,
   name: string,
   icon: {
     href: string,
@@ -37,7 +37,7 @@ export interface Category {
 }
 
 export interface Room {
-  topic: string,
+  uuid: string,
   name: string,
   icon: {
     href: string,

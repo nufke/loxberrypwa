@@ -10,7 +10,7 @@ Fields indicated with '?' are optional
 
 ```
 {
-  topic: string                      (used to track the MQTT topic name, e.g. /control/<control-id> )
+  uuid: string                       (unique identifier to identify the control as MQTT topic)
   name: string                       (GUI name)
   icon: {
           href: string               (URL to SVG icon)
@@ -20,13 +20,13 @@ Fields indicated with '?' are optional
   room: string                       (GUI name for Room)
   category: string                   (GUI name for Category)
   is_favorite?: Boolean              (elevate to favorite item/card)
-  is_visible?: Boolean               (make invisible)
+  is_visible: Boolean                (make invisible)
   is_protected?: Boolean             (passwd/PIN protected control)
   order?: Number                     (defines order in list box)
   state: {
            value: string             (e.g. "1", "0", "22.1", "on", "off", ...)
-           states: string[]          (array with valid states for radio buttons)
            format: string            (message format in sprintf notation, can include pre- and post-text, such as units)
+           states?: string[]         (array with valid states for radio buttons)
            color?: string            (Color in RGB hex notation, e.g. #FFFFFF)
          }
 }
@@ -51,13 +51,13 @@ The control type is a string (enum) which defines the style of the button.
 
 ```
 {
-  topic: string                      (used to track the MQTT topic name, e.g. /category/<category-id> )
+  uuid: string                       (unique identifier to identify the category as MQTT topic)
   name: string                       (GUI name)
   icon: {
           href: string               (URL to SVG icon)
           color?: string             (RGB hex notation, e.g. #FFFFFF)
         }
-  is_visible?: Boolean               (make invisible)
+  is_visible: Boolean                (make invisible)
   is_protected?: Boolean             (passwd/PIN protected control)
   order?: Number                     (defines order in list box)
 }
@@ -67,13 +67,13 @@ The control type is a string (enum) which defines the style of the button.
 
 ```
 {
-  topic: string                      (used to track the MQTT topic name, e.g. /room/<room-id> )
+  uuid: string                       (unique identifier to identify the room as MQTT topic)
   name: string                       (GUI name)
   icon: {
-          href?: string              (URL to SVG icon)
+          href: string               (URL to SVG icon)
           color?: string             (RGB hex notation, e.g. #FFFFFF)
         }
-  is_visible?: Boolean               (make invisible)
+  is_visible: Boolean                (make invisible)
   is_protected?: Boolean             (passwd/PIN protected control)
   order?: Number                     (defines order in list box)
 }

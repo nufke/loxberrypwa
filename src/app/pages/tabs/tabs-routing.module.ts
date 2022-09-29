@@ -14,22 +14,22 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'rooms',
+        path: 'room',
         loadChildren: () => import('../rooms/rooms.module').then(m => m.RoomsPageModule),
         //canActivate: [AuthGuard]
       },
       {
-        path: 'categories',
+        path: 'category',
         loadChildren: () => import('../categories/categories.module').then(m => m.CategoriesPageModule),
         //canActivate: [AuthGuard]
       },
       {
-        path: 'categories/control/:domain/:id',
+        path: ':domain/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
       },
       {
-        path: 'rooms/control/:domain/:id',
+        path: ':domain/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
       },

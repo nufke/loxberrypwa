@@ -84,11 +84,11 @@ export class LoxBerry {
     this.loxberryMqttConnected = true;
   }
 
-  private findTopic(data: any, val:string) {
+  private findUuid(data: any, val:string) {
     for(let i = 0; i < data.length; i++) { // loop through array index (1st level only)
-      if (data[i].topic === val) return i;
+      if (data[i].uuid === val) return i;
     }
-    return -1; // topic not found
+    return -1; // uuid not found
   }
 
   private registerTopic(topic: string) {
@@ -97,8 +97,6 @@ export class LoxBerry {
       .subscribe((message: IMqttMessage) => {
         let mqtt_topic = message.topic.substring(0, message.topic.length - 5); // trim last characters from string
         let msg = message.payload.toString();
-        console.log('topic received:', msg);
-
         if (msg.length == 0 )
           this.flushData();
         else
@@ -123,8 +121,8 @@ export class LoxBerry {
     if (!obj) return;
 
     obj.controls.forEach( item => {
-      let idx = this.findTopic(obj.controls, item.topic);
-      if (idx >= 0) { // Item exists
+      let idx = this.findUuid(obj.controls, item.uuid);
+      if (idx >= 0) { // Item exists, do update
         this.controls[idx] = item; // Override full object in array
         this.controls[idx].state._message = util.format(item.state.format, item.state.value);
        }
@@ -136,7 +134,7 @@ export class LoxBerry {
     });
 
     obj.categories.forEach( item => {
-      let idx = this.findTopic(obj.categories, item.topic);
+      let idx = this.findUuid(obj.categories, item.uuid);
       if (idx >= 0) { // Item exists
         this.categories[idx] = item; // Override full object in array
        }
@@ -146,7 +144,7 @@ export class LoxBerry {
     });
 
     obj.rooms.forEach( item => {
-      let idx = this.findTopic(obj.rooms, item.topic);
+      let idx = this.findUuid(obj.rooms, item.uuid);
       if (idx >= 0) { // Item exists
         this.rooms[idx] = item; // Override full object in array
        }
@@ -172,31 +170,30 @@ export class LoxBerry {
 
   private registerSubTopics(data: any, subject: any, domain_topic: string, sub_topics: string[]) {
     sub_topics.forEach( element => { 
-      let full_topic_name = this.registered_topic_prefix+'/'+domain_topic+'/+'+element; // note: whildcard included
+      let full_topic_name = this.registered_topic_prefix + '/' + domain_topic + '/+' + element; // note: whildcard '+' included
       if (this.registered_topics.includes(full_topic_name)) {
-        console.log("topic already exists and ignored:",full_topic_name );
+        console.log("topic already exists and ignored:", full_topic_name );
         return;
       }
+      console.log("register topic name:", full_topic_name );
       this.registered_topics.push(full_topic_name);
       this.subscription.push( this.mqttService.observe(full_topic_name)
       .subscribe((message: IMqttMessage) => {
-        let topic_received = message.topic.replace(this.registered_topic_prefix+'/'+domain_topic+'/', '').split('/');
-        let idx = this.findTopic(data, domain_topic+'/'+topic_received[0]);
+        let topic_received = message.topic.replace(this.registered_topic_prefix + '/' + domain_topic + '/', '').split('/');
+        let idx = this.findUuid(data, topic_received[0]);
         let msg = message.payload.toString();
-
         // extract name of fields from MQTT topic name
-        if (topic_received.length == 3) {
+        if ((topic_received.length == 3) && (idx != -1)) {
           data[idx][topic_received[1]][topic_received[2]] = msg;
-          console.log('received: ',this.registered_topic_prefix+'/'+domain_topic+'/'+topic_received[0]+'/'+topic_received[1]+'/'+topic_received[2], msg);
+          console.log('received: ', this.registered_topic_prefix + '/' + domain_topic + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2], msg);
         }
-        else { 
+        else if (idx != -1) { 
           data[idx][topic_received[1]] = msg;
-          console.log('received: ',this.registered_topic_prefix+'/'+domain_topic+'/'+topic_received[0]+'/'+topic_received[1], msg);
+          console.log('received: ', this.registered_topic_prefix + '/' + domain_topic + '/' + topic_received[0] + '/' + topic_received[1], msg);
         }
         subject.next(data); // updates for Subscribers
       }));
-      console.log('register',full_topic_name);
-    });  
+    });
   }
 
   public unload() : void {
@@ -205,16 +202,16 @@ export class LoxBerry {
   }
 
   public sendMessage(obj: any) {
-    let idx = this.findTopic(this.controls, obj.topic);
-    let topic_root = this.registered_topic_prefix+'/'+obj.topic;
+    let idx = this.findUuid(this.controls, obj.uuid);
+    let topic_root = this.registered_topic_prefix + '/control/' + obj.uuid;
 
     if (idx==-1) {
-      console.log('Topic '+obj.topic+' not found. Nothing published.');
+      console.log('Topic ' + topic_root + ' not found. Nothing published.');
       return;
     }
     
-    this.mqttService.unsafePublish(topic_root+'/state/value', obj.state.value, { qos: 1, retain: true });
-    console.log('MQTT publish:', topic_root+'/state/value', obj.state.value);
+    this.mqttService.unsafePublish(topic_root + '/state/value', obj.state.value, { qos: 1, retain: true });
+    console.log('MQTT publish:', topic_root + '/state/value', obj.state.value);
   }
 
 }

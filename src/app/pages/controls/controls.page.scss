@@ -20,10 +20,11 @@ ion-item {
 ion-icon {
   font-size: 32px;
   height: 65px;
+  margin-left: 2px;
 }
 
 ion-label {
-  margin: 0 0 0 10px;
+  margin: 0 0 0 15px;
   h1 {
     font-size: 18px;
     line-height: 1.2;
@@ -34,11 +35,10 @@ ion-label {
   }
   p {
     margin-top: 3px; 
-    font-size: 12px;
-    letter-spacing: 0.01em;
+    font-size: 13px;
+    //letter-spacing: 0.01em;
     text-transform: uppercase;
   }
-
 }
 
 ion-toggle {

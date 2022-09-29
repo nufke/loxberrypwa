@@ -21,8 +21,7 @@ export class ControlsPage implements OnInit, OnDestroy {
   private filtered_rooms: string[];
 
   private domain: string;
-  private topic: string;
-  private id: string;
+  private uuid: string;
 
   public itemName: string;
   public key: string;
@@ -36,8 +35,7 @@ export class ControlsPage implements OnInit, OnDestroy {
               private route: ActivatedRoute ) {
 
     this.domain = this.route.snapshot.paramMap.get('domain');
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.topic = this.domain+'/' + this.id;
+    this.uuid = this.route.snapshot.paramMap.get('uuid');
 
     if (this.domain === 'category') {
       this.key = 'room';
@@ -67,7 +65,7 @@ export class ControlsPage implements OnInit, OnDestroy {
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
       
       if (this.domain === 'category')
-        this.itemName = this.findName(categories, this.topic);
+        this.itemName = this.findUuid(categories, this.uuid);
 
       if (this.domain === 'room')
         this.items = categories;
@@ -79,7 +77,7 @@ export class ControlsPage implements OnInit, OnDestroy {
       .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
 
       if (this.domain === 'room')
-        this.itemName = this.findName(rooms, this.topic);
+        this.itemName = this.findUuid(rooms, this.uuid);
 
       if (this.domain === 'category')
         this.items = rooms;
@@ -101,11 +99,11 @@ export class ControlsPage implements OnInit, OnDestroy {
     }
   }
 
-  private findName(obj: any, topic:string) {
+  private findUuid(obj: any, uuid: string) {
     for(let i = 0; i < obj.length; i++) {
-      if (obj[i].topic === topic) return obj[i].name;
+      if (obj[i].uuid === uuid) return obj[i].name;
     }
-    return; // topic not found
+    return; // uuid not found
   }
 
   public filter(item: any, label: any) : Control[] {

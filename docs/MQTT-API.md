@@ -7,46 +7,43 @@
 The MQTT topic API for controls is listed below. Note that the topic string does not include the app-specific topic `loxberry/app`
 
 ```
-/loxberry/app/control/<control-id>/topic         -> "control/1"
-/loxberry/app/control/<control-id>/name          -> "Light control"
-/loxberry/app/control/<control-id>/icon/href     -> "http://myserver.org/bulb.svg"
-/loxberry/app/control/<control-id>/icon/color    -> "#CECECE"
-/loxberry/app/control/<control-id>/type          -> "switch"
-/loxberry/app/control/<control-id>/room          -> "Living Room"
-/loxberry/app/control/<control-id>/category      -> "Lighting"
-/loxberry/app/control/<control-id>/is_favorite   -> true
-/loxberry/app/control/<control-id>/is_visible    -> true
-/loxberry/app/control/<control-id>/is_protected  -> false
-/loxberry/app/control/<control-id>/order         -> 1
-/loxberry/app/control/<control-id>/state/value   -> "on"
-/loxberry/app/control/<control-id>/state/format  -> "%s"
-/loxberry/app/control/<control-id>/state/color   -> "#FFFFFF"
+/loxberry/app/control/<control-uuid>/name          -> "Light control"
+/loxberry/app/control/<control-uuid>/icon/href     -> "http://myserver.org/bulb.svg"
+/loxberry/app/control/<control-uuid>/icon/color    -> "#CECECE"
+/loxberry/app/control/<control-uuid>/type          -> "switch"
+/loxberry/app/control/<control-uuid>/room          -> "Living Room"
+/loxberry/app/control/<control-uuid>/category      -> "Lighting"
+/loxberry/app/control/<control-uuid>/is_favorite   -> true
+/loxberry/app/control/<control-uuid>/is_visible    -> true
+/loxberry/app/control/<control-uuid>/is_protected  -> false
+/loxberry/app/control/<control-uuid>/order         -> 1
+/loxberry/app/control/<control-uuid>/state/value   -> "on"
+/loxberry/app/control/<control-uuid>/state/format  -> "%s"
+/loxberry/app/control/<control-uuid>/state/color   -> "#FFFFFF"
 
 ```
 
 ## MQTT category API
 
 ```
-/loxberry/app/category/<category-id>/topic        -> "category/1"
-/loxberry/app/category/<category-id>/name         -> "Lighting"
-/loxberry/app/category/<category-id>/icon/href    -> "http://myserver.org/lighting.svg"
-/loxberry/app/category/<category-id>/icon/color   -> "#CECECE"
-/loxberry/app/category/<category-id>/is_visible   -> true
-/loxberry/app/category/<category-id>/is_protected -> false
-/loxberry/app/category/<category-id>/order        -> 1
+/loxberry/app/category/<category-uuid>/name         -> "Lighting"
+/loxberry/app/category/<category-uuid>/icon/href    -> "http://myserver.org/lighting.svg"
+/loxberry/app/category/<category-uuid>/icon/color   -> "#CECECE"
+/loxberry/app/category/<category-uuid>/is_visible   -> true
+/loxberry/app/category/<category-uuid>/is_protected -> false
+/loxberry/app/category/<category-uuid>/order        -> 1
 ```
 
 ## MQTT room API
 
 ```
-/loxberry/app/room/<room-id>/topic                -> "room/1"
-/loxberry/app/room/<room-id>/name                 -> "Living Room"
-/loxberry/app/room/<room-id>/icon/href            -> "http://myserver.org/living_room.svg"
-/loxberry/app/room/<room-id>/icon/color           -> "#CECECE"
-/loxberry/app/room/<room-id>/image                -> "http://myserver.org/living_room.png"
-/loxberry/app/room/<room-id>/is_visible           -> true
-/loxberry/app/room/<room-id>/is_protected         -> false
-/loxberry/app/room/<room-id>/order                -> 1
+/loxberry/app/room/<room-uuid>/name                 -> "Living Room"
+/loxberry/app/room/<room-uuid>/icon/href            -> "http://myserver.org/living_room.svg"
+/loxberry/app/room/<room-uuid>/icon/color           -> "#CECECE"
+/loxberry/app/room/<room-uuid>/image                -> "http://myserver.org/living_room.png"
+/loxberry/app/room/<room-uuid>/is_visible           -> true
+/loxberry/app/room/<room-uuid>/is_protected         -> false
+/loxberry/app/room/<room-uuid>/order                -> 1
 ```
 
 ## MQTT settings API
