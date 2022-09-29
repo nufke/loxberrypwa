@@ -119,9 +119,17 @@ export class ControlsPage implements OnInit, OnDestroy {
   private updateControlState(control: any)
   {
     control.forEach( item => {
-      if ((item.type === 'switch') || (item.type === 'intercom') || (item.type === 'light')) {
+      if (item.type === 'switch') {
+        item.state._message = ''; // no status displayed
+        if (item.state.value === '1') 
+          item.icon._active_color = "primary";
+        else item.icon._active_color = item.icon.color;
+      }
+
+      if ((item.type === 'intercom') || (item.type === 'light')) {
         item.state._message = ''; // no status displayed
       }
+
       if (item.type === 'radio') {
         if (item.state.states) {
           let val = parseInt(item.state.value);
@@ -212,12 +220,12 @@ export class ControlsPage implements OnInit, OnDestroy {
     $event.preventDefault();
     $event.stopPropagation();
 
-    if (control.state._toggle) {
-      control.state.value = "0";
+    if (control.state.value === '1') {
+      control.state.value = '0';
       control.icon._active_color = control.icon.color;
     }
     else {
-      control.state.value = "1";
+      control.state.value = '1';
       control.icon._active_color = "primary";
     }
     this.LoxBerryService.sendMessage(control); 

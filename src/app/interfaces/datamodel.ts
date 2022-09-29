@@ -19,7 +19,6 @@ export interface Control {
     color?: string,
     states?: string[],
     _message?: string, // INTERNAL USE ONLY, NOT PART OF API
-    _toggle?: Boolean // INTERNAL USE ONLY, NOT PART OF API
   }
 }
 
