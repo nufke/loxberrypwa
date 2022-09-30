@@ -45,7 +45,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     control.forEach( item => {
       if (item.type == 'switch') {
         item.state._toggle = (item.state.value == '1');
-        item.state._message = item.state._toggle ? "On" : "Off";
+        item.state._status_text = item.state._toggle ? "On" : "Off";
       }
     });
   }

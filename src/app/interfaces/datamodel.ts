@@ -3,8 +3,9 @@ export interface Control {
   name: string,
   icon: {
     href: string,
-    color?: string,
-    _active_color: string // INTERNAL USE ONLY, NOT PART OF API
+    default_color?: string,
+    active_color?: string, 
+    _current_color?: string // INTERNAL USE ONLY, NOT PART OF API
   }
   type: string,
   room: string,
@@ -16,9 +17,11 @@ export interface Control {
   state: {
     value: string,
     format?: string,
-    color?: string,
-    states?: string[],
-    _message?: string, // INTERNAL USE ONLY, NOT PART OF API
+    default_color?: string,
+    active_color?: string,
+    list_names?: string[],
+    _current_color?: string, // INTERNAL USE ONLY, NOT PART OF API
+    _status_text?: string, // INTERNAL USE ONLY, NOT PART OF API
   }
 }
 
@@ -27,7 +30,7 @@ export interface Category {
   name: string,
   icon: {
     href: string,
-    color?: string
+    default_color?: string
   }
   image?: string,
   is_visible?: Boolean,
@@ -40,7 +43,7 @@ export interface Room {
   name: string,
   icon: {
     href: string,
-    color?: string
+    default_color?: string
   }
   image?: string,
   is_visible?: Boolean,

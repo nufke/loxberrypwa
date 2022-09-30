@@ -124,11 +124,11 @@ export class LoxBerry {
       let idx = this.findUuid(obj.controls, item.uuid);
       if (idx >= 0) { // Item exists, do update
         this.controls[idx] = item; // Override full object in array
-        this.controls[idx].state._message = util.format(item.state.format, item.state.value);
+        this.controls[idx].state._status_text = util.format(item.state.format, item.state.value);
        }
       else { // New item
         let control = item;
-        control.state._message = util.format(item.state.format, item.state.value);
+        control.state._status_text = util.format(item.state.format, item.state.value);
         this.controls.push(control); // Add new object to array
       }
     });
@@ -157,10 +157,10 @@ export class LoxBerry {
     this.categoriesSubject.next(this.categories); 
     this.roomsSubject.next(this.rooms); 
 
-    let control_sub_topics = [ "/name", "/icon/href", "/icon/color",
+    let control_sub_topics = [ "/name", "/icon/href", "/icon/default_color", "/icon/active_color",
        "/type", "/category", "/room", "/is_favorite", "/is_visible", "/is_protected", "/order",
-       "/state/value", "/state/format", "/state/color" ];
-    let cat_room_sub_topics = [ "/name", "/icon/href", "/icon/color", "/image",
+       "/state/value", "/state/format", "/state/default_color", "/state/active_color" ];
+    let cat_room_sub_topics = [ "/name", "/icon/href", "/icon/default_color", "/image",
       "/is_visible", "/is_protected", "/order" ];
 
     this.registerSubTopics(this.controls, this.controlsSubject, 'control', control_sub_topics);

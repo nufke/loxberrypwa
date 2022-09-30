@@ -119,21 +119,31 @@ export class ControlsPage implements OnInit, OnDestroy {
   private updateControlState(control: any)
   {
     control.forEach( item => {
+
+      if (item.state.default_color) // if defined
+        item.state._current_color = item.icon.default_color;   
+      else 
+        item.state._current_color = "#5e5e5f";
+
       if (item.type === 'switch') {
-        item.state._message = ''; // no status displayed
+        item.state._status_text = ''; // no status displayed
         if (item.state.value === '1') 
-          item.icon._active_color = "primary";
-        else item.icon._active_color = item.icon.color;
+        {
+          if (item.icon.active_color) // if defined
+            item.icon._current_color = item.icon.active_color;
+            else item.icon._current_color = "primary";
+        }
+        else item.icon._current_color = item.icon.default_color;
       }
 
       if ((item.type === 'intercom') || (item.type === 'light')) {
-        item.state._message = ''; // no status displayed
+        item.state._status_text = ''; // no status displayed
       }
 
       if (item.type === 'radio') {
         if (item.state.states) {
           let val = parseInt(item.state.value);
-          item.state._message = item.state.states[val];
+          item.state._status_text = item.state.states[val];
         }
       }
     });

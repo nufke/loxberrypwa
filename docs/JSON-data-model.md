@@ -10,24 +10,26 @@ Fields indicated with '?' are optional
 
 ```
 {
-  uuid: string                       (unique identifier to identify the control as MQTT topic)
-  name: string                       (GUI name)
+  uuid: string,                       // unique identifier to identify the control as MQTT topic
+  name: string,                       // GUI name
   icon: {
-          href: string               (URL to SVG icon)
-          color?: string             (RGB hex notation, e.g. #FFFFFF)
+          href: string,               // location or URL to SVG icon
+          default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
+          active_color?: string       // color when active in RGB hex notation, e.g. #FFFFFF (optional)
         }
-  type: string                       (type of control, e.g., switch, button, slider, etc. See below)
-  room: string                       (GUI name for Room)
-  category: string                   (GUI name for Category)
-  is_favorite?: Boolean              (elevate to favorite item/card)
-  is_visible: Boolean                (make invisible)
-  is_protected?: Boolean             (passwd/PIN protected control)
-  order?: Number                     (defines order in list box)
+  type: string,                       // type of control, e.g., switch, button, slider, etc. See below
+  room: string,                       // GUI name for Room
+  category: string,                   // GUI name for Category
+  is_favorite?: Boolean,              // elevate to favorite item (optional)
+  is_visible: Boolean,                // make contol invisible
+  is_protected?: Boolean,             // passwd/PIN protected control (optional)
+  order?: Number,                     // defines order in list box (optional)
   state: {
-           value: string             (e.g. "1", "0", "22.1", "on", "off", ...)
-           format: string            (message format in sprintf notation, can include pre- and post-text, such as units)
-           states?: string[]         (array with valid states for radio buttons)
-           color?: string            (Color in RGB hex notation, e.g. #FFFFFF)
+           value: string,             // e.g. "1", "0", "22.1", "on", "off", ...
+           format: string,            // message format in sprintf notation, can include pre- and post-text, such as units
+           list_names?: string[],     // list names for radio buttons (optional)
+           default_color?: string,    // default color in RGB hex notation, e.g. #FFFFFF (optional)
+           active_color?: string      // color of text/value when active in RGB hex notation, e.g. #FFFFFF (optional)
          }
 }
 ```
@@ -37,29 +39,31 @@ Fields indicated with '?' are optional
 The control type is a string (enum) which defines the style of the button.
 
 ```
-"link"
-"push"
-"radio"
-"dimmer"
-"slider"
-"switch"
-"up_down"
-"text" (no button)
+"link"     // symbol for external link/app 
+"push"     // push button
+"radio"    // up/down (+/-) buttons to select state from list-box 
+"dimmer"   // up/down (+/-) buttons
+"slider"   // up/down (+/-) buttons, slider only visible in detailed screen
+"switch"   // toggle switch 
+"updown"   // up/down (+/-) buttons
+"light"    // light control, plus (+) button
+"text"     // status text, no button
+"tempctrl" // temperature control, no button
 ```
 
 # JSON data model for categories
 
 ```
 {
-  uuid: string                       (unique identifier to identify the category as MQTT topic)
-  name: string                       (GUI name)
+  uuid: string,                       // unique identifier to identify the category as MQTT topic
+  name: string,                       // GUI name
   icon: {
-          href: string               (URL to SVG icon)
-          color?: string             (RGB hex notation, e.g. #FFFFFF)
+          href: string,               // location or URL to SVG icon
+          default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
         }
-  is_visible: Boolean                (make invisible)
-  is_protected?: Boolean             (passwd/PIN protected control)
-  order?: Number                     (defines order in list box)
+  is_visible: Boolean,                // make category invisible
+  is_protected?: Boolean,             // passwd/PIN protected control (optional)
+  order?: Number                      // defines order in list box (optional)
 }
 ```
 
@@ -67,14 +71,14 @@ The control type is a string (enum) which defines the style of the button.
 
 ```
 {
-  uuid: string                       (unique identifier to identify the room as MQTT topic)
-  name: string                       (GUI name)
+  uuid: string,                       // unique identifier to identify the room as MQTT topic
+  name: string,                       // GUI name
   icon: {
-          href: string               (URL to SVG icon)
-          color?: string             (RGB hex notation, e.g. #FFFFFF)
+          href: string,               // URL to SVG icon
+          default_color?: string      // RGB hex notation, e.g. #FFFFFF (optional)
         }
-  is_visible: Boolean                (make invisible)
-  is_protected?: Boolean             (passwd/PIN protected control)
-  order?: Number                     (defines order in list box)
+  is_visible: Boolean,                // make room invisible
+  is_protected?: Boolean,             // passwd/PIN protected control (optional)
+  order?: Number                      // defines order in list box (optional)
 }
 ```

@@ -25,26 +25,26 @@
           <ion-card mode="ios">
             <ion-card-content>
               <ion-item>
-                <ion-icon color="{{control.icon._active_color}}" src="{{control.icon.href}}" ></ion-icon>
+                <ion-icon color="{{control.icon._current_color}}" src="{{control.icon.href}}" ></ion-icon>
                 <ion-label>
                   <h1>{{control.name}}</h1>
-                  <h2 *ngIf="control.state._message !== ''">{{control.state._message}}</h2>
+                  <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">{{control.state._status_text}}</h2>
                 </ion-label>
 
                 <ng-container *ngIf="control.type === 'push'">
-                  <ion-fab-button class="fab-button" size="small" (click)="pushed($event, control)">
+                  <ion-fab-button size="small" (click)="pushed($event, control)">
                     <ion-icon name="radio-button-off-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>
 
                 <ng-container *ngIf="control.type === 'light'">
-                  <ion-fab-button class="fab-button" size="small" (click)="pushed_light($event, control)">
+                  <ion-fab-button size="small" (click)="pushed_light($event, control)">
                     <ion-icon name="add-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>
 
                 <ng-container *ngIf="control.type === 'radio'">
-                  <ion-fab-button class="fab-button-2" size="small" (click)="pushed_radio_down($event, control)">
+                  <ion-fab-button size="small" (click)="pushed_radio_down($event, control)">
                     <ion-icon name="remove-outline"></ion-icon>
                   </ion-fab-button>
                   <ion-fab-button class="fab-button-1" size="small" (click)="pushed_radio_up($event, control)">
@@ -52,29 +52,20 @@
                   </ion-fab-button>
                 </ng-container>
 
-                <ng-container *ngIf="control.type === 'slider'">
-                  <ion-fab-button class="fab-button-2" size="small" (click)="pushed_minus($event, control)">
-                    <ion-icon name="remove-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button class="fab-button-1" size="small" (click)="pushed_plus($event, control)">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-fab-button>
-                </ng-container>
-
-                <ng-container *ngIf="control.type === 'updown'">
-                  <ion-fab-button class="fab-button-2" size="small" (click)="pushed_down($event, control)">
+                <ng-container *ngIf="(control.type === 'updown') || (control.type === 'jalousie')">
+                  <ion-fab-button size="small" (click)="pushed_down($event, control)">
                     <ion-icon name="chevron-down-outline"></ion-icon>
                   </ion-fab-button>
-                  <ion-fab-button class="fab-button-1" size="small" (click)="pushed_up($event, control)">
+                  <ion-fab-button size="small" (click)="pushed_up($event, control)">
                     <ion-icon name="chevron-up-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>
 
-                <ng-container *ngIf="control.type === 'plusminus'">
-                  <ion-fab-button class="fab-button-2" size="small" (click)="pushed_minus($event, control)">
+                <ng-container *ngIf="(control.type === 'plusminus') || (control.type === 'slider') ">
+                  <ion-fab-button size="small" (click)="pushed_minus($event, control)">
                     <ion-icon name="remove-outline"></ion-icon>
                   </ion-fab-button>
-                  <ion-fab-button class="fab-button-1" size="small" (click)="pushed_plus($event, control)">
+                  <ion-fab-button size="small" (click)="pushed_plus($event, control)">
                     <ion-icon name="add-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>

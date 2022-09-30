@@ -15,12 +15,12 @@ ion-item {
   --padding-end: 3px;
   --inner-padding-end: 3px;
   --color: var(--ion-text-color, #2c2c2c);
+  margin-left: 2px;
 }
 
 ion-icon {
   font-size: 32px;
   height: 65px;
-  margin-left: 2px;
 }
 
 ion-label {
@@ -46,15 +46,8 @@ ion-toggle {
 }
 
 ion-fab-button {
-  margin-left: 2px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  --border-radius: 40px;
   --background: var(--ion-control-color, #353535);
-  --box-shadow: 0px;
-  --background-activated: var(--ion-color-primary, #000000);
   --background-activated-opacity: 100%;
-  --color: var(--ion-color-primary-contrast, #c9c9c9);
 }
 
 .ion-activated {
