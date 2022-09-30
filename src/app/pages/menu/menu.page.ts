@@ -16,12 +16,12 @@ export class MenuPage implements OnInit {
     },
     {
       title: 'Rooms',
-      url: '/rooms',
+      url: '/room',
       icon: 'grid-sharp'
     },
     {
       title: 'Categories',
-      url: '/categories',
+      url: '/category',
       icon: 'list-sharp'
     },
     {
