@@ -136,7 +136,8 @@ export class ControlsPage implements OnInit, OnDestroy {
         else item.icon._current_color = item.icon.default_color;
       }
 
-      if ((item.type === 'intercom') || (item.type === 'light')) {
+      if ((item.type === 'intercom') || (item.type === 'light') || (item.type === 'link') || (item.type === 'screen_c') ||
+          (item.type === 'light_c')) {
         item.state._status_text = ''; // no status displayed
       }
 

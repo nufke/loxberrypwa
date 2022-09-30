@@ -47,8 +47,12 @@ The control type is a string (enum) which defines the style of the button.
 "switch"   // toggle switch 
 "updown"   // up/down (+/-) buttons
 "light"    // light control, plus (+) button
+"light_c"  // central light control, no button
 "text"     // status text, no button
 "tempctrl" // temperature control, no button
+"screen"   // sunscreen control, ^/v buttons
+"screen_c  // central sunscreens control, no button
+
 ```
 
 # JSON data model for categories
