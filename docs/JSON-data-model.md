@@ -2,9 +2,23 @@
 
 **NOTE**: JSON data model under development and will change!
 
-# JSON data model for controls 
+## Top-level structure
 
-This model is used within the app to manage the properties of the control elements. The elements in the data model match the MQTT topic names.  
+The overall structure is given below:
+
+```
+{
+  "controls": [ ... ],
+  "categories": [ ... ],
+  "rooms": [ ... ]
+}
+```
+
+Each section `controls`, `categories` and `rooms` contains an array of elements as specified below.
+
+## Data model for controls
+
+This model is used within the app to manage the properties of the control elements. The elements in the data model match the MQTT topic names.
 
 Fields indicated with '?' are optional
 
@@ -16,7 +30,7 @@ Fields indicated with '?' are optional
           href: string,               // location or URL to SVG icon
           default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
           active_color?: string       // color when active in RGB hex notation, e.g. #FFFFFF (optional)
-        }
+        },
   type: string,                       // type of control, e.g., switch, button, slider, etc. See below
   room: string,                       // GUI name for Room
   category: string,                   // GUI name for Category
@@ -34,17 +48,17 @@ Fields indicated with '?' are optional
 }
 ```
 
-## Control type (string)
+### Control type (string)
 
 The control type is a string (enum) which defines the style of the button.
 
 ```
-"link"     // symbol for external link/app 
+"link"     // button to external link (e.g. webpage, app)
 "push"     // push button
-"radio"    // up/down (+/-) buttons to select state from list-box 
+"radio"    // up/down (+/-) buttons to select state from list-box
 "dimmer"   // up/down (+/-) buttons
 "slider"   // up/down (+/-) buttons, slider only visible in detailed screen
-"switch"   // toggle switch 
+"switch"   // toggle switch
 "updown"   // up/down (+/-) buttons
 "light"    // light control, plus (+) button
 "light_c"  // central light control, no button
@@ -55,7 +69,7 @@ The control type is a string (enum) which defines the style of the button.
 
 ```
 
-# JSON data model for categories
+## Data model for categories
 
 ```
 {
@@ -64,14 +78,14 @@ The control type is a string (enum) which defines the style of the button.
   icon: {
           href: string,               // location or URL to SVG icon
           default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
-        }
+        },
   is_visible: Boolean,                // make category invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }
 ```
 
-# JSON data model for rooms
+## Data model for rooms
 
 ```
 {
@@ -80,7 +94,7 @@ The control type is a string (enum) which defines the style of the button.
   icon: {
           href: string,               // URL to SVG icon
           default_color?: string      // RGB hex notation, e.g. #FFFFFF (optional)
-        }
+        },
   is_visible: Boolean,                // make room invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
