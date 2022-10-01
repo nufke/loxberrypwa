@@ -4,6 +4,7 @@ import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { util } from 'node-forge' // TODO check package
 import { Control, Category, Room } from '../interfaces/datamodel'
+import { MqttControlTopics, MqttCategoryTopics, MqttRoomTopics } from '../interfaces/mqtt.api'
 import { StorageService } from '../services/storage.service';
 
 @Injectable({  
@@ -157,19 +158,25 @@ export class LoxBerry {
     this.categoriesSubject.next(this.categories); 
     this.roomsSubject.next(this.rooms); 
 
-    let control_sub_topics = [ "/name", "/icon/href", "/icon/default_color", "/icon/active_color",
-       "/type", "/category", "/room", "/is_favorite", "/is_visible", "/is_protected", "/order",
-       "/state/value", "/state/format", "/state/default_color", "/state/active_color" ];
-    let cat_room_sub_topics = [ "/name", "/icon/href", "/icon/default_color", "/image",
-      "/is_visible", "/is_protected", "/order" ];
-
-    this.registerSubTopics(this.controls, this.controlsSubject, 'control', control_sub_topics);
-    this.registerSubTopics(this.categories, this.categoriesSubject, 'category', cat_room_sub_topics);
-    this.registerSubTopics(this.rooms, this.roomsSubject, 'room', cat_room_sub_topics);
+    this.registerSubTopics(this.controls, this.controlsSubject, 'control', MqttControlTopics);
+    this.registerSubTopics(this.categories, this.categoriesSubject, 'category', MqttCategoryTopics);
+    this.registerSubTopics(this.rooms, this.roomsSubject, 'room', MqttRoomTopics);
   }
 
-  private registerSubTopics(data: any, subject: any, domain_topic: string, sub_topics: string[]) {
-    sub_topics.forEach( element => { 
+  private expandTopics(obj: any): Array<string> {
+    const result = [];
+    for (const prop in obj) {
+      const value = obj[prop];
+      if (typeof value === 'object')
+        this.expandTopics(value).forEach( item => result.push(item) ); 
+      else
+        result.push(value);
+    }
+    return result;
+  }
+
+  private registerSubTopics(data: any, subject: any, domain_topic: string, topics: any) {
+    this.expandTopics(topics).forEach( (element) => {
       let full_topic_name = this.registered_topic_prefix + '/' + domain_topic + '/+' + element; // note: whildcard '+' included
       if (this.registered_topics.includes(full_topic_name)) {
         console.log("topic already exists and ignored:", full_topic_name );

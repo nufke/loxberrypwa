@@ -14,7 +14,7 @@ Fields indicated with '?' are optional
   name: string,                       // GUI name
   icon: {
           href: string,               // location or URL to SVG icon
-          default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
+          default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
           active_color?: string       // color when active in RGB hex notation, e.g. #FFFFFF (optional)
         }
   type: string,                       // type of control, e.g., switch, button, slider, etc. See below

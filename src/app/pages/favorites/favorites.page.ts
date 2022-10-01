@@ -43,9 +43,33 @@ export class FavoritesPage implements OnInit, OnDestroy {
   private updateControlState(control: any)
   {
     control.forEach( item => {
-      if (item.type == 'switch') {
-        item.state._toggle = (item.state.value == '1');
-        item.state._status_text = item.state._toggle ? "On" : "Off";
+
+      if (item.state.default_color) // if defined
+        item.state._current_color = item.icon.default_color;   
+      else 
+        item.state._current_color = "#5e5e5f";
+
+      if (item.type === 'switch') {
+        item.state._status_text = ''; // no status displayed
+        if (item.state.value === '1') 
+        {
+          if (item.icon.active_color) // if defined
+            item.icon._current_color = item.icon.active_color;
+            else item.icon._current_color = "primary";
+        }
+        else item.icon._current_color = item.icon.default_color;
+      }
+
+      if ((item.type === 'intercom') || (item.type === 'light') || (item.type === 'link') || (item.type === 'screen_c') ||
+          (item.type === 'light_c')) {
+        item.state._status_text = ''; // no status displayed
+      }
+
+      if (item.type === 'radio') {
+        if (item.state.states) {
+          let val = parseInt(item.state.value);
+          item.state._status_text = item.state.states[val];
+        }
       }
     });
   }
@@ -58,19 +82,37 @@ export class FavoritesPage implements OnInit, OnDestroy {
     this.LoxBerryService.sendMessage(control);
   }
 
-  pushed_radio($event, control) {
+  pushed_light($event, control) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    console.log('pushed light', control);
+  }
+
+  pushed_radio_up($event, control) {
+    this.pushed_radio($event, control, true)
+  }
+
+  pushed_radio_down($event, control) {
+    this.pushed_radio($event, control, false)
+  }
+
+  pushed_radio($event, control, up) {
     $event.preventDefault();
     $event.stopPropagation();
     console.log('pushed radio', control);
-        
+    
     if (control.state.states) // process only if there are radio states
     {
       let val = parseInt(control.state.value);
-      console.log(val);
-      if (val == (control.state.states.length-1))
-        val = 0;
+      let min, max;
+      if (up) { max = control.state.states.length-1; min = 0; }
+        else { max = 0; min = control.state.states.length-1; }
+
+      if (val == max)
+        val = min;
       else
-        val++;
+        if (up) val++; 
+        else val--;
     
       control.state.value = String(val);
       this.LoxBerryService.sendMessage(control);
