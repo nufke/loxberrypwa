@@ -19,10 +19,10 @@
           <p translate>{{label.name}}</p>
         </ion-label>
       </ion-row>
-     
+
       <ion-row>
         <ion-col size="12" size-md="6" *ngFor="let control of filter(controls, label)">
-          <ion-card mode="ios">
+          <ion-card routerLink="{{control.uuid}}">
             <ion-card-content>
               <ion-item>
                 <ion-icon color="{{control.icon._current_color}}" src="{{control.icon.href}}" ></ion-icon>
@@ -32,7 +32,7 @@
                 </ion-label>
 
                 <ng-container *ngIf="control.type === 'push'">
-                  <ion-fab-button size="small" (click)="pushed($event, control)">
+                  <ion-fab-button size="small" (click)="pushed_pulse($event, control)">
                     <ion-icon name="radio-button-off-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>

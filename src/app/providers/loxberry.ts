@@ -7,7 +7,7 @@ import { Control, Category, Room } from '../interfaces/datamodel'
 import { MqttControlTopics, MqttCategoryTopics, MqttRoomTopics } from '../interfaces/mqtt.api'
 import { StorageService } from '../services/storage.service';
 
-@Injectable({  
+@Injectable({
   providedIn: 'root'
 })
 export class LoxBerry {
@@ -19,9 +19,9 @@ export class LoxBerry {
   private categoriesSubject: BehaviorSubject<Category[]> = new BehaviorSubject([]);
   private rooms: Room[] = [];
   private roomsSubject: BehaviorSubject<Room[]> = new BehaviorSubject([]);
- 
+
   private registered_topics: string[] = [];
-  
+
   private loxberryMqttIP: string = '';
   private loxberryMqttPort: string = '';
   private loxberryMqttUsername: string = '';
@@ -47,7 +47,7 @@ export class LoxBerry {
     private mqttService: MqttService,
     private storageService: StorageService)
   {
-    this.storageService.getSettings().subscribe( settings => { 
+    this.storageService.getSettings().subscribe( settings => {
       if (settings) {
         this.loxberryMqttIP = settings.loxberryMqttIP;
         this.loxberryMqttPort = settings.loxberryMqttPort;
@@ -55,11 +55,11 @@ export class LoxBerry {
         this.loxberryMqttPassw = settings.loxberryMqttPassw;
 
         // only connect if all configuration options are valid
-        if (!this.loxberryMqttConnected 
-             && this.loxberryMqttUsername 
-             && this.loxberryMqttPassw 
-             && this.loxberryMqttIP 
-             && this.loxberryMqttPort) { 
+        if (!this.loxberryMqttConnected
+             && this.loxberryMqttUsername
+             && this.loxberryMqttPassw
+             && this.loxberryMqttIP
+             && this.loxberryMqttPort) {
           this.connectToMqtt();
           this.registerTopic(this.registered_topic_prefix+'/settings/set');
         }
@@ -72,7 +72,7 @@ export class LoxBerry {
   });
   }
 
-  private connectToMqtt() 
+  private connectToMqtt()
   {
     console.log('Connecting to LoxBerry Mqtt Broker...');
     this.mqttService.connect(
@@ -111,13 +111,13 @@ export class LoxBerry {
     this.categories = [];
     this.rooms = [];
 
-    this.controlsSubject.next(this.controls); 
-    this.categoriesSubject.next(this.categories); 
-    this.roomsSubject.next(this.rooms); 
+    this.controlsSubject.next(this.controls);
+    this.categoriesSubject.next(this.categories);
+    this.roomsSubject.next(this.rooms);
   }
 
-  // TODO: only items will be added, not removed. 
-  // To remove items, flush the entire dataset first, and add the required items 
+  // TODO: only items will be added, not removed.
+  // To remove items, flush the entire dataset first, and add the required items
   private ProcessJSON(obj: any) {
     if (!obj) return;
 
@@ -154,9 +154,9 @@ export class LoxBerry {
       }
     });
 
-    this.controlsSubject.next(this.controls); 
-    this.categoriesSubject.next(this.categories); 
-    this.roomsSubject.next(this.rooms); 
+    this.controlsSubject.next(this.controls);
+    this.categoriesSubject.next(this.categories);
+    this.roomsSubject.next(this.rooms);
 
     this.registerSubTopics(this.controls, this.controlsSubject, 'control', MqttControlTopics);
     this.registerSubTopics(this.categories, this.categoriesSubject, 'category', MqttCategoryTopics);
@@ -168,7 +168,7 @@ export class LoxBerry {
     for (const prop in obj) {
       const value = obj[prop];
       if (typeof value === 'object')
-        this.expandTopics(value).forEach( item => result.push(item) ); 
+        this.expandTopics(value).forEach( item => result.push(item) );
       else
         result.push(value);
     }
@@ -194,7 +194,7 @@ export class LoxBerry {
           data[idx][topic_received[1]][topic_received[2]] = msg;
           console.log('received: ', this.registered_topic_prefix + '/' + domain_topic + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2], msg);
         }
-        else if (idx != -1) { 
+        else if (idx != -1) {
           data[idx][topic_received[1]] = msg;
           console.log('received: ', this.registered_topic_prefix + '/' + domain_topic + '/' + topic_received[0] + '/' + topic_received[1], msg);
         }
@@ -208,7 +208,7 @@ export class LoxBerry {
     this.subscription.forEach( (item) => { item.unsubscribe(); } );
   }
 
-  public sendMessage(obj: any) {
+  public sendMessage(type: string, obj: any, retain_state: any) {
     let idx = this.findUuid(this.controls, obj.uuid);
     let topic_root = this.registered_topic_prefix + '/control/' + obj.uuid;
 
@@ -216,8 +216,8 @@ export class LoxBerry {
       console.log('Topic ' + topic_root + ' not found. Nothing published.');
       return;
     }
-    
-    this.mqttService.unsafePublish(topic_root + '/state/value', obj.state.value, { qos: 1, retain: true });
+
+    this.mqttService.unsafePublish(topic_root + '/state/value', obj.state.value, { qos: retain_state, retain: true });
     console.log('MQTT publish:', topic_root + '/state/value', obj.state.value);
   }
 

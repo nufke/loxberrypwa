@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{control.name}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" disable-scroll>
+
+<div>
+
+  <ion-card-header>
+    <!--    <ion-avatar>
+      <ion-icon src="/assets/img/lox/{{data.icon}}" style.color="{{color}}"></ion-icon>
+    </ion-avatar>
+    -->
+
+  </ion-card-header>
+
+    <ion-item class="no-background">
+      <ion-label>
+        <p>{{status}}X</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <p style="color:red">{{status}}</p>
+      </ion-label>
+    </ion-item>
+
+  </div>
+
+</ion-content>

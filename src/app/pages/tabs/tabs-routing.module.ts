@@ -29,8 +29,8 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: ':domain/:uuid',
-        loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
+        path: ':domain/:uuid/:control_uuid',
+        loadChildren: () => import('../control/control.module').then(m => m.ControlPageModule),
         //canActivate: [AuthGuard]
       },
       {

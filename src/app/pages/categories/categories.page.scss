@@ -21,16 +21,17 @@ ion-icon {
   margin: 0 auto; // center
   font-size: 42px;
   margin-top: 20px; // TODO vertial align
+  color: var(--ion-text-color, #ffffff);
 }
 
 ion-label {
-  margin: 0; 
+  margin: 0;
   h1 {
     font-size: 18px;
     line-height: 1.2;
   }
   height: 42px;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
 }
 

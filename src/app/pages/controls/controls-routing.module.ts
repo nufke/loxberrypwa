@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ControlsPage } from './controls.page';
 
 const routes: Routes = [
-  { path: '/control/:controlId', //Was '' 
-    component: ControlsPage 
+  { path: '',
+    component: ControlsPage
   },
 ];
 

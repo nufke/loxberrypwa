@@ -1,0 +1,81 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <!--
+    <ion-segment *ngIf="ios" [(ngModel)]="segment" (ionChange)="updateSegment()">
+      <ion-segment-button value="moods" translate>
+        moods
+      </ion-segment-button>
+      <ion-segment-button value="lightzones" translate>
+        lightzones
+      </ion-segment-button>
+    </ion-segment>
+    -->
+    <ion-title>{{control.name}}</ion-title>
+    <!--
+      <ion-searchbar *ngIf="showSearchbar" showCancelButton="always" [(ngModel)]="queryText"
+      (ionChange)="updateSchedule()" (ionCancel)="showSearchbar = false" placeholder="Search"></ion-searchbar>
+      -->
+  </ion-toolbar>
+  <!--
+  <ion-toolbar *ngIf="!ios">
+    <ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
+      <ion-segment-button value="moods" translate>
+        moods
+      </ion-segment-button>
+      <ion-segment-button value="lightzones" translate>
+        lightzones
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  -->
+</ion-header>
+
+<ion-content fullscreen="true" disable-scroll>
+
+  <div *ngIf="segment === 'moods'">
+    <ion-card-header>
+      <ion-avatar>
+        <ion-icon src="/assets/img/lox/{{control.icon}}" style.color="{{color}}"></ion-icon>
+      </ion-avatar>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item class="no-background">
+        <ion-label>
+          <h1>{{status}}</h1>
+        </ion-label>
+      </ion-item>
+
+      <lux-radio-ctrl-item [data]="moods"></lux-radio-ctrl-item>
+
+    </ion-card-content>
+  </div>
+
+  <div *ngIf="segment === 'lightzones'">
+
+ <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6" *ngFor="let control of subControls;">
+
+        <ng-container *ngIf="control.type === 'Dimmer'">
+          <lux-dimmer-ctrl-item [data]="control"></lux-dimmer-ctrl-item>
+        </ng-container>
+
+        <ng-container *ngIf="control.type === 'ColorPickerV2'">
+          <lux-dimmer-ctrl-item [data]="control"></lux-dimmer-ctrl-item>
+        </ng-container>
+
+        <ng-container *ngIf="control.type === 'Switch'">
+          <lux-switch-ctrl-item [data]="control"></lux-switch-ctrl-item>
+        </ng-container>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </div>
+
+</ion-content>

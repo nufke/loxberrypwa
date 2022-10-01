@@ -21,6 +21,7 @@ ion-item {
 ion-icon {
   font-size: 32px;
   height: 65px;
+  color: var(--ion-text-color, #ffffff);
 }
 
 ion-label {
@@ -28,13 +29,13 @@ ion-label {
   h1 {
     font-size: 18px;
     line-height: 1.2;
-  }  
+  }
   h2 {
     font-size: 18px;
     line-height: 1.2;
   }
   p {
-    margin-top: 3px; 
+    margin-top: 3px;
     font-size: 13px;
     //letter-spacing: 0.01em;
     text-transform: uppercase;

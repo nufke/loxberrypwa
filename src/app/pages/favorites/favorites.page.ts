@@ -27,7 +27,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
       this.favorites = controls.filter(item => item.is_favorite)
         .sort((a, b) => { return a.name.localeCompare(b.name); });
 
-      this.updateControlState(controls);
+      this.updateControls(controls);
     });
   }
 
@@ -40,46 +40,49 @@ export class FavoritesPage implements OnInit, OnDestroy {
     }
   }
 
-  private updateControlState(control: any)
+  private updateControls(controls: any)
   {
-    control.forEach( item => {
-
-      if (item.state.default_color) // if defined
-        item.state._current_color = item.icon.default_color;
-      else
-        item.state._current_color = "#5e5e5f";
-
-      if (item.type === 'switch') {
-        item.state._status_text = ''; // no status displayed
-        if (item.state.value === '1')
-        {
-          if (item.icon.active_color) // if defined
-            item.icon._current_color = item.icon.active_color;
-            else item.icon._current_color = "primary";
-        }
-        else item.icon._current_color = item.icon.default_color;
-      }
-
-      if ((item.type === 'intercom') || (item.type === 'light') || (item.type === 'link') || (item.type === 'screen_c') ||
-          (item.type === 'light_c')) {
-        item.state._status_text = ''; // no status displayed
-      }
-
-      if (item.type === 'radio') {
-        if (item.state.states) {
-          let val = parseInt(item.state.value);
-          item.state._status_text = item.state.states[val];
-        }
-      }
+    controls.forEach( item => {
+      this.updateControlState(item)
     });
   }
 
-  pushed($event, control) {
+  private updateControlState(control: any) {
+    if (control.state.default_color) // if defined
+    control.state._current_color = control.icon.default_color;
+    else
+    control.state._current_color = "#5e5e5f";
+
+    if (control.type === 'switch') {
+      control.state._status_text = ''; // no status displayed
+      if (control.state.value === '1') {
+        control.state._toggle = true;
+        if (control.icon.active_color) // if defined
+        control.icon._current_color = control.icon.active_color;
+        else control.icon._current_color = "primary";
+      }
+      else control.icon._current_color = control.icon.default_color;
+    }
+
+    if ((control.type === 'intercom') || (control.type === 'light') || (control.type === 'link') || (control.type === 'screen_c') ||
+      (control.type === 'light_c')) {
+        control.state._status_text = ''; // no status displayed
+    }
+
+    if (control.type === 'radio') {
+      if (control.state.states) {
+        let val = parseInt(control.state.value);
+        control.state._status_text = control.state.states[val];
+      }
+    }
+  }
+
+  pushed_pulse($event, control) {
     $event.preventDefault();
     $event.stopPropagation();
     console.log('pushed', control);
     control.state.value = "pushed";
-    this.LoxBerryService.sendMessage(control);
+    this.LoxBerryService.sendMessage('control', control, 0);
   }
 
   pushed_light($event, control) {
@@ -115,7 +118,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
         else val--;
 
       control.state.value = String(val);
-      this.LoxBerryService.sendMessage(control);
+      this.LoxBerryService.sendMessage('control', control, 1);
     }
   }
 
@@ -124,7 +127,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed up', control);
     control.state.value = "up";
-    this.LoxBerryService.sendMessage(control);
+    this.LoxBerryService.sendMessage('control', control, 0);
   }
 
   pushed_down($event, control) {
@@ -132,7 +135,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed down', control);
     control.state.value = "down";
-    this.LoxBerryService.sendMessage(control);
+    this.LoxBerryService.sendMessage('control', control, 0);
   }
 
   pushed_plus($event, control) {
@@ -140,7 +143,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed plus', control);
     control.state.value = "plus";
-    this.LoxBerryService.sendMessage(control);
+    this.LoxBerryService.sendMessage('control', control, 0);
   }
 
   pushed_minus($event, control) {
@@ -148,19 +151,16 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed minus', control);
     control.state.value = "minus";
-    this.LoxBerryService.sendMessage(control);
+    this.LoxBerryService.sendMessage('control', control, 0);
   }
 
   toggle($event, control) {
     $event.preventDefault();
     $event.stopPropagation();
 
-    if (control.state._toggle) {
-      control.state.value = "0";
-    }
-    else {
-      control.state.value = "1";
-    }
-    this.LoxBerryService.sendMessage(control);
+    if (control.state._toggle) control.state.value = '0';
+    else control.state.value = '1';
+    this.LoxBerryService.sendMessage('control', control, 1);
   }
+
 }

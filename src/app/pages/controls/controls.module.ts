@@ -9,7 +9,10 @@ import { ControlsPageRoutingModule } from './controls-routing.module';
 
 @NgModule({
   imports: [
-    IonicModule,
+    IonicModule.forRoot({
+      rippleEffect: false,
+      animated: false
+    }),
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: ControlsPage }]),

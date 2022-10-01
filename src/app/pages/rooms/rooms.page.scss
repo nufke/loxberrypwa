@@ -21,6 +21,7 @@ ion-icon {
   margin: 0 auto; // center
   font-size: 42px;
   margin-top: 20px; // TODO vertial align
+  color: var(--ion-text-color, #ffffff);
 }
 
 ion-label {
