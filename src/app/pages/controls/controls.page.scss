@@ -27,16 +27,18 @@ ion-label {
   margin: 0 0 0 15px;
   h1 {
     font-size: 18px;
+    letter-spacing: 0.01em;
     line-height: 1.2;
   }  
   h2 {
     font-size: 18px;
+    letter-spacing: 0.01em;
     line-height: 1.2;
   }
   p {
-    margin-top: 3px; 
-    font-size: 13px;
+    margin-top: 3px;
     //letter-spacing: 0.01em;
+    font-size: 13px;
     text-transform: uppercase;
   }
 }

@@ -17,7 +17,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
   private controlsSub: Subscription;
 
   constructor(
-    public LoxBerryService: LoxBerry) 
+    public LoxBerryService: LoxBerry)
   {
     this.controls = [];
 
@@ -45,13 +45,13 @@ export class FavoritesPage implements OnInit, OnDestroy {
     control.forEach( item => {
 
       if (item.state.default_color) // if defined
-        item.state._current_color = item.icon.default_color;   
-      else 
+        item.state._current_color = item.icon.default_color;
+      else
         item.state._current_color = "#5e5e5f";
 
       if (item.type === 'switch') {
         item.state._status_text = ''; // no status displayed
-        if (item.state.value === '1') 
+        if (item.state.value === '1')
         {
           if (item.icon.active_color) // if defined
             item.icon._current_color = item.icon.active_color;
@@ -100,7 +100,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.preventDefault();
     $event.stopPropagation();
     console.log('pushed radio', control);
-    
+
     if (control.state.states) // process only if there are radio states
     {
       let val = parseInt(control.state.value);
@@ -111,9 +111,9 @@ export class FavoritesPage implements OnInit, OnDestroy {
       if (val == max)
         val = min;
       else
-        if (up) val++; 
+        if (up) val++;
         else val--;
-    
+
       control.state.value = String(val);
       this.LoxBerryService.sendMessage(control);
     }
@@ -126,7 +126,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     control.state.value = "up";
     this.LoxBerryService.sendMessage(control);
   }
-  
+
   pushed_down($event, control) {
     $event.preventDefault();
     $event.stopPropagation();

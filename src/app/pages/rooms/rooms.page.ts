@@ -18,7 +18,7 @@ export class RoomsPage implements OnInit, OnDestroy {
 
   private controlsSub: Subscription;
   private roomsSub: Subscription;
-  
+
   constructor(public LoxBerryService: LoxBerry) {
 
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {

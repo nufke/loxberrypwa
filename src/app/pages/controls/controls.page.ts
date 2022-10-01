@@ -16,7 +16,7 @@ export class ControlsPage implements OnInit, OnDestroy {
   public rooms: Room[] = [];
 
   public items: any[];
-  
+
   private filtered_categories: string[];
   private filtered_rooms: string[];
 
@@ -58,12 +58,12 @@ export class ControlsPage implements OnInit, OnDestroy {
 
       this.updateControlState(controls);
     });
-    
+
     this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
-      
+
       if (this.domain === 'category')
         this.itemName = this.findUuid(categories, this.uuid);
 
@@ -107,7 +107,7 @@ export class ControlsPage implements OnInit, OnDestroy {
   }
 
   public filter(item: any, label: any) : Control[] {
-    let filtered_items =  item.filter( resp => { return (resp[this.domain] == this.itemName) && 
+    let filtered_items =  item.filter( resp => { return (resp[this.domain] == this.itemName) &&
       (resp[this.key] == label.name ) && (resp['is_visible'] == true) });
     return filtered_items.sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) });
 }
@@ -121,13 +121,13 @@ export class ControlsPage implements OnInit, OnDestroy {
     control.forEach( item => {
 
       if (item.state.default_color) // if defined
-        item.state._current_color = item.icon.default_color;   
-      else 
+        item.state._current_color = item.icon.default_color;
+      else
         item.state._current_color = "#5e5e5f";
 
       if (item.type === 'switch') {
         item.state._status_text = ''; // no status displayed
-        if (item.state.value === '1') 
+        if (item.state.value === '1')
         {
           if (item.icon.active_color) // if defined
             item.icon._current_color = item.icon.active_color;
@@ -176,7 +176,7 @@ export class ControlsPage implements OnInit, OnDestroy {
     $event.preventDefault();
     $event.stopPropagation();
     console.log('pushed radio', control);
-    
+
     if (control.state.states) // process only if there are radio states
     {
       let val = parseInt(control.state.value);
@@ -187,9 +187,9 @@ export class ControlsPage implements OnInit, OnDestroy {
       if (val == max)
         val = min;
       else
-        if (up) val++; 
+        if (up) val++;
         else val--;
-    
+
       control.state.value = String(val);
       this.LoxBerryService.sendMessage(control);
     }
@@ -202,7 +202,7 @@ export class ControlsPage implements OnInit, OnDestroy {
     control.state.value = "up";
     this.LoxBerryService.sendMessage(control);
   }
-  
+
   pushed_down($event, control) {
     $event.preventDefault();
     $event.stopPropagation();
@@ -239,7 +239,7 @@ export class ControlsPage implements OnInit, OnDestroy {
       control.state.value = '1';
       control.icon._active_color = "primary";
     }
-    this.LoxBerryService.sendMessage(control); 
+    this.LoxBerryService.sendMessage(control);
   }
 
 }

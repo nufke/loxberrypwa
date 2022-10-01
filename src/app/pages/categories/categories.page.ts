@@ -15,12 +15,12 @@ export class CategoriesPage implements OnInit, OnDestroy {
 
   private filtered_categories: string[];
   public categories: Category[] = [];
-  
+
   private controlsSub: Subscription;
   private categoriesSub: Subscription;
 
   constructor(public LoxBerryService: LoxBerry) {
-    
+
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
 
       this.filtered_categories = controls
