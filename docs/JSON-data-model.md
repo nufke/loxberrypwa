@@ -24,6 +24,7 @@ Fields indicated with '?' are optional
 
 ```
 {
+  hwid: string,                       // hardware identifier of the device
   uuid: string,                       // unique identifier to identify the control as MQTT topic
   name: string,                       // GUI name
   icon: {
@@ -53,19 +54,19 @@ Fields indicated with '?' are optional
 The control type is a string (enum) which defines the style of the button.
 
 ```
+"dimmer"   // up/down (+/-) buttons
+"light"    // light control, plus (+) button
+"light_c"  // central light control, no button
 "link"     // button to external link (e.g. webpage, app)
 "push"     // push button
 "radio"    // up/down (+/-) buttons to select state from list-box
-"dimmer"   // up/down (+/-) buttons
-"slider"   // up/down (+/-) buttons, slider only visible in detailed screen
-"switch"   // toggle switch
-"updown"   // up/down (+/-) buttons
-"light"    // light control, plus (+) button
-"light_c"  // central light control, no button
-"text"     // status text, no button
-"tempctrl" // temperature control, no button
 "screen"   // sunscreen control, ^/v buttons
 "screen_c  // central sunscreens control, no button
+"slider"   // up/down (+/-) buttons, slider only visible in detailed view
+"switch"   // toggle switch
+"tempctrl" // room temperature control, no button
+"text"     // status text, no button
+"updown"   // up/down (+/-) buttons
 
 ```
 
@@ -73,6 +74,7 @@ The control type is a string (enum) which defines the style of the button.
 
 ```
 {
+  hwid: string,                       // hardware identifier of the device
   uuid: string,                       // unique identifier to identify the category as MQTT topic
   name: string,                       // GUI name
   icon: {
@@ -89,6 +91,7 @@ The control type is a string (enum) which defines the style of the button.
 
 ```
 {
+  hwid: string,                       // hardware identifier of the device
   uuid: string,                       // unique identifier to identify the room as MQTT topic
   name: string,                       // GUI name
   icon: {
