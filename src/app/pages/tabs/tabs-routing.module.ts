@@ -24,12 +24,12 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: ':domain/:uuid',
+        path: ':domain/:hwid/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
       },
       {
-        path: ':domain/:uuid/:control_uuid',
+        path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid',
         loadChildren: () => import('../control/control.module').then(m => m.ControlPageModule),
         //canActivate: [AuthGuard]
       },

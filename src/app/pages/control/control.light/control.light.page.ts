@@ -25,13 +25,10 @@ export class ControlLightPage extends ControlBase {
     private router: Router
   )
   {
-    super(); //translate, dataservice
+    super(); // translate, dataservice
   }
 
   ngOnInit() {
-    this.subControls = Object.values(this.control.subControls);
-    console.log('subControls: ', this.subControls);
-    this.moodSelected = "Uit";
   }
 
   updateSegment() {

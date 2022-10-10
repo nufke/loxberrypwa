@@ -22,8 +22,10 @@ export class ControlsPage implements OnInit, OnDestroy {
 
   private domain: string;
   private uuid: string;
+  private hwid: string;
 
-  public itemName: string;
+  public page: Control;
+
   public key: string;
   public icon_color: string;
 
@@ -34,8 +36,9 @@ export class ControlsPage implements OnInit, OnDestroy {
   constructor(public LoxBerryService: LoxBerry,
               private route: ActivatedRoute ) {
 
-    this.domain = this.route.snapshot.paramMap.get('domain');
-    this.uuid = this.route.snapshot.paramMap.get('uuid');
+    this.domain = this.route.snapshot.paramMap.get('domain'); // room or category
+    this.uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category
+    this.hwid = this.route.snapshot.paramMap.get('hwid');     // hwid of room or category
 
     if (this.domain === 'category')
       this.key = 'room';
@@ -44,7 +47,8 @@ export class ControlsPage implements OnInit, OnDestroy {
       this.key = 'category';
 
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
-      this.controls = controls;
+      this.controls = controls
+      .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) });
 
       this.filtered_categories = controls
         .map(item => item.category )
@@ -63,7 +67,7 @@ export class ControlsPage implements OnInit, OnDestroy {
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
 
       if (this.domain === 'category')
-        this.itemName = this.findUuid(categories, this.uuid);
+        this.page = this.findObj(categories, this.hwid, this.uuid);
 
       if (this.domain === 'room')
         this.items = categories;
@@ -75,7 +79,7 @@ export class ControlsPage implements OnInit, OnDestroy {
       .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
 
       if (this.domain === 'room')
-        this.itemName = this.findUuid(rooms, this.uuid);
+        this.page = this.findObj(rooms, this.hwid, this.uuid);
 
       if (this.domain === 'category')
         this.items = rooms;
@@ -97,18 +101,15 @@ export class ControlsPage implements OnInit, OnDestroy {
     }
   }
 
-  private findUuid(obj: any, uuid: string) {
-    for(let i = 0; i < obj.length; i++) {
-      if (obj[i].uuid === uuid) return obj[i].name;
-    }
-    return; // uuid not found
+  private findObj(obj: any, hwid: string, uuid: string): Control {
+    return obj.find( item => { return (item.uuid == uuid) && (item.hwid == hwid) } );
   }
 
   public filter(item: any, label: any) : Control[] {
-    let filtered_items =  item.filter( resp => { return (resp[this.domain] == this.itemName) &&
-      (resp[this.key] == label.name ) && (resp['is_visible'] == true) });
-    return filtered_items.sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) });
-}
+    return item.filter( resp => { return ( resp[this.domain] === this.page['uuid']) &&
+      (resp['hwid'] == this.page['hwid']) && (resp[this.key] === label.uuid ) &&
+      (resp['is_visible'] === true) });
+  }
 
   public is_empty(item: any, label: any) : Boolean {
     return (this.filter(item, label).length > 0);

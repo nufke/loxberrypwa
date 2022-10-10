@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import { Control } from '../../interfaces/datamodel'
 
 @Component({
   selector: 'control.base',
@@ -6,7 +7,7 @@ import {Component, Input} from '@angular/core';
 })
 export class ControlBase {
 
-  @Input() control: any = [];
+  @Input() control: Control;
 
   constructor() {}
 

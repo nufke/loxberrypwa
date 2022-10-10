@@ -26,10 +26,10 @@ export class SettingsPage implements OnInit {
     private loadingController: LoadingController,
     private storageService: StorageService,
     private route: ActivatedRoute
-  ) 
+  )
   {
-    this.storageService.getSettings().subscribe( settings => 
-    { 
+    this.storageService.getSettings().subscribe( settings =>
+    {
       if (settings){
         this.loxberryMqttIP = settings.loxberryMqttIP;
         this.loxberryMqttPort = settings.loxberryMqttPort;
@@ -37,11 +37,11 @@ export class SettingsPage implements OnInit {
         this.loxberryMqttPassw = settings.loxberryMqttPassw;
         this.updateFields();
       }
-    });      
+    });
   }
- 
+
   ngOnInit() {
-    // TODO Check action 
+    // TODO Check action
     // this.action = this.route.snapshot.paramMap.get('action');
     // if (this.action === 'logout') this.logout();
 
@@ -51,13 +51,13 @@ export class SettingsPage implements OnInit {
       mqtt_username: ['', Validators.required],
       mqtt_passw: ['', Validators.required]
     });
-    
+
     // get initial values
     this.updateFields();
   }
- 
+
   async updateFields() {
-    if(this.credentials) {
+    if (this.credentials) {
       this.credentials.setValue({
           'mqtt_ipaddress': this.loxberryMqttIP,
           'mqtt_port': this.loxberryMqttPort,
@@ -75,16 +75,16 @@ export class SettingsPage implements OnInit {
     });
 
     await loading.present();
-    
+
     this.loxberryMqttPassw = this.credentials.value.passw;
     await this.storageService.store(
-    { 
-      loxberryMqttIP: this.credentials.value.mqtt_ipaddress, 
-      loxberryMqttPort: this.credentials.value.mqtt_port, 
+    {
+      loxberryMqttIP: this.credentials.value.mqtt_ipaddress,
+      loxberryMqttPort: this.credentials.value.mqtt_port,
       loxberryMqttUsername: this.credentials.value.mqtt_username,
       loxberryMqttPassw: this.credentials.value.mqtt_passw,
     });
-    
+
     await loading.dismiss();
   }
 

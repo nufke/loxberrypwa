@@ -85,9 +85,10 @@ export class LoxBerry {
     this.loxberryMqttConnected = true;
   }
 
-  private findUuid(data: any, val:string) {
+  private findIndex(data: any, hwid: string, uuid: string) {
     for(let i = 0; i < data.length; i++) { // loop through array index (1st level only)
-      if (data[i].uuid === val) return i;
+      if (data[i])
+        if ((data[i].uuid == uuid) && (data[i].hwid == hwid)) return i;
     }
     return -1; // uuid not found
   }
@@ -122,7 +123,7 @@ export class LoxBerry {
     if (!obj) return;
 
     obj.controls.forEach( item => {
-      let idx = this.findUuid(obj.controls, item.uuid);
+      let idx = this.findIndex(obj.controls, item.hwid, item.uuid);
       if (idx >= 0) { // Item exists, do update
         this.controls[idx] = item; // Override full object in array
         this.controls[idx].state._status_text = util.format(item.state.format, item.state.value);
@@ -135,7 +136,7 @@ export class LoxBerry {
     });
 
     obj.categories.forEach( item => {
-      let idx = this.findUuid(obj.categories, item.uuid);
+      let idx = this.findIndex(obj.categories, item.hwid, item.uuid);
       if (idx >= 0) { // Item exists
         this.categories[idx] = item; // Override full object in array
        }
@@ -145,7 +146,7 @@ export class LoxBerry {
     });
 
     obj.rooms.forEach( item => {
-      let idx = this.findUuid(obj.rooms, item.uuid);
+      let idx = this.findIndex(obj.rooms, item.hwid, item.uuid);
       if (idx >= 0) { // Item exists
         this.rooms[idx] = item; // Override full object in array
        }
@@ -177,7 +178,7 @@ export class LoxBerry {
 
   private registerSubTopics(data: any, subject: any, domain_topic: string, topics: any) {
     this.expandTopics(topics).forEach( (element) => {
-      let full_topic_name = this.registered_topic_prefix + '/' + domain_topic + '/+' + element; // note: whildcard '+' included
+      let full_topic_name = this.registered_topic_prefix + '/+/+' + element; // note: two whildcards '+' included
       if (this.registered_topics.includes(full_topic_name)) {
         console.log("topic already exists and ignored:", full_topic_name );
         return;
@@ -186,17 +187,17 @@ export class LoxBerry {
       this.registered_topics.push(full_topic_name);
       this.subscription.push( this.mqttService.observe(full_topic_name)
       .subscribe((message: IMqttMessage) => {
-        let topic_received = message.topic.replace(this.registered_topic_prefix + '/' + domain_topic + '/', '').split('/');
-        let idx = this.findUuid(data, topic_received[0]);
+        let topic_received = message.topic.replace(this.registered_topic_prefix + '/', '').split('/');
         let msg = message.payload.toString();
+        let idx = this.findIndex(data, topic_received[0], topic_received[1]); // 0=hwid, 1=uuid
         // extract name of fields from MQTT topic name
-        if ((topic_received.length == 3) && (idx != -1)) {
-          data[idx][topic_received[1]][topic_received[2]] = msg;
-          console.log('received: ', this.registered_topic_prefix + '/' + domain_topic + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2], msg);
+        if ((topic_received.length == 4) && (idx != -1)) {
+          data[idx][topic_received[2]][topic_received[3]] = msg;
+          console.log('received_4: ', this.registered_topic_prefix + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2] + '/' + topic_received[3], msg);
         }
         else if (idx != -1) {
-          data[idx][topic_received[1]] = msg;
-          console.log('received: ', this.registered_topic_prefix + '/' + domain_topic + '/' + topic_received[0] + '/' + topic_received[1], msg);
+          data[idx][topic_received[2]] = msg;
+          console.log('received: ', this.registered_topic_prefix + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2], msg);
         }
         subject.next(data); // updates for Subscribers
       }));
@@ -209,8 +210,8 @@ export class LoxBerry {
   }
 
   public sendMessage(type: string, obj: any, retain_state: any) {
-    let idx = this.findUuid(this.controls, obj.uuid);
-    let topic_root = this.registered_topic_prefix + '/control/' + obj.uuid;
+    let idx = this.findIndex(this.controls, obj.hwid, obj.uuid);
+    let topic_root = this.registered_topic_prefix + '/' + obj.hwid + '/' + obj.uuid;
 
     if (idx==-1) {
       console.log('Topic ' + topic_root + ' not found. Nothing published.');

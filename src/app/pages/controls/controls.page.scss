@@ -53,6 +53,7 @@ ion-fab-button {
   margin-left: 2px;
   --background: var(--ion-control-color, #353535);
   --background-activated-opacity: 100%;
+  --background-activated: var(--ion-color-primary, #69c350);
 }
 
 .ion-activated {

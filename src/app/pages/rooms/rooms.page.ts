@@ -31,7 +31,7 @@ export class RoomsPage implements OnInit, OnDestroy {
     this.roomsSub = this.LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms
         .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); }) // sort A-Z
-        .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
+        .filter( item => this.filtered_rooms.indexOf(item.uuid) > -1)
     });
   }
 

@@ -31,7 +31,7 @@ export class CategoriesPage implements OnInit, OnDestroy {
     this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories
         .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); }) // sort A-Z
-        .filter( item => this.filtered_categories.indexOf(item.name) > -1);
+        .filter( item => this.filtered_categories.indexOf(item.uuid) > -1);
     });
   }
 

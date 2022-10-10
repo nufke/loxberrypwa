@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
-      {{itemName}}
+      {{page.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -22,7 +22,7 @@
 
       <ion-row>
         <ion-col size="12" size-md="6" *ngFor="let control of filter(controls, label)">
-          <ion-card routerLink="{{control.uuid}}">
+          <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
             <ion-card-content>
               <ion-item>
                 <ion-icon color="{{control.icon._current_color}}" src="{{control.icon.href}}" ></ion-icon>

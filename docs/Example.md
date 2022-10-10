@@ -8,20 +8,21 @@ To initialize the App with a structure, send it over MQTT to topic `/loxberry/ap
 /loxberry/app/settings/set     -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }
 ```
 
-Update to the structure is *incremental*, which means changes to existing objects will be overridden and old objects remain available. To flush all elements in the App, an empty string message should be sent to `/loxberry/app/settings/set`.
+Updates to the structure is *incremental*, which means changes to existing objects will be overridden and old objects remain available. To flush all elements in the App, an empty string message should be sent to `/loxberry/app/settings/set`.
 
 ```json
 {
     "controls": [
         {
+            "hwid": "1",
             "uuid": "1",
             "name": "Lamp couch",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "Living Room",
-            "category": "Lighting",
+            "room": "1",
+            "category": "1",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -31,14 +32,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "2",
             "name": "Lamp dining table",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "Kitchen",
-            "category": "Lighting",
+            "room": "2",
+            "category": "1",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -48,14 +50,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "3",
             "name": "Lamp mirror",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "Bathroom",
-            "category": "Lighting",
+            "room": "3",
+            "category": "1",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -65,14 +68,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "4",
             "name": "Bed lamp left",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "Bedroom",
-            "category": "Lighting",
+            "room": "4",
+            "category": "1",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -82,14 +86,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "5",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "Living Room",
-            "category": "Sensors",
+            "room": "1",
+            "category": "2",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -99,14 +104,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "6",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "Kitchen",
-            "category": "Sensors",
+            "room": "2",
+            "category": "2",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -116,14 +122,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "7",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "Bathroom",
-            "category": "Sensors",
+            "room": "3",
+            "category": "2",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -133,14 +140,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "8",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "Bedroom",
-            "category": "Sensors",
+            "room": "4",
+            "category": "2",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -150,14 +158,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "9",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "Living Room",
-            "category": "Heating",
+            "room": "1",
+            "category": "4",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -167,14 +176,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "10",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "Kitchen",
-            "category": "Heating",
+            "room": "2",
+            "category": "4",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -184,14 +194,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "11",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "Bathroom",
-            "category": "Heating",
+            "room": "3",
+            "category": "4",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -201,14 +212,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "12",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "Bedroom",
-            "category": "Heating",
+            "room": "4",
+            "category": "4",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -218,14 +230,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "13",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "Living Room",
-            "category": "Audio",
+            "room": "1",
+            "category": "3",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -240,14 +253,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "14",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "Kitchen",
-            "category": "Audio",
+            "room": "2",
+            "category": "3",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -262,14 +276,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "15",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "Bathroom",
-            "category": "Audio",
+            "room": "3",
+            "category": "3",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -284,14 +299,15 @@ Update to the structure is *incremental*, which means changes to existing object
             }
         },
         {
+            "hwid": "1",
             "uuid": "16",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "Bedroom",
-            "category": "Audio",
+            "room": "4",
+            "category": "3",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -308,6 +324,7 @@ Update to the structure is *incremental*, which means changes to existing object
     ],
     "categories": [
         {
+            "hwid": "1",
             "uuid": "1",
             "name": "Lighting",
             "icon": {
@@ -317,6 +334,7 @@ Update to the structure is *incremental*, which means changes to existing object
             "order": 2
         },
         {
+            "hwid": "1",
             "uuid": "2",
             "name": "Sensors",
             "icon": {
@@ -326,6 +344,7 @@ Update to the structure is *incremental*, which means changes to existing object
             "order": 1
         },
         {
+            "hwid": "1",
             "uuid": "3",
             "name": "Audio",
             "icon": {
@@ -335,6 +354,7 @@ Update to the structure is *incremental*, which means changes to existing object
             "order": 1
         },
         {
+            "hwid": "1",
             "uuid": "4",
             "name": "Heating",
             "icon": {
@@ -346,6 +366,7 @@ Update to the structure is *incremental*, which means changes to existing object
     ],
     "rooms": [
         {
+            "hwid": "1",
             "uuid": "1",
             "name": "Living Room",
             "icon": {
@@ -355,6 +376,7 @@ Update to the structure is *incremental*, which means changes to existing object
             "order": 1
         },
         {
+            "hwid": "1",
             "uuid": "2",
             "name": "Kitchen",
             "icon": {
@@ -364,6 +386,7 @@ Update to the structure is *incremental*, which means changes to existing object
             "order": 1
         },
         {
+            "hwid": "1",
             "uuid": "3",
             "name": "Bathroom",
             "icon": {
@@ -373,6 +396,7 @@ Update to the structure is *incremental*, which means changes to existing object
             "order": 1
         },
         {
+            "hwid": "1",
             "uuid": "4",
             "name": "Bedroom",
             "icon": {

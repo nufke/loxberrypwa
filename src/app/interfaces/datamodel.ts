@@ -2,12 +2,13 @@
 // Note: changes to the data model might impact the MQTT API (topic registration)
 
 export interface Control {
+  hwid: string,
   uuid: string,
   name: string,
   icon: {
     href: string,
     default_color?: string,
-    active_color?: string, 
+    active_color?: string,
     _current_color?: string
   },
   type: string,
@@ -30,6 +31,7 @@ export interface Control {
 }
 
 export interface Category {
+  hwid: string,
   uuid: string,
   name: string,
   icon: {
@@ -43,6 +45,7 @@ export interface Category {
 }
 
 export interface Room {
+  hwid: string,
   uuid: string,
   name: string,
   icon: {
