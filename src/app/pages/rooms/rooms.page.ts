@@ -32,7 +32,8 @@ export class RoomsPage implements OnInit, OnDestroy {
       this.rooms = rooms
         .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); }) // sort A-Z
         .filter( item => this.filtered_rooms.indexOf(item.uuid) > -1)
-    });
+        .filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove duplicates
+      });
   }
 
   public ngOnInit() : void {

@@ -16,6 +16,7 @@ export class ControlsPage implements OnInit, OnDestroy {
   public rooms: Room[] = [];
 
   public items: any[];
+  public labels: any[];
 
   private filtered_categories: string[];
   private filtered_rooms: string[];
@@ -66,11 +67,13 @@ export class ControlsPage implements OnInit, OnDestroy {
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
 
-      if (this.domain === 'category')
+      if (this.domain === 'category') {
         this.page = this.findObj(categories, this.hwid, this.uuid);
+        this.items = categories;
+      }
 
       if (this.domain === 'room')
-        this.items = categories;
+        this.labels = categories;
     });
 
     this.roomsSub = this.LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
@@ -78,11 +81,13 @@ export class ControlsPage implements OnInit, OnDestroy {
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
 
-      if (this.domain === 'room')
+      if (this.domain === 'room') {
         this.page = this.findObj(rooms, this.hwid, this.uuid);
+        this.items = rooms;
+      }
 
       if (this.domain === 'category')
-        this.items = rooms;
+        this.labels = rooms;
     });
   }
 
@@ -101,13 +106,17 @@ export class ControlsPage implements OnInit, OnDestroy {
     }
   }
 
+  private findName(obj: any, uuid: string): Control {
+    return obj.find( item => { return (item.uuid == uuid) } );
+  }
+
   private findObj(obj: any, hwid: string, uuid: string): Control {
     return obj.find( item => { return (item.uuid == uuid) && (item.hwid == hwid) } );
   }
 
   public filter(item: any, label: any) : Control[] {
-    return item.filter( resp => { return ( resp[this.domain] === this.page['uuid']) &&
-      (resp['hwid'] == this.page['hwid']) && (resp[this.key] === label.uuid ) &&
+    return item.filter( resp => { return ( this.findName(this.items, resp[this.domain]).name === this.page['name']) &&
+      (resp[this.key] === label.uuid ) &&
       (resp['is_visible'] === true) });
   }
 
