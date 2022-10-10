@@ -49,7 +49,8 @@ export class ControlsPage implements OnInit, OnDestroy {
 
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
       this.controls = controls
-      .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) });
+      .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) })
+      .filter( item => item.is_visible === true);
 
       this.filtered_categories = controls
         .map(item => item.category )
@@ -115,9 +116,10 @@ export class ControlsPage implements OnInit, OnDestroy {
   }
 
   public filter(item: any, label: any) : Control[] {
-    return item.filter( resp => { return ( this.findName(this.items, resp[this.domain]).name === this.page['name']) &&
-      (resp[this.key] === label.uuid ) &&
-      (resp['is_visible'] === true) });
+    console.log('size:', item.length);
+    return item.filter( resp => { return (resp[this.key] === label.uuid) &&
+      (this.findName(this.items, resp[this.domain]).name === this.page.name)
+    });
   }
 
   public is_empty(item: any, label: any) : Boolean {

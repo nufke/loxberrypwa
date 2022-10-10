@@ -33,10 +33,10 @@ Fields indicated with '?' are optional
           active_color?: string       // color when active in RGB hex notation, e.g. #FFFFFF (optional)
         },
   type: string,                       // type of control, e.g., switch, button, slider, etc. See below
-  room: string,                       // GUI name for Room
-  category: string,                   // GUI name for Category
+  room: string,                       // uuid of room (hwid of room should match hwid of control)
+  category: string,                   // uuid of category (hwid of category should match hwid of control)
   is_favorite?: Boolean,              // elevate to favorite item (optional)
-  is_visible: Boolean,                // make contol invisible
+  is_visible: Boolean,                // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in list box (optional)
   state: {
