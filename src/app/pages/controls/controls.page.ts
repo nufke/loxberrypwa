@@ -116,7 +116,6 @@ export class ControlsPage implements OnInit, OnDestroy {
   }
 
   public filter(item: any, label: any) : Control[] {
-    console.log('size:', item.length);
     return item.filter( resp => { return (resp[this.key] === label.uuid) &&
       (this.findName(this.items, resp[this.domain]).name === this.page.name)
     });
@@ -135,20 +134,23 @@ export class ControlsPage implements OnInit, OnDestroy {
 
   private updateControlState(control: any) {
     if (control.state.default_color) // if defined
-    control.state._current_color = control.icon.default_color;
+      control.state._current_color = control.icon.default_color;
     else
-    control.state._current_color = "#5e5e5f";
+      control.state._current_color = "#5e5e5f";
+
+    control.icon._current_href = control.icon.default_href;
 
     if (control.type === 'switch') {
       control.state._status_text = ''; // no status displayed
       if (control.state.value === '1') {
         control.state._toggle = true;
         if (control.icon.active_color) // if defined
-        control.icon._current_color = control.icon.active_color;
+          control.icon._current_color = control.icon.active_color;
         else control.icon._current_color = "primary";
+        if (control.icon.active_href) // if defined
+          control.icon._current_href = control.icon.active_href
       }
       else {
-        control.icon._current_color = control.icon.default_color;
         control.state._toggle = false;
       }
     }

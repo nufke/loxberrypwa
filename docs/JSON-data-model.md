@@ -28,7 +28,8 @@ Fields indicated with '?' are optional
   uuid: string,                       // unique identifier to identify the control as MQTT topic
   name: string,                       // GUI name
   icon: {
-          href: string,               // location or URL to SVG icon
+          default_href: string,       // location or URL of default SVG icon
+          active_href?: string,       // location or URL of SVG icon when active
           default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
           active_color?: string       // color when active in RGB hex notation, e.g. #FFFFFF (optional)
         },
@@ -36,12 +37,12 @@ Fields indicated with '?' are optional
   room: string,                       // uuid of room (hwid of room should match hwid of control)
   category: string,                   // uuid of category (hwid of category should match hwid of control)
   is_favorite?: Boolean,              // elevate to favorite item (optional)
-  is_visible: Boolean,                // make control invisible
+  is_visible?: Boolean,               // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in list box (optional)
   state: {
            value: string,             // e.g. "1", "0", "22.1", "on", "off", ...
-           format: string,            // message format in sprintf notation, can include pre- and post-text, such as units
+           format?: string,           // message format in sprintf notation, can include pre- and post-text, such as units (optional)
            list_names?: string[],     // list names for radio buttons (optional)
            default_color?: string,    // default color in RGB hex notation, e.g. #FFFFFF (optional)
            active_color?: string      // color of text/value when active in RGB hex notation, e.g. #FFFFFF (optional)
@@ -79,9 +80,10 @@ The control type is a string (enum) which defines the style of the button.
   name: string,                       // GUI name
   icon: {
           href: string,               // location or URL to SVG icon
-          default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
+          color?: string              // default color in RGB hex notation, e.g. #FFFFFF (optional)
         },
-  is_visible: Boolean,                // make category invisible
+  is_visible?: Boolean,               // make category invisible
+  is_favorite?: Boolean,              // elevate to favorite item (optional)
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }
@@ -96,9 +98,10 @@ The control type is a string (enum) which defines the style of the button.
   name: string,                       // GUI name
   icon: {
           href: string,               // URL to SVG icon
-          default_color?: string      // RGB hex notation, e.g. #FFFFFF (optional)
+          color?: string              // RGB hex notation, e.g. #FFFFFF (optional)
         },
-  is_visible: Boolean,                // make room invisible
+  is_visible?: Boolean,               // make room invisible
+  is_favorite?: Boolean,              // elevate to favorite item (optional)
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }

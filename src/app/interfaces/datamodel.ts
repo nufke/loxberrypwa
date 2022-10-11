@@ -6,7 +6,9 @@ export interface Control {
   uuid: string,                 // unique identifier to identify the control as MQTT topic
   name: string,                 // unique identifier to identify the control as MQTT topic
   icon: {
-    href: string,               // location or URL to SVG icon
+    default_href: string,       // location or URL of default SVG icon
+    active_href?: string,       // location or URL of SVG icon when active
+    _current_href?: string,     // INTERNAL current SVG icon
     default_color?: string,     // default color for icon in RGB hex notation, e.g. #FFFFFF (optional)
     active_color?: string,      // icon color when active in RGB hex notation, e.g. #FFFFFF (optional)
     _current_color?: string     // INTERNAL current color for icon (optional)
@@ -35,8 +37,8 @@ export interface Category {
   uuid: string,                 // unique identifier to identify the category as MQTT topic
   name: string,                 // GUI name
   icon: {
-    href: string,               // location or URL to SVG icon
-    default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
+    href: string,               // location or URL of default SVG icon
+    color?: string              // color in RGB hex notation, e.g. #FFFFFF (optional)
   },
   image?: string,               // location for the bitmap image (optional)
   is_visible?: Boolean,         // make category invisible (optional)
@@ -50,7 +52,7 @@ export interface Room {
   name: string,                 // GUI name
   icon: {
     href: string,               // location or URL to SVG icon
-    default_color?: string      // default color in RGB hex notation, e.g. #FFFFFF (optional)
+    color?: string              // color in RGB hex notation, e.g. #FFFFFF (optional)
   },
   image?: string,               // location for the bitmap image (optional)
   is_visible?: Boolean,         // make category invisible (optional)

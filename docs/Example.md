@@ -18,7 +18,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "1",
             "name": "Lamp couch",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
             "room": "1",
@@ -36,7 +36,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "2",
             "name": "Lamp dining table",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
             "room": "2",
@@ -54,7 +54,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "3",
             "name": "Lamp mirror",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
             "room": "3",
@@ -72,7 +72,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "4",
             "name": "Bed lamp left",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
             "room": "4",
@@ -90,7 +90,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "5",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
             "room": "1",
@@ -108,7 +108,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "6",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
             "room": "2",
@@ -126,7 +126,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "7",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
             "room": "3",
@@ -144,7 +144,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "8",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
             "room": "4",
@@ -162,7 +162,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "9",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
             "room": "1",
@@ -180,7 +180,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "10",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
             "room": "2",
@@ -198,7 +198,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "11",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
             "room": "3",
@@ -216,7 +216,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "12",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
             "room": "4",
@@ -234,7 +234,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "13",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
             "room": "1",
@@ -257,7 +257,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "14",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
             "room": "2",
@@ -280,7 +280,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "15",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
             "room": "3",
@@ -303,7 +303,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "uuid": "16",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
             "room": "4",
