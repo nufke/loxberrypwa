@@ -3,9 +3,10 @@
 export interface MqttControl {
   name: string,
   icon: {
-    href: string,
-    default_color?: string,
-    active_color?: string, 
+    default_href: string,
+    active_href: string,
+    default_color: string,
+    active_color: string
   },
   type: string,
   room: string,
@@ -27,9 +28,10 @@ export interface MqttCategory {
   name: string,
   icon: {
     href: string,
-    default_color: string
+    color: string
   },
   image: string,
+  is_favorite: string,
   is_visible: string,
   is_protected: string,
   order: string
@@ -39,9 +41,10 @@ export interface MqttRoom {
   name: string,
   icon: {
     href: string,
-    default_color: string
+    color: string
   },
   image: string,
+  is_favorite: string,
   is_visible: string,
   is_protected: string,
   order: string
@@ -50,7 +53,8 @@ export interface MqttRoom {
 export const MqttControlTopics: MqttControl = {
   name: "/name",
   icon: {
-    href: "/icon/href",
+    default_href: "/icon/default_href",
+    active_href: "/icon/active_href",
     default_color: "/icon/default_color",
     active_color: "/icon/active_color"
   },
@@ -74,9 +78,10 @@ export const MqttCategoryTopics: MqttCategory = {
   name: "/name",
   icon: {
     href: "/icon/href",
-    default_color: "/icon/default_color"
+    color: "/icon/color"
   },
   image: "/image",
+  is_favorite: "/is_favorite",
   is_visible: "/is_visible",
   is_protected: "/is_protected",
   order: "/order"
@@ -86,9 +91,10 @@ export const MqttRoomTopics: MqttRoom = {
   name: "/name",
   icon: {
     href: "/icon/href",
-    default_color: "/icon/default_color"
+    color: "/icon/color"
   },
   image: "/image",
+  is_favorite: "/is_favorite",
   is_visible: "/is_visible",
   is_protected: "/is_protected",
   order: "/order"
