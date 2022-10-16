@@ -21,8 +21,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "1",
-            "category": "1",
+            "room": "1001",
+            "category": "2001",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -39,8 +39,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "2",
-            "category": "1",
+            "room": "1002",
+            "category": "2001",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -57,8 +57,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "3",
-            "category": "1",
+            "room": "1003",
+            "category": "2001",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -75,8 +75,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/bulb-outline.svg"
             },
             "type": "switch",
-            "room": "4",
-            "category": "1",
+            "room": "1004",
+            "category": "2001",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -93,8 +93,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "1",
-            "category": "2",
+            "room": "1001",
+            "category": "2002",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -111,8 +111,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "2",
-            "category": "2",
+            "room": "1002",
+            "category": "2002",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -129,8 +129,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "3",
-            "category": "2",
+            "room": "1003",
+            "category": "2002",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -147,8 +147,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/thermometer-outline.svg"
             },
             "type": "text",
-            "room": "4",
-            "category": "2",
+            "room": "1004",
+            "category": "2002",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -165,8 +165,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "1",
-            "category": "4",
+            "room": "1001",
+            "category": "2004",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -183,8 +183,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "2",
-            "category": "4",
+            "room": "1002",
+            "category": "2004",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -201,8 +201,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "3",
-            "category": "4",
+            "room": "1003",
+            "category": "2004",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -219,8 +219,8 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/knob-solid.svg"
             },
             "type": "plusminus",
-            "room": "4",
-            "category": "4",
+            "room": "1004",
+            "category": "2004",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
@@ -237,15 +237,15 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "1",
-            "category": "3",
+            "room": "1001",
+            "category": "2003",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
             "state": {
                 "value": 0,
                 "format": "%s",
-                "states": [
+                "list_names": [
                     "channel 1",
                     "channel 2",
                     "channel 3"
@@ -260,15 +260,15 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "2",
-            "category": "3",
+            "room": "1002",
+            "category": "2003",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
             "state": {
                 "value": 0,
                 "format": "%s",
-                "states": [
+                "list_names": [
                     "channel 1",
                     "channel 2",
                     "channel 3"
@@ -283,15 +283,15 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "3",
-            "category": "3",
+            "room": "1003",
+            "category": "2003",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
             "state": {
                 "value": 0,
                 "format": "%s",
-                "states": [
+                "list_names": [
                     "channel 1",
                     "channel 2",
                     "channel 3"
@@ -306,15 +306,15 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "default_href": "assets/svg_icons/music-solid.svg"
             },
             "type": "radio",
-            "room": "4",
-            "category": "3",
+            "room": "1004",
+            "category": "2003",
             "is_favorite": false,
             "is_visible": true,
             "order": 1,
             "state": {
                 "value": 0,
                 "format": "%s",
-                "states": [
+                "list_names": [
                     "channel 1",
                     "channel 2",
                     "channel 3"
@@ -325,7 +325,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
     "categories": [
         {
             "hwid": "1",
-            "uuid": "1",
+            "uuid": "2001",
             "name": "Lighting",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
@@ -335,7 +335,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         },
         {
             "hwid": "1",
-            "uuid": "2",
+            "uuid": "2002",
             "name": "Sensors",
             "icon": {
                 "href": "assets/svg_icons/map-marker-solid.svg"
@@ -345,7 +345,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         },
         {
             "hwid": "1",
-            "uuid": "3",
+            "uuid": "2003",
             "name": "Audio",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
@@ -355,7 +355,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         },
         {
             "hwid": "1",
-            "uuid": "4",
+            "uuid": "2004",
             "name": "Heating",
             "icon": {
                 "href": "assets/svg_icons/home-heating-solid.svg"
@@ -367,7 +367,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
     "rooms": [
         {
             "hwid": "1",
-            "uuid": "1",
+            "uuid": "1001",
             "name": "Living Room",
             "icon": {
                 "href": "assets/svg_icons/couch-solid.svg"
@@ -377,7 +377,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         },
         {
             "hwid": "1",
-            "uuid": "2",
+            "uuid": "1002",
             "name": "Kitchen",
             "icon": {
                 "href": "assets/svg_icons/utensils-solid.svg"
@@ -387,7 +387,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         },
         {
             "hwid": "1",
-            "uuid": "3",
+            "uuid": "1003",
             "name": "Bathroom",
             "icon": {
                 "href": "assets/svg_icons/shower-solid.svg"
@@ -397,7 +397,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         },
         {
             "hwid": "1",
-            "uuid": "4",
+            "uuid": "1004",
             "name": "Bedroom",
             "icon": {
                 "href": "assets/svg_icons/bed-outline.svg"

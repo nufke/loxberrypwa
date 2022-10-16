@@ -142,7 +142,7 @@ export class ControlsPage implements OnInit, OnDestroy {
 
     if (control.type === 'switch') {
       control.state._status_text = ''; // no status displayed
-      if (control.state.value === '1') {
+      if (control.state.value === "1") {
         control.state._toggle = true;
         if (control.icon.active_color) // if defined
           control.icon._current_color = control.icon.active_color;

@@ -4,7 +4,7 @@ import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { util } from 'node-forge' // TODO check package
 import { Control, Category, Room } from '../interfaces/datamodel'
-import { MqttControlTopics, MqttCategoryTopics, MqttRoomTopics } from '../interfaces/mqtt.api'
+import { MqttTopics } from '../interfaces/mqtt.api'
 import { StorageService } from '../services/storage.service';
 
 @Injectable({
@@ -159,26 +159,45 @@ export class LoxBerry {
     this.categoriesSubject.next(this.categories);
     this.roomsSubject.next(this.rooms);
 
-    this.registerSubTopics(this.controls, this.controlsSubject, 'control', MqttControlTopics);
-    this.registerSubTopics(this.categories, this.categoriesSubject, 'category', MqttCategoryTopics);
-    this.registerSubTopics(this.rooms, this.roomsSubject, 'room', MqttRoomTopics);
+    this.registerTopics();
   }
 
-  private expandTopics(obj: any): Array<string> {
-    const result = [];
-    for (const prop in obj) {
-      const value = obj[prop];
-      if (typeof value === 'object')
-        this.expandTopics(value).forEach( item => result.push(item) );
-      else
-        result.push(value);
+  private processTopic(message: any) {
+    if (!message) return;
+
+    let topic = message.topic.replace(this.registered_topic_prefix + '/', '').split('/');
+    let value = message.payload.toString();
+    let hwid = topic[0];
+    let uuid = topic[1];
+
+    let idx = this.findIndex(this.controls, hwid, uuid);
+    if (idx >= 0) {
+      if (topic.length == 4) this.controls[idx][topic[2]][topic[3]] = value;
+      if (topic.length == 3) this.controls[idx][topic[2]] = value;
+      console.log('received control: ', topic.toString(), value);
+      this.controlsSubject.next(this.controls); // updates for Subscribers
     }
-    return result;
+
+    idx = this.findIndex(this.categories, hwid, uuid);
+    if (idx >= 0) {
+      if (topic.length == 4) this.categories[idx][topic[2]][topic[3]] = value;
+      if (topic.length == 3) this.categories[idx][topic[2]] = value;
+      console.log('received control: ', topic.toString(), value);
+      this.categoriesSubject.next(this.categories); // updates for Subscribers
+    }
+
+    idx = this.findIndex(this.rooms, hwid, uuid);
+    if (idx >= 0) {
+      if (topic.length == 4) this.rooms[idx][topic[2]][topic[3]] = value;
+      if (topic.length == 3) this.rooms[idx][topic[2]] = value;
+      console.log('received room: ', topic.toString(), value);
+      this.roomsSubject.next(this.rooms); // updates for Subscribers
+    }
   }
 
-  private registerSubTopics(data: any, subject: any, domain_topic: string, topics: any) {
-    this.expandTopics(topics).forEach( (element) => {
-      let full_topic_name = this.registered_topic_prefix + '/+/+' + element; // note: two whildcards '+' included
+  private registerTopics() {
+    MqttTopics.forEach( (element) => {
+      let full_topic_name = this.registered_topic_prefix + '/+/+' + element; // note: two wildcards '+' included
       if (this.registered_topics.includes(full_topic_name)) {
         console.log("topic already exists and ignored:", full_topic_name );
         return;
@@ -187,19 +206,7 @@ export class LoxBerry {
       this.registered_topics.push(full_topic_name);
       this.subscription.push( this.mqttService.observe(full_topic_name)
       .subscribe((message: IMqttMessage) => {
-        let topic_received = message.topic.replace(this.registered_topic_prefix + '/', '').split('/');
-        let msg = message.payload.toString();
-        let idx = this.findIndex(data, topic_received[0], topic_received[1]); // 0=hwid, 1=uuid
-        // extract name of fields from MQTT topic name
-        if ((topic_received.length == 4) && (idx != -1)) {
-          data[idx][topic_received[2]][topic_received[3]] = msg;
-          console.log('received_4: ', this.registered_topic_prefix + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2] + '/' + topic_received[3], msg);
-        }
-        else if (idx != -1) {
-          data[idx][topic_received[2]] = msg;
-          console.log('received: ', this.registered_topic_prefix + '/' + topic_received[0] + '/' + topic_received[1] + '/' + topic_received[2], msg);
-        }
-        subject.next(data); // updates for Subscribers
+        this.processTopic(message);
       }));
     });
   }

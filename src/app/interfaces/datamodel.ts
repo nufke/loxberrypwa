@@ -59,3 +59,20 @@ export interface Room {
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number                // defines order in list box (optional)
 }
+
+export interface ControlText {
+  state: {
+    value: string,              // number represented as string
+    format?: string,            // message format in sprintf notation, can include pre- and post-text, such as units
+    default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
+    active_color?: string       // color of text/value when active in RGB hex notation, e.g. #FFFFFF (optional)
+  }
+}
+
+export interface ControlRadio {
+  state: {
+    value: string,              // number for active item in the list (0 = off)
+    list_names?: string[],      // name for each radio item
+    list_color?: string[]       // color for each radio item
+  }
+}
