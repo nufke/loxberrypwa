@@ -56,7 +56,6 @@ export class ControlPage implements OnInit {
     private route: ActivatedRoute
     )
   {
-    console.log('constructor');
     const uuid = this.route.snapshot.paramMap.get('control_uuid');
 
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {

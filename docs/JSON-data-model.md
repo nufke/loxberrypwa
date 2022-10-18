@@ -106,3 +106,117 @@ The control type is a string (enum) which defines the style of the button.
   order?: Number                      // defines order in list box (optional)
 }
 ```
+
+## JSON data model generator / translator
+
+In order to map the rooms, categories and controls from a Loxone Miniserver menu structure (`LoxAPP3.json`) to the JSON data model used in the App, the javascript function listed below can be used as a start. The javascript function can be integrated in `Node-RED` using a function node, which should read the Loxone menu structure as input (`msg.payload`) and translates it to the required JSON data model as output (`msg`). In case multiple Miniservers are in use, you should process the Loxone structures individually and concatinate them to a single JSON data model.
+
+**NOTE: At this stage not all functions are generated / translated. As such the generated JSON data model should be seen as a template and requires additional manual modification or additions.**
+
+```
+var cats = Object.values(msg.payload.cats);
+var rooms = Object.values(msg.payload.rooms);
+var controls = Object.values(msg.payload.controls);
+
+var hwinfo = msg.payload.msInfo.serialNr;
+
+cats.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
+rooms.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
+controls.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
+
+var cats_arr = [];
+var rooms_arr = [];
+var controls_arr = [];
+
+var cat_names = [];
+var cat_icons = [];
+var room_names = [];
+
+var i=0; // used to order element
+
+cats.forEach( (item) => {
+    let category =
+    {
+        hwid: hwinfo,
+        uuid: item.uuid,
+        name: item.name,
+            icon: {
+                href: "assets/svg_icons/" + item.image },
+        order: i,
+        is_favorite: false,
+        is_visible: true
+    };
+    i++;
+    cat_names[item.uuid] = item.name;
+    cat_icons[item.uuid] = item.image;
+    cats_arr.push(category);
+});
+
+i=0;
+
+rooms.forEach((item) => {
+    let room =
+    {
+        hwid: hwinfo,
+        uuid: item.uuid,
+        name: item.name,
+        icon: { href: "assets/svg_icons/" + item.image },
+        order: i,
+        is_favorite: false,
+        is_visible: true
+    };
+    i++;
+    room_names[item.uuid] = item.name;
+    rooms_arr.push(room);
+});
+
+i = 0;
+
+controls.forEach( (item) => {
+    let icon;
+    if (item.defaultIcon)
+      icon = item.defaultIcon + ".svg";
+    else
+      icon = cat_icons[item.cat];
+
+    if (item.type === "UpDownDigital") item.type="updown";
+    if (item.type === "InfoOnlyAnalog") item.type = "text";
+    if (item.type === "InfoOnlyDigital") item.type = "text";
+    if (item.type === "InfoOnlyText") item.type = "text";
+    if (item.type === "LightControllerV2") item.type = "light";
+    if (item.type === "Pushbutton") item.type = "push";
+    if (item.type === "CentralLightController") item.type = "light_c";
+    if (item.type === "Jalousie") item.type = "screen";
+    if (item.type === "CentralJalousie") item.type = "screen_c";
+    if (item.type === "IRoomController") item.type = "tempctrl";
+    if (item.type === "TextState") item.type = "text";
+
+    let control =
+    {
+        hwid: hwinfo,
+        uuid: item.uuidAction,
+        name: item.name,
+        icon: { default_href: "assets/svg_icons/" + icon },
+        type: item.type.toLowerCase(),
+        room: item.room,
+        category: item.cat,
+        is_favorite: false,
+        is_visible: true,
+        state: {
+           value: "0",
+           format: "%s"
+        },
+        order: i
+    };
+    i++;
+    controls_arr.push(control);
+});
+
+msg.payload = {
+    controls: controls_arr,
+    categories: cats_arr,
+    rooms: rooms_arr
+}
+
+return msg;
+```
