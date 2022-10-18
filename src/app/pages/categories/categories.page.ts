@@ -37,7 +37,6 @@ export class CategoriesPage implements OnInit, OnDestroy {
   }
 
   public ngOnInit() : void {
-    console.log('ngOnInit');
   }
 
   public ngOnDestroy() : void {
