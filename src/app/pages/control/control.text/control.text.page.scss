@@ -2,3 +2,50 @@
 ion-back-button {
   display: block;
 }
+
+ion-card {
+  margin-top: 100px;
+  border-radius: 5px;
+  padding: 1px;
+}
+
+ion-card-content {
+  margin: 0;
+  padding: 0;
+  //vertical-align: middle;
+}
+
+ion-item {
+  --inner-border-width: 0px;
+  --padding-start: 10px;
+  --padding-end: 3px;
+  --inner-padding-end: 3px;
+  --color: var(--ion-text-color, #2c2c2c);
+  margin-left: 2px;
+}
+
+ion-icon {
+  font-size: 32px;
+  height: 65px;
+  color: var(--ion-text-color, #ffffff);
+}
+
+ion-label {
+  margin: 0 0 0 15px;
+  h1 {
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  p {
+    margin-top: 3px;
+    //letter-spacing: 0.01em;
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+}

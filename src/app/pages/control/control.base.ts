@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import { Control } from '../../interfaces/datamodel'
+import { Control, Category, Room } from '../../interfaces/datamodel'
 
 @Component({
   selector: 'control.base',
@@ -8,7 +8,11 @@ import { Control } from '../../interfaces/datamodel'
 export class ControlBase {
 
   @Input() control: Control;
+  @Input() category: Category;
+  @Input() room: Room;
 
-  constructor() {}
+  constructor()
+  {
+  }
 
 }

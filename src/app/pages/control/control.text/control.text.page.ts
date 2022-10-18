@@ -9,8 +9,6 @@ import { ControlBase } from '../control.base';
 })
 export class ControlTextPage extends ControlBase {
 
-  color = '#ffffff';
-
   constructor(
     private router: Router
   )

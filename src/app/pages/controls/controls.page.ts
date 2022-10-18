@@ -161,9 +161,9 @@ export class ControlsPage implements OnInit, OnDestroy {
     }
 
     if (control.type === 'radio') {
-      if (control.state.states) {
+      if (control.state.list_names) {
         let val = parseInt(control.state.value);
-        control.state._status_text = control.state.states[val];
+        control.state._status_text = control.state.list_names[val];
       }
     }
   }
@@ -195,12 +195,12 @@ export class ControlsPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed radio', control);
 
-    if (control.state.states) // process only if there are radio states
+    if (control.state.list_names) // process only if there are radio list names
     {
       let val = parseInt(control.state.value);
       let min, max;
-      if (up) { max = control.state.states.length-1; min = 0; }
-        else { max = 0; min = control.state.states.length-1; }
+      if (up) { max = control.state.list_names.length-1; min = 0; }
+        else { max = 0; min = control.state.list_names.length-1; }
 
       if (val == max)
         val = min;

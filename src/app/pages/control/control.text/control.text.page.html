@@ -9,10 +9,16 @@
 
 <ion-content fullscreen="true">
 
+<ion-card>
+  <ion-card-content>
     <ion-item>
+      <ion-icon color="{{control.icon._current_color}}" src="{{control.icon._current_href}}" ></ion-icon>
       <ion-label>
-        <p>{{control.state.value}}</p>
+        <h1>{{category.name}} &centerdot; {{room.name}}</h1>
+        <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">{{control.state._status_text}}</h2>
       </ion-label>
     </ion-item>
+  </ion-card-content>
+</ion-card>
 
 </ion-content>

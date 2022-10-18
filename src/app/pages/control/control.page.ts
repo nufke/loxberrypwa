@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoxBerry } from '../../providers/loxberry';
-import { Control } from '../../interfaces/datamodel'
+import { Control, Category, Room } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
 
 import { ControlBase } from './control.base';
@@ -16,10 +16,16 @@ import { ControlLightPage } from './control.light/control.light.page';
 export class ControlPage implements OnInit {
  @ViewChild('container', { read: ViewContainerRef, static: true })
 
-  control : any = [];
-  controlname: string ='';
+  public viewContainer: ViewContainerRef;
+  public componentRef;
+
+  public control : Control;
+  public category : Category;
+  public room : Room;
 
   private controlsSub: Subscription;
+  private categoriesSub: Subscription;
+  private roomsSub: Subscription;
 
   private ControlTypeMap = {
     'text': ControlTextPage,
@@ -47,21 +53,32 @@ export class ControlPage implements OnInit {
 
   constructor(
     public LoxBerryService: LoxBerry,
-    private viewContainerRef: ViewContainerRef,
-    private route: ActivatedRoute )
+    private route: ActivatedRoute
+    )
   {
+    console.log('constructor');
     const uuid = this.route.snapshot.paramMap.get('control_uuid');
 
     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
       this.control = controls.find( item => item.uuid === uuid );
     });
 
-    this.loadControlComponent(this.control);
+    this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
+      this.category = categories.find( item => item.uuid === this.control.category );
+    });
+
+    this.roomsSub = this.LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
+      this.room = rooms.find( item => item.uuid === this.control.room );
+    });
   }
 
-  async loadControlComponent(control: any) {
-    const componentRef = this.viewContainerRef.createComponent(this.getControlType(control.type));
-    (<ControlBase>componentRef.instance).control = control;
+  async loadControlComponent(control: Control, category : Category, room : Room ) {
+    if (!this.componentRef) { // only create if dynamic view does not exist
+      this.componentRef = this.viewContainer.createComponent(this.getControlType(control.type));
+      (<ControlBase>this.componentRef.instance).control = control;
+      (<ControlBase>this.componentRef.instance).category = category;
+      (<ControlBase>this.componentRef.instance).room = room;
+    }
   }
 
   private getControlType(type) {
@@ -69,11 +86,19 @@ export class ControlPage implements OnInit {
   }
 
   public ngOnInit() : void {
+    this.loadControlComponent(this.control, this.category, this.room);
   }
 
   public ngOnDestroy() : void {
+    this.viewContainer.clear(); // remove dynamic view from memory
+    this.componentRef = -1;
+
     if (this.controlsSub)
+      this.categoriesSub.unsubscribe();
+    if (this.categoriesSub)
       this.controlsSub.unsubscribe();
+    if (this.roomsSub)
+      this.roomsSub.unsubscribe();
   }
 
 }
