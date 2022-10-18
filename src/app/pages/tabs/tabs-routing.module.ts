@@ -14,6 +14,11 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
+        path: 'favorites/:control_hwid/:control_uuid',
+        loadChildren: () => import('../control/control.module').then(m => m.ControlPageModule),
+        //canActivate: [AuthGuard]
+      },
+      {
         path: 'room',
         loadChildren: () => import('../rooms/rooms.module').then(m => m.RoomsPageModule),
         //canActivate: [AuthGuard]

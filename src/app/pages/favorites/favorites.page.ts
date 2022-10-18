@@ -49,19 +49,25 @@ export class FavoritesPage implements OnInit, OnDestroy {
 
   private updateControlState(control: any) {
     if (control.state.default_color) // if defined
-    control.state._current_color = control.icon.default_color;
+      control.state._current_color = control.icon.default_color;
     else
-    control.state._current_color = "#5e5e5f";
+      control.state._current_color = "#5e5e5f";
+
+    control.icon._current_href = control.icon.default_href;
 
     if (control.type === 'switch') {
       control.state._status_text = ''; // no status displayed
-      if (control.state.value === '1') {
+      if (control.state.value === "1") {
         control.state._toggle = true;
         if (control.icon.active_color) // if defined
-        control.icon._current_color = control.icon.active_color;
+          control.icon._current_color = control.icon.active_color;
         else control.icon._current_color = "primary";
+        if (control.icon.active_href) // if defined
+          control.icon._current_href = control.icon.active_href
       }
-      else control.icon._current_color = control.icon.default_color;
+      else {
+        control.state._toggle = false;
+      }
     }
 
     if ((control.type === 'intercom') || (control.type === 'light') || (control.type === 'link') || (control.type === 'screen_c') ||
@@ -70,9 +76,9 @@ export class FavoritesPage implements OnInit, OnDestroy {
     }
 
     if (control.type === 'radio') {
-      if (control.state.states) {
+      if (control.state.list_names) {
         let val = parseInt(control.state.value);
-        control.state._status_text = control.state.states[val];
+        control.state._status_text = control.state.list_names[val];
       }
     }
   }
@@ -104,12 +110,12 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed radio', control);
 
-    if (control.state.states) // process only if there are radio states
+    if (control.state.list_names) // process only if there are radio list names
     {
       let val = parseInt(control.state.value);
       let min, max;
-      if (up) { max = control.state.states.length-1; min = 0; }
-        else { max = 0; min = control.state.states.length-1; }
+      if (up) { max = control.state.list_names.length-1; min = 0; }
+        else { max = 0; min = control.state.list_names.length-1; }
 
       if (val == max)
         val = min;

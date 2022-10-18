@@ -21,10 +21,10 @@
 
       <ion-row>
         <ion-col size="12" size-md="6" *ngFor="let control of favorites">
-          <ion-card>
+          <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
             <ion-card-content>
               <ion-item>
-                <ion-icon color="{{control.icon._current_color}}" src="{{control.icon.href}}" ></ion-icon>
+                <ion-icon color="{{control.icon._current_color}}" src="{{control.icon._current_href}}" ></ion-icon>
                 <ion-label>
                   <h1>{{control.name}}</h1>
                   <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">{{control.state._status_text}}</h2>
