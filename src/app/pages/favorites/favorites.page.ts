@@ -51,7 +51,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     if (control.state.default_color) // if defined
       control.state._current_color = control.icon.default_color;
     else
-      control.state._current_color = "#5e5e5f";
+      control.state._current_color = "#5e5e5f"; // TODO use color palette
 
     control.icon._current_href = control.icon.default_href;
 
@@ -67,6 +67,9 @@ export class FavoritesPage implements OnInit, OnDestroy {
       }
       else {
         control.state._toggle = false;
+        if (control.icon.default_color) // if defined
+          control.icon._current_color = control.icon.default_color;
+        else control.icon._current_color = "#ffffff"; // TODO use color palette
       }
     }
 

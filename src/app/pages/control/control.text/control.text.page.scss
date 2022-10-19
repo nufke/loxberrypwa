@@ -3,10 +3,14 @@ ion-back-button {
   display: block;
 }
 
+// disable visible scroll on page
+ion-content {
+  --overflow: hidden;
+}
+
 ion-card {
-  margin-top: 100px;
+  margin: 0;
   border-radius: 5px;
-  padding: 1px;
 }
 
 ion-card-content {

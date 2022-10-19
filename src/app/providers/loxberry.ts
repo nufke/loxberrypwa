@@ -182,7 +182,7 @@ export class LoxBerry {
     if (idx >= 0) {
       if (topic.length == 4) this.categories[idx][topic[2]][topic[3]] = value;
       if (topic.length == 3) this.categories[idx][topic[2]] = value;
-      console.log('received control: ', topic.toString(), value);
+      console.log('received category: ', topic.toString(), value);
       this.categoriesSubject.next(this.categories); // updates for Subscribers
     }
 
