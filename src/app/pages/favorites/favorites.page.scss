@@ -1,21 +1,33 @@
+
 ion-card {
   margin: 0;
   border-radius: 5px;
 }
 
-ion-card-content {
+ion-card-header {
+  height: 60px;
   margin: 0;
   padding: 0;
-  //vertical-align: middle;
+}
+
+ion-card-content {
+  height: 80px;
+  margin: 0px;
+  padding: 3px;
 }
 
 ion-item {
   --inner-border-width: 0px;
-  --padding-start: 10px;
-  --padding-end: 3px;
+  --inner-padding-start: 0px;
   --inner-padding-end: 3px;
+  --inner-border-width: 0px;
+  --padding-start: 0px;
+  --padding-end: 3px;
+  --inner-padding-start: 10px;
+  --inner-padding-end: 0px;
   --color: var(--ion-text-color, #2c2c2c);
-  margin-left: 2px;
+  margin: 0px;
+  padding: 0px;
 }
 
 ion-icon {
@@ -25,7 +37,7 @@ ion-icon {
 }
 
 ion-label {
-  margin: 0 0 0 15px;
+  margin: 0px;
   h1 {
     font-size: 18px;
     line-height: 1.2;
@@ -37,8 +49,6 @@ ion-label {
   p {
     margin-top: 3px;
     font-size: 13px;
-    //letter-spacing: 0.01em;
-    text-transform: uppercase;
   }
 }
 
@@ -50,8 +60,5 @@ ion-fab-button {
   margin-left: 2px;
   --background: var(--ion-control-color, #353535);
   --background-activated-opacity: 100%;
-}
-
-.ion-activated {
-  --transform: scale(1.0); // disable animation of dab button
+  --background-activated: var(--ion-color-primary, #69c350);
 }

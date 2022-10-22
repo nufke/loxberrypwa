@@ -13,36 +13,27 @@
 
   <ion-grid>
 
-      <ion-row>
-        <ion-label>
-          <p translate>Favorites {{user}}</p>
-        </ion-label>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let control of favorites">
+    <ion-row>
+        <ion-col size="6" size-md="3" *ngFor="let control of favorites">
           <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
-            <ion-card-content>
+            <ion-card-header>
               <ion-item>
                 <ion-icon color="{{control.icon._current_color}}" src="{{control.icon._current_href}}" ></ion-icon>
-                <ion-label>
-                  <h1>{{control.name}}</h1>
-                  <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">{{control.state._status_text}}</h2>
-                </ion-label>
+                <ion-label></ion-label>
 
-                <ng-container *ngIf="control.type === 'push'">
-                  <ion-fab-button size="small" (click)="pushed_pulse($event, control)">
+                <ng-container class="align-right" *ngIf="control.type === 'push'">
+                  <ion-fab-button class="align-right" horizontal="end" size="small" (click)="pushed_pulse($event, control)">
                     <ion-icon name="radio-button-off-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>
 
-                <ng-container *ngIf="control.type === 'light'">
-                  <ion-fab-button size="small" (click)="pushed_light($event, control)">
+                <ng-container class="align-right" *ngIf="control.type === 'light'">
+                  <ion-fab-button class="align-right" size="small" (click)="pushed_light($event, control)">
                     <ion-icon name="add-outline"></ion-icon>
                   </ion-fab-button>
                 </ng-container>
 
-                <ng-container *ngIf="control.type === 'radio'">
+                <ng-container class="align-right" *ngIf="control.type === 'radio'">
                   <ion-fab-button size="small" (click)="pushed_radio_down($event, control)">
                     <ion-icon name="remove-outline"></ion-icon>
                   </ion-fab-button>
@@ -51,7 +42,7 @@
                   </ion-fab-button>
                 </ng-container>
 
-                <ng-container *ngIf="(control.type === 'updown') || (control.type === 'screen')">
+                <ng-container class="align-right" *ngIf="(control.type === 'updown') || (control.type === 'screen')">
                   <ion-fab-button size="small" (click)="pushed_down($event, control)">
                     <ion-icon name="chevron-down-outline"></ion-icon>
                   </ion-fab-button>
@@ -61,19 +52,28 @@
                 </ng-container>
 
                 <ng-container *ngIf="(control.type === 'plusminus') || (control.type === 'slider') ">
-                  <ion-fab-button size="small" (click)="pushed_minus($event, control)">
-                    <ion-icon name="remove-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button size="small" (click)="pushed_plus($event, control)">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-fab-button>
+                    <ion-fab-button class="align-right-2" size="small" (click)="pushed_minus($event, control)">
+                      <ion-icon name="remove-outline"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button class="align-right-2" size="small" (click)="pushed_plus($event, control)">
+                      <ion-icon name="add-outline"></ion-icon>
+                    </ion-fab-button>
                 </ng-container>
 
                 <ng-container *ngIf="control.type === 'switch'">
-                    <ion-toggle color="primary" mode="ios" [(ngModel)]="control.state._toggle" (click)="toggle($event, control)">
+                    <ion-toggle class="align-right" color="primary" mode="ios" [(ngModel)]="control.state._toggle" (click)="toggle($event, control)">
                     </ion-toggle>
                 </ng-container>
 
+              </ion-item>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label>
+                  <p>{{get(control.room, control.category)}}</p>
+                  <h1>{{control.name}}</h1>
+                  <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">{{control.state._status_text}}</h2>
+                </ion-label>
               </ion-item>
             </ion-card-content>
           </ion-card>
