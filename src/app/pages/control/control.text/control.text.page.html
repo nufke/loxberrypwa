@@ -20,10 +20,10 @@
         <ion-card>
           <ion-card-content>
             <ion-item>
-              <ion-icon color="{{control.icon._current_color}}" src="{{control.icon._current_href}}"></ion-icon>
+              <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}"></ion-icon>
               <ion-label>
-                <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">
-                  {{control.state._status_text}}</h2>
+                <h2 style="color: {{control.state['color']}};" *ngIf="control.state._display_text !== ''">
+                  {{control.state._display_text}}</h2>
               </ion-label>
             </ion-item>
           </ion-card-content>

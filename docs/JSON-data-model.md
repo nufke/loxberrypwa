@@ -28,10 +28,8 @@ Fields indicated with '?' are optional
   uuid: string,                       // unique identifier to identify the control as MQTT topic
   name: string,                       // GUI name
   icon: {
-          default_href: string,       // location or URL of default SVG icon
-          active_href?: string,       // location or URL of SVG icon when active
-          default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
-          active_color?: string       // color when active in RGB hex notation, e.g. #FFFFFF (optional)
+          href: string,               // location or URL of SVG icon
+          color?: string              // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
         },
   type: string,                       // type of control, e.g., switch, button, slider, etc. See below
   room: string,                       // uuid of room (hwid of room should match hwid of control)
@@ -39,20 +37,14 @@ Fields indicated with '?' are optional
   is_favorite?: Boolean,              // elevate to favorite item (optional)
   is_visible?: Boolean,               // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
-  order?: Number,                     // defines order in list box (optional)
-  state: {
-           value: string,             // e.g. "1", "0", "22.1", "on", "off", ...
-           format?: string,           // message format in sprintf notation, can include pre- and post-text, such as units (optional)
-           list_names?: string[],     // list names for radio buttons (optional)
-           default_color?: string,    // default color in RGB hex notation, e.g. #FFFFFF (optional)
-           active_color?: string      // color of text/value when active in RGB hex notation, e.g. #FFFFFF (optional)
-         }
+  order?: Number,                     // defines order in the App list (optional)
+  state: <state>                      // state of the control
 }
 ```
 
-### Control type (string)
+### Control type and state
 
-The control type is a string (enum) which defines the style of the button.
+The control `type` is a string which defines the style of the control and its associated button(s):
 
 ```
 "dimmer"   // up/down (+/-) buttons
@@ -68,7 +60,37 @@ The control type is a string (enum) which defines the style of the button.
 "tempctrl" // room temperature control, no button
 "text"     // status text, no button
 "updown"   // up/down (+/-) buttons
+```
 
+The JSON structure for the control `state` depend on the type of control:
+
+Control of type `text`:
+```
+{
+  value: string,                // number represented as string
+  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units
+  color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
+  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
+}
+```
+
+Control of type `radio`
+```
+{
+  value: string,                // number for active item in the list (0 = off)
+  list_names?: string[],        // name for each radio item
+  list_color?: string[]         // color for each radio item
+  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
+}
+```
+
+Control of type `switch`
+```
+{
+  value: string,                // number for active item in the list (0 = off)
+  _toggle?: Boolean             // INTERNAL state of toggle (optional)
+  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
+}
 ```
 
 ## Data model for categories

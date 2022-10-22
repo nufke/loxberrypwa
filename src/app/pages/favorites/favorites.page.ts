@@ -59,7 +59,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
       this.roomsSub.unsubscribe();
   }
 
-  private updateControls(controls: any)
+  private updateControls(controls: Control[])
   {
     controls.forEach( item => {
       this.updateControlState(item)
@@ -72,42 +72,29 @@ export class FavoritesPage implements OnInit, OnDestroy {
     return room.name + " • " + category.name;
   }
 
-  private updateControlState(control: any) {
-    if (control.state.default_color) // if defined
-      control.state._current_color = control.icon.default_color;
-    else
-      control.state._current_color = "#5e5e5f"; // TODO use color palette
-
-    control.icon._current_href = control.icon.default_href;
+  private updateControlState(control: Control) {
 
     if (control.type === 'switch') {
-      control.state._status_text = ''; // no status displayed
+      control.state._display_text = ''; // no status displayed
       if (control.state.value === "1") {
-        control.state._toggle = true;
-        if (control.icon.active_color) // if defined
-          control.icon._current_color = control.icon.active_color;
-        else control.icon._current_color = "primary";
-        if (control.icon.active_href) // if defined
-          control.icon._current_href = control.icon.active_href
+        control.state['_toggle'] = true;
+        control.icon.color = "primary";
       }
       else {
-        control.state._toggle = false;
-        if (control.icon.default_color) // if defined
-          control.icon._current_color = control.icon.default_color;
-        else control.icon._current_color = "#ffffff"; // TODO use color palette
+        control.state['_toggle'] = false;
+        control.icon.color = "#5e5e5f"; // TODO select from color palette
       }
     }
-
     if ((control.type === 'intercom') || (control.type === 'light') || (control.type === 'link') || (control.type === 'screen_c') ||
       (control.type === 'light_c')) {
-        control.state._status_text = ''; // no status displayed
+        control.state._display_text = ''; // no status displayed
     }
 
     if (control.type === 'radio') {
-      if (control.state.list_names) {
-        let val = parseInt(control.state.value);
-        control.state._status_text = control.state.list_names[val];
-      }
+      let val = parseInt(control.state.value);
+      let names = control.state['list_names'];
+      if (val && names)
+        control.state._display_text = names[val];
     }
   }
 
@@ -116,7 +103,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed', control);
     control.state.value = "pushed";
-    this.LoxBerryService.sendMessage('control', control, 0);
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
   }
 
   pushed_light($event, control) {
@@ -152,7 +139,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
         else val--;
 
       control.state.value = String(val);
-      this.LoxBerryService.sendMessage('control', control, 1);
+      this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
     }
   }
 
@@ -161,7 +148,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed up', control);
     control.state.value = "up";
-    this.LoxBerryService.sendMessage('control', control, 0);
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
   }
 
   pushed_down($event, control) {
@@ -169,7 +156,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed down', control);
     control.state.value = "down";
-    this.LoxBerryService.sendMessage('control', control, 0);
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
   }
 
   pushed_plus($event, control) {
@@ -177,7 +164,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed plus', control);
     control.state.value = "plus";
-    this.LoxBerryService.sendMessage('control', control, 0);
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
   }
 
   pushed_minus($event, control) {
@@ -185,16 +172,42 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
     console.log('pushed minus', control);
     control.state.value = "minus";
-    this.LoxBerryService.sendMessage('control', control, 0);
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
   }
 
   toggle($event, control) {
     $event.preventDefault();
     $event.stopPropagation();
 
-    if (control.state._toggle) control.state.value = '0';
-    else control.state.value = '1';
-    this.LoxBerryService.sendMessage('control', control, 1);
+    if (control.state._toggle) {
+      control.state.value = "0";
+      control.icon.color = "#5e5e5f"; // TODO select from color palette
+    }
+    else {
+      control.state.value = "1";
+      control.icon.color = "primary";
+    }
+
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
+    this.LoxBerryService.sendMessage(control, '/icon/color', control.icon.color, 1);
+  }
+
+  get_color(control: Control) : string {
+    var color: string;
+    if (control.type === "radio") {
+      let val = parseInt(control.state.value);
+      let colors = control.state['list_colors'];
+      if (val && colors)
+        color = colors[val]
+    }
+
+    if (control.type === "text")
+      color = control.state['color'];
+
+    if (!color)
+      color = "#5e5e5f"; // TODO select from color palette
+
+    return color;
   }
 
 }

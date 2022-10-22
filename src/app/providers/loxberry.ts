@@ -126,11 +126,14 @@ export class LoxBerry {
       let idx = this.findIndex(obj.controls, item.hwid, item.uuid);
       if (idx >= 0) { // Item exists, do update
         this.controls[idx] = item; // Override full object in array
-        this.controls[idx].state._status_text = util.format(item.state.format, item.state.value);
+        if (item.type === "text")
+          this.controls[idx].state['_display_text'] = util.format(item.state.format, item.state.value);
        }
       else { // New item
-        let control = item;
-        control.state._status_text = util.format(item.state.format, item.state.value);
+        var control: Control;
+        control = item;
+        if (item.type === "text")
+          control.state['_display_text'] = util.format(item.state.format, item.state.value);
         this.controls.push(control); // Add new object to array
       }
     });
@@ -216,7 +219,7 @@ export class LoxBerry {
     this.subscription.forEach( (item) => { item.unsubscribe(); } );
   }
 
-  public sendMessage(type: string, obj: any, retain_state: any) {
+  public sendMessage(obj: any, topic: string, value: string, retain_state: any) {
     let idx = this.findIndex(this.controls, obj.hwid, obj.uuid);
     let topic_root = this.registered_topic_prefix + '/' + obj.hwid + '/' + obj.uuid;
 
@@ -225,8 +228,8 @@ export class LoxBerry {
       return;
     }
 
-    this.mqttService.unsafePublish(topic_root + '/state/value', obj.state.value, { qos: retain_state, retain: true });
-    console.log('MQTT publish:', topic_root + '/state/value', obj.state.value);
+    this.mqttService.unsafePublish(topic_root + topic, value, { qos: retain_state, retain: true });
+    console.log('MQTT publish:', obj.name, topic_root + topic, value);
   }
 
 }

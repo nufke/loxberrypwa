@@ -25,10 +25,10 @@
           <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
             <ion-card-content>
               <ion-item>
-                <ion-icon color="{{control.icon._current_color}}" src="{{control.icon._current_href}}" ></ion-icon>
+                <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}" ></ion-icon>
                 <ion-label>
                   <h1>{{control.name}}</h1>
-                  <h2 style="color: {{control.state._current_color}};" *ngIf="control.state._status_text !== ''">{{control.state._status_text}}</h2>
+                  <h2 style="color: {{get_color(control)}};" *ngIf="control.state._display_text !== ''"> {{control.state._display_text}}</h2>
                 </ion-label>
 
                 <ng-container *ngIf="control.type === 'push'">
@@ -71,7 +71,7 @@
                 </ng-container>
 
                 <ng-container *ngIf="control.type === 'switch'">
-                    <ion-toggle color="primary" mode="ios" [(ngModel)]="control.state._toggle" (click)="toggle($event, control)">
+                    <ion-toggle color="primary" mode="ios" [(ngModel)]="control.state['_toggle']" (click)="toggle($event, control)">
                     </ion-toggle>
                 </ng-container>
 

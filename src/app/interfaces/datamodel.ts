@@ -6,12 +6,8 @@ export interface Control {
   uuid: string,                 // unique identifier to identify the control as MQTT topic
   name: string,                 // unique identifier to identify the control as MQTT topic
   icon: {
-    default_href: string,       // location or URL of default SVG icon
-    active_href?: string,       // location or URL of SVG icon when active
-    _current_href?: string,     // INTERNAL current SVG icon
-    default_color?: string,     // default color for icon in RGB hex notation, e.g. #FFFFFF (optional)
-    active_color?: string,      // icon color when active in RGB hex notation, e.g. #FFFFFF (optional)
-    _current_color?: string     // INTERNAL current color for icon (optional)
+    href: string,               // location or URL of SVG icon
+    color?: string              // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
   },
   type: string,                 // type of control, e.g., switch, button, slider, etc.
   room: string,                 // uuid of room (hwid of room should match hwid of control)
@@ -19,17 +15,8 @@ export interface Control {
   is_favorite?: Boolean,        // elevate to favorite item (optional)
   is_visible?: Boolean,         // make control invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
-  order?: number,               // defines order in list box (optional)
-  state: {
-    value: string,              // value, e.g. "1", "0", "22.1", "on", "off", ...
-    format?: string,            // message format in sprintf notation, can include pre- and post-text, such as units
-    default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
-    active_color?: string,      // color of text/value when active in RGB hex notation, e.g. #FFFFFF (optional)
-    list_names?: string[],      // list names for radio buttons (optional)
-    _current_color?: string,    // INTERNAL current color for status text (optional)
-    _status_text?: string,      // INTERNAL status text with formatting applied (optional)
-    _toggle?: Boolean           // INTERNAL state of toggle (optional)
-  }
+  order?: number,               // defines order in the App list (optional)
+  state?: ControlText | ControlRadio | ControlSwitch
 }
 
 export interface Category {
@@ -61,18 +48,21 @@ export interface Room {
 }
 
 export interface ControlText {
-  state: {
-    value: string,              // number represented as string
-    format?: string,            // message format in sprintf notation, can include pre- and post-text, such as units
-    default_color?: string,     // default color in RGB hex notation, e.g. #FFFFFF (optional)
-    active_color?: string       // color of text/value when active in RGB hex notation, e.g. #FFFFFF (optional)
-  }
+  value: string,                // number represented as string
+  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units
+  color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
+  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
 }
 
 export interface ControlRadio {
-  state: {
-    value: string,              // number for active item in the list (0 = off)
-    list_names?: string[],      // name for each radio item
-    list_color?: string[]       // color for each radio item
-  }
+  value: string,                // number for active item in the list (0 = off)
+  list_names?: string[],        // name for each radio item
+  list_color?: string[]         // color for each radio item
+  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
+}
+
+export interface ControlSwitch {
+  value: string,                // number for active item in the list (0 = off)
+  _toggle?: Boolean             // INTERNAL state of toggle (optional)
+  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
 }
