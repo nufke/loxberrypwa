@@ -12,26 +12,37 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
+        <ion-card>
           <ion-card-header>
             <ion-item>
               <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}"></ion-icon>
               <ion-label></ion-label>
             </ion-item>
-          </ion-card-header>
-          <ion-card-content>
             <ion-item>
               <ion-label>
                 <p>{{room.name}} {{category.name}}</p>
                 <h1>{{control.name}}</h1>
-                <h2 style="color: {{control.state['_text_color']}};" *ngIf="control.state['_text'] !== ''">
-                  {{control.state['_text']}}</h2>
               </ion-label>
             </ion-item>
-          </ion-card-content>
+          </ion-card-header>
         </ion-card>
+
+        <ion-radio-group value="{{control.state.value}}" (ionChange)="radioGroupChange($event)">
+          <ion-card *ngFor="let state of toggle_state, let i = index">
+            <ion-card-content>
+              <ion-item>
+                <ion-label class="text-center" *ngIf="control.state.value!=i" >{{state}}</ion-label>
+                <ion-label class="text-center" *ngIf="control.state.value==i" color="primary">{{state}}</ion-label>
+                <ion-radio value="{{i}}"></ion-radio>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-radio-group>
+
       </ion-col>
     </ion-row>
   </ion-grid>
+
+
 
 </ion-content>

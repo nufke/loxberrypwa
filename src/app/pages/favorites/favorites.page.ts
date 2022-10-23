@@ -137,7 +137,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
   pushed_radio($event, control, up) {
     $event.preventDefault();
     $event.stopPropagation();
-    console.log('pushed radio', control);
+
 
     if (control.state.list_names) // process only if there are radio list names
     {

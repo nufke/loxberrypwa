@@ -8,6 +8,8 @@ import { ControlPageRoutingModule } from './control-routing.module';
 import { ControlBase } from './control.base';
 import { ControlTextPage } from './control.text/control.text.page'
 import { ControlLightPage } from './control.light/control.light.page';
+import { ControlRadioPage } from './control.radio/control.radio.page';
+import { ControlSwitchPage } from './control.switch/control.switch.page';
 
 @NgModule({
   imports: [
@@ -21,13 +23,17 @@ import { ControlLightPage } from './control.light/control.light.page';
     ControlBase,
     ControlPage,
     ControlTextPage,
-    ControlLightPage
+    ControlLightPage,
+    ControlRadioPage,
+    ControlSwitchPage
   ],
   providers: [
   ],
   entryComponents: [
     ControlTextPage,
-    ControlLightPage
+    ControlLightPage,
+    ControlRadioPage,
+    ControlSwitchPage
   ]
 })
 export class ControlPageModule {}

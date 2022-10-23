@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs'
 import { ControlBase } from './control.base';
 import { ControlTextPage } from './control.text/control.text.page';
 import { ControlLightPage } from './control.light/control.light.page';
+import { ControlRadioPage } from './control.radio/control.radio.page';
+import { ControlSwitchPage } from './control.switch/control.switch.page';
 
 @Component({
   selector: 'app-control',
@@ -30,25 +32,8 @@ export class ControlPage implements OnInit {
   private ControlTypeMap = {
     'text': ControlTextPage,
     'light': ControlLightPage,
-/*
-    'Pushbutton': PushPageView
-    'InfoOnlyAnalog': TextView,
-    'InfoOnlyDigital': TextView,
-    'Switch': SwitchView,
-    'Webpage': PushView,
-    'Alarm': TextView,
-    'SmokeAlarm': TextView,
-    'Intercom': TextView,
-    'Fronius': TextView,
-    'Slider': SliderView,
-    'CentralLightController': TextView,
-    'Radio': RadioView,
-    'UpDownDigital': UpDownView,
-    'CentralJalousie': TextView,
-    'Jalousie': UpDownView,
-    'Daytimer': TextView,
-    'IRoomController': TextView
-    */
+    'radio': ControlRadioPage,
+    'switch': ControlSwitchPage,
   }
 
   constructor(
