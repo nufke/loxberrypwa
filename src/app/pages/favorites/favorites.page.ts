@@ -31,7 +31,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
       this.controls = controls;
 
       this.favorites = controls.filter(item => item.is_favorite)
-        .sort((a, b) => { return a.name.localeCompare(b.name); });
+        .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) })
 
       this.updateControls(controls);
     });
@@ -75,7 +75,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
 
   private updateControlState(control: Control) {
 
-    if (control.type === 'text') {
+    if ((control.type === 'text') || (control.type === 'slider')) {
       control.state['_text'] = util.format(control.state['format'], control.state['value']);
       control.state['_text_color'] = "#5e5e5f"; // TODO select from color palette
     }
@@ -174,17 +174,13 @@ export class FavoritesPage implements OnInit, OnDestroy {
   pushed_plus($event, control) {
     $event.preventDefault();
     $event.stopPropagation();
-    console.log('pushed plus', control);
-    control.state.value = "plus";
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
+    this.count_up_down(control, true);
   }
 
   pushed_minus($event, control) {
     $event.preventDefault();
     $event.stopPropagation();
-    console.log('pushed minus', control);
-    control.state.value = "minus";
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
+    this.count_up_down(control, false);
   }
 
   toggle($event, control) {
@@ -204,4 +200,24 @@ export class FavoritesPage implements OnInit, OnDestroy {
     this.LoxBerryService.sendMessage(control, '/icon/color', control.icon.color, 1);
   }
 
+  count_up_down(control: Control, up: Boolean) {
+    let val = parseInt(control.state.value);
+    if (!val) val = 0;
+    let step = control.state['step'];
+    let min = control.state['min'];
+    let max = control.state['max'];
+    if (!min) min = 0;
+    if (!max) max = 100;
+    if (!step) step = 1;
+
+    let new_val;
+    if (up) new_val = val + step;
+    else new_val = val - step;
+
+    if (new_val < min) new_val = min;
+    if (new_val > max) new_val = max;
+
+    control.state.value = String(new_val);
+    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
+  }
 }

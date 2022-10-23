@@ -4,11 +4,8 @@ export const MqttTopics = [
 
   // topics for controls
   "/name",
-  "/icon/default_href",
-  "/icon/active_href",
-  "/icon/default_color",
-  "/icon/active_color",
-
+  "/icon/href",
+  "/icon/color",
   "/type",
   "/room",
   "/category",
@@ -18,12 +15,11 @@ export const MqttTopics = [
   "/order",
   "/state/value",
   "/state/format",
-  "/state/default_color",
-  "/state/active_color",
+  "/state/color",
   "/state/list_names",
+  "/state/list_colors",
+  "/state/min",
+  "/state/max",
+  "/state/step"
 
-  // topics for category and rooms
-  "/icon/href",
-  "/icon/color",
-  "/image",
 ];

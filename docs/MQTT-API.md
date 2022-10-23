@@ -4,10 +4,10 @@
 
 ## MQTT settings API
 
-The MQTT settings API is used to send an initial App structure in the form of a single JSON object containing all controls, categories, and rooms, to  MQTT topic `/loxberry/app/settings/set`. The upload is incremental, which means changes to existing objects will be overridden and old objects remain available. To flush all objects, an empty string message should be sent to `/loxberry/app/settings/set`.
+The MQTT settings API is used to send an initial App structure in the form of a single JSON object containing all controls, categories, and rooms, to  MQTT topic `/loxberry/app/structure`. The upload is incremental, which means changes to existing objects will be overridden and old objects remain available. To flush all objects, an empty string message should be sent to `/loxberry/app/structure`.
 
 ```
-/loxberry/app/settings/set     -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }
+/loxberry/app/structure -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }
 ```
 
 More information on the JSON data model is given [here](JSON-data-model.md)
@@ -20,8 +20,8 @@ The MQTT topic API for controls is listed below. The `hwid` refers to the hardwa
 
 ```
 /loxberry/app/<hwid>/<control-uuid>/name                 -> "Light control"
-/loxberry/app/<hwid>/<control-uuid>/icon/default_href    -> "http://myserver.org/bulb.svg"
-/loxberry/app/<hwid>/<control-uuid>/icon/default_color   -> "#CECECE"
+/loxberry/app/<hwid>/<control-uuid>/icon/href            -> "http://myserver.org/bulb.svg"
+/loxberry/app/<hwid>/<control-uuid>/icon/color           -> "#CECECE"
 /loxberry/app/<hwid>/<control-uuid>/type                 -> "switch"
 /loxberry/app/<hwid>/<control-uuid>/room                 -> "2001" (should match <room-uuid>)
 /loxberry/app/<hwid>/<control-uuid>/category             -> "1001" (should match <category-uuid>)
@@ -31,7 +31,7 @@ The MQTT topic API for controls is listed below. The `hwid` refers to the hardwa
 /loxberry/app/<hwid>/<control-uuid>/order                -> 1
 /loxberry/app/<hwid>/<control-uuid>/state/value          -> "1"
 /loxberry/app/<hwid>/<control-uuid>/state/format         -> "%s"
-/loxberry/app/<hwid>/<control-uuid>/state/default_color  -> "#FFFFFF"
+/loxberry/app/<hwid>/<control-uuid>/state/color          -> "#FFFFFF"
 
 ```
 

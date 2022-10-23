@@ -60,7 +60,7 @@ export class LoxBerry {
              && this.loxberryMqttIP
              && this.loxberryMqttPort) {
           this.connectToMqtt();
-          this.registerTopic(this.registered_topic_prefix+'/settings/set');
+          this.registerTopic(this.registered_topic_prefix+'/structure');
         }
       }
     });

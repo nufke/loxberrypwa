@@ -16,7 +16,7 @@ export interface Control {
   is_visible?: Boolean,         // make control invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number,               // defines order in the App list (optional)
-  state?: ControlText | ControlRadio | ControlSwitch
+  state?: ControlText | ControlRadio | ControlSwitch | ControlSlider
 }
 
 export interface Category {
@@ -49,16 +49,25 @@ export interface Room {
 
 export interface ControlText {
   value: string,                // number represented as string
-  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units
-  color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
+  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
+  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
 }
 
 export interface ControlRadio {
   value: string,                // number for active item in the list (0 = off)
-  list_names?: string[],        // name for each radio item
-  list_color?: string[]         // color for each radio item
+  list_names: string[],         // text for each radio item
+  list_color?: string[]         // color for each radio item  (optional)
 }
 
 export interface ControlSwitch {
   value: string,                // number for active item in the list (0 = off)
+}
+
+export interface ControlSlider {
+  value: string,                // number for active item in the list (0 = off)
+  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
+  color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
+  min?: Number,                 // minimum value (0 if not specified) (optional)
+  max?: Number,                 // minimum value (100 if not specified) (optional)
+  step?: Number                 // step size with + or - is pushed (1 if not specified) (optional)
 }
