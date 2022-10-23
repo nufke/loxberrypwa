@@ -160,7 +160,9 @@ export class ControlsPage implements OnInit, OnDestroy {
       let val = parseInt(control.state.value);
       let names = control.state['list_names'];
       let colors = control.state['list_colors'];
-      if (val && names)
+
+      if (!val) val = 0;
+      if (names)
         control.state['_text'] = names[val];
 
       if (colors && colors[val])
