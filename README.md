@@ -61,6 +61,18 @@ Alternatively, you can also make use of URLs to your favorite icons and images i
 
 After building and testing the PWA on your development platform (e.g. Linux desktop), copy the `www` directory to your production server (e.g. LoxBerry or Raspberry Pi) and update the configuration of your webserver (e.g. Apache2) to get access to PWA. Alternatively, you could use `nodejs` and `http-server` to launch the PWA.
 
+## Screenshots
+
+<div>
+<img src="docs/screenshot_settings.png" style="width:150px; border: 2px solid #ccc;">
+&nbsp;&nbsp;
+<img src="docs/screenshot_favorites.png"  style="width:150px; border: 2px solid #ccc;">
+&nbsp;&nbsp;
+<img src="docs/screenshot_rooms.png" style="width:150px;border: 2px solid #ccc;">
+&nbsp;&nbsp;
+<img src="docs/screenshot_lighting.png" style="width:150px;border: 2px solid #ccc;">
+</div>
+
 ## More information
 
 More information can be found on the [wiki](https://github.com/nufke/loxberrypwa/wiki)
