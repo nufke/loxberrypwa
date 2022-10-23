@@ -28,7 +28,7 @@
                 <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}" ></ion-icon>
                 <ion-label>
                   <h1>{{control.name}}</h1>
-                  <h2 style="color: {{get_color(control)}};" *ngIf="control.state._display_text !== ''"> {{control.state._display_text}}</h2>
+                  <h2 style="color: {{control.state['_text_color']}};" *ngIf="control.state['_text'] !== ''"> {{control.state['_text']}}</h2>
                 </ion-label>
 
                 <ng-container *ngIf="control.type === 'push'">

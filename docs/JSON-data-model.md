@@ -218,7 +218,7 @@ controls.forEach( (item) => {
         hwid: hwinfo,
         uuid: item.uuidAction,
         name: item.name,
-        icon: { default_href: "assets/svg_icons/" + icon },
+        icon: { href: "assets/svg_icons/" + icon },
         type: item.type.toLowerCase(),
         room: item.room,
         category: item.cat,

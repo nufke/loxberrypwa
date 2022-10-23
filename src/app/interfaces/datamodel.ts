@@ -51,18 +51,14 @@ export interface ControlText {
   value: string,                // number represented as string
   format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units
   color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
-  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
 }
 
 export interface ControlRadio {
   value: string,                // number for active item in the list (0 = off)
   list_names?: string[],        // name for each radio item
   list_color?: string[]         // color for each radio item
-  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
 }
 
 export interface ControlSwitch {
   value: string,                // number for active item in the list (0 = off)
-  _toggle?: Boolean             // INTERNAL state of toggle (optional)
-  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
 }

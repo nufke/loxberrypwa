@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoxBerry } from '../../providers/loxberry';
 import { Control, Category, Room } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
+import { util } from 'node-forge' // TODO check package
 
 @Component({
   selector: 'app-controls',
@@ -134,28 +135,38 @@ export class ControlsPage implements OnInit, OnDestroy {
 
   private updateControlState(control: Control) {
 
-    if (control.type === "switch") {
-      control.state._display_text = ''; // no status displayed
+    if (control.type === 'text') {
+      control.state['_text'] = util.format(control.state['format'], control.state['value']);
+      control.state['_text_color'] = "#5e5e5f"; // TODO select from color palette
+    }
+
+    if (control.type === 'switch') {
+      control.state['_text'] = ''; // no status displayed
       if (control.state.value === "1") {
         control.state['_toggle'] = true;
         control.icon.color = "primary";
       }
       else {
         control.state['_toggle'] = false;
-        control.icon.color = "#5e5e5f";
+        control.icon.color = "#5e5e5f"; // TODO select from color palette
       }
     }
-
     if ((control.type === 'intercom') || (control.type === 'light') || (control.type === 'link') || (control.type === 'screen_c') ||
-      (control.type === 'light_c') || (control.type === 'push') ) {
-        control.state._display_text = ''; // no status displayed
+      (control.type === 'light_c')) {
+        control.state['_text'] = ''; // no status displayed
     }
 
     if (control.type === 'radio') {
       let val = parseInt(control.state.value);
       let names = control.state['list_names'];
-      if (val &&names)
-        control.state._display_text = names[val];
+      let colors = control.state['list_colors'];
+      if (val && names)
+        control.state['_text'] = names[val];
+
+      if (colors && colors[val])
+        control.state['_text_color'] = colors[val];
+      else
+        control.state['_text_color'] = "#5e5e5f"; // TODO select from color palette
     }
   }
 
@@ -251,24 +262,6 @@ export class ControlsPage implements OnInit, OnDestroy {
 
     this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
     this.LoxBerryService.sendMessage(control, '/icon/color', control.icon.color, 1);
-  }
-
-  get_color(control: Control) : string {
-    var color: string;
-    if (control.type === "radio") {
-      let val = parseInt(control.state.value);
-      let colors = control.state['list_colors'];
-      if (val && colors)
-        color = colors[val]
-    }
-
-    if (control.type === "text")
-      color = control.state['color'];
-
-    if (!color)
-      color = "#5e5e5f"; // TODO select from color palette
-
-    return color;
   }
 
 }

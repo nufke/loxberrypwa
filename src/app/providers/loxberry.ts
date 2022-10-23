@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
-import { util } from 'node-forge' // TODO check package
 import { Control, Category, Room } from '../interfaces/datamodel'
 import { MqttTopics } from '../interfaces/mqtt.api'
 import { StorageService } from '../services/storage.service';
@@ -126,14 +125,10 @@ export class LoxBerry {
       let idx = this.findIndex(obj.controls, item.hwid, item.uuid);
       if (idx >= 0) { // Item exists, do update
         this.controls[idx] = item; // Override full object in array
-        if (item.type === "text")
-          this.controls[idx].state['_display_text'] = util.format(item.state.format, item.state.value);
        }
       else { // New item
         var control: Control;
         control = item;
-        if (item.type === "text")
-          control.state['_display_text'] = util.format(item.state.format, item.state.value);
         this.controls.push(control); // Add new object to array
       }
     });

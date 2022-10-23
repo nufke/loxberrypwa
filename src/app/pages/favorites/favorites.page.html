@@ -71,7 +71,7 @@
               <ion-label>
                 <p>{{get(control.room, control.category)}}</p>
                 <h1>{{control.name}}</h1>
-                  <h2 style="color: {{get_color(control)}};" *ngIf="control.state._display_text !== ''"> {{control.state._display_text}}</h2>
+                  <h2 style="color: {{control.state['_text_color']}};" *ngIf="control.state['_text'] !== ''"> {{control.state['_text']}}</h2>
               </ion-label>
             </ion-item>
           </ion-card-content>
