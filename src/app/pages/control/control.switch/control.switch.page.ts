@@ -28,4 +28,8 @@ export class ControlSwitchPage extends ControlBase {
     this.control.state.value = String(event.detail.value);
     this.LoxBerryService.sendMessage(this.control, '/state/value', event.detail.value, 1);
   }
+
+  to_string(i: Number) : string {
+    return String(i);
+  }
 }

@@ -19,11 +19,14 @@ export class ControlRadioPage extends ControlBase {
   }
 
   ngOnInit() {
-    console.log('control:', this.control );
   }
 
   radioGroupChange(event) {
     this.control.state.value = String(event.detail.value);
     this.LoxBerryService.sendMessage(this.control, '/state/value', event.detail.value, 1);
+  }
+
+  to_string(i: Number) : string {
+    return String(i);
   }
 }

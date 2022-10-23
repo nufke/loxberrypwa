@@ -27,12 +27,12 @@
           </ion-card-header>
         </ion-card>
 
-        <ion-radio-group value="{{control.state.value}}" (ionChange)="radioGroupChange($event)">
-          <ion-card *ngFor="let option of control.state.list_names, let i = index">
+        <ion-radio-group value="{{control.state['value']}}" (ionChange)="radioGroupChange($event)">
+          <ion-card *ngFor="let option of control.state['list_names'], let i = index">
             <ion-card-content>
               <ion-item>
-                <ion-label *ngIf="control.state.value==i" color="primary">{{option}}</ion-label>
-                <ion-label *ngIf="control.state.value!=i">{{option}}</ion-label>
+                <ion-label *ngIf="control.state['value'] == to_string(i)" color="primary">{{option}}</ion-label>
+                <ion-label *ngIf="control.state['value'] != to_string(i)">{{option}}</ion-label>
                 <ion-radio value="{{i}}"></ion-radio>
               </ion-item>
             </ion-card-content>
