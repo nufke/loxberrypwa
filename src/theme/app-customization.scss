@@ -47,3 +47,15 @@
 $font-family-ios-base: "Urbanist-Regular";
 $font-family-md-base: "Urbanist-Regular";
 $font-family-wp-base: "Urbanist-Regular";
+
+// default scss settings for the app
+
+// disable scrollbar (but maintain scroll capability and transistions)
+
+ion-content {
+  width: calc(100% + 15px);
+}
+
+ion-content::part(scroll) {
+  padding-right: 15px;
+}
