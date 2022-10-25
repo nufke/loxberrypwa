@@ -10,6 +10,7 @@ import { ControlTextPage } from './control.text/control.text.page'
 import { ControlLightPage } from './control.light/control.light.page';
 import { ControlRadioPage } from './control.radio/control.radio.page';
 import { ControlSwitchPage } from './control.switch/control.switch.page';
+import { ControlSliderPage } from './control.slider/control.slider.page';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { ControlSwitchPage } from './control.switch/control.switch.page';
     ControlTextPage,
     ControlLightPage,
     ControlRadioPage,
-    ControlSwitchPage
+    ControlSwitchPage,
+    ControlSliderPage
   ],
   providers: [
   ],
@@ -33,7 +35,8 @@ import { ControlSwitchPage } from './control.switch/control.switch.page';
     ControlTextPage,
     ControlLightPage,
     ControlRadioPage,
-    ControlSwitchPage
+    ControlSwitchPage,
+    ControlSliderPage
   ]
 })
 export class ControlPageModule {}

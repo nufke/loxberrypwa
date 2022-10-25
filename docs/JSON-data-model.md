@@ -18,7 +18,7 @@ Each section `controls`, `categories` and `rooms` contains an array of elements 
 
 ## Data model for controls
 
-This model is used within the app to manage the properties of the control elements. The elements in the data model match the MQTT topic names.
+This model is used within the app to manage the properties of the control elements. The elements (keys) in the data model match the MQTT topic names.
 
 Fields indicated with '?' are optional
 
@@ -38,13 +38,13 @@ Fields indicated with '?' are optional
   is_visible?: Boolean,               // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in the App list (optional)
-  state: <state>                      // state of the control
+  state: { ... }                      // state of the control (see below)
 }
 ```
 
 ### Control type and state
 
-The control `type` is a string which defines the style of the control and its associated button(s):
+The control key `type` is a string which defines the style of the control and its associated button(s):
 
 ```
 "dimmer"   // up/down (+/-) buttons
@@ -62,34 +62,44 @@ The control `type` is a string which defines the style of the control and its as
 "updown"   // up/down (+/-) buttons
 ```
 
-The JSON structure for the control `state` depend on the type of control:
+The nested JSON structure for the control key `state` depends on the type of control:
 
-Control of type `text`:
+Value of `state` when `type` is `"test"`:
 ```
 {
   value: string,                // number represented as string
   format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units
-  color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
-  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
+  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
 }
 ```
 
-Control of type `radio`
+Value of `state` when `type` is `"radio"`:
 ```
 {
   value: string,                // number for active item in the list (0 = off)
   list_names?: string[],        // name for each radio item
   list_color?: string[]         // color for each radio item
-  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
 }
 ```
 
-Control of type `switch`
+Value of `state` when `type` is `"switch"`:
 ```
 {
-  value: string,                // number for active item in the list (0 = off)
-  _toggle?: Boolean             // INTERNAL state of toggle (optional)
-  _display_text?: string,       // INTERNAL display text with formatting applied (optional)
+  value: string,                // number represented as string
+}
+```
+
+Value of `state` when `type` is `"slider"`:
+```
+{
+  value: string,                // number represented as string
+  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
+  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
+  min?: Number,                 // minimum value (0 if not specified) (optional)
+  max?: Number,                 // minimum value (100 if not specified) (optional)
+  step?: Number                 // step size with + or - is pushed (1 if not specified) (optional)
+  icon_slider_left?: string,    // icon at left side of slider (optional)
+  icon_slider_right?: string    // icon at right side of slider (optional)
 }
 ```
 

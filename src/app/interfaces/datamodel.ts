@@ -50,7 +50,7 @@ export interface Room {
 export interface ControlText {
   value: string,                // number represented as string
   format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
-  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
+  color?: string                // color in RGB hex notation, e.g. #FFFFFF (optional)
 }
 
 export interface ControlRadio {
@@ -60,7 +60,7 @@ export interface ControlRadio {
 }
 
 export interface ControlSwitch {
-  value: string,                // number for active item in the list (0 = off)
+  value: string                 // number for active item in the list (0 = off)
 }
 
 export interface ControlSlider {
@@ -70,4 +70,6 @@ export interface ControlSlider {
   min?: Number,                 // minimum value (0 if not specified) (optional)
   max?: Number,                 // minimum value (100 if not specified) (optional)
   step?: Number                 // step size with + or - is pushed (1 if not specified) (optional)
+  icon_slider_left?: string,    // icon at left side of slider (optional)
+  icon_slider_right?: string    // icon at right side of slider (optional)
 }

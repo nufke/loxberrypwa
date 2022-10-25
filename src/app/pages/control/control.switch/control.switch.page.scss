@@ -1,12 +1,16 @@
 ion-card {
-  margin: 0;
-  margin-bottom: 10px;
+  margin: 0px 0px 10px 0px; // top right bottm left
   border-radius: 5px;
 }
 
 ion-card-header {
+  height: 56px;
   margin: 0;
-  padding: 0px 3px 10px 3px; // top right bottm left
+  padding: 0px;
+}
+
+.card-content {
+  padding-bottom: 10px;
 }
 
 ion-card-content {
