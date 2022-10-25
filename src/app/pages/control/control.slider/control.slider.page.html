@@ -19,14 +19,14 @@
           </ion-item>
           <ion-item>
 
-            <ion-fab-button class="icon-slider-left" (click)="slider_down_pressed($event)">
+            <ion-fab-button class="icon-slider-left" (click)="slider_down_pressed()">
               <ion-icon name="sunny" style="color: #4e5761;"></ion-icon>
             </ion-fab-button>
 
             <ion-range min="1" max="100" step="2" debounce="50" step="1" (ionChange)="get_slider_value()"
               [(ngModel)]="slider_value"></ion-range>
 
-            <ion-fab-button class="icon-slider-right" (click)="slider_up_pressed($event)">
+            <ion-fab-button class="icon-slider-right" (click)="slider_up_pressed()">
               <ion-icon name="sunny" style="color: #4e5761"></ion-icon>
             </ion-fab-button>
           </ion-item>
