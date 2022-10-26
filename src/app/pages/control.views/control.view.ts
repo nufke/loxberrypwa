@@ -4,19 +4,19 @@ import { LoxBerry } from '../../providers/loxberry';
 import { Control, Category, Room } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
 
-import { ControlBase } from './control.base';
-import { ControlTextPage } from './control.text/control.text.page';
-import { ControlLightPage } from './control.light/control.light.page';
-import { ControlRadioPage } from './control.radio/control.radio.page';
-import { ControlSwitchPage } from './control.switch/control.switch.page';
-import { ControlSliderPage } from './control.slider/control.slider.page';
+import { ControlViewBase } from './control.view.base';
+import { ControlTextView } from './control.text.view/control.text.view';
+import { ControlLightView } from './control.light.view/control.light.view';
+import { ControlRadioView } from './control.radio.view/control.radio.view';
+import { ControlSwitchView } from './control.switch.view/control.switch.view';
+import { ControlSliderView } from './control.slider.view/control.slider.view';
 
 @Component({
   selector: 'app-control',
-  templateUrl: 'control.page.html',
-  styleUrls: ['./control.page.scss'],
+  templateUrl: 'control.view.html',
+  styleUrls: ['./control.view.scss'],
 })
-export class ControlPage implements OnInit {
+export class ControlView implements OnInit {
  @ViewChild('container', { read: ViewContainerRef, static: true })
 
   public viewContainer: ViewContainerRef;
@@ -31,11 +31,11 @@ export class ControlPage implements OnInit {
   private roomsSub: Subscription;
 
   private ControlTypeMap = {
-    'text': ControlTextPage,
-    'light': ControlLightPage,
-    'radio': ControlRadioPage,
-    'switch': ControlSwitchPage,
-    'slider': ControlSliderPage,
+    'text': ControlTextView,
+    'light': ControlLightView,
+    'radio': ControlRadioView,
+    'switch': ControlSwitchView,
+    'slider': ControlSliderView,
   }
 
   constructor(
@@ -61,9 +61,9 @@ export class ControlPage implements OnInit {
   async loadControlComponent(control: Control, category : Category, room : Room ) {
     if (!this.componentRef) { // only create if dynamic view does not exist
       this.componentRef = this.viewContainer.createComponent(this.getControlType(control.type));
-      (<ControlBase>this.componentRef.instance).control = control;
-      (<ControlBase>this.componentRef.instance).category = category;
-      (<ControlBase>this.componentRef.instance).room = room;
+      (<ControlViewBase>this.componentRef.instance).control = control;
+      (<ControlViewBase>this.componentRef.instance).category = category;
+      (<ControlViewBase>this.componentRef.instance).room = room;
     }
   }
 

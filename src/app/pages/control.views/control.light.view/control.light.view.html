@@ -1,0 +1,20 @@
+<ion-content>
+
+      <ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
+        <ion-segment-button value="moods" translate>
+          moods
+        </ion-segment-button>
+        <ion-segment-button value="lightzones" translate>
+          lightzones
+        </ion-segment-button>
+      </ion-segment>
+
+      <div *ngIf="segment === 'moods'">
+        moods
+      </div>
+
+      <div *ngIf="segment === 'lightzones'">
+        lightzones
+      </div>
+
+</ion-content>

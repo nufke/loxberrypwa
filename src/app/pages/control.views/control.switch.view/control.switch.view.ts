@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ControlBase } from '../control.base';
+import { ControlViewBase } from '../control.view.base';
 import { LoxBerry } from '../../../providers/loxberry';
 
 @Component({
   selector: 'app-control-switch',
-  templateUrl: 'control.switch.page.html',
-  styleUrls: ['./control.switch.page.scss'],
+  templateUrl: 'control.switch.view.html',
+  styleUrls: ['./control.switch.view.scss'],
 })
-export class ControlSwitchPage extends ControlBase {
+export class ControlSwitchView extends ControlViewBase {
 
   public toggle_state = ["Off", "On"];
 

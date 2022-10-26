@@ -7,13 +7,15 @@
             <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}"></ion-icon>
             <ion-label></ion-label>
           </ion-item>
+        </ion-card-header>
+        <ion-card-content class="card-content">
           <ion-item>
             <ion-label>
               <p>{{room.name}} • {{category.name}}</p>
               <h1>{{control.name}}</h1>
             </ion-label>
           </ion-item>
-        </ion-card-header>
+        </ion-card-content>
       </ion-card>
 
       <ion-radio-group value="{{control.state['value']}}" (ionChange)="radioGroupChange($event)">

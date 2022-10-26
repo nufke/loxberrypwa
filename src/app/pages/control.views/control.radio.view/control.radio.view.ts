@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ControlBase } from '../control.base';
+import { ControlViewBase } from '../control.view.base';
 import { LoxBerry } from '../../../providers/loxberry';
 
 @Component({
   selector: 'app-control-radio',
-  templateUrl: 'control.radio.page.html',
-  styleUrls: ['./control.radio.page.scss'],
+  templateUrl: 'control.radio.view.html',
+  styleUrls: ['./control.radio.view.scss'],
 })
-export class ControlRadioPage extends ControlBase {
+export class ControlRadioView extends ControlViewBase {
 
   constructor(
     private router: Router,

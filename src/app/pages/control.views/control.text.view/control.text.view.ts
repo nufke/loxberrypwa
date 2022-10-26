@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ControlBase } from '../control.base';
+import { ControlViewBase } from '../control.view.base';
 
 @Component({
   selector: 'app-control-text',
-  templateUrl: 'control.text.page.html',
-  styleUrls: ['./control.text.page.scss'],
+  templateUrl: 'control.text.view.html',
+  styleUrls: ['./control.text.view.scss'],
 })
-export class ControlTextPage extends ControlBase {
+export class ControlTextView extends ControlViewBase {
 
   constructor(
     private router: Router

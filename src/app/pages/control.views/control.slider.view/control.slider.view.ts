@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ControlBase } from '../control.base';
+import { ControlViewBase } from '../control.view.base';
 import { LoxBerry } from '../../../providers/loxberry';
 
 @Component({
   selector: 'app-control-slider',
-  templateUrl: 'control.slider.page.html',
-  styleUrls: ['./control.slider.page.scss'],
+  templateUrl: 'control.slider.view.html',
+  styleUrls: ['./control.slider.view.scss'],
 })
-export class ControlSliderPage extends ControlBase {
+export class ControlSliderView extends ControlViewBase {
 
   public slider_value;
 

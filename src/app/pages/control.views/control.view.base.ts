@@ -5,7 +5,7 @@ import { Control, Category, Room } from '../../interfaces/datamodel'
   selector: 'control.base',
   template: '',
 })
-export class ControlBase {
+export class ControlViewBase {
 
   @Input() control: Control;
   @Input() category: Category;

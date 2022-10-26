@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ControlBase } from '../control.base';
+import { ControlViewBase } from '../control.view.base';
 
 @Component({
   selector: 'app-control-light',
-  templateUrl: 'control.light.page.html',
-  styleUrls: ['./control.light.page.scss'],
+  templateUrl: 'control.light.view.html',
+  styleUrls: ['./control.light.view.scss'],
 })
-export class ControlLightPage extends ControlBase {
+export class ControlLightView extends ControlViewBase {
 
   color = '#ffffff';
   segment = 'moods';
@@ -17,7 +17,7 @@ export class ControlLightPage extends ControlBase {
     "Standard", "Alles aan", "Uit"
   ];
 
-  moodSelected:string;
+  moodSelected: string;
 
   currentValue : number = 10;
 
