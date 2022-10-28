@@ -10,6 +10,7 @@ import { ControlLightView } from './control.light.view/control.light.view';
 import { ControlRadioView } from './control.radio.view/control.radio.view';
 import { ControlSwitchView } from './control.switch.view/control.switch.view';
 import { ControlSliderView } from './control.slider.view/control.slider.view';
+import { ControlPushView } from './control.push.view/control.push.view';
 
 @Component({
   selector: 'app-control',
@@ -36,6 +37,7 @@ export class ControlView implements OnInit {
     'radio': ControlRadioView,
     'switch': ControlSwitchView,
     'slider': ControlSliderView,
+    'push': ControlPushView,
   }
 
   constructor(

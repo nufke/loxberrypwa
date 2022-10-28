@@ -24,7 +24,7 @@ export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
     BrowserModule,
     IonicModule.forRoot({
 //      animated: false,     // disable page transitions
-      rippleEffect: false  // disble ripple effect for buttons
+//      rippleEffect: false  // disble ripple effect for buttons
     }),
     AppRoutingModule,
     MqttModule.forRoot(MQTT_SERVICE_OPTIONS),

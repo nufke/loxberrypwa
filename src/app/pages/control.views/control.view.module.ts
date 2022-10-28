@@ -11,6 +11,7 @@ import { ControlLightView } from './control.light.view/control.light.view';
 import { ControlRadioView } from './control.radio.view/control.radio.view';
 import { ControlSwitchView } from './control.switch.view/control.switch.view';
 import { ControlSliderView } from './control.slider.view/control.slider.view';
+import { ControlPushView } from './control.push.view/control.push.view';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { ControlSliderView } from './control.slider.view/control.slider.view';
     ControlLightView,
     ControlRadioView,
     ControlSwitchView,
-    ControlSliderView
+    ControlSliderView,
+    ControlPushView
   ],
   providers: [
   ],
@@ -36,7 +38,8 @@ import { ControlSliderView } from './control.slider.view/control.slider.view';
     ControlLightView,
     ControlRadioView,
     ControlSwitchView,
-    ControlSliderView
+    ControlSliderView,
+    ControlPushView
   ]
 })
 export class ControlViewModule {}
