@@ -6,11 +6,7 @@ ion-card {
 ion-card-header {
   height: 56px;
   margin: 0;
-  padding: 0px;
-}
-
-.card-content {
-  padding-bottom: 10px;
+  padding: 0;
 }
 
 ion-card-content {
@@ -27,9 +23,27 @@ ion-item {
   --padding-end: 6px;
   --inner-padding-start: 10px;
   --inner-padding-end: 0px;
-  //--color: var(--ion-text-color, #2c2c2c);
   margin: 0px;
   padding: 0px;
+}
+
+.selected-true {
+  --ion-item-background: var(--ion-card-selected);
+}
+
+.radio-item {
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: // TODO inherit from ion-card
+   rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+   rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+   rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+}
+
+// TODO hide radio button, other approach?
+ion-radio {
+  width: 0;
+  height: 0;
 }
 
 ion-icon {
@@ -56,10 +70,4 @@ ion-label {
     margin-top: 3px;
     font-size: 13px;
   }
-}
-
-// TODO hide radio button, other approach?
-ion-radio {
-  width: 0;
-  height: 0;
 }

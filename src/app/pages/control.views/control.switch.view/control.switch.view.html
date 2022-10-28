@@ -1,6 +1,7 @@
 <ion-grid>
   <ion-row>
     <ion-col>
+
       <ion-card>
         <ion-card-header>
           <ion-item>
@@ -8,7 +9,7 @@
             <ion-label></ion-label>
           </ion-item>
         </ion-card-header>
-        <ion-card-content class="card-content">
+        <ion-card-content>
           <ion-item>
             <ion-label>
               <p>{{room.name}} • {{category.name}}</p>
@@ -19,17 +20,16 @@
       </ion-card>
 
       <ion-radio-group value="{{control.state['value']}}" (ionChange)="radioGroupChange($event)">
-        <ion-card *ngFor="let state of toggle_state, let i = index">
-          <ion-card-content>
-            <ion-item>
-              <ion-label class="text-center" *ngIf="control.state['value'] != to_string(i)">{{state}}</ion-label>
-              <ion-label class="text-center" *ngIf="control.state['value'] == to_string(i)" color="primary">{{state}}
-              </ion-label>
+        <div *ngFor="let state of toggle_state, let i = index">
+          <div class="selected-{{control.state['value']==to_string(i)}}">
+            <ion-item class="radio-item">
+              <ion-label class="text-center"><h2>{{state}}</h2></ion-label>
               <ion-radio value="{{i}}"></ion-radio>
             </ion-item>
-          </ion-card-content>
-        </ion-card>
+          </div>
+        </div>
       </ion-radio-group>
+
     </ion-col>
   </ion-row>
 </ion-grid>

@@ -15,10 +15,6 @@ ion-card-content {
   padding: 3px;
 }
 
-.card-content {
-  padding-bottom: 10px;
-}
-
 ion-item {
   --inner-border-width: 0px;
   --inner-padding-start: 0px;
@@ -28,14 +24,25 @@ ion-item {
   --padding-end: 6px;
   --inner-padding-start: 10px;
   --inner-padding-end: 0px;
-  //--color: var(--ion-text-color, #2c2c2c);
-  margin: 0px;
-  padding: 0px;
 }
 
-// TODO not used
-.item-active {
-  --ion-item-background: red;
+.selected-true {
+  --ion-item-background: var(--ion-card-selected);
+}
+
+.radio-item {
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: // TODO inherit from ion-card
+   rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+   rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+   rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+}
+
+// TODO hide radio button, other approach?
+ion-radio {
+  width: 0;
+  height: 0;
 }
 
 ion-icon {
@@ -53,14 +60,10 @@ ion-label {
   h2 {
     font-size: 18px;
     line-height: 1.2;
+    margin-left: 6px;
   }
   p {
     margin-top: 3px;
     font-size: 13px;
   }
-}
-
-ion-radio {
-  width: 32px;
-  height: 32px;
 }
