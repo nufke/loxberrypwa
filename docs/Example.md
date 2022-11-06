@@ -28,8 +28,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": "0",
-                "format": "%s"
+                "value": "0"
             }
         },
         {
@@ -47,8 +46,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": "0",
-                "format": "%s"
+                "value": "0"
             }
         },
         {
@@ -66,8 +64,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": "0",
-                "format": "%s"
+                "value": "0"
             }
         },
         {
@@ -85,8 +82,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": "0",
-                "format": "%s"
+                "value": "0"
             }
         },
         {
@@ -256,12 +252,20 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": 0,
-                "format": "%s",
-                "list_names": [
-                    "channel 1",
-                    "channel 2",
-                    "channel 3"
+                "value": "0",
+                "list": [
+                    {
+                        "name": "off"
+                    },
+                    {
+                        "name": "channel 1"
+                    },
+                    {
+                        "name": "channel 2"
+                    },
+                    {
+                        "name": "channel 3"
+                    }
                 ]
             }
         },
@@ -280,12 +284,23 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": 0,
-                "format": "%s",
-                "list_names": [
-                    "channel 1",
-                    "channel 2",
-                    "channel 3"
+                "value": "0",
+                "list": [
+                    {
+                        "name": "off"
+                    },
+                    {
+                        "name": "channel 1",
+                        "color": "red"
+                    },
+                    {
+                        "name": "channel 2",
+                        "color": "blue"
+                    },
+                    {
+                        "name": "channel 3",
+                        "color": "yellow"
+                    }
                 ]
             }
         },
@@ -304,12 +319,20 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": 0,
-                "format": "%s",
-                "list_names": [
-                    "channel 1",
-                    "channel 2",
-                    "channel 3"
+                "value": "0",
+                "list": [
+                    {
+                        "name": "off"
+                    },
+                    {
+                        "name": "channel 1"
+                    },
+                    {
+                        "name": "channel 2"
+                    },
+                    {
+                        "name": "channel 3"
+                    }
                 ]
             }
         },
@@ -328,12 +351,20 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "is_visible": true,
             "order": 1,
             "state": {
-                "value": 0,
-                "format": "%s",
-                "list_names": [
-                    "channel 1",
-                    "channel 2",
-                    "channel 3"
+                "value": "0",
+                "list": [
+                    {
+                        "name": "off"
+                    },
+                    {
+                        "name": "channel 1"
+                    },
+                    {
+                        "name": "channel 2"
+                    },
+                    {
+                        "name": "channel 3"
+                    }
                 ]
             }
         }

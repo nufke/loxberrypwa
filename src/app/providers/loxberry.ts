@@ -11,7 +11,8 @@ import { StorageService } from '../services/storage.service';
 })
 export class LoxBerry {
 
-  private subscription: Subscription[] = [];
+  private MqttSubscription: Subscription[] = [];
+
   private controls: Control[] = [];
   private controlsSubject: BehaviorSubject<Control[]> = new BehaviorSubject([]);
   private categories: Category[] = [];
@@ -94,7 +95,7 @@ export class LoxBerry {
 
   private registerTopic(topic: string) {
     console.log('Register to topic: ', topic);
-    this.subscription.push( this.mqttService.observe(topic)
+    this.MqttSubscription.push( this.mqttService.observe(topic)
       .subscribe((message: IMqttMessage) => {
         let mqtt_topic = message.topic.substring(0, message.topic.length - 5); // trim last characters from string
         let msg = message.payload.toString();
@@ -127,8 +128,7 @@ export class LoxBerry {
         this.controls[idx] = item; // Override full object in array
        }
       else { // New item
-        var control: Control;
-        control = item;
+        let control: Control = item;
         this.controls.push(control); // Add new object to array
       }
     });
@@ -202,7 +202,7 @@ export class LoxBerry {
       }
       console.log("register topic name:", full_topic_name );
       this.registered_topics.push(full_topic_name);
-      this.subscription.push( this.mqttService.observe(full_topic_name)
+      this.MqttSubscription.push( this.mqttService.observe(full_topic_name)
       .subscribe((message: IMqttMessage) => {
         this.processTopic(message);
       }));
@@ -211,7 +211,7 @@ export class LoxBerry {
 
   public unload() : void {
     console.log('unsubscribe topics..');
-    this.subscription.forEach( (item) => { item.unsubscribe(); } );
+    this.MqttSubscription.forEach( (item) => { item.unsubscribe(); } );
   }
 
   public sendMessage(obj: any, topic: string, value: string, retain_state: any) {

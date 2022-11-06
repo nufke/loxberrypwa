@@ -73,42 +73,54 @@ export class FavoritesPage implements OnInit, OnDestroy {
     return room.name + " • " + category.name;
   }
 
+  private getListName(control: Control, idx) : string {
+    let list = control.state.list;
+    if (!list) list = [ { name: "Off" }, { name: "On" } ];
+    return list[idx].name;
+  }
+
   private updateControlState(control: Control) {
 
     if ((control.type === 'text') || (control.type === 'slider')) {
-      control.state['_text'] = util.format(control.state['format'], control.state['value']);
-      control.state['_text_color'] = "#5e5e5f"; // TODO select from color palette
+      control.state._text = util.format(control.state.format, control.state.value);
+      control.state.color = "#5e5e5f"; // TODO select from color palette
     }
 
     if (control.type === 'switch') {
-      control.state['_text'] = ''; // no status displayed
       if (control.state.value === "1") {
-        control.state['_toggle'] = true;
+        control.state._text = this.getListName(control, 1);
+        control.state._toggle = true;
+        control.state.color = "#69c350"; // primary
         control.icon.color = "primary";
       }
       else {
-        control.state['_toggle'] = false;
+        control.state._text = this.getListName(control, 0);
+        control.state.color = "#5e5e5f"; // TODO select from color palette
+        control.state._toggle = false;
         control.icon.color = "#5e5e5f"; // TODO select from color palette
       }
     }
+
     if ((control.type === 'intercom') || (control.type === 'light') || (control.type === 'link') || (control.type === 'screen_c') ||
       (control.type === 'light_c')) {
-        control.state['_text'] = ''; // no status displayed
+        control.state._text = ''; // no status displayed
     }
 
     if (control.type === 'radio') {
       let val = parseInt(control.state.value);
-      let names = control.state['list_names'];
-      let colors = control.state['list_colors'];
+      let list = control.state.list;
+      let names = list.map(a => a.name);
+      let colors = list.map(a => a.color);
 
       if (!val) val = 0;
       if (names)
-        control.state['_text'] = names[val];
+        control.state._text = names[val];
 
       if (colors && colors[val])
-        control.state['_text_color'] = colors[val];
+        control.state.color = colors[val];
       else
-        control.state['_text_color'] = "#5e5e5f"; // TODO select from color palette
+        if (!val) control.state.color = "#5e5e5f"; // TODO select from color palette
+        else control.state.color = "#69c350"; // primary
     }
   }
 
@@ -139,12 +151,12 @@ export class FavoritesPage implements OnInit, OnDestroy {
     $event.stopPropagation();
 
 
-    if (control.state.list_names) // process only if there are radio list names
+    if (control.state.list) // process only if there are radio list names
     {
-      let val = parseInt(control.state.value);
+      let val = Number(control.state.value);
       let min, max;
-      if (up) { max = control.state.list_names.length-1; min = 0; }
-        else { max = 0; min = control.state.list_names.length-1; }
+      if (up) { max = control.state.list.length-1; min = 0; }
+        else { max = 0; min = control.state.list.length-1; }
 
       if (val == max)
         val = min;
@@ -192,10 +204,12 @@ export class FavoritesPage implements OnInit, OnDestroy {
     if (control.state._toggle) {
       control.state.value = "0";
       control.icon.color = "#5e5e5f"; // TODO select from color palette
+      control.state.color = "#5e5e5f"; // TODO select from color palette
     }
     else {
       control.state.value = "1";
       control.icon.color = "primary";
+      control.state.color = "69c350"; // primary
     }
 
     this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
@@ -203,11 +217,11 @@ export class FavoritesPage implements OnInit, OnDestroy {
   }
 
   count_up_down(control: Control, up: Boolean) {
-    let val = parseInt(control.state.value);
+    let val = Number(control.state.value);
     if (!val) val = 0;
-    let step = control.state['step'];
-    let min = control.state['min'];
-    let max = control.state['max'];
+    let step = Number(control.state.step);
+    let min = Number(control.state.min);
+    let max = Number(control.state.max);
     if (!min) min = 0;
     if (!max) max = 100;
     if (!step) step = 1;

@@ -77,8 +77,7 @@ Value of `state` when `type` is `"radio"`:
 ```
 {
   value: string,                // number for active item in the list (0 = off)
-  list_names?: string[],        // name for each radio item
-  list_color?: string[]         // color for each radio item
+  list: [ ... ]                 // array for each radio item containing name, color and icon
 }
 ```
 
@@ -146,25 +145,25 @@ In order to map the rooms, categories and controls from a Loxone Miniserver menu
 **NOTE: At this stage not all functions are generated / translated. As such the generated JSON data model should be seen as a template and requires additional manual modification or additions.**
 
 ```
-var cats = Object.values(msg.payload.cats);
-var rooms = Object.values(msg.payload.rooms);
-var controls = Object.values(msg.payload.controls);
+let cats = Object.values(msg.payload.cats);
+let rooms = Object.values(msg.payload.rooms);
+let controls = Object.values(msg.payload.controls);
 
-var hwinfo = msg.payload.msInfo.serialNr;
+let hwinfo = msg.payload.msInfo.serialNr;
 
 cats.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
 rooms.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
 controls.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
 
-var cats_arr = [];
-var rooms_arr = [];
-var controls_arr = [];
+let cats_arr = [];
+let rooms_arr = [];
+let controls_arr = [];
 
-var cat_names = [];
-var cat_icons = [];
-var room_names = [];
+let cat_names = [];
+let cat_icons = [];
+let room_names = [];
 
-var i=0; // used to order element
+let i=0; // used to order element
 
 cats.forEach( (item) => {
     let category =

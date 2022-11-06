@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ControlsPage } from './controls.page';
-
 import { ControlsPageRoutingModule } from './controls-routing.module';
 
 @NgModule({

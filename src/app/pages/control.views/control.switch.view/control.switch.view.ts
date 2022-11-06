@@ -10,7 +10,7 @@ import { LoxBerry } from '../../../providers/loxberry';
 })
 export class ControlSwitchView extends ControlViewBase {
 
-  public toggle_state = ["Off", "On"];
+  public list: any[] = [ { name: "Off" }, { name: "On" } ];
 
   constructor(
     private router: Router,
@@ -21,7 +21,10 @@ export class ControlSwitchView extends ControlViewBase {
   }
 
   ngOnInit() {
-    console.log('control:', this.control );
+    let list = this.control.state.list;
+    if (list && (list.length >=1)) {
+      this.list = [ list[0], list[1] ];
+    }
   }
 
   radioGroupChange(event) {

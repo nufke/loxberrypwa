@@ -33,6 +33,7 @@ ion-item {
   padding: 0px;
   text-transform: none;
   --background: var(--ion-card-background, #ffffff);
+  --ripple-color: var(--ion-color-primary, #69c350);
   border-radius: 5px;
   box-shadow: // TODO inherit from ion-card
    rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,

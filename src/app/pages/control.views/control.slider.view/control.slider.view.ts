@@ -25,9 +25,12 @@ export class ControlSliderView extends ControlViewBase {
   }
 
   get_slider_value() {
-    // update control value and send via MQTT
-    this.control.state.value = String(this.slider_value);
-    this.LoxBerryService.sendMessage(this.control, '/state/value', this.control.state.value, 1);
+    // update control value and send via MQTT when changed
+    let new_value = String(this.slider_value);
+    if (this.control.state.value != new_value) {
+      this.control.state.value = new_value;
+      this.LoxBerryService.sendMessage(this.control, '/state/value', this.control.state.value, 1);
+    }
   }
 
   slider_up_pressed() {
@@ -39,7 +42,6 @@ export class ControlSliderView extends ControlViewBase {
   }
 
   calculate_value(up: Boolean) {
-
     let min = Number(this.control.state['min']);
     let max = Number(this.control.state['max']);
     let step = Number(this.control.state['step']);

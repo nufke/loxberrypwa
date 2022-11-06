@@ -16,7 +16,11 @@ export interface Control {
   is_visible?: Boolean,         // make control invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number,               // defines order in the App list (optional)
-  state?: ControlText | ControlRadio | ControlSwitch | ControlSlider
+  state:
+    ControlText &
+    ControlRadioView &
+    ControlSwitch &
+    ControlSlider,
 }
 
 export interface Category {
@@ -50,21 +54,26 @@ export interface Room {
 export interface ControlText {
   value: string,                // number represented as string
   format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
-  color?: string                // color in RGB hex notation, e.g. #FFFFFF (optional)
+  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
+  _text: string                 // INTERNAL display status text
 }
 
-export interface ControlRadio {
-  value: string,                // number for active item in the list (0 = off)
-  list_names: string[],         // text for each radio item
-  list_color?: string[]         // color for each radio item  (optional)
+export interface ControlRadioView {
+  list: RadioListItem[],        // name, color and icon for each radio item
+}
+
+interface RadioListItem {
+  name: string,
+  color?: string,
+  icon?: string
 }
 
 export interface ControlSwitch {
-  value: string                 // number for active item in the list (0 = off)
+  list?: RadioListItem[],       // name, color and icon for on and off state
+  _toggle: Boolean              // INTERNAL toggle state
 }
 
 export interface ControlSlider {
-  value: string,                // number for active item in the list (0 = off)
   format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
   color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
   min?: Number,                 // minimum value (0 if not specified) (optional)
