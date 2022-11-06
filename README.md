@@ -55,7 +55,7 @@ Alternatively, you can also make use of URLs to your favorite icons and images i
 
 **TIP 1**: A simple translator/generator is available to create a JSON structure based on the Loxone Miniserver menu structure (`LoxAPP3.json`). More information is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model#json-data-model-generator--translator).
 
-**TIP 2**: It is recommended to reuse the icons stored on your Loxone Miniserver, located in `<miniserver IP>/web/images.zip`.
+**TIP 2**: It is recommended to reuse the icons stored on your Loxone Miniserver, located in `<miniserver IP>/web/images.zip` (version 13.0 and below) or `<miniserver IP>/sys/IconLibrary.zip`  (from version 13.1 onwards).
 
 ## Deploy the PWA
 

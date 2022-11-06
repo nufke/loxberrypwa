@@ -174,8 +174,9 @@ cats.forEach( (item) => {
             icon: {
                 href: "assets/svg_icons/" + item.image },
         order: i,
-        is_favorite: false,
-        is_visible: true
+        is_favorite: item.isFavorite,
+        is_visible: true,
+        is_protected: false
     };
     i++;
     cat_names[item.uuid] = item.name;
@@ -193,8 +194,9 @@ rooms.forEach((item) => {
         name: item.name,
         icon: { href: "assets/svg_icons/" + item.image },
         order: i,
-        is_favorite: false,
-        is_visible: true
+        is_favorite: item.isFavorite,
+        is_visible: true,
+        is_protected: false
     };
     i++;
     room_names[item.uuid] = item.name;
@@ -203,24 +205,38 @@ rooms.forEach((item) => {
 
 i = 0;
 
-controls.forEach( (item) => {
+controls.forEach((item) => {
     let icon;
-    if (item.defaultIcon)
-      icon = item.defaultIcon + ".svg";
+    if (item.defaultIcon) {
+        icon = item.defaultIcon;
+        if (icon.search(".svg") == -1)
+          icon = icon + ".svg";
+    }
     else
       icon = cat_icons[item.cat];
 
     if (item.type === "UpDownDigital") item.type="updown";
-    if (item.type === "InfoOnlyAnalog") item.type = "text";
-    if (item.type === "InfoOnlyDigital") item.type = "text";
-    if (item.type === "InfoOnlyText") item.type = "text";
+
+    if ( (item.type === "InfoOnlyAnalog") ||
+         (item.type === "InfoOnlyDigital") ||
+         (item.type === "InfoOnlyText") ||
+         (item.type === "TextState") ) item.type = "text";
+
     if (item.type === "LightControllerV2") item.type = "light";
     if (item.type === "Pushbutton") item.type = "push";
     if (item.type === "CentralLightController") item.type = "light_c";
     if (item.type === "Jalousie") item.type = "screen";
     if (item.type === "CentralJalousie") item.type = "screen_c";
     if (item.type === "IRoomController") item.type = "tempctrl";
-    if (item.type === "TextState") item.type = "text";
+
+    let list_arr = undefined;
+    if (item.type === "Radio") {
+        item.type = "radio";
+        let outputs = Object.values(item.details.outputs);
+        list_arr = [];
+        list_arr.push({ name: item.details.allOff });
+        outputs.forEach( item => list_arr.push({ name: item }));
+    }
 
     let control =
     {
@@ -233,15 +249,18 @@ controls.forEach( (item) => {
         category: item.cat,
         is_favorite: false,
         is_visible: true,
+        is_protected: item.isSecured,
         state: {
            value: "0",
            format: "%s"
         },
         order: i
     };
+    if (list_arr) control.state['list'] = list_arr;
     i++;
     controls_arr.push(control);
 });
+
 
 msg.payload = {
     controls: controls_arr,
