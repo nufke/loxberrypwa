@@ -10,9 +10,8 @@ ion-card-header {
 }
 
 ion-card-content {
-  height: 80px;
-  margin: 3px;
-  padding: 3px;
+  margin: 0px 0px 0px 2px;
+  padding: 0px 0px 6px 0px;
 }
 
 ion-item {
@@ -24,8 +23,6 @@ ion-item {
   --padding-end: 6px;
   --inner-padding-start: 10px;
   --inner-padding-end: 0px;
-  margin: 0px;
-  padding: 0px;
 }
 
 .selected-true {
