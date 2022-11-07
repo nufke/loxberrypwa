@@ -86,7 +86,7 @@ export class LoxBerry {
   }
 
   private findIndex(data: any, hwid: string, uuid: string) {
-    for(let i = 0; i < data.length; i++) { // loop through array index (1st level only)
+    for(let i = 0; i < data.length-1; i++) { // loop through array index (1st level only)
       if (data[i])
         if ((data[i].uuid == uuid) && (data[i].hwid == hwid)) return i;
     }
@@ -97,7 +97,6 @@ export class LoxBerry {
     console.log('Register to topic: ', topic);
     this.MqttSubscription.push( this.mqttService.observe(topic)
       .subscribe((message: IMqttMessage) => {
-        let mqtt_topic = message.topic.substring(0, message.topic.length - 5); // trim last characters from string
         let msg = message.payload.toString();
         if (msg.length == 0 )
           this.flushData();

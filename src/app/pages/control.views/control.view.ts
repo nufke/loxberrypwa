@@ -11,6 +11,7 @@ import { ControlRadioView } from './control.radio.view/control.radio.view';
 import { ControlSwitchView } from './control.switch.view/control.switch.view';
 import { ControlSliderView } from './control.slider.view/control.slider.view';
 import { ControlPushView } from './control.push.view/control.push.view';
+import { ControlGeneralView } from './control.general.view/control.general.view';
 
 @Component({
   selector: 'app-control',
@@ -31,13 +32,14 @@ export class ControlView implements OnInit {
   private categoriesSub: Subscription;
   private roomsSub: Subscription;
 
-  private ControlTypeMap = {
+  private ControlViewMap = {
     'text': ControlTextView,
     'light': ControlLightView,
     'radio': ControlRadioView,
     'switch': ControlSwitchView,
     'slider': ControlSliderView,
     'push': ControlPushView,
+    'general': ControlGeneralView
   }
 
   constructor(
@@ -62,15 +64,19 @@ export class ControlView implements OnInit {
 
   async loadControlComponent(control: Control, category : Category, room : Room ) {
     if (!this.componentRef) { // only create if dynamic view does not exist
-      this.componentRef = this.viewContainer.createComponent(this.getControlType(control.type));
+      this.componentRef = this.viewContainer.createComponent(this.getControlView(control.type));
       (<ControlViewBase>this.componentRef.instance).control = control;
       (<ControlViewBase>this.componentRef.instance).category = category;
       (<ControlViewBase>this.componentRef.instance).room = room;
     }
   }
 
-  private getControlType(type) {
-    return this.ControlTypeMap[type];
+  private getControlView(type) {
+    let view = this.ControlViewMap[type];
+    if (view)
+      return this.ControlViewMap[type];
+    else
+      return this.ControlViewMap['general'];
   }
 
   public ngOnInit() : void {

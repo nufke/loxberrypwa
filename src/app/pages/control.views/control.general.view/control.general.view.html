@@ -1,0 +1,24 @@
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-card>
+        <ion-card-header>
+          <ion-item>
+            <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}"></ion-icon>
+            <ion-label></ion-label>
+          </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label>
+              <p>{{room.name}} • {{category.name}}</p>
+              <h1>{{control.name}}</h1>
+              <h2 style="color: {{control.state.color}};" *ngIf="control.state._text !== ''">
+                {{control.state._text}}</h2>
+            </ion-label>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>

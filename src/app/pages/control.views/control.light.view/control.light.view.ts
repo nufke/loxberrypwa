@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ControlViewBase } from '../control.view.base';
+import { LoxBerry } from '../../../providers/loxberry';
 
 @Component({
   selector: 'app-control-light',
@@ -9,23 +10,13 @@ import { ControlViewBase } from '../control.view.base';
 })
 export class ControlLightView extends ControlViewBase {
 
-  color = '#ffffff';
   segment = 'moods';
-
-  subControls: any = [];
-  moods: any = [
-    "Standard", "Alles aan", "Uit"
-  ];
-
-  moodSelected: string;
-
-  currentValue : number = 10;
-
   constructor(
-    private router: Router
+    private router: Router,
+    public LoxBerryService: LoxBerry
   )
   {
-    super(); // translate, dataservice
+    super();
   }
 
   ngOnInit() {
@@ -35,11 +26,12 @@ export class ControlLightView extends ControlViewBase {
     // Close any open sliding items when the schedule updates
   }
 
-  getValue() {
-    console.log('range: ', this.currentValue);
+  radioGroupChange(event) {
+    this.control.state.value = String(event.detail.value);
+    this.LoxBerryService.sendMessage(this.control, '/state/value', event.detail.value, 1);
   }
 
-  radioChanged() {
-    console.log('radioSelect: ', this.moodSelected);
+  to_string(i: Number) : string {
+    return String(i);
   }
 }

@@ -83,7 +83,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
 
     if ((control.type === 'text') || (control.type === 'slider')) {
       control.state._text = util.format(control.state.format, control.state.value);
-      control.state.color = "#5e5e5f"; // TODO select from color palette
+      control.state.color = "#9d9e9e"; // TODO select from color palette
     }
 
     if (control.type === 'switch') {
@@ -95,9 +95,9 @@ export class FavoritesPage implements OnInit, OnDestroy {
       }
       else {
         control.state._text = this.getListName(control, 0);
-        control.state.color = "#5e5e5f"; // TODO select from color palette
+        control.state.color = "#9d9e9e"; // TODO select from color palette
         control.state._toggle = false;
-        control.icon.color = "#5e5e5f"; // TODO select from color palette
+        control.icon.color = "#9d9e9e"; // TODO select from color palette
       }
     }
 
@@ -119,7 +119,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
       if (colors && colors[val])
         control.state.color = colors[val];
       else
-        if (!val) control.state.color = "#5e5e5f"; // TODO select from color palette
+        if (!val) control.state.color = "#9d9e9e"; // TODO select from color palette
         else control.state.color = "#69c350"; // primary
     }
   }
@@ -203,8 +203,8 @@ export class FavoritesPage implements OnInit, OnDestroy {
 
     if (control.state._toggle) {
       control.state.value = "0";
-      control.icon.color = "#5e5e5f"; // TODO select from color palette
-      control.state.color = "#5e5e5f"; // TODO select from color palette
+      control.icon.color = "#9d9e9e"; // TODO select from color palette
+      control.state.color = "#9d9e9e"; // TODO select from color palette
     }
     else {
       control.state.value = "1";
