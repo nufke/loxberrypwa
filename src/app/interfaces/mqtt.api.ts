@@ -3,6 +3,7 @@
 export const MqttTopics = [
 
   // topics for controls
+  "",
   "/name",
   "/icon/href",
   "/icon/color",

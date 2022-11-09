@@ -16,11 +16,12 @@ export interface Control {
   is_visible?: Boolean,         // make control invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number,               // defines order in the App list (optional)
+  subcontrols?: Control[],      // any subcontrols (optional)
   state:
     ControlText &
     ControlRadioView &
     ControlSwitch &
-    ControlSlider,
+    ControlSlider
 }
 
 export interface Category {
@@ -59,26 +60,25 @@ export interface ControlText {
 }
 
 export interface ControlRadioView {
+  value: string,                // number represented as string
   list: RadioListItem[],        // name, color and icon for each radio item
 }
 
 interface RadioListItem {
-  name: string,
-  color?: string,
-  icon?: string
+  name: string,                 // name of the list item
+  color?: string,               // color of the list item in RGB hex notation, e.g. #FFFFFF (optional)
+  icon?: string                 // icon of the list item (optional)
 }
 
 export interface ControlSwitch {
-  list?: RadioListItem[],       // name, color and icon for on and off state
+  value: string,                // number represented as string
+  list?: RadioListItem[],       // name, color and icon for on and off state (optional)
   _toggle: Boolean              // INTERNAL toggle state
 }
 
 export interface ControlSlider {
-  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
-  color?: string,               // default color in RGB hex notation, e.g. #FFFFFF (optional)
+  value: string,                // number represented as string
   min?: Number,                 // minimum value (0 if not specified) (optional)
   max?: Number,                 // minimum value (100 if not specified) (optional)
   step?: Number                 // step size with + or - is pushed (1 if not specified) (optional)
-  icon_slider_left?: string,    // icon at left side of slider (optional)
-  icon_slider_right?: string    // icon at right side of slider (optional)
 }

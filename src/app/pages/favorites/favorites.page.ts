@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoxBerry } from '../../providers/loxberry';
 import { Control, Category, Room  } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
-import { util } from 'node-forge' // TODO check package
+
+var sprintf = require('sprintf-js').sprintf
 
 @Component({
   selector: 'app-favorites',
@@ -82,7 +83,7 @@ export class FavoritesPage implements OnInit, OnDestroy {
   private updateControlState(control: Control) {
 
     if ((control.type === 'text') || (control.type === 'slider')) {
-      control.state._text = util.format(control.state.format, control.state.value);
+      control.state._text = sprintf(control.state.format, control.state.value);
       control.state.color = "#9d9e9e"; // TODO select from color palette
     }
 

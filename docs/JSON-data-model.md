@@ -256,7 +256,10 @@ controls.forEach((item) => {
         },
         order: i
     };
+
     if (list_arr) control.state['list'] = list_arr;
+    if ((item.details)&&(item.details.format)) control.state.format = item.details.format;
+
     i++;
     controls_arr.push(control);
 });

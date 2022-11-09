@@ -20,6 +20,8 @@ export class LoxBerry {
   private rooms: Room[] = [];
   private roomsSubject: BehaviorSubject<Room[]> = new BehaviorSubject([]);
 
+  private subcontrols: Control[] = [];
+
   private registered_topics: string[] = [];
 
   private loxberryMqttIP: string = '';
@@ -108,6 +110,7 @@ export class LoxBerry {
   private flushData() {
     console.log("flush structure...");
     this.controls = [];
+    this.subcontrols = [];
     this.categories = [];
     this.rooms = [];
 
@@ -130,6 +133,20 @@ export class LoxBerry {
         let control: Control = item;
         this.controls.push(control); // Add new object to array
       }
+      /*
+      if (item.subcontrols.length) { // store subcontrols in separate registry
+        obj.subcontrols.forEach( subitem => {
+          let sub_idx = this.findIndex(obj.subcontrols, subitem.hwid, subitem.uuid);
+          if (sub_idx >= 0) { // subcontrol exists, do update
+            this.subcontrols[sub_idx] = subitem; // Override full object in array
+          }
+          else { // New subcontrol
+            let subcontrol: Control = subitem;
+            this.subcontrols.push(subcontrol); // Add new object to array
+          }
+        });
+      }
+      */
     });
 
     obj.categories.forEach( item => {
@@ -171,10 +188,19 @@ export class LoxBerry {
     if (idx >= 0) {
       if (topic.length == 4) this.controls[idx][topic[2]][topic[3]] = value;
       if (topic.length == 3) this.controls[idx][topic[2]] = value;
+      if (topic.length == 2) this.controls[idx].state.value = value;
       console.log('received control: ', topic.toString(), value);
       this.controlsSubject.next(this.controls); // updates for Subscribers
     }
-
+/*
+    let sub_idx = this.findIndex(this.subcontrols, hwid, uuid);
+    if (sub_idx >= 0) {
+      if (topic.length == 4) this.controls[idx].subcontrols[sub_idx][topic[2]][topic[3]] = value;
+      if (topic.length == 3) this.controls[idx].subcontrols[sub_idx][topic[2]] = value;
+      console.log('received subcontrol: ', topic.toString(), value);
+      this.controlsSubject.next(this.controls); // updates for Subscribers
+    }
+*/
     idx = this.findIndex(this.categories, hwid, uuid);
     if (idx >= 0) {
       if (topic.length == 4) this.categories[idx][topic[2]][topic[3]] = value;

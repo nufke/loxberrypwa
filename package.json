@@ -29,6 +29,7 @@
     "@ionic/angular": "^6.0.0",
     "ngx-mqtt": "^9.0.5",
     "rxjs": "~6.6.0",
+    "sprintf-js": "^1.1.2",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
   },
