@@ -30,12 +30,23 @@ export class ControllerBase {
     control.display.color = "#9d9e9e"; // TODO select from color palette
     switch(control.type) {
       case 'info_only_digital':
+        if (control.states.active === "1") {
+          control.display.text = control.details.text.on;
+          control.display.color = control.details.color.on;
+        }
+        else {
+          control.display.text = control.details.text.off;
+          control.display.color = control.details.color.off;
+        }
         break;
       case 'info_only_text':
         control.display.text = sprintf(control.details.format, control.states.text);
         break;
       case 'info_only_analog':
         control.display.text = sprintf(control.details.format, control.states.value);
+        break;
+      case 'text_state':
+        control.display.text = control.states.text_and_icon;
         break;
       case 'slider':
         control.display.text = control.states.value;

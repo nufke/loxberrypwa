@@ -38,8 +38,8 @@ Fields indicated with '?' are optional
   is_visible?: Boolean,               // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in the App list (optional)
-  details: { ... }                    // details of the control (see below)
-  states: { ... }                     // states of the control (see below)
+  details: { ... }                    // details of the control
+  states: { ... }                     // states of the control
 }
 ```
 
@@ -65,7 +65,7 @@ The control key `type` is a string which defines the style of the control and it
 "webpage"                   // button to external link (e.g. webpage, app)
 ```
 
-The nested JSON structure for the control `details` and `states` depend on the type of control:
+The nested JSON structure for the control `details` and `states` depend on the type of control.
 
 ## Data model for categories
 
