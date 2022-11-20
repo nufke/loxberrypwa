@@ -14,18 +14,18 @@
             <ion-label>
               <p>{{room.name}} • {{category.name}}</p>
               <h1>{{control.name}}</h1>
-              <h2 style="color: {{control.state.color}};" *ngIf="control.state._text !== ''">
-                {{control.state._text}}</h2>
+              <h2 style="color: {{control.display.color}};" *ngIf="control.display.text !== ''">
+                {{control.display.text}}</h2>
             </ion-label>
           </ion-item>
         </ion-card-content>
       </ion-card>
 
-      <ion-radio-group value="{{control.state.value}}" (ionChange)="radioGroupChange($event)">
-        <div *ngFor="let list_item of list, let i = index">
-          <div class="selected-{{control.state.value==to_string(i)}}">
+      <ion-radio-group value="{{control.states.active}}" (ionChange)="radioGroupChange($event)">
+        <div *ngFor="let item of off_on, let i = index">
+          <div class="selected-{{control.states.active==to_string(i)}}">
             <ion-item class="radio-item">
-              <ion-label class="text-center"><h2>{{list_item.name}}</h2></ion-label>
+              <ion-label class="text-center"><h2>{{item}}</h2></ion-label>
               <ion-radio value="{{i}}"></ion-radio>
             </ion-item>
           </div>

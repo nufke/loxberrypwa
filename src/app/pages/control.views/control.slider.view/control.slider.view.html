@@ -13,20 +13,20 @@
             <ion-label>
               <p>{{room.name}} • {{category.name}}</p>
               <h1>{{control.name}}</h1>
-              <h2 style="color: {{control.state.color}};" *ngIf="control.state._text !== ''">
-                {{control.state._text}}</h2>
+              <h2 style="color: {{control.display.color}};" *ngIf="control.display.text !== ''">
+                {{control.display.text}}</h2>
             </ion-label>
           </ion-item>
           <ion-item>
 
-            <ion-fab-button class="icon-slider-left" (click)="slider_down_pressed()">
+            <ion-fab-button class="icon-slider-minus" (click)="btn(btnAction.Minus, $event, control)">
               <ion-icon name="sunny" style="color: #4e5761;"></ion-icon>
             </ion-fab-button>
 
-            <ion-range min="1" max="100" step="2" debounce="50" step="1" (ionChange)="get_slider_value()"
+            <ion-range min="{{control.details.min}}" max="{{control.details.max}}" step="{{control.details.step}}" debounce="50" step="1" (ionChange)="slider_value_change()"
               [(ngModel)]="slider_value"></ion-range>
 
-            <ion-fab-button class="icon-slider-right" (click)="slider_up_pressed()">
+            <ion-fab-button class="icon-slider-plus" (click)="btn(btnAction.Plus, $event, control)">
               <ion-icon name="sunny" style="color: #4e5761"></ion-icon>
             </ion-fab-button>
           </ion-item>

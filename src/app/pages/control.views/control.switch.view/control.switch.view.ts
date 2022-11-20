@@ -10,26 +10,22 @@ import { LoxBerry } from '../../../providers/loxberry';
 })
 export class ControlSwitchView extends ControlViewBase {
 
-  public list: any[] = [ { name: "Off" }, { name: "On" } ];
+  public off_on = [ "Off", "On"]; // TODO move to control API
 
   constructor(
     private router: Router,
     public LoxBerryService: LoxBerry
   )
   {
-    super();
+    super(LoxBerryService);
   }
 
   ngOnInit() {
-    let list = this.control.state.list;
-    if (list && (list.length >=1)) {
-      this.list = [ list[0], list[1] ];
-    }
   }
 
   radioGroupChange(event) {
-    this.control.state.value = String(event.detail.value);
-    this.LoxBerryService.sendMessage(this.control, '/state/value', event.detail.value, 1);
+    this.control.states.active = String(event.detail.value);
+    this.LoxBerryService.sendMessage(this.control, '/cmd', event.detail.value, 0);
   }
 
   to_string(i: Number) : string {

@@ -33,12 +33,14 @@ export class ControlView implements OnInit {
   private roomsSub: Subscription;
 
   private ControlViewMap = {
-    'text': ControlTextView,
-    'light': ControlLightView,
+    'info_only_analog': ControlTextView,
+    'info_only_digital': ControlTextView,
+    'info_only_text': ControlTextView,
+    'light_controller_v2': ControlLightView,
     'radio': ControlRadioView,
     'switch': ControlSwitchView,
     'slider': ControlSliderView,
-    'push': ControlPushView,
+    'pushbutton': ControlPushView,
     'general': ControlGeneralView
   }
 

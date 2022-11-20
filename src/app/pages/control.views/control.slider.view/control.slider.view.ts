@@ -11,51 +11,27 @@ import { LoxBerry } from '../../../providers/loxberry';
 export class ControlSliderView extends ControlViewBase {
 
   public slider_value;
+  public text: string;
 
   constructor(
     private router: Router,
     public LoxBerryService: LoxBerry
   )
   {
-    super();
+    super(LoxBerryService);
   }
 
   ngOnInit() {
-    this.slider_value = Number(this.control.state['value']);
+    this.slider_value = Number(this.control.states.value);
   }
 
-  get_slider_value() {
+  public slider_value_change() {
     // update control value and send via MQTT when changed
     let new_value = String(this.slider_value);
-    if (this.control.state.value != new_value) {
-      this.control.state.value = new_value;
-      this.LoxBerryService.sendMessage(this.control, '/state/value', this.control.state.value, 1);
+    if (this.control.states.value != new_value) {
+      this.control.states.value = new_value;
+      this.LoxBerryService.sendMessage(this.control, '/cmd', this.control.states.value, 0);
     }
   }
 
-  slider_up_pressed() {
-    this.calculate_value(true);
-  }
-
-  slider_down_pressed() {
-    this.calculate_value(false);
-  }
-
-  calculate_value(up: Boolean) {
-    let min = Number(this.control.state['min']);
-    let max = Number(this.control.state['max']);
-    let step = Number(this.control.state['step']);
-
-    if (!min) min = 0;
-    if (!max) max = 100;
-    if (!step) step = 1;
-
-    let val;
-    if (up) val = this.slider_value + step;
-    else val = this.slider_value - step;
-
-    if (val >= max) val = max;
-    if (val <= min) val = min;
-    this.slider_value = val;
-  }
 }

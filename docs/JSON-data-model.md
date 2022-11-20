@@ -38,69 +38,34 @@ Fields indicated with '?' are optional
   is_visible?: Boolean,               // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in the App list (optional)
-  state: { ... }                      // state of the control (see below)
+  details: { ... }                    // details of the control (see below)
+  states: { ... }                     // states of the control (see below)
 }
 ```
 
-### Control type and state
+### Control types
 
 The control key `type` is a string which defines the style of the control and its associated button(s):
 
+*NOTE: Not all controls are fully functional*
+
 ```
-"dimmer"   // up/down (+/-) buttons
-"light"    // light control, plus (+) button
-"light_c"  // central light control, no button
-"link"     // button to external link (e.g. webpage, app)
-"push"     // push button
-"radio"    // up/down (+/-) buttons to select state from list-box
-"screen"   // sunscreen control, ^/v buttons
-"screen_c  // central sunscreens control, no button
-"slider"   // up/down (+/-) buttons, slider only visible in detailed view
-"switch"   // toggle switch
-"tempctrl" // room temperature control, no button
-"text"     // status text, no button
-"updown"   // up/down (+/-) buttons
+"central_jalousie           // central sunscreen / shutter control, no button
+"central_light_controller"  // central light control, no button
+"info_only_analog"          // show analog value , no button
+"info_only_digital"         // show digital (2-state) value, no button
+"info_only_text"            // show text, no button
+"i_room_controller"         // room controller, no button
+"jalousie"                  // sunscreen / shutter control, up/down buttons
+"light_controller_v2"       // light control, plus button
+"pushbutton"                // push button
+"radio"                     // up/down buttons to select state from list-box
+"slider"                    // plus/minus buttons, slider only visible in detailed view
+"switch"                    // toggle switch
+"webpage"                   // button to external link (e.g. webpage, app)
 ```
 
-The nested JSON structure for the control key `state` depends on the type of control:
-
-Value of `state` when `type` is `"test"`:
-```
-{
-  value: string,                // number represented as string
-  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units
-  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
-}
-```
-
-Value of `state` when `type` is `"radio"`:
-```
-{
-  value: string,                // number for active item in the list (0 = off)
-  list: [ ... ]                 // array for each radio item containing name, color and icon
-}
-```
-
-Value of `state` when `type` is `"switch"`:
-```
-{
-  value: string,                // number represented as string
-}
-```
-
-Value of `state` when `type` is `"slider"`:
-```
-{
-  value: string,                // number represented as string
-  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
-  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
-  min?: Number,                 // minimum value (0 if not specified) (optional)
-  max?: Number,                 // minimum value (100 if not specified) (optional)
-  step?: Number                 // step size with + or - is pushed (1 if not specified) (optional)
-  icon_slider_left?: string,    // icon at left side of slider (optional)
-  icon_slider_right?: string    // icon at right side of slider (optional)
-}
-```
+The nested JSON structure for the control `details` and `states` depend on the type of control:
 
 ## Data model for categories
 
@@ -113,8 +78,9 @@ Value of `state` when `type` is `"slider"`:
           href: string,               // location or URL to SVG icon
           color?: string              // default color in RGB hex notation, e.g. #FFFFFF (optional)
         },
+  image?: string,                     // bitmap image (optional)
+  is_favorite?: Boolean,              // make favorite item (optional)
   is_visible?: Boolean,               // make category invisible
-  is_favorite?: Boolean,              // elevate to favorite item (optional)
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }
@@ -131,145 +97,10 @@ Value of `state` when `type` is `"slider"`:
           href: string,               // URL to SVG icon
           color?: string              // RGB hex notation, e.g. #FFFFFF (optional)
         },
+  image?: string,                     // bitmap image (optional)
+  is_favorite?: Boolean,              // make favorite item (optional)
   is_visible?: Boolean,               // make room invisible
-  is_favorite?: Boolean,              // elevate to favorite item (optional)
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }
-```
-
-## JSON data model generator / translator
-
-In order to map the rooms, categories and controls from a Loxone Miniserver menu structure (`LoxAPP3.json`) to the JSON data model used in the App, the javascript function listed below can be used as a start. The javascript function can be integrated in `Node-RED` using a function node, which should read the Loxone menu structure as input (`msg.payload`) and translates it to the required JSON data model as output (`msg`). In case multiple Miniservers are in use, you should process the Loxone structures individually and concatinate them to a single JSON data model.
-
-**NOTE: At this stage not all functions are generated / translated. As such the generated JSON data model should be seen as a template and requires additional manual modification or additions.**
-
-```
-let cats = Object.values(msg.payload.cats);
-let rooms = Object.values(msg.payload.rooms);
-let controls = Object.values(msg.payload.controls);
-
-let hwinfo = msg.payload.msInfo.serialNr;
-
-cats.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
-rooms.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
-controls.sort((a, b) => { return a.name.localeCompare(b.name); }) // sort A-Z
-
-let cats_arr = [];
-let rooms_arr = [];
-let controls_arr = [];
-
-let cat_names = [];
-let cat_icons = [];
-let room_names = [];
-
-let i=0; // used to order element
-
-cats.forEach( (item) => {
-    let category =
-    {
-        hwid: hwinfo,
-        uuid: item.uuid,
-        name: item.name,
-            icon: {
-                href: "assets/svg_icons/" + item.image },
-        order: i,
-        is_favorite: item.isFavorite,
-        is_visible: true,
-        is_protected: false
-    };
-    i++;
-    cat_names[item.uuid] = item.name;
-    cat_icons[item.uuid] = item.image;
-    cats_arr.push(category);
-});
-
-i=0;
-
-rooms.forEach((item) => {
-    let room =
-    {
-        hwid: hwinfo,
-        uuid: item.uuid,
-        name: item.name,
-        icon: { href: "assets/svg_icons/" + item.image },
-        order: i,
-        is_favorite: item.isFavorite,
-        is_visible: true,
-        is_protected: false
-    };
-    i++;
-    room_names[item.uuid] = item.name;
-    rooms_arr.push(room);
-});
-
-i = 0;
-
-controls.forEach((item) => {
-    let icon;
-    if (item.defaultIcon) {
-        icon = item.defaultIcon;
-        if (icon.search(".svg") == -1)
-          icon = icon + ".svg";
-    }
-    else
-      icon = cat_icons[item.cat];
-
-    if (item.type === "UpDownDigital") item.type="updown";
-
-    if ( (item.type === "InfoOnlyAnalog") ||
-         (item.type === "InfoOnlyDigital") ||
-         (item.type === "InfoOnlyText") ||
-         (item.type === "TextState") ) item.type = "text";
-
-    if (item.type === "LightControllerV2") item.type = "light";
-    if (item.type === "Pushbutton") item.type = "push";
-    if (item.type === "CentralLightController") item.type = "light_c";
-    if (item.type === "Jalousie") item.type = "screen";
-    if (item.type === "CentralJalousie") item.type = "screen_c";
-    if (item.type === "IRoomController") item.type = "tempctrl";
-
-    let list_arr = undefined;
-    if (item.type === "Radio") {
-        item.type = "radio";
-        let outputs = Object.values(item.details.outputs);
-        list_arr = [];
-        list_arr.push({ name: item.details.allOff });
-        outputs.forEach( item => list_arr.push({ name: item }));
-    }
-
-    let control =
-    {
-        hwid: hwinfo,
-        uuid: item.uuidAction,
-        name: item.name,
-        icon: { href: "assets/svg_icons/" + icon },
-        type: item.type.toLowerCase(),
-        room: item.room,
-        category: item.cat,
-        is_favorite: false,
-        is_visible: true,
-        is_protected: item.isSecured,
-        state: {
-           value: "0",
-           format: "%s"
-        },
-        order: i
-    };
-
-    if (list_arr) control.state['list'] = list_arr;
-    if ((item.details)&&(item.details.format)) control.state.format = item.details.format;
-
-    i++;
-    controls_arr.push(control);
-});
-
-
-msg.payload = {
-    controls: controls_arr,
-    categories: cats_arr,
-    rooms: rooms_arr
-}
-
-return msg;
 ```

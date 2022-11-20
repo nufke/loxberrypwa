@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoxBerry } from '../../providers/loxberry';
 import { Control, Category, Room } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
+import { ControllerBase } from '../control.views/controller.base';
 
 var sprintf = require('sprintf-js').sprintf
 
@@ -11,7 +12,9 @@ var sprintf = require('sprintf-js').sprintf
   templateUrl: 'controls.page.html',
   styleUrls: ['controls.page.scss']
 })
-export class ControlsPage implements OnInit, OnDestroy {
+export class ControlsPage
+  extends ControllerBase
+  implements OnInit, OnDestroy {
 
   public controls: Control[] = [];
   public categories: Category[] = [];
@@ -37,7 +40,9 @@ export class ControlsPage implements OnInit, OnDestroy {
   private roomsSub: Subscription;
 
   constructor(public LoxBerryService: LoxBerry,
-              private route: ActivatedRoute ) {
+              private route: ActivatedRoute )
+  {
+    super(LoxBerryService);
 
     this.domain = this.route.snapshot.paramMap.get('domain'); // room or category
     this.uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category
@@ -49,7 +54,7 @@ export class ControlsPage implements OnInit, OnDestroy {
     if (this.domain === 'room')
       this.key = 'category';
 
-    this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
+    this.controlsSub = LoxBerryService.getControls().subscribe((controls: Control[]) => {
       this.controls = controls
       .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) })
       .filter( item => item.is_visible === true);
@@ -65,7 +70,7 @@ export class ControlsPage implements OnInit, OnDestroy {
       this.updateControls(controls);
     });
 
-    this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
+    this.categoriesSub = LoxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
@@ -79,7 +84,7 @@ export class ControlsPage implements OnInit, OnDestroy {
         this.labels = categories;
     });
 
-    this.roomsSub = this.LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
+    this.roomsSub = LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
@@ -130,174 +135,8 @@ export class ControlsPage implements OnInit, OnDestroy {
   private updateControls(controls: Control[])
   {
     controls.forEach( item => {
-      this.updateControlState(item)
+      this.updateDisplay(item)
     });
   }
 
-  private getListName(control: Control, idx) : string {
-    let list = control.state.list;
-    if (!list) list = [ { name: "Off" }, { name: "On" } ];
-    return list[idx].name;
-  }
-
-  private updateControlState(control: Control) {
-
-    if ((control.type === 'text') || (control.type === 'slider')) {
-      let format = control.state.format;
-      if (!format) format = "%s";
-      //control.state._text = util.format(format, control.state.value);
-      control.state._text = sprintf(format, control.state.value);
-      control.state.color = "#9d9e9e"; // TODO select from color palette
-    }
-
-    if (control.type === 'switch') {
-      if (control.state.value === "1") {
-        control.state._text = this.getListName(control, 1);
-        control.state._toggle = true;
-        control.icon.color = "primary";
-        control.state.color = "#69c350"; // primary
-      }
-      else {
-        control.state._text = this.getListName(control, 0);
-        control.state.color = "#9d9e9e"; // TODO select from color palette
-        control.state._toggle = false;
-        control.icon.color = "#9d9e9e"; // TODO select from color palette
-      }
-    }
-
-    if ((control.type === 'intercom') || (control.type === 'light') || (control.type === 'link') || (control.type === 'screen_c') ||
-      (control.type === 'light_c')) {
-        control.state._text = ''; // no status displayed
-    }
-
-    if (control.type === 'radio') {
-      let val = Number(control.state.value);
-      let list = control.state.list;
-      let names = list.map(a => a.name);
-      let colors = list.map(a => a.color);
-
-      if (!val) val = 0;
-      if (names)
-        control.state._text = names[val];
-
-      if (colors && colors[val])
-        control.state.color = colors[val];
-      else
-        if (!val) control.state.color = "#9d9e9e"; // TODO select from color palette
-        else control.state.color = "#69c350"; // primary
-    }
-  }
-
-  pushed_pulse($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    console.log('pushed', control);
-    control.state.value = "pushed";
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
-  }
-
-  pushed_light($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    console.log('pushed light', control);
-  }
-
-  pushed_radio_up($event, control) {
-    this.pushed_radio($event, control, true)
-  }
-
-  pushed_radio_down($event, control) {
-    this.pushed_radio($event, control, false)
-  }
-
-  pushed_radio($event, control, up) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    if (control.state.list) // process only if there are radio list names
-    {
-      let val = Number(control.state.value);
-      let min, max;
-      if (up) { max = control.state.list.length-1; min = 0; }
-        else { max = 0; min = control.state.list.length-1; }
-
-      if (val == max)
-        val = min;
-      else
-        if (up) val++;
-        else val--;
-
-      control.state.value = String(val);
-      this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
-    }
-  }
-
-  pushed_up($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    console.log('pushed up', control);
-    control.state.value = "up";
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
-  }
-
-  pushed_down($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    console.log('pushed down', control);
-    control.state.value = "down";
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 0);
-  }
-
-  pushed_plus($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.count_up_down(control, true);
-  }
-
-
-  pushed_minus($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.count_up_down(control, false);
-  }
-
-  toggle($event, control) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    if (control.state._toggle) {
-      control.state.value = "0";
-      control.icon.color = "#9d9e9e"; // TODO select from color palette
-      control.state.color = "#9d9e9e"; // TODO select from color palette
-    }
-    else {
-      control.state.value = "1";
-      control.icon.color = "primary";
-      control.state.color = "#69c350"; // primary
-    }
-
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
-    this.LoxBerryService.sendMessage(control, '/icon/color', control.icon.color, 1);
-  }
-
-  count_up_down(control: Control, up: Boolean) {
-    let val = Number(control.state.value);
-    if (!val) val = 0;
-    let step = Number(control.state.step);
-    let min = Number(control.state.min);
-    let max = Number(control.state.max);
-    if (!min) min = 0;
-    if (!max) max = 100;
-    if (!step) step = 1;
-
-    let new_val;
-    if (up) new_val = val + step;
-    else new_val = val - step;
-
-    if (new_val < min) new_val = min;
-    if (new_val > max) new_val = max;
-
-    control.state.value = String(new_val);
-    this.LoxBerryService.sendMessage(control, '/state/value', control.state.value, 1);
-  }
 }

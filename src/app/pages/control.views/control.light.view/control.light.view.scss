@@ -25,6 +25,12 @@ ion-card {
     --inner-padding-end: 0px;
   }
 
+ion-segment-button {
+  --background-checked: var(--ion-toolbar-background);
+  //--color-checked: var(--ion-color-success-contrast);
+  --background: var(--ion-toolbar-background);
+}
+
   .selected-true {
     --ion-item-background: var(--ion-card-selected);
   }

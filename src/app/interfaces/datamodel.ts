@@ -2,6 +2,7 @@
 // Note: changes to the data model might impact the MQTT API (topic registration)
 
 export interface Control {
+  id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the control as MQTT topic
   name: string,                 // unique identifier to identify the control as MQTT topic
@@ -17,14 +18,17 @@ export interface Control {
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number,               // defines order in the App list (optional)
   subcontrols?: Control[],      // any subcontrols (optional)
-  state:
-    ControlText &
-    ControlRadioView &
-    ControlSwitch &
-    ControlSlider
+  details: any,
+  states: any,
+  display: {
+    text?: string,               // INTERNAL display status text (optional)
+    color?: string,              // INTERNAL display status text (optional)
+    toggle?: Boolean             // INTERNAL toggle state (optional)
+  }
 }
 
 export interface Category {
+  id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the category as MQTT topic
   name: string,                 // GUI name
@@ -33,12 +37,14 @@ export interface Category {
     color?: string              // color in RGB hex notation, e.g. #FFFFFF (optional)
   },
   image?: string,               // location for the bitmap image (optional)
+  is_favorite?: Boolean,        // elevate to favorite item (optional)
   is_visible?: Boolean,         // make category invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number                // defines order in list box (optional)
 }
 
 export interface Room {
+  id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the room as MQTT topic
   name: string,                 // GUI name
@@ -47,38 +53,8 @@ export interface Room {
     color?: string              // color in RGB hex notation, e.g. #FFFFFF (optional)
   },
   image?: string,               // location for the bitmap image (optional)
+  is_favorite?: Boolean,        // elevate to favorite item (optional)
   is_visible?: Boolean,         // make category invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number                // defines order in list box (optional)
-}
-
-export interface ControlText {
-  value: string,                // number represented as string
-  format?: string,              // message format in sprintf notation, can include pre- and post-text, such as units (optional)
-  color?: string,               // color in RGB hex notation, e.g. #FFFFFF (optional)
-  _text: string                 // INTERNAL display status text
-}
-
-export interface ControlRadioView {
-  value: string,                // number represented as string
-  list: RadioListItem[],        // name, color and icon for each radio item
-}
-
-interface RadioListItem {
-  name: string,                 // name of the list item
-  color?: string,               // color of the list item in RGB hex notation, e.g. #FFFFFF (optional)
-  icon?: string                 // icon of the list item (optional)
-}
-
-export interface ControlSwitch {
-  value: string,                // number represented as string
-  list?: RadioListItem[],       // name, color and icon for on and off state (optional)
-  _toggle: Boolean              // INTERNAL toggle state
-}
-
-export interface ControlSlider {
-  value: string,                // number represented as string
-  min?: Number,                 // minimum value (0 if not specified) (optional)
-  max?: Number,                 // minimum value (100 if not specified) (optional)
-  step?: Number                 // step size with + or - is pushed (1 if not specified) (optional)
 }

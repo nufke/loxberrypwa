@@ -10,20 +10,25 @@ import { LoxBerry } from '../../../providers/loxberry';
 })
 export class ControlRadioView extends ControlViewBase {
 
-  constructor(
-    private router: Router,
-    public LoxBerryService: LoxBerry
+  public list: string[];
+
+  constructor(public LoxBerryService: LoxBerry
   )
   {
-    super();
+    super(LoxBerryService);
   }
 
   ngOnInit() {
+    this.list = [this.control.details.all_off].concat(Object.values(this.control.details.outputs));
+    if (!this.control.states.active_output)
+      this.control.states.active_output = "0"
   }
 
   radioGroupChange(event) {
-    this.control.state.value = String(event.detail.value);
-    this.LoxBerryService.sendMessage(this.control, '/state/value', event.detail.value, 1);
+    this.control.states.active_output = String(event.detail.value);
+    let msg = String(event.detail.value);
+    if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
+    this.LoxBerryService.sendMessage(this.control, '/cmd', msg, 0);
   }
 
   to_string(i: Number) : string {

@@ -9,22 +9,20 @@ import { LoxBerry } from '../../../providers/loxberry';
   styleUrls: ['./control.push.view.scss'],
 })
 export class ControlPushView extends ControlViewBase {
-  //public a: Number = 0;
+
   constructor(
     private router: Router,
     public LoxBerryService: LoxBerry
   )
   {
-    super();
+    super(LoxBerryService);
   }
 
   ngOnInit() {
   }
 
   pushed() {
-    //if (this.a) this.a=0;
-    //else this.a=1;
-    this.LoxBerryService.sendMessage(this.control, '/state/value', '1', 0); // note: no retain state for push button
+    this.LoxBerryService.sendMessage(this.control, '/states/value', '1', 0);
   }
 
 }

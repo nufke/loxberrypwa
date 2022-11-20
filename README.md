@@ -4,7 +4,7 @@
 
 This is an [Ionic](https://ionicframework.com/)-based PWA to be installed on the [LoxBerry](https://loxwiki.atlassian.net/wiki/spaces/LOXBERRY/overview), a Raspberry Pi image offering additional features for the [Loxone](https://www.loxone.com/) smart home automation system.
 
-This App will interact with the LoxBerry MQTT Broker to enable the creation of a dynamic user interface with contols defined per rooms and category. The controls defined in this App will get their own [MQTT topic](https://github.com/nufke/loxberrypwa/wiki/MQTT-API) and control interface, enabling interaction and integration with Loxone, LoxBerry, or other platforms such as [Node-RED](https://nodered.org/) or [IOBroker](https://www.iobroker.net/).
+This App will interact with the LoxBerry [MQTT Gateway](https://wiki.loxberry.de/plugins/mqtt_gateway/start) and [Loxone-MQTT Gateway](https://github.com/nufke/node-lox-mqtt-gateway) to enable the creation of a dynamic user interface with contols defined per rooms and category. The controls defined in this App will get their own [MQTT topic](https://github.com/nufke/loxberrypwa/wiki/MQTT-API) and control interface, enabling interaction and integration with Loxone, LoxBerry, or other platforms such as [Node-RED](https://nodered.org/) or [IOBroker](https://www.iobroker.net/).
 
 The concept of a Progressive Web App is used to offer a light-weight development and deployment platform. Most operating systems available today offer the integration of a PWA on the start screen or direct installation as a web app. Obviously, the build flow could be extended to create a stand-alone app for mobile or desktop usage, but this is out-of-scope for this project.
 
@@ -53,7 +53,7 @@ Alternatively, you can update control, room or category elements separately via 
 When you would like to use local icons and images, you can store them in the directories `assets/icons` and `assets/images` and reference to these directories in the JSON structure, see the [example](https://github.com/nufke/loxberrypwa/wiki/Example).
 Alternatively, you can also make use of URLs to your favorite icons and images in the JSON structure, e.g. `http:/myserver.org/my_image.svg`.
 
-**TIP 1**: A simple translator/generator is available to create a JSON structure based on the Loxone Miniserver menu structure (`LoxAPP3.json`). More information is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model#json-data-model-generator--translator).
+**TIP 1**: The [Loxone-MQTT Gateway](https://github.com/nufke/node-lox-mqtt-gateway) will create and send the App-specific structure over MQTT, based on the Loxone Miniserver menu structure (`LoxAPP3.json`).
 
 **TIP 2**: It is recommended to reuse the icons stored on your Loxone Miniserver, located in `<miniserver IP>/web/images.zip` (version 13.0 and below) or `<miniserver IP>/sys/IconLibrary.zip`  (from version 13.1 onwards).
 

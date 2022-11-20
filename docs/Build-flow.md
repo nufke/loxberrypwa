@@ -39,7 +39,7 @@ Alternatively, you can update control, room or category elements separately via 
 When you would like to use local icons and images, you can store them in the directories `assets/icons` and `assets/images` and reference to these directories in the JSON structure, see the [example](https://github.com/nufke/loxberrypwa/wiki/Example).
 Alternatively, you can also make use of URLs to your favorite icons and images in the JSON structure, e.g. `http:/myserver.org/my_image.svg`.
 
-**TIP 1**: A simple translator/generator is available to create a JSON structure based on the Loxone Miniserver menu structure (`LoxAPP3.json`). More information is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model#json-data-model-generator--translator).
+**TIP 1**: The [Loxone-MQTT Gateway](https://github.com/nufke/node-lox-mqtt-gateway) will create and send the App-specific structure over MQTT, based on the Loxone Miniserver menu structure (`LoxAPP3.json`).
 
 **TIP 2**: It is recommended to reuse the icons stored on your Loxone Miniserver, located in `<miniserver IP>/web/images.zip` (version 13.0 and below) or `<miniserver IP>/sys/IconLibrary.zip`  (from version 13.1 onwards).
 

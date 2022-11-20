@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ControlViewBase } from '../control.view.base';
+import { LoxBerry } from '../../../providers/loxberry';
 
 @Component({
   selector: 'app-control-general',
@@ -10,10 +11,11 @@ import { ControlViewBase } from '../control.view.base';
 export class ControlGeneralView extends ControlViewBase {
 
   constructor(
-    private router: Router
+    private router: Router,
+    public LoxBerryService: LoxBerry
   )
   {
-    super();
+    super(LoxBerryService);
   }
 
   ngOnInit() {
