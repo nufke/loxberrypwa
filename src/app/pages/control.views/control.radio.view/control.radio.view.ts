@@ -28,7 +28,7 @@ export class ControlRadioView extends ControlViewBase {
     this.control.states.active_output = String(event.detail.value);
     let msg = String(event.detail.value);
     if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
-    this.LoxBerryService.sendMessage(this.control, '/cmd', msg, 0);
+    this.LoxBerryService.sendMessage(this.control, msg);
   }
 
   to_string(i: Number) : string {

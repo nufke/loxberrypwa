@@ -22,7 +22,7 @@ export class ControlPushView extends ControlViewBase {
   }
 
   pushed() {
-    this.LoxBerryService.sendMessage(this.control, '/states/value', '1', 0);
+    this.LoxBerryService.sendMessage(this.control, '1');
   }
 
 }

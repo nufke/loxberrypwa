@@ -42,7 +42,7 @@ export class ControlLightView extends ControlViewBase {
     this.control.states.value = String(event.detail.value);
     let mood = this.mood_list[event.detail.value];
     if (mood.id > 0) {
-      this.LoxBerryService.sendMessage(this.control, '/cmd', 'changeTo/'+String(mood.id), 0);
+      this.LoxBerryService.sendMessage(this.control, 'changeTo/'+String(mood.id));
     }
 
   }

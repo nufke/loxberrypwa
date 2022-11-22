@@ -49,7 +49,7 @@ export class ControllerBase {
         control.display.text = control.states.text_and_icon;
         break;
       case 'slider':
-        control.display.text = control.states.value;
+        control.display.text = sprintf(control.details.format, control.states.value);
         break;
       case 'switch':
         if (control.states.active === "1") {
@@ -76,12 +76,15 @@ export class ControllerBase {
 
         break;
       case 'light_controller_v2':
-        let id = JSON.parse(control.states.active_moods)[0];
+        if (control.states.active_moods && control.states.mood_list)
+        {
+          let id = JSON.parse(control.states.active_moods)[0];
 
-        let mood_list = [{name:'Manual', id:-1}].concat(JSON.parse(control.states.mood_list));
-        let mood = mood_list.find( item => { return item.id == id } );
-        if (mood) control.display.text = mood.name;
-        if (id > 0) control.display.color = "#69c350"; // primary
+          let mood_list = [{name:'Manual', id:-1}].concat(JSON.parse(control.states.mood_list));
+          let mood = mood_list.find( item => { return item.id == id } );
+          if (mood) control.display.text = mood.name;
+          if (id > 0) control.display.color = "#69c350"; // primary
+        }
         break;
       default:
         // no status change
@@ -144,7 +147,7 @@ export class ControllerBase {
       let msg = String(val);
       if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
 
-      this.LoxBerryService.sendMessage(control, '/cmd', msg, 0);
+      this.LoxBerryService.sendMessage(control, msg);
     }
   }
 
@@ -167,7 +170,7 @@ export class ControllerBase {
     if (new_val > max) new_val = max;
 
     control.states.value = String(new_val);
-    this.LoxBerryService.sendMessage(control, '/cmd', control.states.value, 0);
+    this.LoxBerryService.sendMessage(control, control.states.value);
   }
 
   public ctrl_toggle(control) {
@@ -179,12 +182,12 @@ export class ControllerBase {
     else { // off -> on
       str = "On";
     }
-    this.LoxBerryService.sendMessage(control, '/cmd', str, 0); // for loxone
+    this.LoxBerryService.sendMessage(control, str);
   }
 
   ctrl_push(control, action) {
     control.states.active = action;
-    this.LoxBerryService.sendMessage(control, '/cmd', control.states.active, 0);
+    this.LoxBerryService.sendMessage(control, control.states.active);
   }
 
 }

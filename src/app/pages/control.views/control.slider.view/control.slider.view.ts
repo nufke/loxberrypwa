@@ -30,7 +30,7 @@ export class ControlSliderView extends ControlViewBase {
     let new_value = String(this.slider_value);
     if (this.control.states.value != new_value) {
       this.control.states.value = new_value;
-      this.LoxBerryService.sendMessage(this.control, '/cmd', this.control.states.value, 0);
+      this.LoxBerryService.sendMessage(this.control, this.control.states.value);
     }
   }
 

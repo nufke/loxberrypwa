@@ -25,7 +25,7 @@ export class ControlSwitchView extends ControlViewBase {
 
   radioGroupChange(event) {
     this.control.states.active = String(event.detail.value);
-    this.LoxBerryService.sendMessage(this.control, '/cmd', event.detail.value, 0);
+    this.LoxBerryService.sendMessage(this.control, event.detail.value);
   }
 
   to_string(i: Number) : string {

@@ -21,6 +21,8 @@ export class LoxBerry {
 
   private Structure: any = {};
 
+  private mqtt_topics: any = {};
+
   private registered_topics: string[] = [];
 
   private loxberryMqttIP: string = '';
@@ -129,6 +131,14 @@ export class LoxBerry {
     if (!control.display.text) control.display.text = "";
     if (!control.display.color) control.display.color = null;
     if (!control.display.toggle) control.display.toggle = false;
+
+    let topic = this.registered_topic_prefix + '/' + control.hwid + '/' + control.uuid + '/states/';
+
+    Object.keys(control.states).forEach( key => {
+        this.mqtt_topics[control.states[key]] = topic + key;
+        control.states[key] = ""; // clear topic
+    });
+
     return control;
   }
 
@@ -210,11 +220,33 @@ export class LoxBerry {
     this.registerTopics();
   }
 
-  private processTopic(message: any) {
-    if (!message) return;
+  private registerTopics() {
+    MqttTopics.forEach( (element) => {
+      let full_topic_name = this.registered_topic_prefix + '/+/+' + element; // note: two wildcards '+' included
+      if (this.registered_topics.includes(full_topic_name)) {
+        console.log("topic already exists and ignored:", full_topic_name );
+        return;
+      }
+      console.log("register topic name:", full_topic_name );
+      this.registered_topics.push(full_topic_name);
+      this.MqttSubscription.push( this.mqttService.observe(full_topic_name)
+      .subscribe((message: IMqttMessage) => {
+        this.processTopic(message.topic, message.payload );
+      }));
+    });
 
-    let topic = message.topic.replace(this.registered_topic_prefix + '/', '').split('/');
-    let value = message.payload.toString();
+    let topic_name = "loxone/#"; // TODO register prefix
+    this.MqttSubscription.push( this.mqttService.observe(topic_name)
+    .subscribe((message: IMqttMessage) => {
+      this.processTopic(this.mqtt_topics[message.topic], message.payload);
+    }));
+  }
+
+  private processTopic(topic_in: any, value_in: any) {
+    if (!topic_in) return;
+
+    let topic = topic_in.replace(this.registered_topic_prefix + '/', '').split('/');
+    let value = value_in.toString();
     let hwid = topic[0];
     let uuid = topic[1];
 
@@ -222,7 +254,7 @@ export class LoxBerry {
     if (idx >= 0) {
       if (topic.length == 4) this.Structure.controls[idx][topic[2]][topic[3]] = value;
       if (topic.length == 3) this.Structure.controls[idx][topic[2]] = value;
-      console.log('received control: ', message.topic, value);
+      console.log('received control: ', topic_in, value);
       this.controlsSubject.next(this.Structure.controls); // updates for Subscribers
     }
 /*
@@ -238,7 +270,7 @@ export class LoxBerry {
     if (idx >= 0) {
       if (topic.length == 4) this.Structure.categories[idx][topic[2]][topic[3]] = value;
       if (topic.length == 3) this.Structure.categories[idx][topic[2]] = value;
-      console.log('received category: ', topic.toString(), value);
+      console.log('received category: ', topic_in, value);
       this.categoriesSubject.next(this.Structure.categories); // updates for Subscribers
     }
 
@@ -246,25 +278,9 @@ export class LoxBerry {
     if (idx >= 0) {
       if (topic.length == 4) this.Structure.rooms[idx][topic[2]][topic[3]] = value;
       if (topic.length == 3) this.Structure.rooms[idx][topic[2]] = value;
-      console.log('received room: ', topic.toString(), value);
+      console.log('received room: ', topic_in, value);
       this.roomsSubject.next(this.Structure.rooms); // updates for Subscribers
     }
-  }
-
-  private registerTopics() {
-    MqttTopics.forEach( (element) => {
-      let full_topic_name = this.registered_topic_prefix + '/+/+' + element; // note: two wildcards '+' included
-      if (this.registered_topics.includes(full_topic_name)) {
-        console.log("topic already exists and ignored:", full_topic_name );
-        return;
-      }
-      console.log("register topic name:", full_topic_name );
-      this.registered_topics.push(full_topic_name);
-      this.MqttSubscription.push( this.mqttService.observe(full_topic_name)
-      .subscribe((message: IMqttMessage) => {
-        this.processTopic(message);
-      }));
-    });
   }
 
   public unload() : void {
@@ -272,17 +288,27 @@ export class LoxBerry {
     this.MqttSubscription.forEach( (item) => { item.unsubscribe(); } );
   }
 
-  public sendMessage(obj: any, topic: string, value: string, retain_state: any) {
+  public sendMessage(obj: any, value: string) {
     let idx = this.findIndex(this.Structure.controls, obj.hwid, obj.uuid);
-    let topic_root = this.registered_topic_prefix + '/' + obj.hwid + '/' + obj.uuid;
+    let topic = obj.mqtt.command_topic;
+    let qos = obj.mqtt.qos;
+    let retain = obj.mqtt.retain;
 
-    if (idx==-1) {
-      console.log('Topic ' + topic_root + ' not found. Nothing published.');
+    if (!qos) qos = 1;
+    if (!retain) retain = false;
+
+    if (!topic) {
+      console.log('Topic ' + topic + ' not found. Nothing published.');
       return;
     }
 
-    this.mqttService.unsafePublish(topic_root + topic, value, { qos: 1, retain: retain_state });
-    console.log('MQTT publish:', obj.name, topic_root + topic, value);
+    if (idx==-1) {
+      console.log('Control ' + obj.name + ' not found. Nothing published.');
+      return;
+    }
+
+    this.mqttService.unsafePublish(topic, value, { qos: qos, retain: retain });
+    console.log('MQTT publish:', obj.name, topic, value);
   }
 
 }
