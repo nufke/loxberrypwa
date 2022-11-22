@@ -11,22 +11,31 @@
   <form (ngSubmit)="save_settings()" [formGroup]="credentials">
     <div class="input-group">
       <ion-item>
-        <ion-label position="floating" color="medium">LoxBerry MQTT Broker IP Address</ion-label>
+        <ion-label position="floating" color="medium">MQTT Broker IP Address</ion-label>
         <ion-input placeholder="IP Address" formControlName="mqtt_ipaddress"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating" color="medium">LoxBerry MQTT Broker Websocket Port</ion-label>
+        <ion-label position="floating" color="medium">MQTT Broker Websocket Port</ion-label>
         <ion-input placeholder="Port" formControlName="mqtt_port"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating" color="medium">LoxBerry MQTT Broker Username</ion-label>
+        <ion-label position="floating" color="medium">MQTT Broker Username</ion-label>
         <ion-input placeholder="Username" formControlName="mqtt_username"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating" color="medium">LoxBerry MQTT Broker Password</ion-label>
+        <ion-label position="floating" color="medium">MQTT Broker Password</ion-label>
         <ion-input type="password" placeholder="Password" formControlName="mqtt_passw"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" color="medium">Loxone MQTT Topic</ion-label>
+        <ion-input placeholder="MQTT Topic" formControlName="mqtt_lox_topic"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" color="medium">LoxBerry App Topic</ion-label>
+        <ion-input placeholder="MQTT Topic" formControlName="mqtt_app_topic"></ion-input>
       </ion-item>
     </div>
     <ion-button type="submit" expand="block" [disabled]="!credentials.valid">Save settings</ion-button>
   </form>
+  <ion-button expand="block" class="cancel" (click)="cancel()">Cancel</ion-button>
 </ion-content>

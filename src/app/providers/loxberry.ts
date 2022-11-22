@@ -30,9 +30,8 @@ export class LoxBerry {
   private loxberryMqttUsername: string = '';
   private loxberryMqttPassw: string = '';
   private loxberryMqttConnected: boolean = false;
-
-  // TODO move to app configuration
-  private registered_topic_prefix = 'loxberry/app';
+  private loxberryMqttLoxoneTopic: string = '';
+  private loxberryMqttAppTopic: string = '';
 
   public getControls() {
     return this.controlsSubject.asObservable();
@@ -60,13 +59,17 @@ export class LoxBerry {
         this.loxberryMqttPort = settings.loxberryMqttPort;
         this.loxberryMqttUsername = settings.loxberryMqttUsername;
         this.loxberryMqttPassw = settings.loxberryMqttPassw;
+        this.loxberryMqttLoxoneTopic = settings.loxberryMqttLoxoneTopic;
+        this.loxberryMqttAppTopic = settings.loxberryMqttAppTopic;
 
         // only connect if all configuration options are valid
         if (!this.loxberryMqttConnected
              && this.loxberryMqttUsername
              && this.loxberryMqttPassw
              && this.loxberryMqttIP
-             && this.loxberryMqttPort) {
+             && this.loxberryMqttPort
+             && this.loxberryMqttLoxoneTopic
+             && this.loxberryMqttAppTopic) {
           this.connectToMqtt();
           this.registerStructureTopic();
         }
@@ -97,7 +100,7 @@ export class LoxBerry {
   }
 
   private registerStructureTopic() {
-    let topic = this.registered_topic_prefix+'/structure';
+    let topic = this.loxberryMqttAppTopic + '/structure';
     this.MqttSubscription.push( this.mqttService.observe(topic)
       .subscribe((message: IMqttMessage) => {
         let msg = message.payload.toString();
@@ -132,7 +135,7 @@ export class LoxBerry {
     if (!control.display.color) control.display.color = null;
     if (!control.display.toggle) control.display.toggle = false;
 
-    let topic = this.registered_topic_prefix + '/' + control.hwid + '/' + control.uuid + '/states/';
+    let topic = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid + '/states/';
 
     Object.keys(control.states).forEach( key => {
         this.mqtt_topics[control.states[key]] = topic + key;
@@ -222,7 +225,7 @@ export class LoxBerry {
 
   private registerTopics() {
     MqttTopics.forEach( (element) => {
-      let full_topic_name = this.registered_topic_prefix + '/+/+' + element; // note: two wildcards '+' included
+      let full_topic_name = this.loxberryMqttAppTopic + '/+/+' + element; // note: two wildcards '+' included
       if (this.registered_topics.includes(full_topic_name)) {
         console.log("topic already exists and ignored:", full_topic_name );
         return;
@@ -235,7 +238,7 @@ export class LoxBerry {
       }));
     });
 
-    let topic_name = "loxone/#"; // TODO register prefix
+    let topic_name = this.loxberryMqttLoxoneTopic + "/#";
     this.MqttSubscription.push( this.mqttService.observe(topic_name)
     .subscribe((message: IMqttMessage) => {
       this.processTopic(this.mqtt_topics[message.topic], message.payload);
@@ -245,7 +248,7 @@ export class LoxBerry {
   private processTopic(topic_in: any, value_in: any) {
     if (!topic_in) return;
 
-    let topic = topic_in.replace(this.registered_topic_prefix + '/', '').split('/');
+    let topic = topic_in.replace(this.loxberryMqttAppTopic + '/', '').split('/');
     let value = value_in.toString();
     let hwid = topic[0];
     let uuid = topic[1];

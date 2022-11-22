@@ -4,6 +4,7 @@ export interface Settings {
   loxberryMqttUrl?: string,
   loxberryMqttUsername?: string,
   loxberryMqttPassw?: string,
-  loxberryMqttTopicPrefix?: string,
+  loxberryMqttLoxoneTopic?: string,
+  loxberryMqttAppTopic?: string,
   appDarkTheme?: boolean
 }

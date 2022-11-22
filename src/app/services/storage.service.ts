@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@capacitor/storage';
-import { BehaviorSubject, from, Observable, of } from 'rxjs';
+import { EncryptStorage } from 'encrypt-storage';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Settings } from '../interfaces/settings'
 
 export const SETTINGS_TOKEN_KEY = 'lxb-settings-token';
+export const encryptStorage = new EncryptStorage('DNGS9SDJ3NFS9F5DNRW8AHSDN3WAQSF');
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
-  
+
   private settings: Settings;
   private settingsSubject: BehaviorSubject<Settings> = new BehaviorSubject<Settings>(null);
 
@@ -21,7 +22,8 @@ export class StorageService {
       loxberryMqttUrl: null,
       loxberryMqttUsername: null,
       loxberryMqttPassw: null,
-      loxberryMqttTopicPrefix: null,
+      loxberryMqttLoxoneTopic: null,
+      loxberryMqttAppTopic: null,
       appDarkTheme: null
     }
     // load settings from Storage
@@ -37,19 +39,19 @@ export class StorageService {
   }
 
   async loadSettings() {
-    const settings = await Storage.get({ key: SETTINGS_TOKEN_KEY });
-    if (settings.value)
+    let settings = encryptStorage.getItem(SETTINGS_TOKEN_KEY);
+    console.log('settings:', settings);
+    if (settings)
     {
-      await this.update(JSON.parse(settings.value));
+      await this.update(settings);
       this.settingsSubject.next(this.settings);
     }
   }
-  
+
   async store(obj: Settings) : Promise<any> {
     await this.update(obj);
-    console.log("store:", this.settings);
     this.settingsSubject.next(this.settings);
-    return Storage.set({ key: SETTINGS_TOKEN_KEY, value: JSON.stringify(this.settings) });
+    return encryptStorage.setItem(SETTINGS_TOKEN_KEY, JSON.stringify(this.settings));
   }
 
   public getSettings() : Observable<Settings> {
@@ -62,7 +64,7 @@ export class StorageService {
     let port = '';
     if (obj.loxberryMqttIP.includes("http://")) {    // check if user added prefix
       url = obj.loxberryMqttIP;
-      ipaddress = obj.loxberryMqttIP.replace('http://','');     // remove http from IP    
+      ipaddress = obj.loxberryMqttIP.replace('http://','');     // remove http from IP
     }
     else {
       url = 'http://' + obj.loxberryMqttIP;
@@ -71,7 +73,7 @@ export class StorageService {
 
     if (ipaddress.match(":[0-9]{4,6}")) {   // check if user added port
       port = ipaddress.split(':')[1];
-      ipaddress = ipaddress.split(':')[0]; // remove port from IP  
+      ipaddress = ipaddress.split(':')[0]; // remove port from IP
     }
     else {
       url = url + ':' + obj.loxberryMqttPort; // TODO make configurable
