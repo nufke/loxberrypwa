@@ -1,11 +1,10 @@
 // MQTT topics API, used to register the MQTT topics
+// note: topic /states/# is NOT added, this is managed via nested MQTT topics
 
 export const MqttTopics = [
-
-  // topics for controls
+  "/mqtt/#",
   "/name",
-  "/icon/href",
-  "/icon/color",
+  "/icon/#",
   "/type",
   "/room",
   "/category",
@@ -13,4 +12,5 @@ export const MqttTopics = [
   "/is_visible",
   "/is_protected",
   "/order",
+  "/details/#"
 ];

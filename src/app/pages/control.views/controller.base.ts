@@ -21,6 +21,10 @@ export class ControllerBase {
     Toggle: 'toggle'
   };
 
+  public radio_list: string[];
+  public mood_list: any;
+  public mood_idx: any;
+
   constructor(
     public LoxBerryService: LoxBerry)
   {
@@ -66,24 +70,20 @@ export class ControllerBase {
         break;
       case 'radio':
         let val = Number(control.states.active_output);
-        let list: string[] = [control.details.all_off].concat(Object.values(control.details.outputs));
-
+        this.radio_list = [control.details.all_off].concat(Object.values(control.details.outputs));
         if (!val) val = 0;
-
         if (val > 0) control.display.color = "#69c350"; // primary
-
-        if (list) control.display.text = list[val];
-
+        if (this.radio_list) control.display.text = this.radio_list[val];
         break;
       case 'light_controller_v2':
-        if (control.states.active_moods && control.states.mood_list)
+        if (control.states.mood_list)
         {
           let id = JSON.parse(control.states.active_moods)[0];
-
-          let mood_list = [{name:'Manual', id:-1}].concat(JSON.parse(control.states.mood_list));
-          let mood = mood_list.find( item => { return item.id == id } );
-          if (mood) control.display.text = mood.name;
-          if (id > 0) control.display.color = "#69c350"; // primary
+          if (!id) id = -1; // TODO no number means manual?
+          this.mood_list = [{name:'Manual', id:-1}].concat(JSON.parse(control.states.mood_list));
+          this.mood_idx = this.mood_list.findIndex( item => { return item.id == id } );
+          control.display.text = this.mood_list[this.mood_idx].name;
+          if (id != 778) control.display.color = "#69c350"; // primary
         }
         break;
       default:
@@ -97,26 +97,22 @@ export class ControllerBase {
 
     switch(control.type) {
       case 'radio':
-        console.log('radio', btnAction );
         this.ctrl_radio(control, btnAction);
         break;
       case 'switch':
-        console.log('switch', btnAction );
         this.ctrl_toggle(control);
         break;
       case 'push':
-        console.log('push', btnAction );
         this.ctrl_push(control, btnAction);
         break;
       case 'slider':
-        console.log('slider', btnAction );
         this.ctrl_slider_updown(control, btnAction);
         break;
       case 'light_controller_v2':
         this.ctrl_light(control);
         break;
       default:
-        console.log('default', btnAction );
+        console.log('btn: no implementation for ', btnAction );
 
     }
   }

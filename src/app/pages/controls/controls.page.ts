@@ -5,8 +5,6 @@ import { Control, Category, Room } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
 import { ControllerBase } from '../control.views/controller.base';
 
-var sprintf = require('sprintf-js').sprintf
-
 @Component({
   selector: 'app-controls',
   templateUrl: 'controls.page.html',

@@ -17,7 +17,6 @@ export class SettingsPage implements OnInit {
   public loxberryMqttPort: string = '';
   public loxberryMqttUsername: string = '';
   public loxberryMqttPassw: string = '';
-  public loxberryMqttLoxoneTopic: string = '';
   public loxberryMqttAppTopic: string = '';
   private action: string;
 
@@ -38,7 +37,6 @@ export class SettingsPage implements OnInit {
         this.loxberryMqttPort = settings.loxberryMqttPort;
         this.loxberryMqttUsername = settings.loxberryMqttUsername;
         this.loxberryMqttPassw = settings.loxberryMqttPassw;
-        this.loxberryMqttLoxoneTopic = settings.loxberryMqttLoxoneTopic;
         this.loxberryMqttAppTopic = settings.loxberryMqttAppTopic;
         this.updateFields();
       }
@@ -55,7 +53,6 @@ export class SettingsPage implements OnInit {
       mqtt_port: ['', Validators.required],
       mqtt_username: ['', Validators.required],
       mqtt_passw: ['', Validators.required],
-      mqtt_lox_topic: ['', Validators.required],
       mqtt_app_topic: ['', Validators.required]
     });
 
@@ -70,7 +67,6 @@ export class SettingsPage implements OnInit {
           'mqtt_port': this.loxberryMqttPort,
           'mqtt_username': this.loxberryMqttUsername,
           'mqtt_passw': this.loxberryMqttPassw,
-          'mqtt_lox_topic': this.loxberryMqttLoxoneTopic,
           'mqtt_app_topic': this.loxberryMqttAppTopic
       })
     }
@@ -92,7 +88,6 @@ export class SettingsPage implements OnInit {
       loxberryMqttPort: this.credentials.value.mqtt_port,
       loxberryMqttUsername: this.credentials.value.mqtt_username,
       loxberryMqttPassw: this.credentials.value.mqtt_passw,
-      loxberryMqttLoxoneTopic: this.credentials.value.mqtt_lox_topic,
       loxberryMqttAppTopic: this.credentials.value.mqtt_app_topic,
     });
 

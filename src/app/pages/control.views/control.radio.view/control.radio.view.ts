@@ -19,9 +19,7 @@ export class ControlRadioView extends ControlViewBase {
   }
 
   ngOnInit() {
-    this.list = [this.control.details.all_off].concat(Object.values(this.control.details.outputs));
-    if (!this.control.states.active_output)
-      this.control.states.active_output = "0"
+    this.updateDisplay(this.control);
   }
 
   radioGroupChange(event) {

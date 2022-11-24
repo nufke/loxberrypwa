@@ -22,7 +22,6 @@ export class StorageService {
       loxberryMqttUrl: null,
       loxberryMqttUsername: null,
       loxberryMqttPassw: null,
-      loxberryMqttLoxoneTopic: null,
       loxberryMqttAppTopic: null,
       appDarkTheme: null
     }
@@ -40,7 +39,6 @@ export class StorageService {
 
   async loadSettings() {
     let settings = encryptStorage.getItem(SETTINGS_TOKEN_KEY);
-    console.log('settings:', settings);
     if (settings)
     {
       await this.update(settings);

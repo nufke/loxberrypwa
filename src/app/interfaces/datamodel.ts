@@ -5,6 +5,12 @@ export interface Control {
   id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the control as MQTT topic
+  mqtt: {
+    subscribe_topic?: string,   // topic to subscribe to messages to update control states (optional)
+    command_topic: string,      // topic to publish commands from control
+    qos?: number,               // QoS level (optional)
+    retain?: Boolean            // retain published commands at broker (optional)
+  },
   name: string,                 // unique identifier to identify the control as MQTT topic
   icon: {
     href: string,               // location or URL of SVG icon
@@ -22,7 +28,7 @@ export interface Control {
   states: any,
   display: {
     text?: string,               // INTERNAL display status text (optional)
-    color?: string,              // INTERNAL display status text (optional)
+    color?: string,              // INTERNAL display status color (optional)
     toggle?: Boolean             // INTERNAL toggle state (optional)
   }
 }
@@ -31,6 +37,12 @@ export interface Category {
   id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the category as MQTT topic
+  mqtt: {
+    subscribe_topic?: string,   // topic to subscribe to messages to update states (optional)
+    command_topic?: string,     // topic to publish commands from category (optional)
+    qos?: number,               // QoS level (optional)
+    retain?: Boolean            // retain published commands at broker (optional)
+  },
   name: string,                 // GUI name
   icon: {
     href: string,               // location or URL of default SVG icon
@@ -47,6 +59,12 @@ export interface Room {
   id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the room as MQTT topic
+  mqtt: {
+    subscribe_topic?: string,   // topic to subscribe to messages to update values (optional)
+    command_topic?: string,     // topic to publish commands from room (optional)
+    qos?: number,               // QoS level (optional)
+    retain?: Boolean            // retain published commands at broker (optional)
+  },
   name: string,                 // GUI name
   icon: {
     href: string,               // location or URL to SVG icon

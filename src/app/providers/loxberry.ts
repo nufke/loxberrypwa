@@ -21,7 +21,8 @@ export class LoxBerry {
 
   private Structure: any = {};
 
-  private mqtt_topics: any = {};
+  private mqtt_lox2app: any = {};
+  private mqtt_topic_list: string[] = [];
 
   private registered_topics: string[] = [];
 
@@ -30,7 +31,6 @@ export class LoxBerry {
   private loxberryMqttUsername: string = '';
   private loxberryMqttPassw: string = '';
   private loxberryMqttConnected: boolean = false;
-  private loxberryMqttLoxoneTopic: string = '';
   private loxberryMqttAppTopic: string = '';
 
   public getControls() {
@@ -59,7 +59,6 @@ export class LoxBerry {
         this.loxberryMqttPort = settings.loxberryMqttPort;
         this.loxberryMqttUsername = settings.loxberryMqttUsername;
         this.loxberryMqttPassw = settings.loxberryMqttPassw;
-        this.loxberryMqttLoxoneTopic = settings.loxberryMqttLoxoneTopic;
         this.loxberryMqttAppTopic = settings.loxberryMqttAppTopic;
 
         // only connect if all configuration options are valid
@@ -68,7 +67,6 @@ export class LoxBerry {
              && this.loxberryMqttPassw
              && this.loxberryMqttIP
              && this.loxberryMqttPort
-             && this.loxberryMqttLoxoneTopic
              && this.loxberryMqttAppTopic) {
           this.connectToMqtt();
           this.registerStructureTopic();
@@ -124,6 +122,7 @@ export class LoxBerry {
   }
 
   private checkControl(obj: Control) : Control {
+    let that = this;
     let control: Control = obj;
     if (!control.icon.color) control.icon.color = "";
     if (!control.is_favorite) control.is_favorite = false;
@@ -138,11 +137,26 @@ export class LoxBerry {
     let topic = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid + '/states/';
 
     Object.keys(control.states).forEach( key => {
-        this.mqtt_topics[control.states[key]] = topic + key;
-        control.states[key] = ""; // clear topic
+      if (Array.isArray(control.states[key])) {
+        control.states[key].forEach( (value, index) => {
+          that.mqtt_lox2app[value] = topic + key + '/' + index;
+          this.registerTopic(value);
+          value = ""; // clear value in array
+        });
+      }
+      else {
+        that.mqtt_lox2app[control.states[key]] = topic + key;
+        this.registerTopic(control.states[key]);
+        control.states[key] = ""; // clear value
+      }
     });
-
     return control;
+  }
+
+  private registerTopic(value: string) {
+    let prefix = value.split('/')[0];
+    if (!this.mqtt_topic_list.find( item => { return item === prefix }))
+        this.mqtt_topic_list.push(prefix);
   }
 
   private checkRoom(obj: Room) : Room {
@@ -219,7 +233,6 @@ export class LoxBerry {
     this.controlsSubject.next(this.Structure.controls);
     this.categoriesSubject.next(this.Structure.categories);
     this.roomsSubject.next(this.Structure.rooms);
-
     this.registerTopics();
   }
 
@@ -234,15 +247,20 @@ export class LoxBerry {
       this.registered_topics.push(full_topic_name);
       this.MqttSubscription.push( this.mqttService.observe(full_topic_name)
       .subscribe((message: IMqttMessage) => {
+        console.log('MQTT received: ', message.topic, message.payload.toString());
         this.processTopic(message.topic, message.payload );
       }));
     });
 
-    let topic_name = this.loxberryMqttLoxoneTopic + "/#";
-    this.MqttSubscription.push( this.mqttService.observe(topic_name)
-    .subscribe((message: IMqttMessage) => {
-      this.processTopic(this.mqtt_topics[message.topic], message.payload);
-    }));
+    this.mqtt_topic_list.forEach( (topic) => {
+      let topic_name = topic + "/#";
+      console.log("register topic name:", topic_name );
+      this.MqttSubscription.push( this.mqttService.observe(topic_name)
+        .subscribe((message: IMqttMessage) => {
+        console.log('MQTT received: ', message.topic, message.payload.toString());
+        this.processTopic(this.mqtt_lox2app[message.topic], message.payload);
+      }));
+    });
   }
 
   private processTopic(topic_in: any, value_in: any) {
@@ -253,36 +271,18 @@ export class LoxBerry {
     let hwid = topic[0];
     let uuid = topic[1];
 
-    let idx = this.findIndex(this.Structure.controls, hwid, uuid);
-    if (idx >= 0) {
-      if (topic.length == 4) this.Structure.controls[idx][topic[2]][topic[3]] = value;
-      if (topic.length == 3) this.Structure.controls[idx][topic[2]] = value;
-      console.log('received control: ', topic_in, value);
-      this.controlsSubject.next(this.Structure.controls); // updates for Subscribers
-    }
-/*
-    let sub_idx = this.findIndex(this.subcontrols, hwid, uuid);
-    if (sub_idx >= 0) {
-      if (topic.length == 4) this.controls[idx].subcontrols[sub_idx][topic[2]][topic[3]] = value;
-      if (topic.length == 3) this.controls[idx].subcontrols[sub_idx][topic[2]] = value;
-      console.log('received subcontrol: ', topic.toString(), value);
-      this.controlsSubject.next(this.controls); // updates for Subscribers
-    }
-*/
-    idx = this.findIndex(this.Structure.categories, hwid, uuid);
-    if (idx >= 0) {
-      if (topic.length == 4) this.Structure.categories[idx][topic[2]][topic[3]] = value;
-      if (topic.length == 3) this.Structure.categories[idx][topic[2]] = value;
-      console.log('received category: ', topic_in, value);
-      this.categoriesSubject.next(this.Structure.categories); // updates for Subscribers
-    }
+    this.updateTopic(topic, this.Structure.controls, hwid, uuid, value);
+    this.updateTopic(topic, this.Structure.categories, hwid, uuid, value);
+    this.updateTopic(topic, this.Structure.rooms, hwid, uuid, value);
+  }
 
-    idx = this.findIndex(this.Structure.rooms, hwid, uuid);
+  private updateTopic(topic: string[], obj: any, hwid: string, uuid: string, value: string) {
+    let idx = this.findIndex(obj, hwid, uuid);
     if (idx >= 0) {
-      if (topic.length == 4) this.Structure.rooms[idx][topic[2]][topic[3]] = value;
-      if (topic.length == 3) this.Structure.rooms[idx][topic[2]] = value;
-      console.log('received room: ', topic_in, value);
-      this.roomsSubject.next(this.Structure.rooms); // updates for Subscribers
+      if (topic.length == 5) obj[idx][topic[2]][topic[3]][topic[4]] = value;
+      if (topic.length == 4) obj[idx][topic[2]][topic[3]] = value;
+      if (topic.length == 3) obj[idx][topic[2]] = value;
+      this.controlsSubject.next(obj); // updates for Subscribers
     }
   }
 

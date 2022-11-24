@@ -35,9 +35,9 @@
 
           <ng-container *ngIf="segment === 'moods'">
 
-            <ion-radio-group value="{{control.states.value}}" (ionChange)="radioGroupChange($event)">
+            <ion-radio-group value="{{mood_idx}}" (ionChange)="radioGroupChange($event)">
             <div *ngFor="let item of mood_list, let i = index">
-              <div class="selected-{{control.states.value==to_string(i)}}">
+              <div class="selected-{{mood_idx==i}}">
                 <ion-item class="radio-item">
                   <ion-label>
                     <h3>{{item.name}}</h3>

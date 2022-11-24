@@ -21,7 +21,7 @@
       </ion-card>
 
       <ion-radio-group value="{{control.states.active_output}}" (ionChange)="radioGroupChange($event)">
-        <div *ngFor="let item of list, let i = index">
+        <div *ngFor="let item of radio_list, let i = index">
           <div class="selected-{{control.states.active_output==to_string(i)}}">
             <ion-item class="radio-item">
               <ion-label><h3>{{item}}</h3></ion-label>

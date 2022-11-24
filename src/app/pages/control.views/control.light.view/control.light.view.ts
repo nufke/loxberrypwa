@@ -10,7 +10,6 @@ import { LoxBerry } from '../../../providers/loxberry';
 })
 export class ControlLightView extends ControlViewBase {
 
-  public mood_list = [];
   public segment: string = 'moods';
 
   constructor(
@@ -22,16 +21,7 @@ export class ControlLightView extends ControlViewBase {
   }
 
   ngOnInit() {
-    this.mood_list = [{name:'Manual', id:-1}].concat(JSON.parse(this.control.states.mood_list));
-    this.updateControl();
-  }
-
-  public updateControl() {
-    let id = JSON.parse(this.control.states.active_moods)[0];
-
-    let mood = this.mood_list.find( item => { return item.id == id } );
-    if (mood) this.control.display.text = mood.name;
-    if (id > 0) this.control.display.color = "#69c350"; // primary
+    this.updateDisplay(this.control);
   }
 
   updateSegment() {
@@ -40,14 +30,10 @@ export class ControlLightView extends ControlViewBase {
 
   radioGroupChange(event) {
     this.control.states.value = String(event.detail.value);
-    let mood = this.mood_list[event.detail.value];
-    if (mood.id > 0) {
-      this.LoxBerryService.sendMessage(this.control, 'changeTo/'+String(mood.id));
+    this.mood_idx = event.detail.value;
+    if (this.mood_idx > 0) {
+      this.LoxBerryService.sendMessage(this.control, 'changeTo/' + String(this.mood_list[this.mood_idx].id));
     }
-
   }
 
-  to_string(i: Number) : string {
-    return String(i);
-  }
 }
