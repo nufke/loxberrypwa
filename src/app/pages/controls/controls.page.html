@@ -13,14 +13,14 @@
   <ion-grid>
     <ng-container *ngFor="let label of labels">
 
-      <ion-row *ngIf="is_empty(controls, label)">
+      <ion-row *ngIf="is_empty(label)">
         <ion-label>
           <p translate>{{label.name}}</p>
         </ion-label>
       </ion-row>
 
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let control of filter(controls, label)">
+        <ion-col size="12" size-md="6" *ngFor="let control of filter(label)">
           <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
             <ion-card-content>
               <ion-item>
