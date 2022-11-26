@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoxBerry } from '../../providers/loxberry';
-import { Control, Category, Room } from '../../interfaces/datamodel'
-import { Subscription } from 'rxjs'
-import { ControllerBase } from '../control.views/controller.base';
+import { Control, Category, Room } from '../../interfaces/datamodel';
+import { Subscription } from 'rxjs';
+import { DetailedControlBase } from '../detailed-control/detailed-control.base';
 
 @Component({
   selector: 'app-controls',
@@ -11,7 +11,7 @@ import { ControllerBase } from '../control.views/controller.base';
   styleUrls: ['controls.page.scss']
 })
 export class ControlsPage
-  extends ControllerBase
+  extends DetailedControlBase
   implements OnInit, OnDestroy {
 
   public controls: Control[] = [];
@@ -40,7 +40,7 @@ export class ControlsPage
   constructor(public LoxBerryService: LoxBerry,
               private route: ActivatedRoute )
   {
-    super(LoxBerryService);
+    super();
 
     this.domain = this.route.snapshot.paramMap.get('domain'); // room or category
     this.uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category

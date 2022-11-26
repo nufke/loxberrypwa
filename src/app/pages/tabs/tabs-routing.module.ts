@@ -15,7 +15,7 @@ const routes: Routes = [
       },
       {
         path: 'favorites/:control_hwid/:control_uuid',
-        loadChildren: () => import('../control.views/control.view.module').then(m => m.ControlViewModule),
+        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
         //canActivate: [AuthGuard]
       },
       {
@@ -35,7 +35,7 @@ const routes: Routes = [
       },
       {
         path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid',
-        loadChildren: () => import('../control.views/control.view.module').then(m => m.ControlViewModule),
+        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
         //canActivate: [AuthGuard]
       },
       {

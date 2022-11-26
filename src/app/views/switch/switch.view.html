@@ -1,0 +1,12 @@
+<ion-radio-group value="{{control.states.active}}" (ionChange)="radioGroupChange($event)">
+  <div *ngFor="let item of off_on, let i = index">
+    <div class="selected-{{control.states.active==to_string(i)}}">
+      <ion-item class="radio-item">
+        <ion-label class="text-center">
+          <h2>{{item}}</h2>
+        </ion-label>
+        <ion-radio value="{{i}}"></ion-radio>
+      </ion-item>
+    </div>
+  </div>
+</ion-radio-group>

@@ -1,0 +1,25 @@
+<ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
+    <ion-segment-button value="moods" translate>
+        moods
+    </ion-segment-button>
+    <ion-segment-button value="lightzones" translate>
+        lightzones
+    </ion-segment-button>
+</ion-segment>
+
+<ion-grid>
+    <ion-row>
+        <ion-col>
+            <app-text-view></app-text-view>
+
+            <ng-container *ngIf="segment === 'moods'">
+                <app-light-v2-view [control]="control" [category]="category" [room]="room"></app-light-v2-view>
+            </ng-container>
+
+            <ng-container *ngIf="segment === 'lightzones'">
+                lightzones
+            </ng-container>
+
+        </ion-col>
+    </ion-row>
+</ion-grid>

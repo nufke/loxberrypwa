@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { LoxBerry } from '../../providers/loxberry';
-import { Control, Room } from '../../interfaces/datamodel'
-import { Subscription } from 'rxjs'
+import { Control, Room } from '../../interfaces/datamodel';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rooms',

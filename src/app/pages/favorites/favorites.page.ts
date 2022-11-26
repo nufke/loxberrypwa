@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoxBerry } from '../../providers/loxberry';
-import { Control, Category, Room  } from '../../interfaces/datamodel'
-import { Subscription } from 'rxjs'
-import { ControllerBase } from '../control.views/controller.base';
+import { Control, Category, Room  } from '../../interfaces/datamodel';
+import { Subscription } from 'rxjs';
+import { DetailedControlBase } from '../detailed-control/detailed-control.base';
 
 @Component({
   selector: 'app-favorites',
@@ -10,7 +10,7 @@ import { ControllerBase } from '../control.views/controller.base';
   styleUrls: ['favorites.page.scss']
 })
 export class FavoritesPage
-  extends ControllerBase
+  extends DetailedControlBase
   implements OnInit, OnDestroy {
 
   public controls: Control[] = [];
@@ -27,7 +27,7 @@ export class FavoritesPage
   constructor(
     public LoxBerryService: LoxBerry)
   {
-    super(LoxBerryService);
+    super();
 
     this.controls = [];
 
