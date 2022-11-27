@@ -35,12 +35,12 @@ export class DetailedControlPage implements OnInit {
      'info_only_analog': ControlTextStateView,
      'info_only_digital': ControlTextStateView,
      'info_only_text': ControlTextStateView,
+     'text_state': ControlTextStateView,
      'light_controller_v2': ControlLightV2View,
      'radio': ControlRadioView,
      'switch': ControlSwitchView,
      'slider': ControlSliderView,
-     'pushbutton': ControlPushbuttonView,
-     'general': ControlTextStateView
+     'pushbutton': ControlPushbuttonView
    }
 
    constructor(
@@ -77,7 +77,7 @@ export class DetailedControlPage implements OnInit {
      if (view)
        return this.ViewMap[type];
      else
-       return this.ViewMap['general'];
+       return this.ViewMap['text_state'];
    }
 
    public ngOnInit() : void {
