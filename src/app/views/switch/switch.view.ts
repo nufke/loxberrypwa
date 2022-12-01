@@ -12,14 +12,18 @@ export class SwitchView
   extends ViewBase
   implements OnInit {
 
-  public off_on = [ "Off", "On"]; // TODO move to control API
-
   constructor(public LoxBerryService: LoxBerry) {
     super(LoxBerryService);
   }
 
   ngOnInit() {
-    this.updateDisplay(this.control);
+    if (this.control.states.active === "1") {
+      this.control.display.toggle = true;
+    }
+    else {
+      this.control.display.text = "Off";
+      this.control.display.toggle = false;
+    }
   }
 
 }

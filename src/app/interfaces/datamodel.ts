@@ -32,6 +32,26 @@ export interface Control {
   }
 }
 
+export interface Subcontrol {
+  uuid: string,                 // unique identifier to identify the control as MQTT topic
+  name: string,                 // unique identifier to identify the control as MQTT topic
+  icon: {
+    href: string,               // location or URL of SVG icon
+    color?: string              // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
+  },
+  type: string,                 // type of control, e.g., switch, button, slider, etc.
+  is_favorite?: Boolean,        // elevate to favorite item (optional)
+  is_visible?: Boolean,         // make control invisible (optional)
+  is_protected?: Boolean,       // passwd/PIN protected control (optional)
+  order?: number,               // defines order in the App list (optional)
+  states: any,                  // control states
+  display: {
+    text?: string,              // INTERNAL display status text (optional)
+    color?: string,             // INTERNAL display status color (optional)
+    toggle?: Boolean            // INTERNAL toggle state (optional)
+  }
+}
+
 export interface Category {
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the category as MQTT topic
