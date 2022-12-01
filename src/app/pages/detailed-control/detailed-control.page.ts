@@ -48,7 +48,7 @@ export class DetailedControlPage implements OnInit {
      private route: ActivatedRoute
      )
    {
-     const uuid = this.route.snapshot.paramMap.get('control_uuid');
+     const uuid = this.route.snapshot.paramMap.get('control_uuid')
 
      this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
        this.control = controls.find( item => item.uuid === uuid );

@@ -16,6 +16,8 @@ import { SliderView } from './slider/slider.view';
 import { PushView } from './push/push.view';
 import { LightV2View } from './light-v2/light-v2.view';
 import { RadioView } from './radio/radio.view';
+import { RadioSwitchView } from './radio-switch/radio-switch.view';
+import { DimmerView } from './dimmer/dimmer.view';
 
 @NgModule({
   imports: [
@@ -36,7 +38,9 @@ import { RadioView } from './radio/radio.view';
     SliderView,
     PushView,
     LightV2View,
-    RadioView
+    RadioView,
+    RadioSwitchView,
+    DimmerView
   ],
   exports: [
     IonicModule,
@@ -52,7 +56,9 @@ import { RadioView } from './radio/radio.view';
     SliderView,
     PushView,
     LightV2View,
-    RadioView
+    RadioView,
+    RadioSwitchView,
+    DimmerView
   ]
 })
 export class ViewsModule { }

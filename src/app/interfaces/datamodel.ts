@@ -2,7 +2,6 @@
 // Note: changes to the data model might impact the MQTT API (topic registration)
 
 export interface Control {
-  id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the control as MQTT topic
   mqtt: {
@@ -23,18 +22,17 @@ export interface Control {
   is_visible?: Boolean,         // make control invisible (optional)
   is_protected?: Boolean,       // passwd/PIN protected control (optional)
   order?: number,               // defines order in the App list (optional)
-  subcontrols?: Control[],      // any subcontrols (optional)
-  details: any,
-  states: any,
+  subcontrols?: any,            // subcontrols (optional)
+  details: any,                 // control details
+  states: any,                  // control states
   display: {
-    text?: string,               // INTERNAL display status text (optional)
-    color?: string,              // INTERNAL display status color (optional)
-    toggle?: Boolean             // INTERNAL toggle state (optional)
+    text?: string,              // INTERNAL display status text (optional)
+    color?: string,             // INTERNAL display status color (optional)
+    toggle?: Boolean            // INTERNAL toggle state (optional)
   }
 }
 
 export interface Category {
-  id: string,
   hwid: string,                 // hardware identifier of the device
   uuid: string,                 // unique identifier to identify the category as MQTT topic
   mqtt: {
@@ -56,9 +54,8 @@ export interface Category {
 }
 
 export interface Room {
-  id: string,
   hwid: string,                 // hardware identifier of the device
-  uuid: string,                 // unique identifier to identify the room as MQTT topic
+  uuid: string,                 // unique identifier to identify the room as MQTT topic  (device-uuid)
   mqtt: {
     subscribe_topic?: string,   // topic to subscribe to messages to update values (optional)
     command_topic?: string,     // topic to publish commands from room (optional)

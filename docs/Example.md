@@ -5,19 +5,19 @@ Below a simple example describing the structure to specify controls, categories 
 To initialize the App with a structure, send it over MQTT to topic `/loxberry/app/structure`:
 
 ```
-/loxberry/app/structure -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }
+/loxberry/app/structure -> { "controls": { ... },  "categories": { ... }, "rooms": { ... } }
 ```
 
 Updates to the structure is *incremental*, which means changes to existing objects will be overridden and old objects remain available. To flush all elements in the App, an empty string message should be sent to `/loxberry/app/structure`.
 
 ```json
 {
-    "controls": [
-        {
+    "controls": {
+        "1/1": {
             "hwid": "1",
             "uuid": "1",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/1",
+                "subscribe_topic": "loxberry/app/1/1",
                 "command_topic": "my_mqtt_device/1/cmd",
                 "retain": true
             },
@@ -36,11 +36,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "mood_list": "my_mqtt_device/1/mood_list"
             }
         },
-        {
+        "1/2": {
             "hwid": "1",
             "uuid": "2",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/2",
+                "subscribe_topic": "loxberry/app/1/2",
                 "command_topic": "my_mqtt_device/2/cmd",
                 "retain": false
             },
@@ -58,11 +58,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/2"
             }
         },
-        {
+        "1/3": {
             "hwid": "1",
             "uuid": "3",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/3",
+                "subscribe_topic": "loxberry/app/1/3",
                 "command_topic": "my_mqtt_device/3/cmd",
                 "retain": true
             },
@@ -80,11 +80,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/3"
             }
         },
-        {
+        "1/4": {
             "hwid": "1",
             "uuid": "4",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/4",
+                "subscribe_topic": "loxberry/app/1/4",
                 "command_topic": "my_mqtt_device/4/cmd",
                 "retain": true
             },
@@ -103,11 +103,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "mood_list": "my_mqtt_device/4/mood_list"
             }
         },
-        {
+        "1/5": {
             "hwid": "1",
             "uuid": "5",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/5",
+                "subscribe_topic": "loxberry/app/1/5",
                 "command_topic": "my_mqtt_device/5/cmd",
                 "retain": true
             },
@@ -128,11 +128,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/5"
             }
         },
-        {
+        "1/6": {
             "hwid": "1",
             "uuid": "6",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/6",
+                "subscribe_topic": "loxberry/app/1/6",
                 "command_topic": "my_mqtt_device/6/cmd",
                 "retain": true
             },
@@ -153,11 +153,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/6"
             }
         },
-        {
+        "1/7": {
             "hwid": "1",
             "uuid": "7",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/7",
+                "subscribe_topic": "loxberry/app/1/7",
                 "command_topic": "my_mqtt_device/7/cmd",
                 "retain": true
             },
@@ -178,11 +178,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/7"
             }
         },
-        {
+        "1/8": {
             "hwid": "1",
             "uuid": "8",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/8",
+                "subscribe_topic": "loxberry/app/1/8",
                 "command_topic": "my_mqtt_device/8/cmd",
                 "retain": true
             },
@@ -203,11 +203,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/8"
             }
         },
-        {
+        "1/9": {
             "hwid": "1",
             "uuid": "9",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/9",
+                "subscribe_topic": "loxberry/app/1/9",
                 "command_topic": "my_mqtt_device/9/cmd",
                 "retain": true
             },
@@ -231,11 +231,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/9"
             }
         },
-        {
+        "1/10": {
             "hwid": "1",
             "uuid": "10",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/10",
+                "subscribe_topic": "loxberry/app/1/10",
                 "command_topic": "my_mqtt_device/10/cmd",
                 "retain": true
             },
@@ -259,11 +259,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/10"
             }
         },
-        {
+        "1/11": {
             "hwid": "1",
             "uuid": "11",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/11",
+                "subscribe_topic": "loxberry/app/1/11",
                 "command_topic": "my_mqtt_device/11/cmd",
                 "retain": true
             },
@@ -287,11 +287,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/11"
             }
         },
-        {
+        "1/12": {
             "hwid": "1",
             "uuid": "12",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/12",
+                "subscribe_topic": "loxberry/app/1/12",
                 "command_topic": "my_mqtt_device/12/cmd",
                 "retain": true
             },
@@ -315,11 +315,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "value": "my_mqtt_device/12"
             }
         },
-        {
+        "1/13": {
             "hwid": "1",
             "uuid": "13",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/13",
+                "subscribe_topic": "loxberry/app/1/13",
                 "command_topic": "my_mqtt_device/13/cmd",
                 "retain": true
             },
@@ -345,11 +345,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "active_output": "my_mqtt_device/13"
             }
         },
-        {
+        "1/14": {
             "hwid": "1",
             "uuid": "14",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/14",
+                "subscribe_topic": "loxberry/app/1/14",
                 "command_topic": "my_mqtt_device/14/cmd",
                 "retain": true
             },
@@ -375,11 +375,11 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "active_output": "my_mqtt_device/14"
             }
         },
-        {
+        "1/15": {
             "hwid": "1",
             "uuid": "15",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/15",
+                "subscribe_topic": "loxberry/app/1/15",
                 "command_topic": "my_mqtt_device/15/cmd",
                 "retain": true
             },
@@ -405,12 +405,12 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "active_output": "my_mqtt_device/15"
             }
         },
-        {
+        "1/16": {
             "hwid": "1",
             "uuid": "16",
             "name": "Musicplayer",
             "mqtt": {
-                "subscribe_topic": "my_mqtt_device/16",
+                "subscribe_topic": "loxberry/app/1/16",
                 "command_topic": "my_mqtt_device/16/cmd",
                 "retain": true
             },
@@ -435,9 +435,9 @@ Updates to the structure is *incremental*, which means changes to existing objec
                 "active_output": "my_mqtt_device/16"
             }
         }
-    ],
-    "categories": [
-        {
+    },
+    "categories": {
+        "1/2001": {
             "hwid": "1",
             "uuid": "2001",
             "mqtt": {
@@ -449,7 +449,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             },
             "order": 2
         },
-        {
+        "1/2002": {
             "hwid": "1",
             "uuid": "2002",
             "mqtt": {
@@ -461,7 +461,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             },
             "order": 1
         },
-        {
+        "1/2003": {
             "hwid": "1",
             "uuid": "2003",
             "mqtt": {
@@ -473,7 +473,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             },
             "order": 1
         },
-        {
+        "1/2004": {
             "hwid": "1",
             "uuid": "2004",
             "mqtt": {
@@ -485,9 +485,9 @@ Updates to the structure is *incremental*, which means changes to existing objec
             },
             "order": 1
         }
-    ],
-    "rooms": [
-        {
+    },
+    "rooms": {
+        "1/1001": {
             "hwid": "1",
             "uuid": "1001",
             "mqtt": {
@@ -500,7 +500,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "image": "assets/images/living-room.jpg",
             "order": 1
         },
-        {
+        "1/1002": {
             "hwid": "1",
             "uuid": "1002",
             "mqtt": {
@@ -513,7 +513,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "image": "assets/images/kitchen2.jpg",
             "order": 1
         },
-        {
+        "1/1003": {
             "hwid": "1",
             "uuid": "1003",
             "mqtt": {
@@ -526,7 +526,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "image": "assets/images/bathroom.jpg",
             "order": 1
         },
-        {
+        "1/1004": {
             "hwid": "1",
             "uuid": "1004",
             "mqtt": {
@@ -538,6 +538,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
             },
             "order": 1
         }
-    ]
+    }
 }
 ```

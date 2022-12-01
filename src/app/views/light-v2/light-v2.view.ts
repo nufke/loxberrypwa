@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
@@ -8,7 +8,9 @@ import { LoxBerry } from '../../providers/loxberry';
   templateUrl: 'light-v2.view.html',
   styleUrls: ['./light-v2.view.scss'],
 })
-export class LightV2View extends ViewBase {
+export class LightV2View
+  extends ViewBase
+  implements OnInit {
 
   constructor(public LoxBerryService: LoxBerry) {
     super(LoxBerryService);

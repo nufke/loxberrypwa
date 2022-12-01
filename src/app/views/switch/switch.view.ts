@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
@@ -8,7 +8,9 @@ import { LoxBerry } from '../../providers/loxberry';
   templateUrl: 'switch.view.html',
   styleUrls: ['./switch.view.scss'],
 })
-export class SwitchView extends ViewBase {
+export class SwitchView
+  extends ViewBase
+  implements OnInit {
 
   public off_on = [ "Off", "On"]; // TODO move to control API
 
@@ -17,14 +19,7 @@ export class SwitchView extends ViewBase {
   }
 
   ngOnInit() {
+    this.updateDisplay(this.control);
   }
 
-  radioGroupChange(event) {
-    this.control.states.active = String(event.detail.value);
-    this.LoxBerryService.sendMessage(this.control, event.detail.value);
-  }
-
-  to_string(i: Number) : string {
-    return String(i);
-  }
 }

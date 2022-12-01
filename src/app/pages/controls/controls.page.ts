@@ -29,7 +29,7 @@ export class ControlsPage
   private uuid: string;
   private hwid: string;
 
-  public page: Control;
+  public page: any;
 
   public key: string;
   public icon_color: string;
@@ -72,7 +72,7 @@ export class ControlsPage
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
 
       if (this.domain === 'category') {
-        this.page = this.findObj(categories, this.hwid, this.uuid);
+        this.page = categories.find( item => (item.uuid === this.uuid) && (item.hwid === this.hwid));
         this.filtered_controls = this.controls.filter( item => (item.category === this.page.uuid && item.is_visible ));
         this.items = categories;
       }
@@ -87,7 +87,7 @@ export class ControlsPage
       .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
 
       if (this.domain === 'room') {
-        this.page = this.findObj(rooms, this.hwid, this.uuid);
+        this.page = rooms.find( item => (item.uuid === this.uuid) && (item.hwid === this.hwid));
         this.filtered_controls = this.controls.filter( item => (item.room === this.page.uuid && item.is_visible ));
         this.items = rooms;
       }
@@ -110,10 +110,6 @@ export class ControlsPage
     if (this.roomsSub) {
       this.roomsSub.unsubscribe();
     }
-  }
-
-  private findObj(obj: any, hwid: string, uuid: string): Control {
-    return obj.find( item => (item.uuid == uuid) && (item.hwid == hwid) );
   }
 
   public filter(label: any) : Control[] {

@@ -1,0 +1,93 @@
+ion-card {
+  margin: 0;
+  border-radius: 5px;
+}
+
+ion-card-content {
+  margin: 0px;
+  padding: 3px;
+}
+
+ion-item {
+  --inner-border-width: 0px;
+  --inner-padding-start: 0px;
+  --inner-padding-end: 3px;
+  --inner-border-width: 0px;
+  --padding-start: 0px;
+  --padding-end: 3px;
+  --inner-padding-start: 10px;
+  --inner-padding-end: 0px;
+  --color: var(--ion-text-color, #2c2c2c);
+  --border-width: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+
+ion-icon {
+  font-size: 32px;
+  height: 65px;
+  color: var(--ion-text-color, #ffffff);
+}
+
+ion-label {
+  margin: 0px;
+  h1 {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 18px;
+    line-height: 1.2;
+    color: #93a5b8;
+    float:right;
+    padding: 10px;
+  }
+  p {
+    margin-top: 3px;
+    font-size: 13px;
+  }
+}
+
+ion-range {
+  margin: 0;
+  padding-left: 0;
+  padding-right: 10px;
+  --knob-size: 18px;
+  --bar-height: 5px;
+  --bar-border-radius: 3px;
+  //--bar-background: -webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127));
+  --bar-background-active: transparent; // disable
+  --knob-background: var(--ion-text-color, #aaaaaa);
+  //--pin-color: var(--ion-text-color, #ffffff);
+
+  &::part(knob) {
+    transform: scale(1);  // fixed size in shadowDOM
+  }
+}
+
+ion-fab-button {
+  --border-radius: 50%;
+  --background: transparent;
+  --box-shadow: 0px;
+  --background-hover: transparent;
+  --background-hover-opacity: 0%;
+  --background-activated: transparent;
+  --background-activated-opacity: 0%;
+  margin: 0;
+  padding: 0;
+}
+
+.icon-slider-minus {
+  height: 16px;
+  width: 16px;
+  margin-right: 20px;
+  margin-left: 0px;
+}
+
+.icon-slider-plus {
+  height: 24px;
+  width: 24px;
+  margin-left: 10px;
+  margin-right: 6px;
+  padding:0;
+}

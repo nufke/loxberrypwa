@@ -17,8 +17,6 @@ export class LoxBerry {
   private categoriesSubject: BehaviorSubject<Category[]> = new BehaviorSubject([]);
   private roomsSubject: BehaviorSubject<Room[]> = new BehaviorSubject([]);
 
-  private subcontrols: Control[] = [];
-
   private Structure: any = {};
 
   private mqtt_lox2app: any = {};
@@ -49,9 +47,9 @@ export class LoxBerry {
     private mqttService: MqttService,
     private storageService: StorageService)
   {
-    this.Structure.controls = [];
-    this.Structure.categories = [];
-    this.Structure.rooms = [];
+    this.Structure.controls = {};
+    this.Structure.categories = {};
+    this.Structure.rooms = {};
 
     this.storageService.getSettings().subscribe( settings => {
       if (settings) {
@@ -80,8 +78,7 @@ export class LoxBerry {
   });
   }
 
-  private connectToMqtt()
-  {
+  private connectToMqtt() {
     console.log('Connecting to LoxBerry Mqtt Broker...');
     this.mqttService.connect(
     {
@@ -91,10 +88,6 @@ export class LoxBerry {
       port: Number(this.loxberryMqttPort)
     });
     this.loxberryMqttConnected = true;
-  }
-
-  private findIndex(data: any, hwid: string, uuid: string) {
-    return data.findIndex( item => { return (item.hwid === hwid) && (item.uuid === uuid) });
   }
 
   private registerStructureTopic() {
@@ -111,46 +104,49 @@ export class LoxBerry {
 
   private flushData() {
     console.log("flush structure...");
-    this.Structure.controls = [];
-    //this.subcontrols = [];
-    this.Structure.categories = [];
-    this.Structure.rooms = [];
+    this.Structure.controls = {};
+    this.Structure.categories = {};
+    this.Structure.rooms = {};
 
-    this.controlsSubject.next(this.Structure.controls);
-    this.categoriesSubject.next(this.Structure.categories);
-    this.roomsSubject.next(this.Structure.rooms);
+    this.controlsSubject.next(Object.values(this.Structure.controls));
+    this.categoriesSubject.next(Object.values(this.Structure.categories));
+    this.roomsSubject.next(Object.values(this.Structure.rooms));
   }
 
   private checkControl(obj: Control) : Control {
-    let that = this;
     let control: Control = obj;
-    if (!control.icon.color) control.icon.color = "";
-    if (!control.is_favorite) control.is_favorite = false;
-    if (!control.is_visible) control.is_visible = true;
-    if (!control.is_protected) control.is_protected = false;
-    if (!control.order) control.order = 10;
-    if (!control.display) control.display = {};
-    if (!control.display.text) control.display.text = "";
-    if (!control.display.color) control.display.color = null;
-    if (!control.display.toggle) control.display.toggle = false;
+    if (!control.display) control.display = { text: "", color: null, toggle: false};
 
     let topic = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid + '/states/';
+    this.checkStates(control.states, topic);
 
-    Object.keys(control.states).forEach( key => {
-      if (Array.isArray(control.states[key])) {
-        control.states[key].forEach( (value, index) => {
-          that.mqtt_lox2app[value] = topic + key + '/' + index;
+    if (control.subcontrols) {
+      Object.keys(control.subcontrols).forEach(key => {
+        let subcontrol = control.subcontrols[key];
+        topic = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid + '/subcontrols/' + key + '/states/';
+        this.checkStates(subcontrol.states, topic);
+        if (!subcontrol.display) subcontrol.display = { text: "", color: null, toggle: false };
+        if (!subcontrol.icon) subcontrol.icon = { href: "", color: null };
+      });
+    }
+    return control;
+  }
+
+  private checkStates(states: any, topic: string) {
+    Object.keys(states).forEach( key => {
+      if (Array.isArray(states[key])) {
+        states[key].forEach( (value, index) => {
+          this.mqtt_lox2app[value] = topic + key + '/' + index;
           this.registerTopic(value);
           value = ""; // clear value in array
         });
       }
       else {
-        that.mqtt_lox2app[control.states[key]] = topic + key;
-        this.registerTopic(control.states[key]);
-        control.states[key] = ""; // clear value
+        this.mqtt_lox2app[states[key]] = topic + key;
+        this.registerTopic(states[key]);
+        states[key] = ""; // clear value
       }
     });
-    return control;
   }
 
   private registerTopic(value: string) {
@@ -159,86 +155,35 @@ export class LoxBerry {
         this.mqtt_topic_list.push(prefix);
   }
 
-  private checkRoom(obj: Room) : Room {
-    let room: Room = obj;
-    if (!room.icon.color) room.icon.color = "";
-    if (!room.is_favorite) room.is_favorite = false;
-    if (!room.is_visible) room.is_visible = true;
-    if (!room.is_protected) room.is_protected = false;
-    if (!room.order) room.order = 10;
-    if (!room.image) room.image = "";
-    return room;
-  }
-
-  private checkCategory(obj: Category) : Category {
-    let category: Category = obj;
-    if (!category.icon.color) category.icon.color = "";
-    if (!category.is_favorite) category.is_favorite = false;
-    if (!category.is_visible) category.is_visible = true;
-    if (!category.is_protected) category.is_protected = false;
-    if (!category.order) category.order = 10;
-    if (!category.image) category.image = "";
-    return category;
-  }
-
   // TODO: only items will be added, not removed.
   // To remove items, flush the entire dataset first, and add the required items
   private ProcessStructure(obj: any) {
     if (!obj) return;
 
-    obj.controls.forEach( item => {
-      let idx = this.findIndex(obj.controls, item.hwid, item.uuid);
-      if (idx >= 0) { // Item exists, do update
-        this.Structure.controls[idx] = this.checkControl(item); // Override full object in array
-       }
-      else { // New item
-        this.Structure.controls.push(this.checkControl(item)); // Add new object to array
-      }
-      /*
-      if (item.subcontrols.length) { // store subcontrols in separate registry
-        obj.subcontrols.forEach( subitem => {
-          let sub_idx = this.findIndex(obj.subcontrols, subitem.hwid, subitem.uuid);
-          if (sub_idx >= 0) { // subcontrol exists, do update
-            this.subcontrols[sub_idx] = subitem; // Override full object in array
-          }
-          else { // New subcontrol
-            let subcontrol: Control = subitem;
-            this.subcontrols.push(subcontrol); // Add new object to array
-          }
-        });
-      }
-      */
+    Object.keys(obj.controls).forEach( key => {
+      let control = obj.controls[key];
+      this.Structure.controls[key] = this.checkControl(control); // Override full object in array
     });
 
-    obj.categories.forEach( item => {
-      let idx = this.findIndex(obj.categories, item.hwid, item.uuid);
-      if (idx >= 0) { // Item exists
-        this.Structure.categories[idx] = this.checkCategory(item); // Override full object in array
-       }
-      else { // New item
-        this.Structure.categories.push(this.checkCategory(item)); // Add new object to array
-      }
+    Object.keys(obj.categories).forEach( key => {
+      let category = obj.categories[key];
+      this.Structure.categories[key] = category; // Override full object in array
     });
 
-    obj.rooms.forEach( item => {
-      let idx = this.findIndex(obj.rooms, item.hwid, item.uuid);
-      if (idx >= 0) { // Item exists
-        this.Structure.rooms[idx] = this.checkRoom(item); // Override full object in array
-       }
-      else { // New item
-        this.Structure.rooms.push(this.checkRoom(item)); // Add new object to array
-      }
+    Object.keys(obj.rooms).forEach( key => {
+      let room = obj.rooms[key];
+      this.Structure.rooms[key] = room; // Override full object in array
     });
 
-    this.controlsSubject.next(this.Structure.controls);
-    this.categoriesSubject.next(this.Structure.categories);
-    this.roomsSubject.next(this.Structure.rooms);
+    this.controlsSubject.next(Object.values(this.Structure.controls));
+    this.categoriesSubject.next(Object.values(this.Structure.categories));
+    this.roomsSubject.next(Object.values(this.Structure.rooms));
     this.registerTopics();
   }
 
   private registerTopics() {
     MqttTopics.forEach( (element) => {
-      let full_topic_name = this.loxberryMqttAppTopic + '/+/+' + element; // note: two wildcards '+' included
+      let full_topic_name = this.loxberryMqttAppTopic + '/+/+' + element;
       if (this.registered_topics.includes(full_topic_name)) {
         console.log("topic already exists and ignored:", full_topic_name );
         return;
@@ -247,7 +192,7 @@ export class LoxBerry {
       this.registered_topics.push(full_topic_name);
       this.MqttSubscription.push( this.mqttService.observe(full_topic_name)
       .subscribe((message: IMqttMessage) => {
-        console.log('MQTT received: ', message.topic, message.payload.toString());
+        //console.log('MQTT received: ', message.topic, message.payload.toString());
         this.processTopic(message.topic, message.payload );
       }));
     });
@@ -257,7 +202,7 @@ export class LoxBerry {
       console.log("register topic name:", topic_name );
       this.MqttSubscription.push( this.mqttService.observe(topic_name)
         .subscribe((message: IMqttMessage) => {
-        console.log('MQTT received: ', message.topic, message.payload.toString());
+        //console.log('MQTT received: ', message.topic, message.payload.toString());
         this.processTopic(this.mqtt_lox2app[message.topic], message.payload);
       }));
     });
@@ -265,25 +210,40 @@ export class LoxBerry {
 
   private processTopic(topic_in: any, value_in: any) {
     if (!topic_in) return;
-
-    let topic = topic_in.replace(this.loxberryMqttAppTopic + '/', '').split('/');
+    let topic = topic_in.replace(this.loxberryMqttAppTopic + '/', '');
+    let topic_level = topic.split('/');
     let value = value_in.toString();
-    let hwid = topic[0];
-    let uuid = topic[1];
+    let id = topic_level[0] + '/' + topic_level[1];
+    //console.log('topic:', topic_in, value);
 
-    this.updateTopic(topic, this.Structure.controls, hwid, uuid, value);
-    this.updateTopic(topic, this.Structure.categories, hwid, uuid, value);
-    this.updateTopic(topic, this.Structure.rooms, hwid, uuid, value);
+    if (this.Structure.controls[id]) {
+      this.updateTopic(this.Structure.controls[id], id + '/', topic, value);
+      this.controlsSubject.next(Object.values(this.Structure.controls));
+    }
+
+    if (this.Structure.categories[id]) {
+      this.updateTopic(this.Structure.categories[id], id + '/', topic, value);
+      this.controlsSubject.next(Object.values(this.Structure.categories));
+    }
+    if (this.Structure.rooms[id]) {
+      this.updateTopic(this.Structure.rooms[id], id + '/', topic, value);
+      this.controlsSubject.next(Object.values(this.Structure.rooms)); // updates for Subscribers
+    }
   }
 
-  private updateTopic(topic: string[], obj: any, hwid: string, uuid: string, value: string) {
-    let idx = this.findIndex(obj, hwid, uuid);
-    if (idx >= 0) {
-      if (topic.length == 5) obj[idx][topic[2]][topic[3]][topic[4]] = value;
-      if (topic.length == 4) obj[idx][topic[2]][topic[3]] = value;
-      if (topic.length == 3) obj[idx][topic[2]] = value;
-      this.controlsSubject.next(obj); // updates for Subscribers
-    }
+  private updateTopic(obj, name, topic, value) {
+    Object.keys(obj).forEach(key => {
+       if (typeof obj[key] === 'object' && obj[key] !== null) {
+         this.updateTopic(obj[key], name+key+'/', topic, value);
+       }
+       else {
+         if (name+key === topic) {
+            obj[key] = value;
+            console.log('key/value found:', name+key, value);
+            return;
+         }
+       }
+    });
   }
 
   public unload() : void {
@@ -292,7 +252,6 @@ export class LoxBerry {
   }
 
   public sendMessage(obj: any, value: string) {
-    let idx = this.findIndex(this.Structure.controls, obj.hwid, obj.uuid);
     let topic = obj.mqtt.command_topic;
     let qos = obj.mqtt.qos;
     let retain = obj.mqtt.retain;
@@ -302,11 +261,6 @@ export class LoxBerry {
 
     if (!topic) {
       console.log('Topic ' + topic + ' not found. Nothing published.');
-      return;
-    }
-
-    if (idx==-1) {
-      console.log('Control ' + obj.name + ' not found. Nothing published.');
       return;
     }
 

@@ -8,9 +8,9 @@ The overall structure is given below:
 
 ```
 {
-  "controls": [ ... ],
-  "categories": [ ... ],
-  "rooms": [ ... ]
+  "controls": { ... },
+  "categories": { ... },
+  "rooms": { ... }
 }
 ```
 
@@ -32,14 +32,15 @@ Fields indicated with '?' are optional
           color?: string              // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
         },
   type: string,                       // type of control, e.g., switch, button, slider, etc. See below
-  room: string,                       // uuid of room (hwid of room should match hwid of control)
-  category: string,                   // uuid of category (hwid of category should match hwid of control)
+  room: string,                       // uuid of room
+  category: string,                   // uuid of category
   is_favorite?: Boolean,              // elevate to favorite item (optional)
   is_visible?: Boolean,               // make control invisible
   is_protected?: Boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in the App list (optional)
   details: { ... }                    // details of the control
   states: { ... }                     // states of the control
+  subcontrols?: { ... }               // subcontrols (optional)
 }
 ```
 

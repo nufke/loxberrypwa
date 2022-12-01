@@ -18,7 +18,8 @@ export class DetailedControlBase {
     Plus: true,
     Minus: false,
     Push: 'pulse',
-    Toggle: 'toggle'
+    Toggle: 'toggle',
+    Slider: 'slider'
   };
 
   public radio_list: string[];
@@ -30,6 +31,7 @@ export class DetailedControlBase {
   constructor() {}
 
   public updateDisplay(control: Control) {
+
     control.display.color = "#9d9e9e"; // TODO select from color palette
     switch(control.type) {
       case 'info_only_digital':

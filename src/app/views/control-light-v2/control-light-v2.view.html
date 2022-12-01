@@ -7,19 +7,23 @@
     </ion-segment-button>
 </ion-segment>
 
-<ion-grid>
-    <ion-row>
-        <ion-col>
-            <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
+<ng-container *ngIf="segment === 'moods'">
+    <div class="row">
+        <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
+    </div>
+    <div class="row">
+        <app-light-v2-view [control]="control"></app-light-v2-view>
+    </div>
+</ng-container>
 
-            <ng-container *ngIf="segment === 'moods'">
-                <app-light-v2-view [control]="control" [category]="category" [room]="room"></app-light-v2-view>
-            </ng-container>
-
-            <ng-container *ngIf="segment === 'lightzones'">
-                lightzones
-            </ng-container>
-
-        </ion-col>
-    </ion-row>
-</ion-grid>
+<ng-container *ngIf="segment === 'lightzones'">
+    <div class="row">
+        <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
+    </div>
+    <ng-container size="12" size-md="6" *ngFor="let subcontrol of getSubcontrols()">
+        <div class="row">
+            <app-dimmer-view *ngIf="subcontrol.type === 'dimmer'" [control]="subcontrol"></app-dimmer-view>
+            <app-switch-view *ngIf="subcontrol.type === 'switch'" [control]="subcontrol"></app-switch-view>
+        </div>
+    </ng-container>
+</ng-container>
