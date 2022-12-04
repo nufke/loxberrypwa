@@ -26,6 +26,7 @@ Fields indicated with '?' are optional
 {
   hwid: string,                       // hardware identifier of the device
   uuid: string,                       // unique identifier to identify the control as MQTT topic
+  mqtt_cmd: string                    // MQTT topic to send command
   name: string,                       // GUI name
   icon: {
           href: string,               // location or URL of SVG icon
@@ -34,9 +35,9 @@ Fields indicated with '?' are optional
   type: string,                       // type of control, e.g., switch, button, slider, etc. See below
   room: string,                       // uuid of room
   category: string,                   // uuid of category
-  is_favorite?: Boolean,              // elevate to favorite item (optional)
-  is_visible?: Boolean,               // make control invisible
-  is_protected?: Boolean,             // passwd/PIN protected control (optional)
+  is_favorite?: boolean,              // elevate to favorite item (optional)
+  is_visible?: boolean,               // make control invisible
+  is_protected?: boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in the App list (optional)
   details: { ... }                    // details of the control
   states: { ... }                     // states of the control
@@ -80,9 +81,9 @@ The nested JSON structure for the control `details` and `states` depend on the t
           color?: string              // default color in RGB hex notation, e.g. #FFFFFF (optional)
         },
   image?: string,                     // bitmap image (optional)
-  is_favorite?: Boolean,              // make favorite item (optional)
-  is_visible?: Boolean,               // make category invisible
-  is_protected?: Boolean,             // passwd/PIN protected control (optional)
+  is_favorite?: boolean,              // make favorite item (optional)
+  is_visible?: boolean,               // make category invisible
+  is_protected?: boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }
 ```
@@ -99,9 +100,9 @@ The nested JSON structure for the control `details` and `states` depend on the t
           color?: string              // RGB hex notation, e.g. #FFFFFF (optional)
         },
   image?: string,                     // bitmap image (optional)
-  is_favorite?: Boolean,              // make favorite item (optional)
-  is_visible?: Boolean,               // make room invisible
-  is_protected?: Boolean,             // passwd/PIN protected control (optional)
+  is_favorite?: boolean,              // make favorite item (optional)
+  is_visible?: boolean,               // make room invisible
+  is_protected?: boolean,             // passwd/PIN protected control (optional)
   order?: Number                      // defines order in list box (optional)
 }
 ```

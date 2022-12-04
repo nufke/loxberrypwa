@@ -11,7 +11,8 @@ ion-card-content {
 
 ion-item {
   --inner-border-width: 0px;
-  --padding-start: 6px;
+  --inner-padding-start: 10px;
+  --padding-start: 0px;
   --padding-end: 3px;
   --inner-padding-end: 3px;
   --color: var(--ion-text-color, #2c2c2c);

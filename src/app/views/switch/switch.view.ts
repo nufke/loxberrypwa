@@ -17,13 +17,10 @@ export class SwitchView
   }
 
   ngOnInit() {
-    if (this.control.states.active === "1") {
+    if (this.control.states.active === "1")
       this.control.display.toggle = true;
-    }
-    else {
-      this.control.display.text = "Off";
+    else
       this.control.display.toggle = false;
-    }
   }
 
 }

@@ -20,10 +20,11 @@ After sending the initial structure, each control, category, and room item in th
 
 ## MQTT control API
 
-The MQTT topic API for controls is listed below. The `hwid` refers to the hardware (device) ID to which the control belongs (i.e. Miniserver serialnr). The `control-uuid` is the unique identifier for the control. The `hwid` and `control-uuid` cannot be changed dynamically, but only as part of the creation of a new structure. The `room-uuid` or `category-uuid` should be given for the `room` and `category` topic respectively, which should exist for the hardware (device) ID `hwid`.
+An example for the MQTT topic API for controls is listed below.
 
 ```
 /loxberry/app/<hwid>/<control-uuid>/name            -> "Light control"
+/loxberry/app/<hwid>/<control-uuid>/mqtt_cmd        -> "my_mqtt_device/cmd"
 /loxberry/app/<hwid>/<control-uuid>/icon/href       -> "http://myserver.org/bulb.svg"
 /loxberry/app/<hwid>/<control-uuid>/icon/color      -> "#CECECE"
 /loxberry/app/<hwid>/<control-uuid>/type            -> "switch"
@@ -34,13 +35,13 @@ The MQTT topic API for controls is listed below. The `hwid` refers to the hardwa
 /loxberry/app/<hwid>/<control-uuid>/is_protected    -> false
 /loxberry/app/<hwid>/<control-uuid>/order           -> 1
 /loxberry/app/<hwid>/<control-uuid>/details/format  -> "%s"
-/loxberry/app/<hwid>/<control-uuid>/states/value    -> "1"
+/loxberry/app/<hwid>/<control-uuid>/states/active   -> "1"
 
 ```
 
 ## MQTT category API
 
-The MQTT topic API for categories is listed below. The `hwid` refers to the hardware (device) ID to which the category belongs (i.e. Miniserver serialnr). The `category-uuid` is the unique identifier for the category. The `hwid` and `category-uuid` cannot be changed dynamically, but only as part of the creation of a new structure.
+An example for the MQTT topic API for categories is listed below.
 
 ```
 /loxberry/app/<hwid>/<category-uuid>/name           -> "Lighting"
@@ -52,7 +53,7 @@ The MQTT topic API for categories is listed below. The `hwid` refers to the hard
 
 ## MQTT room API
 
-The MQTT topic API for rooms is listed below. The `hwid` refers to the hardware (device) ID to which the room belongs (i.e. Miniserver serialnr). The `room-uuid` is the unique identifier for the room. The `hwid` and `room-uuid` cannot be changed dynamically, but only as part of the creation of a new structure.
+An example for the MQTT topic API for rooms is listed below.
 
 ```
 /loxberry/app/<hwid>/<room-uuid>/name               -> "Living Room"

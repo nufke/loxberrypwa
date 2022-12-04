@@ -16,11 +16,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/1": {
             "hwid": "1",
             "uuid": "1",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/1",
-                "command_topic": "my_mqtt_device/1/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/1/cmd",
             "name": "Lighting Living",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
@@ -39,11 +35,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/2": {
             "hwid": "1",
             "uuid": "2",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/2",
-                "command_topic": "my_mqtt_device/2/cmd",
-                "retain": false
-            },
+            "mqtt_cmd": "my_mqtt_device/1/2/cmd",
             "name": "Lighting Kitchen",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
@@ -61,11 +53,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/3": {
             "hwid": "1",
             "uuid": "3",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/3",
-                "command_topic": "my_mqtt_device/3/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/3/cmd",
             "name": "Lighting Bath",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
@@ -83,11 +71,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/4": {
             "hwid": "1",
             "uuid": "4",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/4",
-                "command_topic": "my_mqtt_device/4/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/4/cmd",
             "name": "Lighting Bed",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
@@ -106,11 +90,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/5": {
             "hwid": "1",
             "uuid": "5",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/5",
-                "command_topic": "my_mqtt_device/5/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/5/cmd",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
@@ -131,11 +111,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/6": {
             "hwid": "1",
             "uuid": "6",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/6",
-                "command_topic": "my_mqtt_device/6/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/6/cmd",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
@@ -156,11 +132,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/7": {
             "hwid": "1",
             "uuid": "7",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/7",
-                "command_topic": "my_mqtt_device/7/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/7/cmd",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
@@ -181,11 +153,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/8": {
             "hwid": "1",
             "uuid": "8",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/8",
-                "command_topic": "my_mqtt_device/8/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/8/cmd",
             "name": "Temperature",
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
@@ -206,11 +174,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/9": {
             "hwid": "1",
             "uuid": "9",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/9",
-                "command_topic": "my_mqtt_device/9/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/9/cmd",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
@@ -234,11 +198,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/10": {
             "hwid": "1",
             "uuid": "10",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/10",
-                "command_topic": "my_mqtt_device/10/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/10/cmd",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
@@ -262,11 +222,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/11": {
             "hwid": "1",
             "uuid": "11",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/11",
-                "command_topic": "my_mqtt_device/11/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/11/cmd",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
@@ -290,11 +246,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/12": {
             "hwid": "1",
             "uuid": "12",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/12",
-                "command_topic": "my_mqtt_device/12/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/12/cmd",
             "name": "Thermostat",
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
@@ -318,11 +270,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/13": {
             "hwid": "1",
             "uuid": "13",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/13",
-                "command_topic": "my_mqtt_device/13/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/13/cmd",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
@@ -348,11 +296,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/14": {
             "hwid": "1",
             "uuid": "14",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/14",
-                "command_topic": "my_mqtt_device/14/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/14/cmd",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
@@ -378,11 +322,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/15": {
             "hwid": "1",
             "uuid": "15",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/15",
-                "command_topic": "my_mqtt_device/15/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/15/cmd",
             "name": "Musicplayer",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
@@ -409,11 +349,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "hwid": "1",
             "uuid": "16",
             "name": "Musicplayer",
-            "mqtt": {
-                "subscribe_topic": "loxberry/app/1/16",
-                "command_topic": "my_mqtt_device/16/cmd",
-                "retain": true
-            },
+            "mqtt_cmd": "my_mqtt_device/1/16/cmd",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
@@ -440,9 +376,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/2001": {
             "hwid": "1",
             "uuid": "2001",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Lighting",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
@@ -452,9 +385,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/2002": {
             "hwid": "1",
             "uuid": "2002",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Sensors",
             "icon": {
                 "href": "assets/svg_icons/map-marker-solid.svg"
@@ -464,9 +394,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/2003": {
             "hwid": "1",
             "uuid": "2003",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Audio",
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
@@ -476,9 +403,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/2004": {
             "hwid": "1",
             "uuid": "2004",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Heating",
             "icon": {
                 "href": "assets/svg_icons/home-heating-solid.svg"
@@ -490,9 +414,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/1001": {
             "hwid": "1",
             "uuid": "1001",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Living Room",
             "icon": {
                 "href": "assets/svg_icons/couch-solid.svg"
@@ -503,9 +424,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/1002": {
             "hwid": "1",
             "uuid": "1002",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Kitchen",
             "icon": {
                 "href": "assets/svg_icons/utensils-solid.svg"
@@ -516,9 +434,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/1003": {
             "hwid": "1",
             "uuid": "1003",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Bathroom",
             "icon": {
                 "href": "assets/svg_icons/shower-solid.svg"
@@ -529,9 +444,6 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "1/1004": {
             "hwid": "1",
             "uuid": "1004",
-            "mqtt": {
-                "command_topic": ""
-            },
             "name": "Bedroom",
             "icon": {
                 "href": "assets/svg_icons/bed-outline.svg"

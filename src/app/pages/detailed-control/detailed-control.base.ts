@@ -30,7 +30,7 @@ export class DetailedControlBase {
 
   constructor() {}
 
-  public updateDisplay(control: Control) {
+  public updateDisplay(control: any) {
 
     control.display.color = "#9d9e9e"; // TODO select from color palette
     switch(control.type) {
@@ -56,6 +56,10 @@ export class DetailedControlBase {
       case 'slider':
         control.display.text = sprintf(control.details.format, control.states.value);
         break;
+      case 'dimmer':
+        control.display.value = Number(control.states.position);
+        //console.log('display',control.display.value);
+        break;
       case 'switch':
         if (control.states.active === "1") {
           control.display.text = "On";
@@ -80,16 +84,21 @@ export class DetailedControlBase {
         if (control.states.mood_list)
         {
           let id = JSON.parse(control.states.active_moods)[0];
-          if (!id) id = -1; // TODO no number means manual?
-          this.mood_list = [{name:'Manual', id:-1}].concat(JSON.parse(control.states.mood_list));
-          this.mood_idx = this.mood_list.findIndex( item => { return item.id == id } );
-          control.display.text = this.mood_list[this.mood_idx].name;
+          this.mood_list = JSON.parse(control.states.mood_list);
+          if (id) {
+            this.mood_idx = this.mood_list.findIndex( item => { return item.id == id } );
+            control.display.text = this.mood_list[this.mood_idx].name;
+          }
+          else
+            control.display.text = "Manual";
           if (id != 778) control.display.color = "#69c350"; // primary
         }
         break;
       default:
         // no status change
     }
+    if (control.subcontrols && Object.keys(control.subcontrols).length > 0)
+      Object.values(control.subcontrols).forEach( subcontrol => this.updateDisplay(subcontrol))
   }
 
   public btn(btnAction, $event, control) {

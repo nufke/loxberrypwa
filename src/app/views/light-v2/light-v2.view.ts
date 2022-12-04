@@ -21,9 +21,9 @@ export class LightV2View
   }
 
   radioGroupChange(event) {
-    this.control.states.value = String(event.detail.value);
-    this.mood_idx = event.detail.value;
-    if (this.mood_idx > 0) {
+    this.mood_idx = this.mood_list.findIndex( item => item.name === event.detail.value);
+    this.control.states.value = event.detail.value;
+    if (this.mood_idx >= 0) {
       this.LoxBerryService.sendMessage(this.control, 'changeTo/' + String(this.mood_list[this.mood_idx].id));
     }
   }

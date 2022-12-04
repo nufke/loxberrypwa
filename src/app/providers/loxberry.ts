@@ -239,7 +239,7 @@ export class LoxBerry {
        else {
          if (name+key === topic) {
             obj[key] = value;
-            console.log('key/value found:', name+key, value);
+            //console.log('update key/value:', name+key, value);
             return;
          }
        }
@@ -252,19 +252,14 @@ export class LoxBerry {
   }
 
   public sendMessage(obj: any, value: string) {
-    let topic = obj.mqtt.command_topic;
-    let qos = obj.mqtt.qos;
-    let retain = obj.mqtt.retain;
-
-    if (!qos) qos = 1;
-    if (!retain) retain = false;
+    let topic = obj.mqtt_cmd;
 
     if (!topic) {
       console.log('Topic ' + topic + ' not found. Nothing published.');
       return;
     }
 
-    this.mqttService.unsafePublish(topic, value, { qos: qos, retain: retain });
+    this.mqttService.unsafePublish(topic, value);
     console.log('MQTT publish:', obj.name, topic, value);
   }
 

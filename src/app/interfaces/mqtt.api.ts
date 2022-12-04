@@ -2,7 +2,7 @@
 // note: topic /states/# is NOT added, this is managed via nested MQTT topics
 
 export const MqttTopics = [
-  "/mqtt/#",
+  "/mqtt_cmd",
   "/name",
   "/icon/#",
   "/type",
@@ -12,5 +12,6 @@ export const MqttTopics = [
   "/is_visible",
   "/is_protected",
   "/order",
-  "/details/#"
+  "/details/#",
+  "/subcontrols/#"
 ];

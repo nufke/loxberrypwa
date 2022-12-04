@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoxBerry } from '../../providers/loxberry';
-import { Control, Category, Room } from '../../interfaces/datamodel'
-import { Subscription } from 'rxjs'
-
+import { Control, Category, Room } from '../../interfaces/datamodel';
+import { Subscription } from 'rxjs';
 import { ViewBase } from '../../views/view.base';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
@@ -48,7 +47,8 @@ export class DetailedControlPage implements OnInit {
      private route: ActivatedRoute
      )
    {
-     const uuid = this.route.snapshot.paramMap.get('control_uuid')
+    const hwid = this.route.snapshot.paramMap.get('control_hwid')
+    const uuid = this.route.snapshot.paramMap.get('control_uuid')
 
      this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
        this.control = controls.find( item => item.uuid === uuid );
