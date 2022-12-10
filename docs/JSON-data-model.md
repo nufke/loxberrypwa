@@ -26,7 +26,7 @@ Fields indicated with '?' are optional
 {
   hwid: string,                       // hardware identifier of the device
   uuid: string,                       // unique identifier to identify the control as MQTT topic
-  mqtt_cmd: string                    // MQTT topic to send command
+  mqtt_cmd: string,                   // MQTT topic to send command
   name: string,                       // GUI name
   icon: {
           href: string,               // location or URL of SVG icon
@@ -39,9 +39,9 @@ Fields indicated with '?' are optional
   is_visible?: boolean,               // make control invisible
   is_protected?: boolean,             // passwd/PIN protected control (optional)
   order?: Number,                     // defines order in the App list (optional)
-  details: { ... }                    // details of the control
-  states: { ... }                     // states of the control
-  subcontrols?: { ... }               // subcontrols (optional)
+  details: { ... },                   // details of the control (values control dependent)
+  states: { ... },                    // states of the control (values control dependent)
+  subcontrols?: { ... }               // subcontrols (values control dependent) (optional)
 }
 ```
 

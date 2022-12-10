@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
+import { Observable, of } from "rxjs";
 
 @Component({
   selector: 'app-light-v2-view',
@@ -21,10 +22,10 @@ export class LightV2View
   }
 
   radioGroupChange(event) {
-    this.mood_idx = this.mood_list.findIndex( item => item.name === event.detail.value);
+    let mood_idx = this.control.states.mood_list.findIndex( item => item.name === event.detail.value);
     this.control.states.value = event.detail.value;
-    if (this.mood_idx >= 0) {
-      this.LoxBerryService.sendMessage(this.control, 'changeTo/' + String(this.mood_list[this.mood_idx].id));
+    if (mood_idx >= 0) {
+      this.LoxBerryService.sendMessage(this.control, 'changeTo/' + String(this.control.states.mood_list[mood_idx].id));
     }
   }
 

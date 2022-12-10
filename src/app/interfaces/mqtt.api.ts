@@ -13,5 +13,6 @@ export const MqttTopics = [
   "/is_protected",
   "/order",
   "/details/#",
+  "/states/#",
   "/subcontrols/#"
 ];

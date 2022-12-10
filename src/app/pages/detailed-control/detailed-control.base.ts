@@ -23,9 +23,6 @@ export class DetailedControlBase {
   };
 
   public radio_list: string[];
-  public mood_list: any;
-  public mood_idx: any;
-
   public LoxBerryService: LoxBerry;
 
   constructor() {}
@@ -33,6 +30,7 @@ export class DetailedControlBase {
   public updateDisplay(control: any) {
 
     control.display.color = "#9d9e9e"; // TODO select from color palette
+    control.icon.color = "#9d9e9e"; // TODO select from color palette
     switch(control.type) {
       case 'info_only_digital':
         if (control.states.active === "1") {
@@ -83,15 +81,18 @@ export class DetailedControlBase {
       case 'light_controller_v2':
         if (control.states.mood_list)
         {
-          let id = JSON.parse(control.states.active_moods)[0];
-          this.mood_list = JSON.parse(control.states.mood_list);
+          let id = control.states.active_moods[0];
+          let mood_list = control.states.mood_list;
           if (id) {
-            this.mood_idx = this.mood_list.findIndex( item => { return item.id == id } );
-            control.display.text = this.mood_list[this.mood_idx].name;
+            let mood_idx = mood_list.findIndex( item => { return item.id == id } );
+            control.display.text = mood_list[mood_idx].name;
           }
           else
             control.display.text = "Manual";
-          if (id != 778) control.display.color = "#69c350"; // primary
+          if (id != 778) {
+            control.display.color = "#69c350"; // primary
+            control.icon.color = "primary";
+          }
         }
         break;
       default:
@@ -119,7 +120,7 @@ export class DetailedControlBase {
         this.ctrl_slider_updown(control, btnAction);
         break;
       case 'light_controller_v2':
-        this.ctrl_light(control);
+        this.ctrl_light_v2(control);
         break;
       default:
         console.log('btn: no implementation for ', btnAction );
@@ -127,7 +128,20 @@ export class DetailedControlBase {
     }
   }
 
-  public ctrl_light(control) {
+  public ctrl_light_v2(control) {
+    let id = control.states.active_moods[0];
+    let mood_idx;
+    let mood_list = control.states.mood_list;
+    let max = Object.keys(mood_list).length-1;
+    if (id) {
+      mood_idx = mood_list.findIndex( item => { return item.id == id } );
+      mood_idx++;
+      if (mood_idx > max) mood_idx = 0;
+    }
+    else {
+      mood_idx = 0;
+    }
+      this.LoxBerryService.sendMessage(control, 'changeTo/' + String(mood_list[mood_idx].id));
   }
 
   public ctrl_radio(control, is_up) {

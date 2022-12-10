@@ -1,5 +1,5 @@
 <ion-radio-group (ngModel)="control.display.text" (ionChange)="radioGroupChange($event)">
-  <div *ngFor="let item of mood_list">
+  <div *ngFor="let item of control.states.mood_list">
     <div class="selected-{{control.display.text==item.name}}">
       <ion-item class="radio-item">
         <ion-label>

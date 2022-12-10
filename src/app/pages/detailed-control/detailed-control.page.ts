@@ -10,13 +10,16 @@ import { ControlRadioView } from '../../views/control-radio/control-radio.view';
 import { ControlSwitchView } from '../../views/control-switch/control-switch.view';
 import { ControlSliderView } from '../../views/control-slider/control-slider.view';
 import { ControlPushbuttonView } from '../../views/control-pushbutton/control-pushbutton.view';
+import { DetailedControlBase } from './detailed-control.base';
 
 @Component({
   selector: 'app-detailed-control',
   templateUrl: 'detailed-control.page.html',
   styleUrls: ['./detailed-control.page.scss'],
 })
-export class DetailedControlPage implements OnInit {
+export class DetailedControlPage
+  extends DetailedControlBase
+  implements OnInit {
   @ViewChild('viewcontainer', { read: ViewContainerRef, static: true })
 
    public viewContainer: ViewContainerRef;
@@ -47,6 +50,8 @@ export class DetailedControlPage implements OnInit {
      private route: ActivatedRoute
      )
    {
+    super();
+
     const hwid = this.route.snapshot.paramMap.get('control_hwid')
     const uuid = this.route.snapshot.paramMap.get('control_uuid')
 

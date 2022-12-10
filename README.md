@@ -42,7 +42,7 @@ First, the MQTT broker settings should be configured. Open the menu `Settings` a
 
 After the configuration, you can send all controls, rooms and categories to the App, by sending a JSON structure to the MQTT topic `/loxberry/app/structure`:
 ```
-/loxberry/app/structure -> { "controls": [ ... ],  "categories": [ ... ], "rooms": [ ... ] }
+/loxberry/app/structure -> { "controls": { ... },  "categories": { ... }, "rooms": { ... } }
 ```
 The data model of the JSON obects is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model). An [example](https://github.com/nufke/loxberrypwa/wiki/Example) is given on the wiki.
 

@@ -113,40 +113,33 @@ export class LoxBerry {
     this.roomsSubject.next(Object.values(this.Structure.rooms));
   }
 
-  private checkControl(obj: Control) : Control {
-    let control: Control = obj;
+  private processControl(control: any, name: string) {
+    Object.keys(control).forEach(key => {
+       if (typeof control[key] === 'object' && control[key] !== null) {
+         this.processControl(control[key], name + '/' + key);
+         if (control[key].mqtt) control[key] = ""; // remove mqtt object
+       }
+       else {
+         if (key === 'mqtt') {
+            //console.log('element name, value:', name,  control[key] );
+            this.mqtt_lox2app[control[key]] = name;
+            this.registerTopic(control[key]);
+         }
+       }
+    });
+    return control;
+  }
+
+  private addDisplayFields(control) {
     if (!control.display) control.display = { text: "", color: null, toggle: false};
-
-    let topic = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid + '/states/';
-    this.checkStates(control.states, topic);
-
     if (control.subcontrols) {
       Object.keys(control.subcontrols).forEach(key => {
         let subcontrol = control.subcontrols[key];
-        topic = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid + '/subcontrols/' + key + '/states/';
-        this.checkStates(subcontrol.states, topic);
         if (!subcontrol.display) subcontrol.display = { text: "", color: null, toggle: false };
         if (!subcontrol.icon) subcontrol.icon = { href: "", color: null };
       });
     }
     return control;
-  }
-
-  private checkStates(states: any, topic: string) {
-    Object.keys(states).forEach( key => {
-      if (Array.isArray(states[key])) {
-        states[key].forEach( (value, index) => {
-          this.mqtt_lox2app[value] = topic + key + '/' + index;
-          this.registerTopic(value);
-          value = ""; // clear value in array
-        });
-      }
-      else {
-        this.mqtt_lox2app[states[key]] = topic + key;
-        this.registerTopic(states[key]);
-        states[key] = ""; // clear value
-      }
-    });
   }
 
   private registerTopic(value: string) {
@@ -155,14 +148,14 @@ export class LoxBerry {
         this.mqtt_topic_list.push(prefix);
   }
 
-  // TODO: only items will be added, not removed.
-  // To remove items, flush the entire dataset first, and add the required items
+  // TODO: only items will be added, not removed
   private ProcessStructure(obj: any) {
     if (!obj) return;
 
     Object.keys(obj.controls).forEach( key => {
-      let control = obj.controls[key];
-      this.Structure.controls[key] = this.checkControl(control); // Override full object in array
+      let control = this.addDisplayFields(obj.controls[key]); // TODO move elsewhere
+      let name = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid;
+      this.Structure.controls[key] = this.processControl(control, name); // Override full object in array
     });
 
     Object.keys(obj.categories).forEach( key => {
@@ -214,7 +207,7 @@ export class LoxBerry {
     let topic_level = topic.split('/');
     let value = value_in.toString();
     let id = topic_level[0] + '/' + topic_level[1];
-    //console.log('topic:', topic_in, value);
+    //console.log('process topic:', topic_in, value);
 
     if (this.Structure.controls[id]) {
       this.updateTopic(this.Structure.controls[id], id + '/', topic, value);
@@ -233,17 +226,26 @@ export class LoxBerry {
 
   private updateTopic(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
-       if (typeof obj[key] === 'object' && obj[key] !== null) {
-         this.updateTopic(obj[key], name+key+'/', topic, value);
-       }
-       else {
-         if (name+key === topic) {
+      if (name+key === topic) {
+          if (this.isValidJSONString(value))
+            obj[key] = JSON.parse(value);
+          else
             obj[key] = value;
-            //console.log('update key/value:', name+key, value);
-            return;
-         }
+          return;
        }
+       else
+          if (typeof obj[key] === 'object' && obj[key] !== null)
+            this.updateTopic(obj[key], name+key+'/', topic, value);
     });
+  }
+
+  private isValidJSONString(str: string) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
   }
 
   public unload() : void {
