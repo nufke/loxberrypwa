@@ -5,16 +5,17 @@ ion-card {
 
 ion-card-content {
   margin: 0px;
-  padding: 3px;
+  padding: 0 3px 0 3px; // top right bottm left
 }
 
 ion-item {
+  //height: 25px;
   --inner-border-width: 0px;
   --inner-padding-start: 0px;
   --inner-padding-end: 3px;
   --inner-border-width: 0px;
   --padding-start: 0px;
-  --padding-end: 3px;
+  --padding-end: 0px;
   --inner-padding-start: 10px;
   --inner-padding-end: 0px;
   --color: var(--ion-text-color, #2c2c2c);

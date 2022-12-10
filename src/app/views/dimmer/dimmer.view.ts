@@ -12,8 +12,17 @@ export class DimmerView
 extends ViewBase
 implements OnInit {
 
+  public min: number;
+  public max: number;
+  public step: number;
+
   constructor(public LoxBerryService: LoxBerry) {
     super(LoxBerryService);
+
+    //TODO:, use the control min/max/step. It seems not all dimmers send the states !!!
+    this.step = 1;  // Number(this.control.states.step);
+    this.min = 0;   // Number(this.control.states.min);
+    this.max = 100; // Number(this.control.states.max);
   }
 
   ngOnInit() {
@@ -32,20 +41,13 @@ implements OnInit {
   public subctrl_slider_updown(control, is_up) {
     let val = this.control.display.value;
     if (!val) val = 0;
-    let step = Number(this.control.states.step);
-    let min = Number(this.control.states.min);
-    let max = Number(this.control.states.max);
-
-    if (!min) min = 0;
-    if (!max) max = 100;
-    if (!step) step = 1;
 
     let new_val;
-    if (is_up) new_val = val + step;
-    else new_val = val - step;
+    if (is_up) new_val = val + this.step;
+    else new_val = val - this.step;
 
-    if (new_val < min) new_val = min;
-    if (new_val > max) new_val = max;
+    if (new_val < this.min) new_val = this.min;
+    if (new_val > this.max) new_val = this.max;
 
     this.control.display.value = new_val;
     this.control.states.position = String(new_val);

@@ -207,7 +207,7 @@ export class LoxBerry {
     let topic_level = topic.split('/');
     let value = value_in.toString();
     let id = topic_level[0] + '/' + topic_level[1];
-    //console.log('process topic:', topic_in, value);
+    console.log('process topic:', topic_in, value);
 
     if (this.Structure.controls[id]) {
       this.updateTopic(this.Structure.controls[id], id + '/', topic, value);
@@ -227,25 +227,31 @@ export class LoxBerry {
   private updateTopic(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
       if (name+key === topic) {
-          if (this.isValidJSONString(value))
+          if (this.isValidJSONObject(value)) {
             obj[key] = JSON.parse(value);
-          else
+            //console.log('update key/value (json):', name+key, value);
+          }
+          else {
             obj[key] = value;
+            //console.log('update key/value:', key, value);
+          }
           return;
        }
        else
           if (typeof obj[key] === 'object' && obj[key] !== null)
-            this.updateTopic(obj[key], name+key+'/', topic, value);
+             this.updateTopic(obj[key], name+key+'/', topic, value);
     });
   }
 
-  private isValidJSONString(str: string) {
+  private isValidJSONObject(str: string) {
+    let obj;
     try {
-      JSON.parse(str);
+      obj = JSON.parse(str);
     } catch (e) {
         return false;
     }
-    return true;
+    if (typeof obj === 'object') return true;
+    else false;
   }
 
   public unload() : void {

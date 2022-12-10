@@ -12,7 +12,7 @@
       <ion-fab-button class="icon-slider-minus" (click)="subctrl_slider_updown(control, false)">
         <ion-icon name="sunny" style="color: #4e5761;"></ion-icon>
       </ion-fab-button>
-      <ion-range min="{{control.states.min}}" max="{{control.states.max}}" step="{{control.states.step}}"
+      <ion-range min="{{min}}" max="{{max}}" step="{{step}}"
         debounce="50" step="1" (ionChange)="subctrl_slider_change(control)" [(ngModel)]="control.display.value"></ion-range>
       <ion-fab-button class="icon-slider-plus" (click)="subctrl_slider_updown(control, true)">
         <ion-icon name="sunny" style="color: #4e5761"></ion-icon>

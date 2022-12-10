@@ -10,7 +10,7 @@ import { LoxBerry } from '../../providers/loxberry';
 })
 export class SliderView extends ViewBase {
 
-  public slider_value;
+  public slider_value: number;
   public text: string;
 
   constructor(public LoxBerryService: LoxBerry) {

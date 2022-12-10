@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Control, Category, Room } from '../../interfaces/datamodel'
 import { LoxBerry } from '../../providers/loxberry';
+import * as moment from 'moment';
 
 var sprintf = require('sprintf-js').sprintf
 
@@ -46,7 +47,19 @@ export class DetailedControlBase {
         control.display.text = sprintf(control.details.format, control.states.text);
         break;
       case 'info_only_analog':
-        control.display.text = sprintf(control.details.format, control.states.value);
+        switch(control.details.format) {
+        case '<v.u>': // date + time
+          let date = new Date(Number(control.states.value)*1000 + 1230768000000);
+          control.display.text = moment(date).format("DD-MM-YYYY hh:mm").toString();
+          break;
+        case '<v.t>': // duration
+          let duration = moment.duration(Number(control.states.value), 'seconds');
+          control.display.text = duration.days() + 'd ' + (duration.subtract(duration.days())).hours() + 'h';
+          break;
+        default:
+          control.display.text = sprintf(control.details.format, control.states.value);
+          break;
+        }
         break;
       case 'text_state':
         control.display.text = control.states.text_and_icon;
@@ -95,6 +108,8 @@ export class DetailedControlBase {
           }
         }
         break;
+      case 'i_room_controller':
+        control.display.text = sprintf("%.1f", control.states.temp_actual);
       default:
         // no status change
     }
