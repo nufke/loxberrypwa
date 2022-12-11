@@ -30,16 +30,26 @@ implements OnInit {
   }
 
   public subctrl_slider_change(control) {
-    // update control value and send via MQTT when changed
-    let position = String(this.control.display.value);
-    if (this.control.states.position != position) {
-      this.control.states.position = position;
-      this.LoxBerryService.sendMessage(this.control, this.control.states.position);
+    let position = String(control.display.value);
+
+    if (control.type === 'dimmer') {
+      if (control.states.position != position) {
+        control.states.position = position;
+        this.LoxBerryService.sendMessage(control, control.states.position);
+      }
+    }
+
+    if (control.type === 'color_picker_v2') {
+      let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+      if (res[3] != position) {
+        control.states.color = 'hsv(' + res[1] + ',' + res[2] + ',' + position + ')';
+        this.LoxBerryService.sendMessage(control, control.states.color);
+      }
     }
   }
 
   public subctrl_slider_updown(control, is_up) {
-    let val = this.control.display.value;
+    let val = control.display.value;
     if (!val) val = 0;
 
     let new_val;
@@ -49,8 +59,52 @@ implements OnInit {
     if (new_val < this.min) new_val = this.min;
     if (new_val > this.max) new_val = this.max;
 
-    this.control.display.value = new_val;
-    this.control.states.position = String(new_val);
-    this.LoxBerryService.sendMessage(this.control, this.control.states.position);
+    if (control.type === 'dimmer') {
+      control.display.value = new_val;
+      control.states.position = String(new_val);
+      this.LoxBerryService.sendMessage(control, control.states.position);
+    }
+
+    if (control.type === 'color_picker_v2') {
+      let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+      control.states.color = 'hsv(' + res[1] + ',' + res[2] + ',' + new_val + ')';
+      this.LoxBerryService.sendMessage(control, control.states.color);
+    }
+
   }
+
+  public subctrl_slider_change2(control) {
+    // update control value and send via MQTT when changed
+    let position = String(control.display.value);
+    let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+    if (res)
+    {
+      if (res[3] != position) {
+        control.states.color = 'hsv(' + res[1] + ',' + res[2] + ',' + position + ')';
+        this.LoxBerryService.sendMessage(control, control.states.color);
+      }
+    }
+  }
+
+  public subctrl_slider_updown2(control, is_up) {
+    let val = control.display.value;
+    let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+    console.log(val, res);
+    if (!val) val = 0;
+
+    let new_val;
+    if (is_up) new_val = val + this.step;
+    else new_val = val - this.step;
+
+    if (new_val < this.min) new_val = this.min;
+    if (new_val > this.max) new_val = this.max;
+
+    if (res)
+    {
+      control.states.color = 'hsv(' + res[1] + ',' + res[2] + ',' + new_val + ')';
+      this.LoxBerryService.sendMessage(control, control.states.color);
+    }
+  }
+
+
 }

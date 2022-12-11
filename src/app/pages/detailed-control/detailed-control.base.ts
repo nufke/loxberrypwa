@@ -69,7 +69,15 @@ export class DetailedControlBase {
         break;
       case 'dimmer':
         control.display.value = Number(control.states.position);
-        //console.log('display',control.display.value);
+        control.display.color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))'
+        break;
+      case 'color_picker_v2':
+        let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+        if (res) {
+          control.display.value = Number(res[3]);
+          let rgb = this.hsv2rgb(res[1], res[2], 100);
+          control.display.color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + '))';
+        }
         break;
       case 'switch':
         if (control.states.active === "1") {
@@ -222,6 +230,28 @@ export class DetailedControlBase {
   public ctrl_push(control, action) {
     control.states.active = action;
     this.LoxBerryService.sendMessage(control, control.states.active);
+  }
+
+  // TODO, take from iro.js
+  public hsv2rgb(h_, s_, v_) {
+    const clampround = (num, a, b) => Math.round(Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b)));
+    const h = h_ / 60;
+    const s = s_ / 100;
+    const v = v_ / 100;
+    const i = Math.floor(h);
+    const f = h - i;
+    const p = v * (1 - s);
+    const q = v * (1 - f * s);
+    const t = v * (1 - (1 - f) * s);
+    const mod = i % 6;
+    const r = [v, q, p, p, t, v][mod];
+    const g = [t, v, v, q, p, p][mod];
+    const b = [p, p, t, v, v, q][mod];
+    return [
+      clampround(r * 255, 0, 255),
+      clampround(g * 255, 0, 255),
+      clampround(b * 255, 0, 255)
+    ];
   }
 
 }

@@ -49,7 +49,7 @@ Fields indicated with '?' are optional
 
 The control key `type` is a string which defines the style of the control and its associated button(s):
 
-*NOTE: Not all controls are fully functional*
+*NOTE: Not all controls are fully functional, see [Status](https://github.com/nufke/loxberrypwa/wiki/Status)*
 
 ```
 "central_jalousie           // central sunscreen / shutter control, no button

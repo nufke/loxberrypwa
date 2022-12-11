@@ -24,7 +24,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
         "9999/1000": {
             "hwid": "9999",
             "uuid": "1000",
-            "mqtt_cmd": "loxone/999/1000/cmd",
+            "mqtt_cmd": "loxone/9999/1000/cmd",
             "name": "Lighting Living",
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"

@@ -207,39 +207,40 @@ export class LoxBerry {
     let topic_level = topic.split('/');
     let value = value_in.toString();
     let id = topic_level[0] + '/' + topic_level[1];
-    console.log('process topic:', topic_in, value);
+    //console.log('process topic:', topic_in, value);
 
     if (this.Structure.controls[id]) {
-      this.updateTopic(this.Structure.controls[id], id + '/', topic, value);
+      this.updateTopic(this.Structure.controls[id], id, topic, value);
       this.controlsSubject.next(Object.values(this.Structure.controls));
     }
 
     if (this.Structure.categories[id]) {
-      this.updateTopic(this.Structure.categories[id], id + '/', topic, value);
+      this.updateTopic(this.Structure.categories[id], id, topic, value);
       this.controlsSubject.next(Object.values(this.Structure.categories));
     }
     if (this.Structure.rooms[id]) {
-      this.updateTopic(this.Structure.rooms[id], id + '/', topic, value);
+      this.updateTopic(this.Structure.rooms[id], id, topic, value);
       this.controlsSubject.next(Object.values(this.Structure.rooms)); // updates for Subscribers
     }
   }
 
+
   private updateTopic(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
-      if (name+key === topic) {
+      if (name + '/' + key === topic) {
           if (this.isValidJSONObject(value)) {
             obj[key] = JSON.parse(value);
-            //console.log('update key/value (json):', name+key, value);
+            //console.log('update key/value (json):', name + '/' + key, value);
           }
           else {
             obj[key] = value;
-            //console.log('update key/value:', key, value);
+            //console.log('update key/value:', name + '/' + key, value);
           }
           return;
        }
        else
           if (typeof obj[key] === 'object' && obj[key] !== null)
-             this.updateTopic(obj[key], name+key+'/', topic, value);
+             this.updateTopic(obj[key], name + '/' + key, topic, value);
     });
   }
 

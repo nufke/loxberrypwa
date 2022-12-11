@@ -1,11 +1,14 @@
 # loxberrypwa wiki
 
-[MQTT API](./MQTT-API)
-
-[JSON data model](./JSON-data-model)
+[Build flow](./Build-flow)
 
 [Example](./Example)
 
+[JSON data model](./JSON-data-model)
+
+[MQTT API](./MQTT-API)
+
 [Screenshots](./Screenshots)
 
-[Build flow](./Build-flow)
+[Status](./Status)
+

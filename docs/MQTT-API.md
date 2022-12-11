@@ -14,7 +14,7 @@ The MQTT settings API is used to send an initial App structure in the form of a 
 /loxberry/app/structure -> { "controls": { ... },  "categories": { ... }, "rooms": { ... } }
 ```
 
-More information on the JSON data model is given [here](JSON-data-model.md)
+More information on the JSON data model is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model)
 
 After sending the initial structure, each control, category, and room item in the App has multiple associated MQTT topics registered which enable updates of individual element as shown below.
 
