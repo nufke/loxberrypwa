@@ -14,7 +14,7 @@ export class LightV2View
   implements OnInit {
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   ngOnInit() {

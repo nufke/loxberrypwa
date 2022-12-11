@@ -39,7 +39,7 @@ export class ControlsPage
   private roomsSub: Subscription;
 
   constructor(public LoxBerryService: LoxBerry,
-              private route: ActivatedRoute )
+              private route: ActivatedRoute)
   {
     super();
 

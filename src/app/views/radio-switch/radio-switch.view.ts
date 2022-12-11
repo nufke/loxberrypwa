@@ -13,7 +13,7 @@ export class RadioSwitchView extends ViewBase {
   public off_on = [ "Off", "On"]; // TODO move to control API
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   ngOnInit() {

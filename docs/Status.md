@@ -73,7 +73,7 @@ This page lists the development status of the controls and subcontrols.
 |--------------------------|-------------------|
 | dark / light theme       | Available         |
 | homescreen widgets       | Not started       |
-| multi-language support   | Not started       |
+| internationalization     | Under development |
 | loxberry plugins         | Not started       |
 | voice control            | Not started       |
 | weather forecast         | Not started       |

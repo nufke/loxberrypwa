@@ -1,0 +1,20 @@
+{
+    "favorites": "Favorites",
+    "central": "Central",
+    "rooms": "Rooms",
+    "categories": "Categories",
+    "all": "All",
+    "on": "On",
+    "off": "Off",
+    "checking_status": "Checking Status...",
+    "lightzones": "Light Circuits",
+    "moods": "Moods",
+    "color": "Color",
+    "color_sequence" : "Color sequence",
+    "brightness": "Brightness",
+    "master_brightness": "Overall brightness",
+    "settings": "Settings",
+    "dark_mode": "Dark Mode",
+    "about": "About",
+    "manual": "Manual"
+}

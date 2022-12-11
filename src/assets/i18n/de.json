@@ -1,0 +1,20 @@
+{
+    "favorites": "Favoriten",
+    "central": "Zentral",
+    "rooms": "Räume",
+    "categories": "Kategorien",
+    "all": "Alle",
+    "on": "Ein",
+    "off": "Aus",
+    "checking_status": "Status wird abgefragt..",
+    "lightzones": "Lichtkreise",
+    "moods": "Stimmungen",
+    "color": "Farbe",
+    "color_sequence" : "Farbwechsler",
+    "brightness": "Helligkeit",
+    "master_brightness": "Master Helligkeit",
+    "settings": "Einstellungen",
+    "dark_mode": "Dunkler Modus",
+    "about": "Über",
+    "manual": "Manuell"
+}

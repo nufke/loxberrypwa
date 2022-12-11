@@ -2,6 +2,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { FavoritesPage } from './favorites.page';
 import { FavoritesPageRoutingModule } from './favorites-routing.module';
 
@@ -10,7 +11,8 @@ import { FavoritesPageRoutingModule } from './favorites-routing.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    FavoritesPageRoutingModule
+    FavoritesPageRoutingModule,
+    TranslateModule.forChild()
   ],
   declarations: [
     FavoritesPage

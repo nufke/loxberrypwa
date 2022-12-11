@@ -12,7 +12,7 @@ export class ControlTextStateView
   extends TextView {
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
 }

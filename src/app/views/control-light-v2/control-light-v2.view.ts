@@ -15,7 +15,7 @@ export class ControlLightV2View
   public segment: string = 'moods';
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   updateSegment() {

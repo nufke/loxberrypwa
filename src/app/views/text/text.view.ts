@@ -11,8 +11,8 @@ import { LoxBerry } from '../../providers/loxberry';
 export class TextView
   extends ViewBase {
 
-  constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+  constructor() {
+    super();
   }
 
 }

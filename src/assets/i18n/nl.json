@@ -1,0 +1,21 @@
+{
+    "favorites": "Favorieten",
+    "central": "Centraal",
+    "rooms": "Ruimte",
+    "categories": "Categorie",
+    "all": "Alle",
+    "on": "Aan",
+    "off": "Uit",
+    "checking_status": "Status wordt opgevraagd...",
+    "lightzones": "Lichtkringen",
+    "moods": "Stemmingen",
+    "color": "Kleur",
+    "color_sequence": "Kleur sequentie",
+    "brightness": "Helderheid",
+    "master_brightness": "Master helderheid",
+    "settings": "Instellingen",
+    "dark_mode": "Donkere mode",
+    "about": "Over",
+    "manual": "Handmatig"
+
+}

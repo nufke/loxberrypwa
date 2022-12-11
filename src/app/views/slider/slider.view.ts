@@ -14,7 +14,7 @@ export class SliderView extends ViewBase {
   public text: string;
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   ngOnInit() {

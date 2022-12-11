@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Control, Category, Room } from '../../interfaces/datamodel'
 import { LoxBerry } from '../../providers/loxberry';
 import * as moment from 'moment';
@@ -56,6 +57,29 @@ export class DetailedControlBase {
           let duration = moment.duration(Number(control.states.value), 'seconds');
           control.display.text = duration.days() + 'd ' + (duration.subtract(duration.days())).hours() + 'h';
           break;
+        case '<v.d>': // EIS4, dd:mm:yyyy
+          let d = new Date(Number(control.states.value)*1000 + 1230768000000); // TODO check
+          control.display.text = moment(d).format("DD:MM:YYYY").toString();
+          break;
+        case '<v.x>': // digital value
+          control.display.text = control.states.value ? '1' : '0'; // TODO check
+          break;
+        case '<v.j>': // combined value
+          control.details.format = '%f'; // TODO: check
+        case '<v.i>': // combined pushbutton
+          control.details.format = '%f'; // TODO: check
+        case '<v.c>': // color
+          control.details.format = '#%6h'; // TODO: check
+        case '<v.m>': // EIS3, hh:mm:ss
+          control.details.format = '%d'; // TODO: check
+        case '<v>': // integer
+          control.details.format = '%d';
+        case '<v.1>': // float in x.y notation
+          control.details.format = '%.1f';
+        case '<v.2>': // float in x.yy notation
+          control.details.format = '%.2f';
+        case '<v.3>': // float in x.yy notation
+          control.details.format = '%.3f';
         default:
           control.display.text = sprintf(control.details.format, control.states.value);
           break;
@@ -109,7 +133,7 @@ export class DetailedControlBase {
             control.display.text = mood_list[mood_idx].name;
           }
           else
-            control.display.text = "Manual";
+            control.display.text = 'Manual'; // TODO translate
           if (id != 778) {
             control.display.color = "#69c350"; // primary
             control.icon.color = "primary";

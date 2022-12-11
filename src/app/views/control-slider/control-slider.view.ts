@@ -12,7 +12,7 @@ export class ControlSliderView
   extends TextView {
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
 }

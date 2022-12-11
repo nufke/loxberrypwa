@@ -28,6 +28,8 @@
     "@capacitor/storage": "^1.2.5",
     "@ionic/angular": "^6.0.0",
     "@jaames/iro": "^5.5.2",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "encrypt-storage": "^2.12.12",
     "moment": "^2.29.4",
     "ngx-mqtt": "^9.0.5",

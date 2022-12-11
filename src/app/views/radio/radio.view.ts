@@ -13,7 +13,7 @@ export class RadioView extends ViewBase {
   public list: string[];
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   ngOnInit() {

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { ControlTextStateView } from './control-text-state/control-text-state.view';
 import { ControlSwitchView } from './control-switch/control-switch.view';
 import { ControlSliderView } from './control-slider/control-slider.view';
@@ -24,7 +24,8 @@ import { DimmerView } from './dimmer/dimmer.view';
     CommonModule,
     IonicModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    TranslateModule.forChild()
   ],
   declarations: [
     ControlTextStateView,

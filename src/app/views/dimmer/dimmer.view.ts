@@ -17,7 +17,7 @@ implements OnInit {
   public step: number;
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
 
     //TODO:, use the control min/max/step. It seems not all dimmers send the states !!!
     this.step = 1;  // Number(this.control.states.step);

@@ -11,7 +11,7 @@ import { LoxBerry } from '../../providers/loxberry';
 export class PushView extends ViewBase {
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   pushed() {

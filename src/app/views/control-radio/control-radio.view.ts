@@ -14,7 +14,7 @@ export class ControlRadioView
   public segment: string = 'moods';
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   updateSegment() {

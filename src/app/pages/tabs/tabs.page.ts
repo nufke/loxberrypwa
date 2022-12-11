@@ -9,7 +9,7 @@ import { NavController } from '@ionic/angular';
 export class TabsPage {
 
   constructor(
-    private navCtrl: NavController )
+    private navCtrl: NavController)
   {}
 
   click(tab: string) {

@@ -12,7 +12,7 @@ export class ControlPushbuttonView
   extends TextView {
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
 }

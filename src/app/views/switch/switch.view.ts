@@ -13,7 +13,7 @@ export class SwitchView
   implements OnInit {
 
   constructor(public LoxBerryService: LoxBerry) {
-    super(LoxBerryService);
+    super();
   }
 
   ngOnInit() {
