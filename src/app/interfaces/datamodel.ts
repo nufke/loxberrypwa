@@ -28,6 +28,8 @@ export interface Control {
   display: {
     text?: string,              // INTERNAL display status text (optional)
     color?: string,             // INTERNAL display status color (optional)
+    bar_color?: string,         // INTERNAL display bar color (optional)
+    btn_color?: string,         // INTERNAL display button style (optional)
     toggle?: boolean            // INTERNAL toggle state (optional)
   }
 }
@@ -49,6 +51,8 @@ export interface Subcontrol {
     text?: string,              // INTERNAL display status text (optional)
     value?: number,             // INTERNAL display status value (optional)
     color?: string,             // INTERNAL display status color (optional)
+    bar_color?: string,         // INTERNAL display bar color (optional)
+    btn_color?: string,         // INTERNAL display button style (optional)
     toggle?: boolean            // INTERNAL toggle state (optional)
   }
 }

@@ -92,15 +92,25 @@ export class DetailedControlBase {
         control.display.text = sprintf(control.details.format, control.states.value);
         break;
       case 'dimmer':
-        control.display.value = Number(control.states.position);
-        control.display.color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))'
+        let pos = Number(control.states.position);
+        control.display.value = pos;
+        control.display.bar_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))';
+        if (pos < 10)
+          control.display.btn_color = '#31373e'; // TODO update for white template
+        else
+          control.display.btn_color = 'rgba(255, 229, 127,' + (pos/100) + ')';
         break;
       case 'color_picker_v2':
         let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
         if (res) {
-          control.display.value = Number(res[3]);
+          let val = Number(res[3]);
+          control.display.value = val;
           let rgb = this.hsv2rgb(res[1], res[2], 100);
-          control.display.color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + '))';
+          control.display.bar_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + '))';
+          if (val < 10)
+            control.display.btn_color = '#31373e'; // TODO update for white template
+          else
+            control.display.btn_color = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (val/100) + ')';
         }
         break;
       case 'switch':

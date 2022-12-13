@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoxBerry } from '../../providers/loxberry';
-import { Control, Category, Room } from '../../interfaces/datamodel';
+import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
 import { ViewBase } from '../../views/view.base';
+import { DetailedControlBase } from './detailed-control.base';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
 import { ControlRadioView } from '../../views/control-radio/control-radio.view';
 import { ControlSwitchView } from '../../views/control-switch/control-switch.view';
 import { ControlSliderView } from '../../views/control-slider/control-slider.view';
 import { ControlPushbuttonView } from '../../views/control-pushbutton/control-pushbutton.view';
-import { DetailedControlBase } from './detailed-control.base';
+import { ControlColorPickerV2View } from '../../views/control-color-picker-v2/control-color-picker-v2.view';
 
 @Component({
   selector: 'app-detailed-control',
@@ -42,7 +43,8 @@ export class DetailedControlPage
      'radio': ControlRadioView,
      'switch': ControlSwitchView,
      'slider': ControlSliderView,
-     'pushbutton': ControlPushbuttonView
+     'pushbutton': ControlPushbuttonView,
+     'color_picker_v2': ControlColorPickerV2View
    }
 
    constructor(
@@ -50,13 +52,13 @@ export class DetailedControlPage
      private route: ActivatedRoute
      )
    {
-    super();
+     super();
 
-    const hwid = this.route.snapshot.paramMap.get('control_hwid')
-    const uuid = this.route.snapshot.paramMap.get('control_uuid')
+     const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
+     const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
 
      this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
-       this.control = controls.find( item => item.uuid === uuid );
+       this.control = controls.find( item => (item.hwid === control_hwid && item.uuid === control_uuid) );
      });
 
      this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
@@ -82,11 +84,18 @@ export class DetailedControlPage
      if (view)
        return this.ViewMap[type];
      else
-       return this.ViewMap['text_state'];
+       return this.ViewMap['text_state']; // default
    }
 
    public ngOnInit() : void {
-     this.loadControlComponent(this.control, this.category, this.room);
+    const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
+    const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
+
+    // assign subcontrol is specified via URL
+    if (subcontrol_uuid && subcontrol_uuid_ext) {
+      this.control = this.control.subcontrols[this.control.hwid + '/' + subcontrol_uuid + '/' + subcontrol_uuid_ext];
+    }
+    this.loadControlComponent(this.control, this.category, this.room);
    }
 
    public ngOnDestroy() : void {

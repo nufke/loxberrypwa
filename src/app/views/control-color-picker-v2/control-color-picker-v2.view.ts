@@ -1,0 +1,29 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TextView } from '../text/text.view';
+import { LoxBerry } from '../../providers/loxberry';
+import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel'
+
+@Component({
+  selector: 'control-color-picker-v2.view',
+  templateUrl: 'control-color-picker-v2.view.html',
+  styleUrls: ['./control-color-picker-v2.view.scss'],
+})
+export class ControlColorPickerV2View
+  extends TextView
+  implements OnInit {
+
+  public segment: string = 'color';
+
+  constructor(public LoxBerryService: LoxBerry) {
+    super();
+  }
+
+  ngOnInit() {
+  }
+
+  updateSegment() {
+    // Close any open sliding items when the schedule updates
+  }
+
+}

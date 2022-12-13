@@ -18,6 +18,8 @@ import { LightV2View } from './light-v2/light-v2.view';
 import { RadioView } from './radio/radio.view';
 import { RadioSwitchView } from './radio-switch/radio-switch.view';
 import { DimmerView } from './dimmer/dimmer.view';
+import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
+import { ColorPickerView } from './color-picker/color-picker.view';
 
 @NgModule({
   imports: [
@@ -34,6 +36,7 @@ import { DimmerView } from './dimmer/dimmer.view';
     ControlPushbuttonView,
     ControlLightV2View,
     ControlRadioView,
+    ControlColorPickerV2View,
     TextView,
     SwitchView,
     SliderView,
@@ -41,7 +44,8 @@ import { DimmerView } from './dimmer/dimmer.view';
     LightV2View,
     RadioView,
     RadioSwitchView,
-    DimmerView
+    DimmerView,
+    ColorPickerView
   ],
   exports: [
     IonicModule,
@@ -52,6 +56,7 @@ import { DimmerView } from './dimmer/dimmer.view';
     ControlPushbuttonView,
     ControlLightV2View,
     ControlRadioView,
+    ControlColorPickerV2View,
     TextView,
     SwitchView,
     SliderView,
@@ -59,7 +64,8 @@ import { DimmerView } from './dimmer/dimmer.view';
     LightV2View,
     RadioView,
     RadioSwitchView,
-    DimmerView
+    DimmerView,
+    ColorPickerView
   ]
 })
 export class ViewsModule { }

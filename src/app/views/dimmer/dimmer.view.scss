@@ -30,6 +30,25 @@ ion-icon {
   color: var(--ion-text-color, #ffffff);
 }
 
+.hsv_icon {
+  font-size: 20px;
+  pointer-events: none;
+}
+
+.rgb_icon {
+  font-size: 20px;
+  margin-bottom:2px; // correction for rgb icon
+  pointer-events: none;
+}
+
+.btn_dimmer {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 5px 3px 0;  // top right bottm left
+  float: right;
+}
+
 ion-label {
   margin: 0px;
   h1 {
