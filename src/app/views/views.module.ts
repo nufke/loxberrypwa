@@ -19,7 +19,8 @@ import { RadioView } from './radio/radio.view';
 import { RadioSwitchView } from './radio-switch/radio-switch.view';
 import { DimmerView } from './dimmer/dimmer.view';
 import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
-import { ColorPickerView } from './color-picker/color-picker.view';
+import { ColorRGBPickerView } from './color-rgb-picker/color-rgb-picker.view';
+import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { ColorPickerView } from './color-picker/color-picker.view';
     RadioView,
     RadioSwitchView,
     DimmerView,
-    ColorPickerView
+    ColorRGBPickerView,
+    ColorTempPickerView
   ],
   exports: [
     IonicModule,
@@ -65,7 +67,8 @@ import { ColorPickerView } from './color-picker/color-picker.view';
     RadioView,
     RadioSwitchView,
     DimmerView,
-    ColorPickerView
+    ColorRGBPickerView,
+    ColorTempPickerView
   ]
 })
 export class ViewsModule { }

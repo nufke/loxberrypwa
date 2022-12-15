@@ -106,6 +106,7 @@ export class DetailedControlBase {
           let val = Number(res[3]);
           control.display.value = val;
           let rgb = this.hsv2rgb(res[1], res[2], 100);
+          control.display.rgb = {r: rgb[0], g: rgb[1], b: rgb[2]};
           control.display.bar_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + '))';
           if (val < 10)
             control.display.btn_color = '#31373e'; // TODO update for white template

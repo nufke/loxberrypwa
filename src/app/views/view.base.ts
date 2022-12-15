@@ -15,6 +15,8 @@ export class ViewBase extends DetailedControlBase {
   @Input() category: any;
   @Input() room: any;
 
+  @Input() name: string;
+
   constructor()
   {
     super();

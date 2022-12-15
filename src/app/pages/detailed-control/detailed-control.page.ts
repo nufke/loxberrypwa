@@ -30,6 +30,8 @@ export class DetailedControlPage
    public category : Category;
    public room : Room;
 
+   public control_name: string;
+
    private controlsSub: Subscription;
    private categoriesSub: Subscription;
    private roomsSub: Subscription;
@@ -57,8 +59,14 @@ export class DetailedControlPage
      const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
      const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
 
+     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
+     const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
+
      this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
-       this.control = controls.find( item => (item.hwid === control_hwid && item.uuid === control_uuid) );
+      this.control = controls.find( item => (item.hwid === control_hwid && item.uuid === control_uuid) );
+
+      if (!(subcontrol_uuid && subcontrol_uuid_ext))
+        this.control_name = this.control.name;
      });
 
      this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
@@ -88,14 +96,18 @@ export class DetailedControlPage
    }
 
    public ngOnInit() : void {
+    const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
     const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
     // assign subcontrol is specified via URL
-    if (subcontrol_uuid && subcontrol_uuid_ext) {
-      this.control = this.control.subcontrols[this.control.hwid + '/' + subcontrol_uuid + '/' + subcontrol_uuid_ext];
+    if (subcontrol_uuid && subcontrol_uuid_ext && this.control) {
+      let subcontrol = this.control.subcontrols[control_hwid + '/' + subcontrol_uuid + '/' + subcontrol_uuid_ext];
+      this.control_name = subcontrol.name;
+      this.loadControlComponent(subcontrol, this.category, this.room);
     }
-    this.loadControlComponent(this.control, this.category, this.room);
+    else
+      this.loadControlComponent(this.control, this.category, this.room);
    }
 
    public ngOnDestroy() : void {

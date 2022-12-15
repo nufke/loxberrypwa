@@ -25,13 +25,7 @@ export interface Control {
   subcontrols?: any,            // subcontrols (optional)
   details: any,                 // control details
   states: any,                  // control states
-  display: {
-    text?: string,              // INTERNAL display status text (optional)
-    color?: string,             // INTERNAL display status color (optional)
-    bar_color?: string,         // INTERNAL display bar color (optional)
-    btn_color?: string,         // INTERNAL display button style (optional)
-    toggle?: boolean            // INTERNAL toggle state (optional)
-  }
+  display: any                  // INTERNAL display properties (optional)
 }
 
 export interface Subcontrol {

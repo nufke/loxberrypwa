@@ -14,9 +14,12 @@ export class ControlColorPickerV2View
   implements OnInit {
 
   public segment: string = 'color';
+  public mode_rgb: Boolean;
 
   constructor(public LoxBerryService: LoxBerry) {
     super();
+
+    this.mode_rgb = true;
   }
 
   ngOnInit() {
@@ -24,6 +27,10 @@ export class ControlColorPickerV2View
 
   updateSegment() {
     // Close any open sliding items when the schedule updates
+  }
+
+  switch_picker() {
+    this.mode_rgb = !this.mode_rgb;
   }
 
 }

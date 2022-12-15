@@ -8,13 +8,25 @@
 </ion-segment>
 
 <div *ngIf="segment === 'color'">
+    <div class="row container" *ngIf="mode_rgb">
+        <app-color-rgb-picker-view [control]="control" [category]="category" [room]="room"></app-color-rgb-picker-view>
+        <div class="overlay">
+            <ion-fab-button class="fab_btn_temp" (click)="switch_picker()"></ion-fab-button>
+        </div>
+    </div>
+    <div class="row container" *ngIf="!mode_rgb">
+        <app-color-temp-picker-view [control]="control" [category]="category" [room]="room"></app-color-temp-picker-view>
+        <div class="overlay">
+            <ion-fab-button class="fab_btn_rgb" (click)="switch_picker()"></ion-fab-button>
+        </div>
+    </div>
     <div class="row">
-        <app-color-picker-view [control]="control" [category]="category" [room]="room"></app-color-picker-view >
+        <app-dimmer-view [control]="control" [name]="'brightness' | translate"></app-dimmer-view>
     </div>
 </div>
 
 <div *ngIf="segment === 'sequence'">
-    <div class="row">
-        <app-color-picker-view [control]="control" [category]="category" [room]="room"></app-color-picker-view >
+    <div class="row container">
+        <app-color-rgb-picker-view [control]="control" [category]="category" [room]="room"></app-color-rgb-picker-view>
     </div>
 </div>
