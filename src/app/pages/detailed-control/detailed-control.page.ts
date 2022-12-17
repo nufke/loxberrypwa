@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { LoxBerry } from '../../providers/loxberry';
 import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
@@ -51,10 +52,11 @@ export class DetailedControlPage
 
    constructor(
      public LoxBerryService: LoxBerry,
-     private route: ActivatedRoute
+     private route: ActivatedRoute,
+     public translate: TranslateService
      )
    {
-     super();
+     super(translate);
 
      const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
      const control_uuid = this.route.snapshot.paramMap.get('control_uuid');

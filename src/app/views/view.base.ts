@@ -17,8 +17,8 @@ export class ViewBase extends DetailedControlBase {
 
   @Input() name: string;
 
-  constructor()
+  constructor(public translate: TranslateService)
   {
-    super();
+    super(translate);
   }
 }

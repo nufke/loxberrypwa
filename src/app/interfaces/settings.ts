@@ -5,5 +5,6 @@ export interface Settings {
   loxberryMqttUsername?: string,
   loxberryMqttPassw?: string,
   loxberryMqttAppTopic?: string,
-  appDarkTheme?: boolean
+  appDarkTheme?: boolean,
+  appLanguage?: string
 }

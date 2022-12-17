@@ -13,7 +13,7 @@ import { ControlRadioView } from './control-radio/control-radio.view';
 import { TextView } from './text/text.view';
 import { SwitchView } from './switch/switch.view';
 import { SliderView } from './slider/slider.view';
-import { PushView } from './push/push.view';
+import { PushButtonView } from './pushbutton/pushbutton.view';
 import { LightV2View } from './light-v2/light-v2.view';
 import { RadioView } from './radio/radio.view';
 import { RadioSwitchView } from './radio-switch/radio-switch.view';
@@ -28,7 +28,7 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     IonicModule,
     FormsModule,
     RouterModule,
-    TranslateModule.forChild()
+    TranslateModule //.forChild()
   ],
   declarations: [
     ControlTextStateView,
@@ -41,7 +41,7 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     TextView,
     SwitchView,
     SliderView,
-    PushView,
+    PushButtonView,
     LightV2View,
     RadioView,
     RadioSwitchView,
@@ -62,7 +62,7 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     TextView,
     SwitchView,
     SliderView,
-    PushView,
+    PushButtonView,
     LightV2View,
     RadioView,
     RadioSwitchView,

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ViewBase } from '../view.base';
+import { TranslateService } from '@ngx-translate/core';
+import { TextView } from '../text/text.view';
 import { LoxBerry } from '../../providers/loxberry';
 
 @Component({
@@ -8,12 +9,12 @@ import { LoxBerry } from '../../providers/loxberry';
   templateUrl: 'control-switch.view.html',
   styleUrls: ['./control-switch.view.scss'],
 })
-export class ControlSwitchView extends ViewBase {
+export class ControlSwitchView extends TextView {
 
-  public off_on = [ "Off", "On"]; // TODO move to control API
-
-  constructor(public LoxBerryService: LoxBerry) {
-    super();
+  constructor(
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService) {
+    super(translate);
   }
 
   ngOnInit() {

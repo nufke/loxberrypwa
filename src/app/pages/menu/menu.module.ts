@@ -12,7 +12,7 @@ import { MenuPage } from './menu.page';
     FormsModule,
     IonicModule,
     MenuPageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule, // note: do not add .forChild(), see https://github.com/ngx-translate/core/issues/1258
   ],
   declarations: [MenuPage]
 })

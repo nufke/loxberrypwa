@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
 
@@ -16,8 +17,10 @@ implements OnInit {
   public max: number;
   public step: number;
 
-  constructor(public LoxBerryService: LoxBerry) {
-    super();
+  constructor(
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService ) {
+    super(translate);
 
     //TODO:, use the control min/max/step. It seems not all dimmers send the states !!!
     this.step = 1;  // Number(this.control.states.step);

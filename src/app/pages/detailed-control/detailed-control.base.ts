@@ -24,13 +24,13 @@ export class DetailedControlBase {
     Slider: 'slider'
   };
 
+  public off_on = ['Off', 'On'];
   public radio_list: string[];
   public LoxBerryService: LoxBerry;
 
-  constructor() {}
+  constructor(public translate: TranslateService) {}
 
   public updateDisplay(control: any) {
-
     control.display.color = "#9d9e9e"; // TODO select from color palette
     control.icon.color = "#9d9e9e"; // TODO select from color palette
     switch(control.type) {
@@ -53,9 +53,12 @@ export class DetailedControlBase {
           let date = new Date(Number(control.states.value)*1000 + 1230768000000);
           control.display.text = moment(date).format("DD-MM-YYYY hh:mm").toString();
           break;
-        case '<v.t>': // duration
-          let duration = moment.duration(Number(control.states.value), 'seconds');
-          control.display.text = duration.days() + 'd ' + (duration.subtract(duration.days())).hours() + 'h';
+        case '<v.t>': // duration/time
+          let du = Number(control.states.value) / 60;
+          let days = Math.floor(du / 1440);
+          let hours = Math.floor((du % 1440) / 60);
+          let minutes = Math.floor((du % 1440) % 60);
+          control.display.text = days + 'd ' + hours + 'h ' + minutes + 'm'; //
           break;
         case '<v.d>': // EIS4, dd:mm:yyyy
           let d = new Date(Number(control.states.value)*1000 + 1230768000000); // TODO check
@@ -116,13 +119,13 @@ export class DetailedControlBase {
         break;
       case 'switch':
         if (control.states.active === "1") {
-          control.display.text = "On";
+          control.display.text = this.translate.instant('On');
           control.display.toggle = true;
           control.display.color = "#69c350"; // primary
           control.icon.color = "primary";
         }
         else {
-          control.display.text = "Off";
+          control.display.text = this.translate.instant('Off');
           control.display.toggle = false;
           control.icon.color = "#9d9e9e"; // TODO select from color palette
         }
@@ -144,7 +147,7 @@ export class DetailedControlBase {
             control.display.text = mood_list[mood_idx].name;
           }
           else
-            control.display.text = 'Manual'; // TODO translate
+            control.display.text = this.translate.instant('Manual');
           if (id != 778) {
             control.display.color = "#69c350"; // primary
             control.icon.color = "primary";
@@ -171,7 +174,7 @@ export class DetailedControlBase {
       case 'switch':
         this.ctrl_toggle(control);
         break;
-      case 'push':
+      case 'pushbutton':
         this.ctrl_push(control, btnAction);
         break;
       case 'slider':
@@ -182,7 +185,6 @@ export class DetailedControlBase {
         break;
       default:
         console.log('btn: no implementation for ', btnAction );
-
     }
   }
 

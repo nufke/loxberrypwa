@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { LoxBerry } from '../../providers/loxberry';
 import { Control, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
@@ -38,10 +39,12 @@ export class ControlsPage
   private categoriesSub: Subscription;
   private roomsSub: Subscription;
 
-  constructor(public LoxBerryService: LoxBerry,
-              private route: ActivatedRoute)
+  constructor(
+    public LoxBerryService: LoxBerry,
+    private route: ActivatedRoute,
+    public translate: TranslateService)
   {
-    super();
+    super(translate);
 
     this.domain = this.route.snapshot.paramMap.get('domain'); // room or category
     this.uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category

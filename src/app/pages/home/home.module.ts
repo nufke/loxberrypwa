@@ -3,21 +3,21 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { FavoritesPage } from './favorites.page';
-import { FavoritesPageRoutingModule } from './favorites-routing.module';
+import { HomePage } from './home.page';
+import { HomePageRoutingModule } from './home-routing.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    FavoritesPageRoutingModule,
+    HomePageRoutingModule,
     TranslateModule.forChild()
   ],
   declarations: [
-    FavoritesPage
+    HomePage
   ],
   providers: [
   ],
 })
-export class FavoritesPageModule {}
+export class HomePageModule {}

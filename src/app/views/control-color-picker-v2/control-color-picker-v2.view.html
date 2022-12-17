@@ -1,9 +1,9 @@
 <ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
-    <ion-segment-button value="color" translate>
-        moods
+    <ion-segment-button value="color">
+        {{ 'Moods' | translate }}
     </ion-segment-button>
-    <ion-segment-button value="sequence" translate>
-        lightzones
+    <ion-segment-button value="sequence">
+        {{ 'Color sequence' | translate }}
     </ion-segment-button>
 </ion-segment>
 

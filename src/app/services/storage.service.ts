@@ -23,7 +23,8 @@ export class StorageService {
       loxberryMqttUsername: null,
       loxberryMqttPassw: null,
       loxberryMqttAppTopic: null,
-      appDarkTheme: null
+      appDarkTheme: null,
+      appLanguage: null
     }
     // load settings from Storage
     this.loadSettings();

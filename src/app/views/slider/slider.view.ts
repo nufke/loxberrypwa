@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
 
@@ -13,8 +14,10 @@ export class SliderView extends ViewBase {
   public slider_value: number;
   public text: string;
 
-  constructor(public LoxBerryService: LoxBerry) {
-    super();
+  constructor(
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService) {
+    super(translate);
   }
 
   ngOnInit() {

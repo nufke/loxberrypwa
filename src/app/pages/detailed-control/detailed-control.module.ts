@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DetailedControlPage } from './detailed-control.page';
 import { DetailedControlPageRoutingModule } from './detailed-control-routing.module';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { TextView } from '../../views/text/text.view';
 import { ViewsModule } from '../../views/views.module';
 
@@ -16,7 +16,8 @@ import { ViewsModule } from '../../views/views.module';
     FormsModule,
     RouterModule.forChild([{ path: '', component: DetailedControlPage }]),
     DetailedControlPageRoutingModule,
-    ViewsModule
+    ViewsModule,
+    TranslateModule
   ],
   declarations: [
     DetailedControlPage

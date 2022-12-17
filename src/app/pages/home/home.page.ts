@@ -3,13 +3,14 @@ import { LoxBerry } from '../../providers/loxberry';
 import { Control, Category, Room  } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
 import { DetailedControlBase } from '../detailed-control/detailed-control.base';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-favorites',
-  templateUrl: 'favorites.page.html',
-  styleUrls: ['favorites.page.scss']
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss']
 })
-export class FavoritesPage
+export class HomePage
   extends DetailedControlBase
   implements OnInit, OnDestroy {
 
@@ -25,9 +26,10 @@ export class FavoritesPage
   private roomsSub: Subscription;
 
   constructor(
-    public LoxBerryService: LoxBerry)
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService)
   {
-    super();
+    super(translate);
 
     this.controls = [];
 

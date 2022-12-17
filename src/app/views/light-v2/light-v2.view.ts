@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable, of } from "rxjs";
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
-import { Observable, of } from "rxjs";
 
 @Component({
   selector: 'app-light-v2-view',
@@ -13,8 +14,10 @@ export class LightV2View
   extends ViewBase
   implements OnInit {
 
-  constructor(public LoxBerryService: LoxBerry) {
-    super();
+  constructor(
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService) {
+    super(translate);
   }
 
   ngOnInit() {

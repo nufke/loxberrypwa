@@ -71,9 +71,13 @@ This page lists the development status of the controls and subcontrols.
 
 | Feature                  | Status                 |
 |--------------------------|------------------------|
+| calendar                 | Not started            |
 | dark / light theme       | Available              |
 | homescreen widgets       | Not started            |
 | internationalization     | Available (NL, DE, US) |
 | loxberry plugins         | Not started            |
+| push messages            | Not started            |
+| screensaver              | Not started            |
+| splashscreen             | Not started            |
 | voice control            | Not started            |
 | weather forecast         | Not started            |

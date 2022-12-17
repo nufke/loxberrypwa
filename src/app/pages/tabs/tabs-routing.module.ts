@@ -9,12 +9,12 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'favorites',
-        loadChildren: () => import('../favorites/favorites.module').then(m => m.FavoritesPageModule),
+        path: 'home',
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule),
         //canActivate: [AuthGuard]
       },
       {
-        path: 'favorites/:control_hwid/:control_uuid',
+        path: 'home/:control_hwid/:control_uuid',
         loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
         //canActivate: [AuthGuard]
       },
@@ -45,7 +45,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/favorites',
+        redirectTo: '/home',
       }
     ]
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { TextView } from '../text/text.view';
 import { LoxBerry } from '../../providers/loxberry';
 import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel'
@@ -14,8 +15,10 @@ export class ColorRGBPickerView
   extends TextView
   implements OnInit {
 
-  constructor(public LoxBerryService: LoxBerry) {
-    super();
+  constructor(
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService) {
+    super(translate);
   }
 
   ngOnInit() {

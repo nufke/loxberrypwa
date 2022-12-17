@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
 import { LoxBerry } from '../../providers/loxberry';
 
@@ -12,8 +13,10 @@ export class RadioView extends ViewBase {
 
   public list: string[];
 
-  constructor(public LoxBerryService: LoxBerry) {
-    super();
+  constructor(
+    public LoxBerryService: LoxBerry,
+    public translate: TranslateService) {
+    super(translate);
   }
 
   ngOnInit() {
