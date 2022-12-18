@@ -15,7 +15,7 @@ export class LightV2View
   constructor(
     public loxBerryService: LoxBerryService,
     public controlService: ControlService) {
-    super();
+    super(controlService);
   }
 
   ngOnInit() {

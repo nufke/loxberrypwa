@@ -9,7 +9,8 @@ import { Subscription } from 'rxjs'
   templateUrl: 'categories.page.html',
   styleUrls: ['categories.page.scss']
 })
-export class CategoriesPage implements OnInit, OnDestroy {
+export class CategoriesPage
+  implements OnInit, OnDestroy {
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
 

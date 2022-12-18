@@ -10,24 +10,12 @@ var sprintf = require('sprintf-js').sprintf
 })
 export class ControlService {
 
-  public btnAction = {
-    up: 'up',
-    down: 'down',
-    left: 'left',
-    right: 'right',
-    plus: 'plus',
-    minus: 'minus',
-    push: 'push',
-    toggle: 'toggle',
-    slider: 'slider',
-    change: 'change' // radio change
-  };
-
   public off_on = ['Off', 'On'];
   public radio_list: string[];
-  public loxBerryService: LoxBerryService;
 
-  constructor(public translate: TranslateService) {
+  constructor(
+    public translate: TranslateService,
+    public loxBerryService: LoxBerryService) {
   }
 
   public updateDisplay(control: any) {
@@ -161,6 +149,8 @@ export class ControlService {
     }
     if (control.subcontrols && Object.keys(control.subcontrols).length > 0)
       Object.values(control.subcontrols).forEach( subcontrol => this.updateDisplay(subcontrol))
+
+    return control;
   }
 
   public btn(action, $event, control) {

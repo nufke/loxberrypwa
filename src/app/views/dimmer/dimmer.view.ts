@@ -19,7 +19,7 @@ implements OnInit {
   constructor(
     public loxBerryService: LoxBerryService,
     public controlService: ControlService ) {
-    super();
+    super(controlService);
 
     //TODO:, use the control min/max/step. It seems not all dimmers send the states !!!
     this.step = 1;  // Number(this.control.states.step);
@@ -28,7 +28,7 @@ implements OnInit {
   }
 
   ngOnInit() {
-    this.controlService.updateDisplay(this.control);
+    this.updateDisplay(this.control);
   }
 
   public subctrl_slider_change(control) {

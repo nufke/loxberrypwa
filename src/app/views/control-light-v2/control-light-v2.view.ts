@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { TextView } from '../text/text.view';
+import { ViewBase } from '../view.base';
 import { Subcontrol } from '../../interfaces/datamodel';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'control-light-v2-view',
@@ -8,12 +9,12 @@ import { Subcontrol } from '../../interfaces/datamodel';
   styleUrls: ['./control-light-v2.view.scss'],
 })
 export class ControlLightV2View
-  extends TextView {
+  extends ViewBase {
 
   public segment: string = 'moods';
 
-  constructor() {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
   updateSegment() {

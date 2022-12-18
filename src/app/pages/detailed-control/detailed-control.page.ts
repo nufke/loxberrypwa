@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
-import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel';
+import { Control, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
 import { ViewBase } from '../../views/view.base';
-import { DetailedControlBase } from './detailed-control.base';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
 import { ControlRadioView } from '../../views/control-radio/control-radio.view';
@@ -20,7 +18,6 @@ import { ControlColorPickerV2View } from '../../views/control-color-picker-v2/co
   styleUrls: ['./detailed-control.page.scss'],
 })
 export class DetailedControlPage
-  extends DetailedControlBase
   implements OnInit {
   @ViewChild('viewcontainer', { read: ViewContainerRef, static: true })
 
@@ -52,30 +49,26 @@ export class DetailedControlPage
 
    constructor(
      public loxBerryService: LoxBerryService,
-     private route: ActivatedRoute,
-     public translate: TranslateService
-     )
+     private route: ActivatedRoute)
    {
-     super(translate);
-
      const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
      const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
 
      const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
      const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
-     this.controlsSub = this.loxBerryService.getControls().subscribe((controls: Control[]) => {
+     this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
       this.control = controls.find( item => (item.hwid === control_hwid && item.uuid === control_uuid) );
 
       if (!(subcontrol_uuid && subcontrol_uuid_ext))
         this.control_name = this.control.name;
      });
 
-     this.categoriesSub = this.loxBerryService.getCategories().subscribe((categories: Category[]) => {
+     this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
        this.category = categories.find( item => item.uuid === this.control.category );
      });
 
-     this.roomsSub = this.loxBerryService.getRooms().subscribe((rooms: Room[]) => {
+     this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
        this.room = rooms.find( item => item.uuid === this.control.room );
      });
    }

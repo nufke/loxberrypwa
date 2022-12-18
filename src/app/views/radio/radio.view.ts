@@ -8,18 +8,19 @@ import { ControlService } from '../../services/control.service';
   templateUrl: 'radio.view.html',
   styleUrls: ['./radio.view.scss'],
 })
-export class RadioView extends ViewBase {
+export class RadioView
+  extends ViewBase {
 
   public list: string[];
 
   constructor(
     public loxBerryService: LoxBerryService,
-    private controlService: ControlService) {
-    super();
+    public controlService: ControlService) {
+    super(controlService);
   }
 
   ngOnInit() {
-    this.controlService.updateDisplay(this.control);
+    //this.updateDisplay(this.control);
   }
 
   radioGroupChange(event) {

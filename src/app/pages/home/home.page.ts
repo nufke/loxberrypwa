@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { Control, Category, Room  } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
-import { DetailedControlBase } from '../detailed-control/detailed-control.base';
 import { TranslateService } from '@ngx-translate/core';
+import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
+import { Control, Category, Room, ButtonAction } from '../../interfaces/datamodel';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +11,9 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['home.page.scss']
 })
 export class HomePage
-  extends DetailedControlBase
   implements OnInit, OnDestroy {
+
+  public btnAction = ButtonAction;
 
   public controls: Control[] = [];
   public categories: Category[] = [];
@@ -27,12 +28,9 @@ export class HomePage
 
   constructor(
     public loxBerryService: LoxBerryService,
-    public translate: TranslateService)
+    public translate: TranslateService,
+    public controlService: ControlService)
   {
-    super(translate);
-
-    this.controls = [];
-
     this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
       this.controls = controls;
 
@@ -49,7 +47,6 @@ export class HomePage
     this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms;
     });
-
   }
 
   public ngOnInit() : void {
@@ -69,7 +66,7 @@ export class HomePage
   private updateControls(controls: Control[])
   {
     controls.forEach( item => {
-      this.updateDisplay(item)
+      this.controlService.updateDisplay(item);
     });
   }
 
@@ -77,6 +74,10 @@ export class HomePage
     let room = this.rooms.find( item => { return (item.uuid == room_uuid) } );
     let category = this.categories.find( item => { return (item.uuid == category_uuid) } );
     return room.name + " • " + category.name;
+  }
+
+  public btn(action, $event, control) {
+    this.controlService.btn(action, $event, control)
   }
 
 }

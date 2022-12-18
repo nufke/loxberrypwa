@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ButtonAction } from '../interfaces/datamodel';
+import { ControlService } from '../services/control.service';
 
 @Component({
   selector: 'view.base',
@@ -12,6 +14,18 @@ export class ViewBase {
 
   @Input() name: string;
 
-  constructor() {}
+  public btnAction = ButtonAction;
+
+  constructor(public controlService: ControlService) {
+  }
+
+  public updateDisplay(control: any) {
+    this.controlService.updateDisplay(control);
+  }
+
+  public btn(action, $event, control) {
+    console.log('btn');
+    this.controlService.btn(action, $event, control);
+  }
 
 }

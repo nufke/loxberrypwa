@@ -92,3 +92,16 @@ export interface Room {
   is_protected?: boolean,       // passwd/PIN protected control (optional)
   order?: number                // defines order in list box (optional)
 }
+
+export const ButtonAction = {
+  up: 'up',
+  down: 'down',
+  left: 'left',
+  right: 'right',
+  plus: 'plus',
+  minus: 'minus',
+  push: 'push',
+  toggle: 'toggle',
+  slider: 'slider',
+  change: 'change' // radio change
+};

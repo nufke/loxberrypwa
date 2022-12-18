@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TextView } from '../text/text.view';
+import { ViewBase } from '../view.base';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'control-pushbutton-view',
@@ -7,10 +8,10 @@ import { TextView } from '../text/text.view';
   styleUrls: ['./control-pushbutton.view.scss'],
 })
 export class ControlPushbuttonView
-  extends TextView {
+  extends ViewBase {
 
-  constructor() {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
 }

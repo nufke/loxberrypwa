@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { TextView } from '../text/text.view';
+import { ViewBase } from '../view.base';
 import { Subcontrol } from '../../interfaces/datamodel';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'control-irr-view',
@@ -8,12 +9,12 @@ import { Subcontrol } from '../../interfaces/datamodel';
   styleUrls: ['./control-irr.view.scss'],
 })
 export class ControlIRRView
-  extends TextView {
+  extends ViewBase {
 
   public segment: string = 'modes';
 
-  constructor() {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
   updateSegment() {

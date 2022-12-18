@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TextView } from '../text/text.view';
+import { ViewBase } from '../view.base';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'control-radio-view',
@@ -7,12 +8,12 @@ import { TextView } from '../text/text.view';
   styleUrls: ['./control-radio.view.scss'],
 })
 export class ControlRadioView
-  extends TextView {
+ extends ViewBase {
 
   public segment: string = 'moods';
 
-  constructor() {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
 }

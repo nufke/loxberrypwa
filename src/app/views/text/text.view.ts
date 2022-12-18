@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ViewBase } from '../view.base';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'app-text-view',
@@ -9,8 +10,8 @@ import { ViewBase } from '../view.base';
 export class TextView
   extends ViewBase {
 
-  constructor() {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
 }

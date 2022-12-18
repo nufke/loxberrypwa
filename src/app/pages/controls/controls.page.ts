@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { Control, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
-import { DetailedControlBase } from '../detailed-control/detailed-control.base';
+import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
+import { Control, Category, Room, ButtonAction } from '../../interfaces/datamodel';
 
 @Component({
   selector: 'app-controls',
@@ -12,8 +11,9 @@ import { DetailedControlBase } from '../detailed-control/detailed-control.base';
   styleUrls: ['controls.page.scss']
 })
 export class ControlsPage
-  extends DetailedControlBase
   implements OnInit, OnDestroy {
+
+  public btnAction = ButtonAction;
 
   public controls: Control[] = [];
   public categories: Category[] = [];
@@ -42,10 +42,8 @@ export class ControlsPage
   constructor(
     public loxBerryService: LoxBerryService,
     private route: ActivatedRoute,
-    public translate: TranslateService)
+    public controlService: ControlService)
   {
-    super(translate);
-
     this.domain = this.route.snapshot.paramMap.get('domain'); // room or category
     this.uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category
     this.hwid = this.route.snapshot.paramMap.get('hwid');     // hwid of room or category
@@ -123,4 +121,7 @@ export class ControlsPage
     return (this.filter(label).length > 0);
   }
 
+  public btn(action, $event, control) {
+    this.controlService.btn(action, $event, control)
+  }
 }

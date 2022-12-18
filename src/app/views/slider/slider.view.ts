@@ -1,20 +1,23 @@
 import { Component } from '@angular/core';
 import { ViewBase } from '../view.base';
 import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'app-slider-view',
   templateUrl: 'slider.view.html',
   styleUrls: ['./slider.view.scss'],
 })
-export class SliderView extends ViewBase {
+export class SliderView
+  extends ViewBase {
 
   public slider_value: number;
   public text: string;
 
   constructor(
-    public loxBerryService: LoxBerryService) {
-    super();
+    public loxBerryService: LoxBerryService,
+    public controlService: ControlService) {
+    super(controlService);
   }
 
   ngOnInit() {

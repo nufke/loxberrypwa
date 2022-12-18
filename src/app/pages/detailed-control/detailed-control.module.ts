@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { DetailedControlPage } from './detailed-control.page';
 import { DetailedControlPageRoutingModule } from './detailed-control-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { TextView } from '../../views/text/text.view';
+import { ViewBase } from '../../views/view.base';
 import { ViewsModule } from '../../views/views.module';
 
 @NgModule({
@@ -25,7 +25,7 @@ import { ViewsModule } from '../../views/views.module';
   providers: [
   ],
   entryComponents: [
-    TextView
+    ViewBase
   ]
 })
 export class DetailedControlPageModule {}

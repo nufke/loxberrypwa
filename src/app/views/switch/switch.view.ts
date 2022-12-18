@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ViewBase } from '../view.base';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'app-switch-view',
@@ -10,8 +11,8 @@ export class SwitchView
   extends ViewBase
   implements OnInit {
 
-  constructor() {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
   ngOnInit() {

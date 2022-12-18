@@ -1,28 +1,20 @@
 import { Component } from '@angular/core';
-import { TextView } from '../text/text.view';
-import { LoxBerryService } from '../../services/loxberry.service';
+import { ViewBase } from '../view.base';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'control-switch-view',
   templateUrl: 'control-switch.view.html',
   styleUrls: ['./control-switch.view.scss'],
 })
-export class ControlSwitchView extends TextView {
+export class ControlSwitchView
+  extends ViewBase {
 
-  constructor(
-    public loxBerryService: LoxBerryService) {
-    super();
+  constructor(public controlService: ControlService) {
+    super(controlService);
   }
 
   ngOnInit() {
   }
 
-  radioGroupChange(event) {
-    this.control.states.active = String(event.detail.value);
-    this.loxBerryService.sendMessage(this.control, event.detail.value);
-  }
-
-  to_string(i: Number) : string {
-    return String(i);
-  }
 }

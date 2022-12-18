@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TextView } from '../text/text.view';
-import { LoxBerryService } from '../../services/loxberry.service';
 import iro from "@jaames/iro";
+import { ViewBase } from '../view.base';
+import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'app-color-rgb-picker-view',
@@ -9,12 +10,13 @@ import iro from "@jaames/iro";
   styleUrls: ['./color-rgb-picker.view.scss'],
 })
 export class ColorRGBPickerView
-  extends TextView
+  extends ViewBase
   implements OnInit {
 
   constructor(
-    public loxBerryService: LoxBerryService) {
-    super();
+    public loxBerryService: LoxBerryService,
+    public controlService: ControlService) {
+    super(controlService);
   }
 
   ngOnInit() {
