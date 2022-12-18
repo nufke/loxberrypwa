@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewBase } from '../view.base';
 import { LoxBerryService } from '../../services/loxberry.service';
-import { ControlService } from '../../services/control.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-light-v2-view',
@@ -13,13 +13,13 @@ export class LightV2View
   implements OnInit {
 
   constructor(
-    public loxBerryService: LoxBerryService,
-    public controlService: ControlService) {
-    super(controlService);
+    public translate: TranslateService,
+    public loxBerryService: LoxBerryService) {
+    super(translate, loxBerryService);
   }
 
   ngOnInit() {
-    this.controlService.updateDisplay(this.control);
+    this.updateDisplay(this.control);
   }
 
   radioGroupChange(event) {

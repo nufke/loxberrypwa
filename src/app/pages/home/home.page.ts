@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
-import { ControlService } from '../../services/control.service';
+import { ControlsBase } from '../controls/controls.base';
 import { Control, Category, Room, ButtonAction } from '../../interfaces/datamodel';
 
 @Component({
@@ -11,6 +11,7 @@ import { Control, Category, Room, ButtonAction } from '../../interfaces/datamode
   styleUrls: ['home.page.scss']
 })
 export class HomePage
+  extends ControlsBase
   implements OnInit, OnDestroy {
 
   public btnAction = ButtonAction;
@@ -27,10 +28,11 @@ export class HomePage
   private roomsSub: Subscription;
 
   constructor(
-    public loxBerryService: LoxBerryService,
     public translate: TranslateService,
-    public controlService: ControlService)
+    public loxBerryService: LoxBerryService)
   {
+    super(translate, loxBerryService);
+
     this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
       this.controls = controls;
 
@@ -66,7 +68,7 @@ export class HomePage
   private updateControls(controls: Control[])
   {
     controls.forEach( item => {
-      this.controlService.updateDisplay(item);
+      this.updateDisplay(item);
     });
   }
 
@@ -74,10 +76,6 @@ export class HomePage
     let room = this.rooms.find( item => { return (item.uuid == room_uuid) } );
     let category = this.categories.find( item => { return (item.uuid == category_uuid) } );
     return room.name + " • " + category.name;
-  }
-
-  public btn(action, $event, control) {
-    this.controlService.btn(action, $event, control)
   }
 
 }

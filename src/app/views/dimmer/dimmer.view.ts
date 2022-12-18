@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewBase } from '../view.base';
 import { LoxBerryService } from '../../services/loxberry.service';
-import { ControlService } from '../../services/control.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dimmer-view',
@@ -17,9 +17,9 @@ implements OnInit {
   public step: number;
 
   constructor(
-    public loxBerryService: LoxBerryService,
-    public controlService: ControlService ) {
-    super(controlService);
+    public translate: TranslateService,
+    public loxBerryService: LoxBerryService) {
+    super(translate, loxBerryService);
 
     //TODO:, use the control min/max/step. It seems not all dimmers send the states !!!
     this.step = 1;  // Number(this.control.states.step);

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewBase } from '../view.base';
 import { Subcontrol } from '../../interfaces/datamodel';
-import { ControlService } from '../../services/control.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LoxBerryService } from '../../services/loxberry.service';
 
 @Component({
   selector: 'control-irr-view',
@@ -13,8 +14,10 @@ export class ControlIRRView
 
   public segment: string = 'modes';
 
-  constructor(public controlService: ControlService) {
-    super(controlService);
+  constructor(
+    public translate: TranslateService,
+    public loxBerryService: LoxBerryService) {
+    super(translate, loxBerryService);
   }
 
   updateSegment() {

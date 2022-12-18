@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewBase } from '../view.base';
-import { ControlService } from '../../services/control.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LoxBerryService } from '../../services/loxberry.service';
 
 @Component({
   selector: 'control-slider-view',
@@ -10,8 +11,10 @@ import { ControlService } from '../../services/control.service';
 export class ControlSliderView
   extends ViewBase{
 
-  constructor(public controlService: ControlService) {
-    super(controlService);
+  constructor(
+    public translate: TranslateService,
+    public loxBerryService: LoxBerryService) {
+    super(translate, loxBerryService);
   }
 
 }

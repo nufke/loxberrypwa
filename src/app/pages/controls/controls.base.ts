@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerryService } from './loxberry.service';
+import { LoxBerryService } from '../../services/loxberry.service';
 import * as moment from 'moment';
 
 var sprintf = require('sprintf-js').sprintf
 
-@Injectable({
-  providedIn: 'root'
+@Component({
+  selector: 'app-controls',
+  templateUrl: 'controls.page.html',
+  styleUrls: ['controls.page.scss']
 })
-export class ControlService {
+export class ControlsBase {
 
   public off_on = ['Off', 'On'];
   public radio_list: string[];

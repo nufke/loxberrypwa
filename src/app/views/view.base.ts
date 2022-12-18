@@ -1,12 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { ButtonAction } from '../interfaces/datamodel';
-import { ControlService } from '../services/control.service';
+import { ControlsBase } from '../pages/controls/controls.base';
+import { TranslateService } from '@ngx-translate/core';
+import { LoxBerryService } from '../services/loxberry.service';
 
 @Component({
   selector: 'view.base',
   template: '',
 })
-export class ViewBase {
+export class ViewBase
+  extends ControlsBase {
 
   @Input() control: any;
   @Input() category: any;
@@ -16,16 +19,10 @@ export class ViewBase {
 
   public btnAction = ButtonAction;
 
-  constructor(public controlService: ControlService) {
-  }
-
-  public updateDisplay(control: any) {
-    this.controlService.updateDisplay(control);
-  }
-
-  public btn(action, $event, control) {
-    console.log('btn');
-    this.controlService.btn(action, $event, control);
+  constructor(
+    public translate: TranslateService,
+    public loxBerryService: LoxBerryService) {
+    super(translate, loxBerryService);
   }
 
 }
