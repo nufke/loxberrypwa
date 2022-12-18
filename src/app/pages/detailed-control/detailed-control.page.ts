@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
 import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
 import { ViewBase } from '../../views/view.base';
@@ -51,7 +51,7 @@ export class DetailedControlPage
    }
 
    constructor(
-     public LoxBerryService: LoxBerry,
+     public loxBerryService: LoxBerryService,
      private route: ActivatedRoute,
      public translate: TranslateService
      )
@@ -64,18 +64,18 @@ export class DetailedControlPage
      const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
      const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
-     this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
+     this.controlsSub = this.loxBerryService.getControls().subscribe((controls: Control[]) => {
       this.control = controls.find( item => (item.hwid === control_hwid && item.uuid === control_uuid) );
 
       if (!(subcontrol_uuid && subcontrol_uuid_ext))
         this.control_name = this.control.name;
      });
 
-     this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
+     this.categoriesSub = this.loxBerryService.getCategories().subscribe((categories: Category[]) => {
        this.category = categories.find( item => item.uuid === this.control.category );
      });
 
-     this.roomsSub = this.LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
+     this.roomsSub = this.loxBerryService.getRooms().subscribe((rooms: Room[]) => {
        this.room = rooms.find( item => item.uuid === this.control.room );
      });
    }

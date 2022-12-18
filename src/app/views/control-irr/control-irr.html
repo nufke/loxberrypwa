@@ -1,0 +1,20 @@
+<ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
+    <ion-segment-button value="modes">
+        {{ 'Modes' | translate }}
+    </ion-segment-button>
+    <ion-segment-button value="timezones">
+        {{ 'Timezones' | translate }}
+    </ion-segment-button>
+</ion-segment>
+
+<ng-container *ngIf="segment === 'modes'">
+    <div class="row">
+        <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="segment === 'timezones'">
+    <div class="row">
+        <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
+    </div>
+</ng-container>

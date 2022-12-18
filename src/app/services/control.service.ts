@@ -1,16 +1,14 @@
-import { Component } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Category, Room } from '../../interfaces/datamodel'
-import { LoxBerryService } from '../../services/loxberry.service';
+import { LoxBerryService } from './loxberry.service';
 import * as moment from 'moment';
 
 var sprintf = require('sprintf-js').sprintf
 
-@Component({
-  selector: 'detailed-control.base',
-  template: '',
+@Injectable({
+  providedIn: 'root'
 })
-export class DetailedControlBase {
+export class ControlService {
 
   public btnAction = {
     up: 'up',
@@ -24,7 +22,6 @@ export class DetailedControlBase {
     slider: 'slider',
     change: 'change' // radio change
   };
-
 
   public off_on = ['Off', 'On'];
   public radio_list: string[];

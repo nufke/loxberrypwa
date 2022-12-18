@@ -3,14 +3,14 @@ import { TextView } from '../text/text.view';
 import { Subcontrol } from '../../interfaces/datamodel';
 
 @Component({
-  selector: 'control-light-v2-view',
-  templateUrl: 'control-light-v2.view.html',
-  styleUrls: ['./control-light-v2.view.scss'],
+  selector: 'control-irr-view',
+  templateUrl: 'control-irr.view.html',
+  styleUrls: ['./control-irr.view.scss'],
 })
-export class ControlLightV2View
+export class ControlIRRView
   extends TextView {
 
-  public segment: string = 'moods';
+  public segment: string = 'modes';
 
   constructor() {
     super();

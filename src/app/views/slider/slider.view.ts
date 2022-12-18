@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
 
 @Component({
   selector: 'app-slider-view',
@@ -15,9 +13,8 @@ export class SliderView extends ViewBase {
   public text: string;
 
   constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService) {
-    super(translate);
+    public loxBerryService: LoxBerryService) {
+    super();
   }
 
   ngOnInit() {
@@ -29,7 +26,7 @@ export class SliderView extends ViewBase {
     let new_value = String(this.slider_value);
     if (this.control.states.value != new_value) {
       this.control.states.value = new_value;
-      this.LoxBerryService.sendMessage(this.control, this.control.states.value);
+      this.loxBerryService.sendMessage(this.control, this.control.states.value);
     }
   }
 

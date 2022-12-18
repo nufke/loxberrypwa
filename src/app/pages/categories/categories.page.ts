@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { IonContent } from '@ionic/angular';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
 import { Control, Category } from '../../interfaces/datamodel'
 import { Subscription } from 'rxjs'
 
@@ -19,16 +19,16 @@ export class CategoriesPage implements OnInit, OnDestroy {
   private controlsSub: Subscription;
   private categoriesSub: Subscription;
 
-  constructor(public LoxBerryService: LoxBerry) {
+  constructor(public loxBerryService: LoxBerryService) {
 
-    this.controlsSub = this.LoxBerryService.getControls().subscribe((controls: Control[]) => {
+    this.controlsSub = this.loxBerryService.getControls().subscribe((controls: Control[]) => {
 
       this.filtered_categories = controls
         .map(item => item.category )
         .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
     });
 
-    this.categoriesSub = this.LoxBerryService.getCategories().subscribe((categories: Category[]) => {
+    this.categoriesSub = this.loxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories
         .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); }) // sort A-Z
         .filter( item => this.filtered_categories.indexOf(item.uuid) > -1)

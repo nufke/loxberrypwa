@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { TextView } from '../text/text.view';
-import { LoxBerry } from '../../providers/loxberry';
-import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel'
 
 @Component({
   selector: 'control-color-picker-v2.view',
@@ -17,10 +13,8 @@ export class ControlColorPickerV2View
   public segment: string = 'color';
   public mode_rgb: Boolean;
 
-  constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService) {
-    super(translate);
+  constructor() {
+    super();
 
     this.mode_rgb = true;
   }

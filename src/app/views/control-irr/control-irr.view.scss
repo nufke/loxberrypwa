@@ -1,0 +1,12 @@
+ion-segment-button {
+    --background-checked: var(--ion-toolbar-background);
+    //--color-checked: var(--ion-color-success-contrast);
+    --background: var(--ion-toolbar-background);
+    max-width: unset; // default was 360px, does not work for widescreen
+  }
+
+.row {
+  padding: 10px 10px 0px 10px; // top right bottm left
+  max-width: 500px;
+  margin: auto; // center horizontally
+}

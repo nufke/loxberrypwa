@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
 import { Control, Category, Room  } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
 import { DetailedControlBase } from '../detailed-control/detailed-control.base';
@@ -26,14 +26,14 @@ export class HomePage
   private roomsSub: Subscription;
 
   constructor(
-    public LoxBerryService: LoxBerry,
+    public loxBerryService: LoxBerryService,
     public translate: TranslateService)
   {
     super(translate);
 
     this.controls = [];
 
-    this.controlsSub = LoxBerryService.getControls().subscribe((controls: Control[]) => {
+    this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
       this.controls = controls;
 
       this.favorites = controls.filter(item => item.is_favorite)
@@ -42,11 +42,11 @@ export class HomePage
       this.updateControls(controls);
     });
 
-    this.categoriesSub = LoxBerryService.getCategories().subscribe((categories: Category[]) => {
+    this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories;
     });
 
-    this.roomsSub = LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
+    this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms;
     });
 

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'app-radio-view',
@@ -14,20 +13,20 @@ export class RadioView extends ViewBase {
   public list: string[];
 
   constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService) {
-    super(translate);
+    public loxBerryService: LoxBerryService,
+    private controlService: ControlService) {
+    super();
   }
 
   ngOnInit() {
-    this.updateDisplay(this.control);
+    this.controlService.updateDisplay(this.control);
   }
 
   radioGroupChange(event) {
     this.control.states.active_output = String(event.detail.value);
     let msg = String(event.detail.value);
     if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
-    this.LoxBerryService.sendMessage(this.control, msg);
+    this.loxBerryService.sendMessage(this.control, msg);
   }
 
   to_string(i: Number) : string {

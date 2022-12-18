@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
-import { LoxBerry } from '../../providers/loxberry';
 
 @Component({
   selector: 'app-switch-view',
@@ -13,10 +10,8 @@ export class SwitchView
   extends ViewBase
   implements OnInit {
 
-  constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService) {
-    super(translate);
+  constructor() {
+    super();
   }
 
   ngOnInit() {

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
 
 @Component({
   selector: 'app-dimmer-view',
@@ -18,9 +17,9 @@ implements OnInit {
   public step: number;
 
   constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService ) {
-    super(translate);
+    public loxBerryService: LoxBerryService,
+    public controlService: ControlService ) {
+    super();
 
     //TODO:, use the control min/max/step. It seems not all dimmers send the states !!!
     this.step = 1;  // Number(this.control.states.step);
@@ -29,7 +28,7 @@ implements OnInit {
   }
 
   ngOnInit() {
-    this.updateDisplay(this.control);
+    this.controlService.updateDisplay(this.control);
   }
 
   public subctrl_slider_change(control) {
@@ -38,7 +37,7 @@ implements OnInit {
     if (control.type === 'dimmer') {
       if (control.states.position != position) {
         control.states.position = position;
-        this.LoxBerryService.sendMessage(control, control.states.position);
+        this.loxBerryService.sendMessage(control, control.states.position);
       }
     }
 
@@ -46,7 +45,7 @@ implements OnInit {
       let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
        if (res[3] != position) {
         control.states.color = 'hsv(' + res[1] + ',' + res[2] + ',' + position + ')';
-        this.LoxBerryService.sendMessage(control, control.states.color);
+        this.loxBerryService.sendMessage(control, control.states.color);
       }
     }
   }
@@ -65,13 +64,13 @@ implements OnInit {
     if (control.type === 'dimmer') {
       control.display.value = new_val;
       control.states.position = String(new_val);
-      this.LoxBerryService.sendMessage(control, control.states.position);
+      this.loxBerryService.sendMessage(control, control.states.position);
     }
 
     if (control.type === 'color_picker_v2') {
       let res = control.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
       control.states.color = 'hsv(' + res[1] + ',' + res[2] + ',' + new_val + ')';
-      this.LoxBerryService.sendMessage(control, control.states.color);
+      this.loxBerryService.sendMessage(control, control.states.color);
     }
   }
 

@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { TextView } from '../text/text.view';
-import { LoxBerry } from '../../providers/loxberry';
-import { Control, Subcontrol, Category, Room } from '../../interfaces/datamodel'
+import { LoxBerryService } from '../../services/loxberry.service';
 import iro from "@jaames/iro";
 
 @Component({
@@ -16,9 +13,8 @@ export class ColorRGBPickerView
   implements OnInit {
 
   constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService) {
-    super(translate);
+    public loxBerryService: LoxBerryService) {
+    super();
   }
 
   ngOnInit() {
@@ -39,7 +35,7 @@ export class ColorRGBPickerView
   updateColor(color) {
     let v = this.control.display.value;
     this.control.states.color = 'hsv(' + Math.round(color.hsv.h) + ',' + Math.round(color.hsv.s) + ',' + v + ')';
-    this.LoxBerryService.sendMessage(this.control, this.control.states.color);
+    this.loxBerryService.sendMessage(this.control, this.control.states.color);
   }
 
 }

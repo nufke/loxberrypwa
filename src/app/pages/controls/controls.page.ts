@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
 import { Control, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
 import { DetailedControlBase } from '../detailed-control/detailed-control.base';
@@ -40,7 +40,7 @@ export class ControlsPage
   private roomsSub: Subscription;
 
   constructor(
-    public LoxBerryService: LoxBerry,
+    public loxBerryService: LoxBerryService,
     private route: ActivatedRoute,
     public translate: TranslateService)
   {
@@ -56,7 +56,7 @@ export class ControlsPage
     if (this.domain === 'room')
       this.key = 'category';
 
-    this.controlsSub = LoxBerryService.getControls().subscribe((controls: Control[]) => {
+    this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
       this.controls = controls
       .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) })
 
@@ -69,7 +69,7 @@ export class ControlsPage
         //.filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
     });
 
-    this.categoriesSub = LoxBerryService.getCategories().subscribe((categories: Category[]) => {
+    this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
       this.categories = categories
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_categories.indexOf(item.name) > -1);
@@ -84,7 +84,7 @@ export class ControlsPage
         this.labels = categories;
     });
 
-    this.roomsSub = LoxBerryService.getRooms().subscribe((rooms: Room[]) => {
+    this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
       this.rooms = rooms
       .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
       .filter( item => this.filtered_rooms.indexOf(item.name) > -1);

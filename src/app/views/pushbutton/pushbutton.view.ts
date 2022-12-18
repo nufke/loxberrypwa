@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
-import { LoxBerry } from '../../providers/loxberry';
+import { LoxBerryService } from '../../services/loxberry.service';
 
 @Component({
   selector: 'app-pushbutton-view',
@@ -12,13 +10,12 @@ import { LoxBerry } from '../../providers/loxberry';
 export class PushButtonView extends ViewBase {
 
   constructor(
-    public LoxBerryService: LoxBerry,
-    public translate: TranslateService) {
-    super(translate);
+    public loxBerryService: LoxBerryService) {
+    super();
   }
 
   pushed() {
-    this.LoxBerryService.sendMessage(this.control, 'pulse');
+    this.loxBerryService.sendMessage(this.control, 'pulse');
   }
 
 }

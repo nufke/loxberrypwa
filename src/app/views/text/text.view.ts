@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { ViewBase } from '../view.base';
-import { LoxBerry } from '../../providers/loxberry';
 
 @Component({
   selector: 'app-text-view',
@@ -12,8 +9,8 @@ import { LoxBerry } from '../../providers/loxberry';
 export class TextView
   extends ViewBase {
 
-  constructor(public translate: TranslateService) {
-    super(translate);
+  constructor() {
+    super();
   }
 
 }

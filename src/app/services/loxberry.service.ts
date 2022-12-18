@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { Control, Category, Room } from '../interfaces/datamodel'
 import { MqttTopics } from '../interfaces/mqtt.api'
-import { StorageService } from '../services/storage.service';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoxBerry {
+export class LoxBerryService {
 
   private MqttSubscription: Subscription[] = [];
 
@@ -43,7 +42,7 @@ export class LoxBerry {
     return this.roomsSubject.asObservable();
   }
 
-  constructor(private http: HttpClient,
+  constructor(
     private mqttService: MqttService,
     private storageService: StorageService)
   {
