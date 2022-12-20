@@ -10,6 +10,7 @@ import { ControlSliderView } from './control-slider/control-slider.view';
 import { ControlPushbuttonView } from './control-pushbutton/control-pushbutton.view';
 import { ControlLightV2View } from './control-light-v2/control-light-v2.view';
 import { ControlRadioView } from './control-radio/control-radio.view';
+import { ControlIRCView } from './control-irc/control-irc.view';
 import { TextView } from './text/text.view';
 import { SwitchView } from './switch/switch.view';
 import { SliderView } from './slider/slider.view';
@@ -38,6 +39,7 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     ControlLightV2View,
     ControlRadioView,
     ControlColorPickerV2View,
+    ControlIRCView,
     TextView,
     SwitchView,
     SliderView,
@@ -59,6 +61,7 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     ControlLightV2View,
     ControlRadioView,
     ControlColorPickerV2View,
+    ControlIRCView,
     TextView,
     SwitchView,
     SliderView,

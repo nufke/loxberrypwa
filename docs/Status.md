@@ -79,5 +79,6 @@ This page lists the development status of the controls and subcontrols.
 | push messages            | Not started            |
 | screensaver              | Not started            |
 | splashscreen             | Not started            |
+| statusbar                | Not started            |
 | voice control            | Not started            |
 | weather forecast         | Not started            |

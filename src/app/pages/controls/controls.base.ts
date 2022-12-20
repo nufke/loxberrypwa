@@ -145,7 +145,32 @@ export class ControlsBase {
         }
         break;
       case 'i_room_controller':
-        control.display.text = sprintf("%.1f", control.states.temp_actual);
+        let temp = sprintf("%.1f", control.states.temp_actual).split('.');
+        control.display.temp_base = temp[0];
+        control.display.temp_dec = temp[1];
+        let mode = [
+          'Automatic',
+          'Automatic (currently heating)',
+          'Automatic (currently cooling)',
+          'Automatic heating',
+          'Automatic cooling',
+          'Manual heating',
+          'Manual cooling']
+        control.display.name = mode[control.states.mode];
+        let temperature_id = [
+          'Economy',
+          'Comfort Heating',
+          'Comfort Cooling',
+          'Empty House',
+          'Heat Protection',
+          'Increased Heat',
+          'Party',
+          'Manual']
+          let subcontrols = Object.keys(control.subcontrols);
+          let id = control.subcontrols[subcontrols[0]].states.value;
+          control.display.text = temperature_id[id]; // TODO select heating or cooling period
+          if (id > 0) control.display.color = "#69c350"; // primary
+        break;
       default:
         // no status change
     }

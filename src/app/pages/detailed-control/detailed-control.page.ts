@@ -11,6 +11,7 @@ import { ControlSwitchView } from '../../views/control-switch/control-switch.vie
 import { ControlSliderView } from '../../views/control-slider/control-slider.view';
 import { ControlPushbuttonView } from '../../views/control-pushbutton/control-pushbutton.view';
 import { ControlColorPickerV2View } from '../../views/control-color-picker-v2/control-color-picker-v2.view';
+import { ControlIRCView } from '../../views/control-irc/control-irc.view';
 
 @Component({
   selector: 'app-detailed-control',
@@ -44,7 +45,8 @@ export class DetailedControlPage
      'switch': ControlSwitchView,
      'slider': ControlSliderView,
      'pushbutton': ControlPushbuttonView,
-     'color_picker_v2': ControlColorPickerV2View
+     'color_picker_v2': ControlColorPickerV2View,
+     'i_room_controller': ControlIRCView
    }
 
    constructor(

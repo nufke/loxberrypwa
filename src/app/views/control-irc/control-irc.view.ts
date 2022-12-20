@@ -5,11 +5,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
 
 @Component({
-  selector: 'control-irr-view',
-  templateUrl: 'control-irr.view.html',
-  styleUrls: ['./control-irr.view.scss'],
+  selector: 'control-irc-view',
+  templateUrl: 'control-irc.view.html',
+  styleUrls: ['./control-irc.view.scss'],
 })
-export class ControlIRRView
+export class ControlIRCView
   extends ViewBase {
 
   public segment: string = 'modes';

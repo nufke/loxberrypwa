@@ -19,6 +19,12 @@ ion-item {
   margin-left: 2px;
 }
 
+.text-svg {
+  height: 65px;
+  width: 32px;
+  fill: var(--ion-text-color, #ffffff);
+}
+
 ion-icon {
   font-size: 32px;
   height: 65px;

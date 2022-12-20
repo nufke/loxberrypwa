@@ -16,7 +16,16 @@
         <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
           <ion-card-header>
             <ion-item>
-              <ion-icon color="{{control.icon.color}}" src="{{control.icon.href}}"></ion-icon>
+              <ion-icon *ngIf="control.type !== 'i_room_controller'" color="{{control.icon.color}}"
+                src="{{control.icon.href}}"></ion-icon>
+
+              <svg *ngIf="control.type === 'i_room_controller'" class="text-svg" x="0px" y="0px" viewBox="0 0 50 50">
+                <text x="25" y="36" text-anchor="middle">
+                  <tspan style="font-size: 30px;">{{control.display.temp_base}}</tspan>
+                  <tspan style="font-size: 18px;">.{{control.display.temp_dec}}</tspan>
+                </text>
+              </svg>
+
               <ion-label></ion-label>
 
               <ng-container *ngIf="control.type === 'pushbutton'">
@@ -59,7 +68,8 @@
               </ng-container>
 
               <ng-container *ngIf="control.type === 'switch'">
-                <ion-toggle color="primary" mode="ios" [(ngModel)]="control.display.toggle" (click)="btn(btnAction.toggle, $event, control)">
+                <ion-toggle color="primary" mode="ios" [(ngModel)]="control.display.toggle"
+                  (click)="btn(btnAction.toggle, $event, control)">
                 </ion-toggle>
               </ng-container>
 
@@ -70,8 +80,10 @@
             <ion-item>
               <ion-label>
                 <p>{{get(control.room, control.category)}}</p>
-                <h1>{{control.name}}</h1>
-                <h2 style="color: {{control.display.color}};" *ngIf="control.display.text !== ''">{{control.display.text}}</h2>
+                <h1 *ngIf="control.type !== 'i_room_controller'">{{control.name}}</h1>
+                <h1 *ngIf="control.type === 'i_room_controller'">{{control.display.name | translate }}</h1>
+                <h2 style="color: {{control.display.color}};" *ngIf="control.display.text !== ''">
+                  {{control.display.text | translate}}</h2>
               </ion-label>
             </ion-item>
           </ion-card-content>
