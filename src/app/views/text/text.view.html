@@ -3,14 +3,12 @@
     <ion-item>
       <ion-icon *ngIf="control.type !== 'i_room_controller'" color="{{control.icon.color}}" src="{{control.icon.href}}">
       </ion-icon>
-
-      <svg *ngIf="control.type === 'i_room_controller'" class="text-svg" x="0px" y="0px" viewBox="0 0 50 50">
-        <text x="25" y="36" text-anchor="middle">
-          <tspan style="font-size: 30px;">{{control.display.temp_base}}</tspan>
-          <tspan style="font-size: 18px;">.{{control.display.temp_dec}}</tspan>
-        </text>
-      </svg>
-
+      <div *ngIf="control.type === 'i_room_controller'" class="text-icon">
+        <div>
+          <span style="font-size: 22px;">{{control.display.temp_base}}</span>
+          <span style="font-size: 14px;">{{control.display.temp_dec}}</span>
+        </div>
+      </div>
       <ion-label></ion-label>
     </ion-item>
   </ion-card-header>

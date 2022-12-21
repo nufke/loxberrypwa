@@ -14,7 +14,9 @@ ion-card-content {
   padding: 0px 0px 6px 0px;
 }
 
-.text-svg {
+.text-icon {
+  display: flex;
+  align-items: center;
   height: 65px;
   width: 32px;
   fill: var(--ion-text-color, #ffffff);

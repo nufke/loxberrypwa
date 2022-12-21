@@ -147,7 +147,7 @@ export class ControlsBase {
       case 'i_room_controller':
         let temp = sprintf("%.1f", control.states.temp_actual).split('.');
         control.display.temp_base = temp[0];
-        control.display.temp_dec = temp[1];
+        control.display.temp_dec = '.' + temp[1];
         let mode = [
           'Automatic',
           'Automatic (currently heating)',

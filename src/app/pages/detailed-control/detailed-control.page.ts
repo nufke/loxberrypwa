@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
 import { Control, Category, Room } from '../../interfaces/datamodel';
 import { Subscription } from 'rxjs';
@@ -51,7 +52,8 @@ export class DetailedControlPage
 
    constructor(
      public loxBerryService: LoxBerryService,
-     private route: ActivatedRoute)
+     private route: ActivatedRoute,
+     public translate: TranslateService)
    {
      const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
      const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
@@ -64,6 +66,9 @@ export class DetailedControlPage
 
       if (!(subcontrol_uuid && subcontrol_uuid_ext))
         this.control_name = this.control.name;
+
+      if (this.control.type === 'i_room_controller' && this.control.display.name)
+        this.control_name = this.translate.instant(this.control.display.name);
      });
 
      this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
