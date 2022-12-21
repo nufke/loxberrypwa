@@ -17,8 +17,6 @@ export class ViewBase
 
   @Input() name: string;
 
-  public btnAction = ButtonAction;
-
   constructor(
     public translate: TranslateService,
     public loxBerryService: LoxBerryService) {

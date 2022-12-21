@@ -15,7 +15,6 @@ import { TextView } from './text/text.view';
 import { SwitchView } from './switch/switch.view';
 import { SliderView } from './slider/slider.view';
 import { PushButtonView } from './pushbutton/pushbutton.view';
-import { LightV2View } from './light-v2/light-v2.view';
 import { RadioView } from './radio/radio.view';
 import { RadioSwitchView } from './radio-switch/radio-switch.view';
 import { DimmerView } from './dimmer/dimmer.view';
@@ -44,7 +43,6 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     SwitchView,
     SliderView,
     PushButtonView,
-    LightV2View,
     RadioView,
     RadioSwitchView,
     DimmerView,
@@ -66,7 +64,6 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     SwitchView,
     SliderView,
     PushButtonView,
-    LightV2View,
     RadioView,
     RadioSwitchView,
     DimmerView,

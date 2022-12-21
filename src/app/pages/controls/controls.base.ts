@@ -1,19 +1,54 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
+
 import * as moment from 'moment';
 
 var sprintf = require('sprintf-js').sprintf
 
 @Component({
-  selector: 'app-controls',
-  templateUrl: 'controls.page.html',
-  styleUrls: ['controls.page.scss']
+  selector: 'controls.base',
+  template: '',
 })
 export class ControlsBase {
 
+  public btnAction = {
+    up: 'up',
+    down: 'down',
+    left: 'left',
+    right: 'right',
+    plus: 'plus',
+    minus: 'minus',
+    push: 'push',
+    toggle: 'toggle',
+    slider: 'slider',
+    change: 'change' // radio change
+  };
+
   public off_on = ['Off', 'On'];
-  public radio_list: string[];
+  public radio_list: any[];
+  public radio_list_selected;
+
+  public irc_mode = [
+    { id: 0, name: 'Automatic' },
+    { id: 1, name: 'Automatic (currently heating)' },
+    { id: 2, name: 'Automatic (currently cooling)' },
+    { id: 3, name: 'Automatic heating' },
+    { id: 4, name: 'Automatic cooling' },
+    { id: 5, name: 'Manual heating' },
+    { id: 6, name: 'Manual cooling' }
+  ];
+
+  public irc_temperature_setting_id = [
+    { id: 0, name: 'Economy' },
+    { id: 1, name: 'Comfort Heating' },
+    { id: 2, name: 'Comfort Cooling' },
+    { id: 3, name: 'Empty House' },
+    { id: 4, name: 'Heat Protection' },
+    { id: 5, name: 'Increased Heat' },
+    { id: 6, name: 'Party' }
+   // { id: 7, name: 'Manual' } // TODO, should the user select this?
+  ];
 
   constructor(
     public translate: TranslateService,
@@ -121,20 +156,24 @@ export class ControlsBase {
         }
         break;
       case 'radio':
-        let val = Number(control.states.active_output);
-        this.radio_list = [control.details.all_off].concat(Object.values(control.details.outputs));
-        if (!val) val = 0;
-        if (val > 0) control.display.color = "#69c350"; // primary
-        if (this.radio_list) control.display.text = this.radio_list[val];
+        let selected = Number(control.states.active_output);
+        this.radio_list = Object.entries(control.details.outputs).map( entry => ({id: Number(entry[0]), name: entry[1]}) );
+        this.radio_list.push( { id: 0, name: control.details.all_off } );
+        if (!selected) selected = 0;
+        if (selected > 0) control.display.color = "#69c350"; // primary
+        if (this.radio_list) {
+          let idx = this.radio_list.findIndex( item => { return item.id == selected } );
+          control.display.text = this.radio_list[idx].name;
+        }
         break;
       case 'light_controller_v2':
         if (control.states.mood_list)
         {
           let id = control.states.active_moods[0];
-          let mood_list = control.states.mood_list;
+          this.radio_list = control.states.mood_list;
           if (id) {
-            let mood_idx = mood_list.findIndex( item => { return item.id == id } );
-            control.display.text = mood_list[mood_idx].name;
+            let mood_idx = this.radio_list.findIndex( item => { return item.id == id } );
+            control.display.text = this.radio_list[mood_idx].name;
           }
           else
             control.display.text = this.translate.instant('Manual');
@@ -148,28 +187,15 @@ export class ControlsBase {
         let temp = sprintf("%.1f", control.states.temp_actual).split('.');
         control.display.temp_base = temp[0];
         control.display.temp_dec = '.' + temp[1];
-        let mode = [
-          'Automatic',
-          'Automatic (currently heating)',
-          'Automatic (currently cooling)',
-          'Automatic heating',
-          'Automatic cooling',
-          'Manual heating',
-          'Manual cooling']
-        control.display.name = mode[control.states.mode];
-        let temperature_id = [
-          'Economy',
-          'Comfort Heating',
-          'Comfort Cooling',
-          'Empty House',
-          'Heat Protection',
-          'Increased Heat',
-          'Party',
-          'Manual']
-          let subcontrols = Object.keys(control.subcontrols);
-          let id = control.subcontrols[subcontrols[0]].states.value;
-          control.display.text = temperature_id[id]; // TODO select heating or cooling period
-          if (id > 0) control.display.color = "#69c350"; // primary
+        let idx = this.irc_mode.findIndex( item => { return item.id == control.states.mode } );
+        control.display.name = this.irc_mode[idx].name;
+
+        let subcontrols = Object.keys(control.subcontrols);
+        let state = control.subcontrols[subcontrols[0]].states.value;
+        let idxx = this.irc_temperature_setting_id.findIndex( item => { return item.id == state } );
+        control.display.text = this.irc_temperature_setting_id[idxx].name; // TODO select heating or cooling period
+        this.radio_list = this.irc_temperature_setting_id; // enable selection in detailed control view
+        if (idxx > 0) control.display.color = "#69c350"; // primary
         break;
       default:
         // no status change
@@ -195,7 +221,7 @@ export class ControlsBase {
         this.ctrl_pushbutton(action, $event, control);
         break;
       case 'slider':
-        this.ctrl_slider_updown(action, $event, control);
+        this.ctrl_slider(action, $event, control);
         break;
       case 'light_controller_v2':
         this.ctrl_light_v2(action, $event, control);
@@ -248,7 +274,7 @@ export class ControlsBase {
     }
   }
 
-  public ctrl_slider_updown(action, $event, control) {
+  public ctrl_slider(action, $event, control) {
     let val = Number(control.states.value);
     if (!val) val = 0;
     let step = Number(control.details.step);
@@ -260,7 +286,7 @@ export class ControlsBase {
     if (!step) step = 1;
 
     let new_val;
-    if (action === 'up') new_val = val + step;
+    if (action === 'plus') new_val = val + step;
     else new_val = val - step;
 
     if (new_val < min) new_val = min;

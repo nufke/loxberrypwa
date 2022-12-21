@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
 import { Subscription } from 'rxjs';
 import { ControlsBase } from './controls.base';
-import { Control, Category, Room, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Category, Room } from '../../interfaces/datamodel';
 
 @Component({
   selector: 'app-controls',
@@ -14,8 +14,6 @@ import { Control, Category, Room, ButtonAction } from '../../interfaces/datamode
 export class ControlsPage
   extends ControlsBase
   implements OnInit, OnDestroy {
-
-  public btnAction = ButtonAction;
 
   public controls: Control[] = [];
   public categories: Category[] = [];

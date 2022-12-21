@@ -17,12 +17,12 @@ import { ControlsPageRoutingModule } from './controls-routing.module';
     FormsModule,
     RouterModule.forChild([{ path: '', component: ControlsPage }]),
     ControlsPageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule
   ],
   declarations: [
     ControlsPage
   ],
   providers: [
-  ],
+  ]
 })
 export class ControlsPageModule {}

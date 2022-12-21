@@ -8,7 +8,7 @@ This App will interact with the LoxBerry [MQTT Gateway](https://wiki.loxberry.de
 
 The concept of a Progressive Web App is used to offer a light-weight development and deployment platform. Most operating systems available today offer the integration of a PWA on the start screen or direct installation as a web app. Obviously, the build flow could be extended to create a stand-alone app for mobile or desktop usage, but this is out-of-scope for this project.
 
-**NOTE: The current version is not production ready.**
+**NOTE: The current version is not production ready. Use it at your own risk.**
 
 ## Installation set-up
 
