@@ -24,8 +24,4 @@ export class ControlIRCView
     // Close any open sliding items when the schedule updates
   }
 
-  getSubcontrols() : Subcontrol[] {
-    if (this.control.subcontrols)
-      return Object.values(this.control.subcontrols);
-  }
 }

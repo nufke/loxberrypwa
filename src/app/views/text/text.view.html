@@ -17,9 +17,11 @@
       <ion-label>
         <p>{{room.name}} • {{category.name}}</p>
         <h1 *ngIf="control.type !== 'i_room_controller'">{{control.name}}</h1>
-        <h1 *ngIf="control.type === 'i_room_controller'">{{control.display.name | translate }}</h1>
+        <h1 *ngIf="control.type === 'i_room_controller'">{{control.display.name}}</h1>
         <h2 style="color: {{control.display.color}};" *ngIf="control.display.text !== ''">
-          {{control.display.text | translate}}</h2>
+          <span>{{control.display.text}}</span>
+          <span>{{control.display.text_temp}}</span>
+        </h2>
       </ion-label>
     </ion-item>
   </ion-card-content>

@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LoxBerryService } from '../../services/loxberry.service';
 
 import * as moment from 'moment';
+import { IonItem } from '@ionic/angular';
 
 var sprintf = require('sprintf-js').sprintf
 
@@ -24,31 +25,6 @@ export class ControlsBase {
     slider: 'slider',
     change: 'change' // radio change
   };
-
-  public off_on = ['Off', 'On'];
-  public radio_list: any[];
-  public radio_list_selected;
-
-  public irc_mode = [
-    { id: 0, name: 'Automatic' },
-    { id: 1, name: 'Automatic (currently heating)' },
-    { id: 2, name: 'Automatic (currently cooling)' },
-    { id: 3, name: 'Automatic heating' },
-    { id: 4, name: 'Automatic cooling' },
-    { id: 5, name: 'Manual heating' },
-    { id: 6, name: 'Manual cooling' }
-  ];
-
-  public irc_temperature_setting_id = [
-    { id: 0, name: 'Economy' },
-    { id: 1, name: 'Comfort Heating' },
-    { id: 2, name: 'Comfort Cooling' },
-    { id: 3, name: 'Empty House' },
-    { id: 4, name: 'Heat Protection' },
-    { id: 5, name: 'Increased Heat' },
-    { id: 6, name: 'Party' }
-   // { id: 7, name: 'Manual' } // TODO, should the user select this?
-  ];
 
   constructor(
     public translate: TranslateService,
@@ -157,23 +133,23 @@ export class ControlsBase {
         break;
       case 'radio':
         let selected = Number(control.states.active_output);
-        this.radio_list = Object.entries(control.details.outputs).map( entry => ({id: Number(entry[0]), name: entry[1]}) );
-        this.radio_list.push( { id: 0, name: control.details.all_off } );
+        control.display.radio_list = Object.entries(control.details.outputs).map( entry => ({id: Number(entry[0]), name: entry[1]}) );
+        control.display.radio_list.push( { id: 0, name: control.details.all_off } );
         if (!selected) selected = 0;
         if (selected > 0) control.display.color = "#69c350"; // primary
-        if (this.radio_list) {
-          let idx = this.radio_list.findIndex( item => { return item.id == selected } );
-          control.display.text = this.radio_list[idx].name;
+        if (control.display.radio_list) {
+          let idx = control.display.radio_list.findIndex( item => { return item.id == selected } );
+          control.display.text = control.display.radio_list[idx].name;
         }
         break;
       case 'light_controller_v2':
         if (control.states.mood_list)
         {
           let id = control.states.active_moods[0];
-          this.radio_list = control.states.mood_list;
+          control.display.radio_list = control.states.mood_list;
           if (id) {
-            let mood_idx = this.radio_list.findIndex( item => { return item.id == id } );
-            control.display.text = this.radio_list[mood_idx].name;
+            let mood_idx = control.display.radio_list.findIndex( item => { return item.id == id } );
+            control.display.text = control.display.radio_list[mood_idx].name;
           }
           else
             control.display.text = this.translate.instant('Manual');
@@ -187,15 +163,63 @@ export class ControlsBase {
         let temp = sprintf("%.1f", control.states.temp_actual).split('.');
         control.display.temp_base = temp[0];
         control.display.temp_dec = '.' + temp[1];
-        let idx = this.irc_mode.findIndex( item => { return item.id == control.states.mode } );
-        control.display.name = this.irc_mode[idx].name;
+
+        let irc_mode = [
+          { id: 0, name: 'Automatic' },
+          { id: 1, name: 'Automatic (currently heating)' },
+          { id: 2, name: 'Automatic (currently cooling)' },
+          { id: 3, name: 'Automatic heating' },
+          { id: 4, name: 'Automatic cooling' },
+          { id: 5, name: 'Manual heating' },
+          { id: 6, name: 'Manual cooling' }
+        ];
+
+        let idx = irc_mode.findIndex( item => { return item.id == control.states.mode } );
+        control.display.name = this.translate.instant(irc_mode[idx].name);
 
         let subcontrols = Object.keys(control.subcontrols);
         let state = control.subcontrols[subcontrols[0]].states.value;
-        let idxx = this.irc_temperature_setting_id.findIndex( item => { return item.id == state } );
-        control.display.text = this.irc_temperature_setting_id[idxx].name; // TODO select heating or cooling period
-        this.radio_list = this.irc_temperature_setting_id; // enable selection in detailed control view
+
+        let heat_or_cool = 1; // TODO default: heating?
+        let mode = control.states.mode;
+        if (mode)
+          heat_or_cool = ((mode == 1) || (mode == 3) || (mode == 5)) ? 1 : 2;
+
+        if (!control.display.radio_list) {
+          if (heat_or_cool == 1) // heating
+            control.display.radio_list = [
+              { id: 0, name: 'Economy' },
+              { id: 1, name: 'Comfort Heating'},
+              { id: 3, name: 'Empty House' },
+              { id: 4, name: 'Heat Protection' },
+              { id: 5, name: 'Increased Heat' },
+              { id: 6, name: 'Party' }
+            ];
+          if (heat_or_cool == 2) // cooling
+            control.display.radio_list = [
+              { id: 0, name: 'Economy' },
+              { id: 2, name: 'Comfort Cooling' },
+              { id: 3, name: 'Empty House' },
+              { id: 4, name: 'Heat Protection'},
+              { id: 5, name: 'Increased Heat' },
+              { id: 6, name: 'Party' }
+            ];
+        }
+        control.display.radio_list.forEach( item => {
+          let sign = (item.id == 5) ? 1 : -1; // sign for increased heat
+          if (control.details.temperatures[item.id].isAbsolute)
+            item.temp = control.states.temperatures[item.id];
+          else
+            item.temp = Number(control.states.temperatures[heat_or_cool]) + sign * Number(control.states.temperatures[item.id]);
+          item.temp = ' (' + item.temp + '°C)';
+          item.name = this.translate.instant(item.name); // translate
+        });
+
+        let idxx = control.display.radio_list.findIndex( item => { return item.id == state } );
+        control.display.text = this.translate.instant(control.display.radio_list[idxx].name);
+        control.display.text_temp = control.display.radio_list[idxx].temp;
         if (idxx > 0) control.display.color = "#69c350"; // primary
+
         break;
       default:
         // no status change
@@ -203,7 +227,6 @@ export class ControlsBase {
     if (control.subcontrols && Object.keys(control.subcontrols).length > 0)
       Object.values(control.subcontrols).forEach( subcontrol => this.updateDisplay(subcontrol))
 
-    return control;
   }
 
   public btn(action, $event, control) {

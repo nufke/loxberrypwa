@@ -21,29 +21,22 @@ export class RadioView
     this.updateDisplay(this.control);
   }
 
-  // add extra text for IRC
-  extraText(control, item) {
-    if (control.type === 'i_room_controller') {
-      return ''; //TODO
-    }
-  }
-
   // TODO: move button control to central controller
   radioGroupChange(control, event) {
 
     if (control.type === 'radio') {
-      let idx = this.radio_list.findIndex( item => item.name === event.detail.value);
-      control.states.active_output = String(this.radio_list[idx].id);
+      let idx = control.display.radio_list.findIndex( item => item.name === event.detail.value);
+      control.states.active_output = String(control.display.radio_list[idx].id);
       let msg = control.states.active_output
       if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
       this.loxBerryService.sendMessage(control, msg);
     }
 
     if (control.type === 'light_controller_v2') {
-      let idx = this.radio_list.findIndex( item => item.name === event.detail.value);
+      let idx = control.display.radio_list.findIndex( item => item.name === event.detail.value);
       control.states.value = event.detail.value;
       if (idx >= 0) { // exists
-        this.loxBerryService.sendMessage(control, 'changeTo/' + String(this.radio_list[idx].id));
+        this.loxBerryService.sendMessage(control, 'changeTo/' + String(control.display.radio_list[idx].id));
       }
     }
 

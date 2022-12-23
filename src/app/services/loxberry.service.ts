@@ -229,7 +229,7 @@ export class LoxBerryService {
       if (name + '/' + key === topic) {
           if (this.isValidJSONObject(value)) {
             obj[key] = JSON.parse(value);
-            //console.log('update key/value (json):', name + '/' + key, value);
+            //console.log('update key/value (json):', name + '/' + key, obj[key]);
           }
           else {
             obj[key] = value;

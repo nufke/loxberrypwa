@@ -1,9 +1,12 @@
 <ion-radio-group value="{{control.display.text}}" (ionChange)="radioGroupChange(control, $event)">
-  <div *ngFor="let item of radio_list">
-    <div class="selected-{{control.display.text==item.name}}">
+  <div *ngFor="let item of control.display.radio_list">
+    <div *ngIf="item.name!=''" class="selected-{{control.display.text==item.name}}">
       <ion-item class="radio-item">
         <ion-label>
-          <h3>{{item.name | translate}}{{extraText(control, item)}}</h3>
+          <h3>
+            <span>{{item.name}}</span>
+            <span *ngIf="item.temp!=''">{{item.temp}}</span>
+          </h3>
         </ion-label>
         <ion-radio value="{{item.name}}"></ion-radio>
       </ion-item>
