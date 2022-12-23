@@ -13,6 +13,8 @@ var sprintf = require('sprintf-js').sprintf
 })
 export class ControlsBase {
 
+  public off_on = ['Off', 'On'];
+
   public btnAction = {
     up: 'up',
     down: 'down',
