@@ -101,9 +101,15 @@ export class ControlSwitchView
   }
 
   radioChange(vm: VM, $event) {
-    console.log('radioChange', $event);
     $event.preventDefault();
     $event.stopPropagation();
+    let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);
+    if (idx) {
+      this.controlService.updateControl(vm.control, 'On');
+    }
+    else {
+      this.controlService.updateControl(vm.control, 'Off');
+    }
   }
 
 }

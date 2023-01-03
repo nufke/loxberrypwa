@@ -2,7 +2,7 @@
   <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
     <ion-card-content class="card-content">
       <ion-item>
-        <ion-icon class="icon" color="{{control.icon.color}}" src="{{control.icon.href}}"></ion-icon>
+        <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
         <ion-label class="label label-listitem">
           <h1>{{vm.control.name}}</h1>
           <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
