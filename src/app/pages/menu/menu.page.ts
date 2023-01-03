@@ -61,7 +61,7 @@ export class MenuPage implements OnInit {
 
   onToggleDarkTheme() {
     document.body.classList.toggle('dark', this.darkTheme);
-    console.log("darkTheme: ", this.darkTheme);
+    //console.log("darkTheme: ", this.darkTheme);
     this.storageService.store( { appDarkTheme: this.darkTheme } );
   }
 
