@@ -1,5 +1,6 @@
 {
     "About": "Über",
+    "Active": "Aktiv",
     "Address": "Addresse",
     "All": "Alle",
     "Automatic": "Automatic",
@@ -23,6 +24,7 @@
     "Home": "Home",
     "Heat Protection": "Hitzeschutztemperatur",
     "Increased Heat": "Erhöhter Wärmebedarf",
+    "Inactive": "Inaktiv",
     "Language": "Sprache",
     "Lightzones": "Lichtkreise",
     "Manual": "Manuell",

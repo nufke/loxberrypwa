@@ -1,8 +1,30 @@
-import { Component } from '@angular/core';
-import { ViewBase } from '../view.base';
-import { Subcontrol } from '../../interfaces/datamodel';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
+import { Control, Subcontrol, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerryService } from '../../services/loxberry.service';
+import { ControlService } from '../../services/control.service';
+
+interface RadioListItem {
+  id: number;
+  name: string;
+}
+
+interface LightVM {
+  control: Control;
+  ui: {
+    name: string;
+    room: string;
+    category: string;
+    radio_list: RadioListItem[];
+    selected_id: number;
+    status: {
+      text: string;
+      color: string;
+    }
+  }
+  subcontrols?: Subcontrol[];
+}
 
 @Component({
   selector: 'control-light-v2-view',
@@ -10,22 +32,105 @@ import { LoxBerryService } from '../../services/loxberry.service';
   styleUrls: ['./control-light-v2.view.scss'],
 })
 export class ControlLightV2View
-  extends ViewBase {
+  implements OnInit {
 
-  public segment: string = 'moods';
+  @Input() control: Control;
+  @Input() view: View;
+
+  buttonType = ButtonAction;
+  viewType = View;
+
+  vm$: Observable<LightVM>;
+  segment: string = 'moods';
 
   constructor(
     public translate: TranslateService,
-    public loxBerryService: LoxBerryService) {
-    super(translate, loxBerryService);
+    public controlService: ControlService) {
+  }
+
+  ngOnInit() {
+    this.initVM();
+  }
+
+  private initVM(): void {
+    if (this.control == undefined) {
+      console.error('Component \'control-light-v2\' not available for rendering.');
+      return;
+    }
+
+    this.vm$ = combineLatest([
+      this.controlService.getControl(this.control.hwid, this.control.uuid),
+      this.controlService.categories$,
+      this.controlService.rooms$,
+    ]).pipe(
+      map(([control, categories, rooms]) => {
+        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+
+        let selected_id = control.states.active_moods[0];
+        let mood_list = control.states.mood_list; // TODO only load once?
+        let text = '';
+
+        if (mood_list) {
+          if (selected_id) {
+            let mood_idx = mood_list.findIndex(item => { return item.id == selected_id });
+            text = mood_list[mood_idx].name;
+          }
+          else
+            text = this.translate.instant('Manual');
+        }
+
+        let allSubcontrols: Subcontrol[] = Object.values(control.subcontrols);
+        let visibleSubcontrols = allSubcontrols.filter( subcontrol => subcontrol.is_visible );
+
+        const vm: LightVM = {
+          control: {
+            ...control,
+            icon: {
+              href: control.icon.href,
+              color: (selected_id != 778) ? "primary" : "#9d9e9e" }
+            }, // TODO select from color palette
+          ui: {
+            name: control.name,
+            room: (room && room.name) ? room.name : "unknown",
+            category: (category && category.name) ? category.name : "unknown",
+            radio_list: mood_list,
+            selected_id: selected_id,
+            status: {
+              text: text,
+              color: (selected_id != 778) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+            }
+          },
+          subcontrols: visibleSubcontrols,
+        };
+        return vm;
+      })
+    );
   }
 
   updateSegment() {
     // Close any open sliding items when the schedule updates
   }
 
-  getSubcontrols() : Subcontrol[] {
-    if (this.control.subcontrols)
-      return Object.values(this.control.subcontrols);
+  clickLightButton(action: ButtonAction, vm: LightVM, $event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    let id = this.control.states.active_moods[0];
+    let mood_idx;
+    let mood_list = this.control.states.mood_list;
+
+    let max = vm.ui.radio_list.length - 1;
+
+    if (vm.ui.selected_id && vm.ui.radio_list) {
+      mood_idx = vm.ui.radio_list.findIndex(item => { return item.id == vm.ui.selected_id });
+      mood_idx++;
+      if (mood_idx > max) mood_idx = 0;
+    }
+    else {
+      mood_idx = 0;
+    }
+    this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
   }
+
 }

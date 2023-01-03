@@ -20,7 +20,7 @@ This page lists the development status of the controls and subcontrols.
 | climate_controller_u_s   | Not started       |
 | color_picker             | Not started       |
 | color_picker_v2          | Under development |
-| daytimer                 | Not started       |
+| daytimer                 | Under development |
 | dimmer                   | Available         |
 | energy_manager           | Not started       |
 | fronius                  | Not started       |
@@ -79,6 +79,8 @@ This page lists the development status of the controls and subcontrols.
 | push messages            | Not started            |
 | screensaver              | Not started            |
 | splashscreen             | Not started            |
+| statistics / history     | Not started            |
 | statusbar                | Not started            |
+| systemessages            | Not started            |
 | voice control            | Not started            |
 | weather forecast         | Not started            |

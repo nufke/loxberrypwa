@@ -1,5 +1,6 @@
 {
     "About": "About",
+    "Active": "Active",
     "Address": "Address",
     "All": "All",
     "Automatic": "Automatic",
@@ -22,6 +23,7 @@
     "Favorites": "Favorites",
     "Home": "Home",
     "Heat Protection": "Heat protection",
+    "Inactive": "Inactive",
     "Increased Heat": "Increased heat",
     "Language": "Language",
     "Lightzones": "Light Circuits",

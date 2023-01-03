@@ -1,5 +1,6 @@
 {
     "About": "Over",
+    "Active": "Actief",
     "Address": "Adres",
     "All": "Alle",
     "Automatic": "Automatic",
@@ -22,6 +23,7 @@
     "Favorites": "Favorieten",
     "Home": "Home",
     "Heat Protection": "Hitte beschermingstemperatuur",
+    "Inactive": "Inactief",
     "Increased Heat": "Verhoogde warmte vraag",
     "Language": "Taal",
     "Lightzones": "Lichtkringen",

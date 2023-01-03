@@ -1,0 +1,25 @@
+<ion-card class="card">
+  <ion-card-header class="card-header">
+    <ion-item class="item">
+      <ion-icon class="icon" *ngIf="vm.ui.icon == undefined" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
+      <div *ngIf="vm.ui.icon" class="text-icon">
+        <div>
+          <span style="font-size: 22px;">{{vm.ui.icon.temp_base}}</span>
+          <span style="font-size: 14px;">{{vm.ui.icon.temp_dec}}</span>
+        </div>
+      </div>
+      <ion-label></ion-label>
+    </ion-item>
+  </ion-card-header>
+  <ion-card-content class="card-content">
+    <ion-item class="item">
+      <ion-label class="label">
+        <p>{{vm.ui.room}} • {{vm.ui.category}}</p>
+        <h1>{{vm.ui.name}}</h1>
+        <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
+          {{vm.ui.status.text | translate}}
+        </h2>
+      </ion-label>
+    </ion-item>
+  </ion-card-content>
+</ion-card>

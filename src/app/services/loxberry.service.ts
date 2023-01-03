@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
+import { map } from "rxjs/operators";
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
+import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 import { Control, Category, Room } from '../interfaces/datamodel'
 import { MqttTopics } from '../interfaces/mqtt.api'
 import { StorageService } from './storage.service';
+import { DataService } from './data.service';
+
+var sprintf = require('sprintf-js').sprintf;
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +17,6 @@ import { StorageService } from './storage.service';
 export class LoxBerryService {
 
   private MqttSubscription: Subscription[] = [];
-
-  private controlsSubject: BehaviorSubject<Control[]> = new BehaviorSubject([]);
-  private categoriesSubject: BehaviorSubject<Category[]> = new BehaviorSubject([]);
-  private roomsSubject: BehaviorSubject<Room[]> = new BehaviorSubject([]);
-
-  private Structure: any = {};
 
   private mqtt_lox2app: any = {};
   private mqtt_topic_list: string[] = [];
@@ -30,26 +30,12 @@ export class LoxBerryService {
   private loxberryMqttConnected: boolean = false;
   private loxberryMqttAppTopic: string = '';
 
-  public getControls() {
-    return this.controlsSubject.asObservable();
-  }
-
-  public getCategories() {
-    return this.categoriesSubject.asObservable();
-  }
-
-  public getRooms() {
-    return this.roomsSubject.asObservable();
-  }
-
   constructor(
     private mqttService: MqttService,
-    private storageService: StorageService)
+    public translate: TranslateService,
+    private storageService: StorageService,
+    private dataService: DataService)
   {
-    this.Structure.controls = {};
-    this.Structure.categories = {};
-    this.Structure.rooms = {};
-
     this.storageService.getSettings().subscribe( settings => {
       if (settings) {
         this.loxberryMqttIP = settings.loxberryMqttIP;
@@ -95,21 +81,10 @@ export class LoxBerryService {
       .subscribe((message: IMqttMessage) => {
         let msg = message.payload.toString();
         if (msg.length == 0 )
-          this.flushData();
+          this.dataService.flushControls();
         else
           this.ProcessStructure(JSON.parse(msg));
     }));
-  }
-
-  private flushData() {
-    console.log("flush structure...");
-    this.Structure.controls = {};
-    this.Structure.categories = {};
-    this.Structure.rooms = {};
-
-    this.controlsSubject.next(Object.values(this.Structure.controls));
-    this.categoriesSubject.next(Object.values(this.Structure.categories));
-    this.roomsSubject.next(Object.values(this.Structure.rooms));
   }
 
   private processControl(control: any, name: string) {
@@ -154,22 +129,19 @@ export class LoxBerryService {
     Object.keys(obj.controls).forEach( key => {
       let control = this.addDisplayFields(obj.controls[key]); // TODO move elsewhere
       let name = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid;
-      this.Structure.controls[key] = this.processControl(control, name); // Override full object in array
+      this.dataService.addControl(this.processControl(control, name)); // Override full object in array
     });
 
     Object.keys(obj.categories).forEach( key => {
       let category = obj.categories[key];
-      this.Structure.categories[key] = category; // Override full object in array
+      this.dataService.addCategory(category); // Override full object in array
     });
 
     Object.keys(obj.rooms).forEach( key => {
       let room = obj.rooms[key];
-      this.Structure.rooms[key] = room; // Override full object in array
+      this.dataService.addRoom(room); // Override full object in array
     });
 
-    this.controlsSubject.next(Object.values(this.Structure.controls));
-    this.categoriesSubject.next(Object.values(this.Structure.categories));
-    this.roomsSubject.next(Object.values(this.Structure.rooms));
     this.registerTopics();
   }
 
@@ -177,7 +149,7 @@ export class LoxBerryService {
     MqttTopics.forEach( (element) => {
       let full_topic_name = this.loxberryMqttAppTopic + '/+/+' + element;
       if (this.registered_topics.includes(full_topic_name)) {
-        console.log("topic already exists and ignored:", full_topic_name );
+        //console.log("topic already exists and ignored:", full_topic_name );
         return;
       }
       console.log("register topic name:", full_topic_name );
@@ -203,63 +175,17 @@ export class LoxBerryService {
   private processTopic(topic_in: any, value_in: any) {
     if (!topic_in) return;
     let topic = topic_in.replace(this.loxberryMqttAppTopic + '/', '');
-    let topic_level = topic.split('/');
     let value = value_in.toString();
-    let id = topic_level[0] + '/' + topic_level[1];
     //console.log('process topic:', topic_in, value);
-
-    if (this.Structure.controls[id]) {
-      this.updateTopic(this.Structure.controls[id], id, topic, value);
-      this.controlsSubject.next(Object.values(this.Structure.controls));
-    }
-
-    if (this.Structure.categories[id]) {
-      this.updateTopic(this.Structure.categories[id], id, topic, value);
-      this.controlsSubject.next(Object.values(this.Structure.categories));
-    }
-    if (this.Structure.rooms[id]) {
-      this.updateTopic(this.Structure.rooms[id], id, topic, value);
-      this.controlsSubject.next(Object.values(this.Structure.rooms)); // updates for Subscribers
-    }
+    this.dataService.updateElement(topic, value);
   }
 
-
-  private updateTopic(obj, name, topic, value) {
-    Object.keys(obj).forEach(key => {
-      if (name + '/' + key === topic) {
-          if (this.isValidJSONObject(value)) {
-            obj[key] = JSON.parse(value);
-            //console.log('update key/value (json):', name + '/' + key, obj[key]);
-          }
-          else {
-            obj[key] = value;
-            //console.log('update key/value:', name + '/' + key, value);
-          }
-          return;
-       }
-       else
-          if (typeof obj[key] === 'object' && obj[key] !== null)
-             this.updateTopic(obj[key], name + '/' + key, topic, value);
-    });
-  }
-
-  private isValidJSONObject(str: string) {
-    let obj;
-    try {
-      obj = JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    if (typeof obj === 'object') return true;
-    else false;
-  }
-
-  public unload() : void {
+  unload() : void {
     console.log('unsubscribe topics..');
     this.MqttSubscription.forEach( (item) => { item.unsubscribe(); } );
   }
 
-  public sendMessage(obj: any, value: string) {
+  sendMessage(obj: any, value: string) {
     let topic = obj.mqtt_cmd;
 
     if (!topic) {

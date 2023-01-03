@@ -1,9 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { ControlsBase } from '../controls/controls.base';
-import { Control, Category, Room, ButtonAction } from '../../interfaces/datamodel';
+import { ControlService } from '../../services/control.service';
+import { Control, Category, Room, View } from '../../interfaces/datamodel';
+
+interface VM {
+  controls: Control[]
+}
 
 @Component({
   selector: 'app-home',
@@ -11,71 +15,37 @@ import { Control, Category, Room, ButtonAction } from '../../interfaces/datamode
   styleUrls: ['home.page.scss']
 })
 export class HomePage
-  extends ControlsBase
-  implements OnInit, OnDestroy {
+  implements OnInit {
 
-  public btnAction = ButtonAction;
-
-  public controls: Control[] = [];
-  public categories: Category[] = [];
-  public rooms: Room[] = [];
-
-  public favorites: Control[];
-  public user: string;
-
-  private controlsSub: Subscription;
-  private categoriesSub: Subscription;
-  private roomsSub: Subscription;
+  viewType = View;
+  public vm$: Observable<VM>;
 
   constructor(
     public translate: TranslateService,
-    public loxBerryService: LoxBerryService)
+    private controlService: ControlService)
   {
-    super(translate, loxBerryService);
-
-    this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
-      this.controls = controls;
-
-      this.favorites = controls.filter(item => item.is_favorite)
-        .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) })
-
-      this.updateControls(controls);
-    });
-
-    this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
-      this.categories = categories;
-    });
-
-    this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
-      this.rooms = rooms;
-    });
+    this.initVM();
   }
 
-  public ngOnInit() : void {
+  private initVM() : void {
+    this.vm$ = combineLatest([
+      this.controlService.controls$,
+      this.controlService.categories$,
+      this.controlService.rooms$,
+      ]).pipe(
+      map( ([controls, categories, rooms]) => {
+        controls = controls
+        .filter( control => control.is_favorite && control.is_visible )
+        .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+        const vm: VM = {
+          controls: controls
+        };
+        return vm;
+      })
+    );
   }
 
-  public ngOnDestroy() : void {
-    if (this.controlsSub)
-      this.controlsSub.unsubscribe();
-
-    if (this.categoriesSub)
-      this.categoriesSub.unsubscribe();
-
-    if (this.roomsSub)
-      this.roomsSub.unsubscribe();
-  }
-
-  private updateControls(controls: Control[])
-  {
-    controls.forEach( item => {
-      this.updateDisplay(item);
-    });
-  }
-
-  public get(room_uuid: string, category_uuid: string): string {
-    let room = this.rooms.find( item => { return (item.uuid == room_uuid) } );
-    let category = this.categories.find( item => { return (item.uuid == category_uuid) } );
-    return room.name + " • " + category.name;
+  ngOnInit() : void {
   }
 
 }

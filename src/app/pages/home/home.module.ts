@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
+import { ViewsModule } from '../../views/views.module';
 
 @NgModule({
   imports: [
@@ -12,12 +13,14 @@ import { HomePageRoutingModule } from './home-routing.module';
     CommonModule,
     FormsModule,
     HomePageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    ViewsModule
   ],
   declarations: [
     HomePage
   ],
   providers: [
+
   ],
 })
 export class HomePageModule {}

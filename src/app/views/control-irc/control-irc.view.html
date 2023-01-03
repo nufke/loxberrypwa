@@ -1,23 +1,81 @@
-<ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
-    <ion-segment-button value="modes">
-        {{ 'Modes' | translate }}
-    </ion-segment-button>
-    <ion-segment-button value="timezones">
-        {{ 'Manual' | translate }}
-    </ion-segment-button>
-</ion-segment>
-
-<ng-container *ngIf="segment === 'modes'">
-    <div class="row">
-        <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
-    </div>
-    <div class="row">
-        <app-radio-view [control]="control"></app-radio-view>
-    </div>
+<ng-container *ngIf="view===viewType.LIST_ITEM">
+  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+    <ion-card-content class="card-content">
+      <ion-item class="item">
+        <div class="icon text-icon">
+          <div>
+            <span style="font-size: 22px;">{{vm.ui.icon.temp_base}}</span>
+            <span style="font-size: 14px;">{{vm.ui.icon.temp_dec}}</span>
+          </div>
+        </div>
+        <ion-label class="label">
+          <h1>{{vm.ui.name}}</h1>
+          <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
+            {{vm.ui.status.text}}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ng-container>
 
-<ng-container *ngIf="segment === 'timezones'">
-    <div class="row">
-        <app-text-view [control]="control" [category]="category" [room]="room"></app-text-view>
-    </div>
+<ng-container *ngIf="view===viewType.FAVORITE">
+  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+    <ion-card-header class="card-header">
+      <ion-item class="item">
+        <div class="icon text-icon">
+          <div>
+            <span style="font-size: 22px;">{{vm.ui.icon.temp_base}}</span>
+            <span style="font-size: 14px;">{{vm.ui.icon.temp_dec}}</span>
+          </div>
+        </div>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content class="card-content">
+      <ion-item class="item">
+        <ion-label class="label">
+          <p>{{vm.ui.room}} • {{vm.ui.category}}</p>
+          <h1>{{vm.ui.name | translate }}</h1>
+          <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
+            {{vm.ui.status.text}}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ng-container>
+
+<ng-container *ngIf="view===viewType.DETAILED">
+  <ion-segment [(ngModel)]="segment" (ionChange)="updateSegment()">
+    <ion-segment-button class="segment-button" value="modes">
+      {{ 'Modes' | translate }}
+    </ion-segment-button>
+    <ion-segment-button class="segment-button" value="timezones">
+      {{ 'Manual' | translate }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <ng-container *ngIf="segment === 'modes'">
+    <ion-grid *ngIf="vm$ | async as vm">
+      <ion-row>
+        <ion-col>
+          <card-text-view [vm]="vm"></card-text-view>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <card-radio-list-view [vm]="vm"></card-radio-list-view>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
+  <ng-container *ngIf="segment === 'timezones'">
+    <ion-grid *ngIf="vm$ | async as vm">
+      <ion-row>
+        <ion-col>
+          <card-text-view [vm]="vm"></card-text-view>
+        </ion-col>
+      </ion-row>
+      <!-- TODO add daytimer-->
+    </ion-grid>
+  </ng-container>
 </ng-container>

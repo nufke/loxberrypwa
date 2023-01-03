@@ -1,51 +1,57 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { IonContent } from '@ionic/angular';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { Control, Room } from '../../interfaces/datamodel';
-import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { ControlService } from '../../services/control.service';
+import { Room } from '../../interfaces/datamodel';
+
+interface VM {
+  rooms: Room[];
+}
 
 @Component({
   selector: 'app-rooms',
   templateUrl: 'rooms.page.html',
   styleUrls: ['rooms.page.scss']
 })
-export class RoomsPage implements OnInit, OnDestroy {
+export class RoomsPage
+  implements OnInit {
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
-  private filtered_rooms: string[];
-  public rooms: Room[] = [];
+  public vm$: Observable<VM>;
 
-  private controlsSub: Subscription;
-  private roomsSub: Subscription;
-
-  constructor(public loxBerryService: LoxBerryService) {
-
-    this.controlsSub = this.loxBerryService.getControls().subscribe((controls: Control[]) => {
-
-      this.filtered_rooms = controls
-        .map(item => item.room )
-        .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
-    });
-
-    this.roomsSub = this.loxBerryService.getRooms().subscribe((rooms: Room[]) => {
-      this.rooms = rooms
-        .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); }) // sort A-Z
-        .filter( item => this.filtered_rooms.indexOf(item.uuid) > -1)
-        .filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
-      });
+  constructor(
+    public translate: TranslateService,
+    private controlService: ControlService)
+  {
+    this.initVM();
   }
 
-  public ngOnInit() : void {
+  private initVM() : void {
+    this.vm$ =  combineLatest([
+      this.controlService.controls$,
+      this.controlService.rooms$
+      ]).pipe(
+      map( ([controls, rooms]) => {
+        controls = controls
+        .filter( control => control.is_visible );
+        let filtered_rooms = controls.map(control => control.room );
+        rooms = rooms
+          .filter( room => room.is_visible && filtered_rooms.indexOf(room.uuid) > -1)
+          //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
+          //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
+          .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+          const vm: VM = {
+            rooms: rooms
+          };
+          return vm;
+      })
+    );
   }
 
-  public ngOnDestroy() : void {
-    if (this.controlsSub) {
-      this.controlsSub.unsubscribe();
-    }
-    if (this.roomsSub) {
-      this.roomsSub.unsubscribe();
-    }
+  ngOnInit() : void {
   }
 
   public ionViewWillEnter() : void {

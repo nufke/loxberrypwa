@@ -11,16 +11,14 @@ import { ControlPushbuttonView } from './control-pushbutton/control-pushbutton.v
 import { ControlLightV2View } from './control-light-v2/control-light-v2.view';
 import { ControlRadioView } from './control-radio/control-radio.view';
 import { ControlIRCView } from './control-irc/control-irc.view';
-import { TextView } from './text/text.view';
-import { SwitchView } from './switch/switch.view';
-import { SliderView } from './slider/slider.view';
-import { PushButtonView } from './pushbutton/pushbutton.view';
-import { RadioView } from './radio/radio.view';
-import { RadioSwitchView } from './radio-switch/radio-switch.view';
-import { DimmerView } from './dimmer/dimmer.view';
 import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
-import { ColorRGBPickerView } from './color-rgb-picker/color-rgb-picker.view';
-import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view';
+import { CardTextView } from './card-text/card-text.view';
+import { CardSliderView } from './card-slider/card-slider.view';
+import { CardRadioListView } from './card-radio-list/card-radio-list.view';
+import { CardSwitchView } from './card-switch/card-switch.view';
+import { CardDimmerView } from './card-dimmer/card-dimmer.view';
+import { ElementColorRGBPickerView } from './element-color-rgb-picker/element-color-rgb-picker.view';
+import { ElementColorTempPickerView } from './element-color-temp-picker/element-color-temp-picker.view';
 
 @NgModule({
   imports: [
@@ -39,15 +37,13 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     ControlRadioView,
     ControlColorPickerV2View,
     ControlIRCView,
-    TextView,
-    SwitchView,
-    SliderView,
-    PushButtonView,
-    RadioView,
-    RadioSwitchView,
-    DimmerView,
-    ColorRGBPickerView,
-    ColorTempPickerView
+    CardTextView,
+    CardRadioListView,
+    CardSliderView,
+    CardSwitchView,
+    CardDimmerView,
+    ElementColorRGBPickerView,
+    ElementColorTempPickerView
   ],
   exports: [
     IonicModule,
@@ -60,15 +56,13 @@ import { ColorTempPickerView } from './color-temp-picker/color-temp-picker.view'
     ControlRadioView,
     ControlColorPickerV2View,
     ControlIRCView,
-    TextView,
-    SwitchView,
-    SliderView,
-    PushButtonView,
-    RadioView,
-    RadioSwitchView,
-    DimmerView,
-    ColorRGBPickerView,
-    ColorTempPickerView
+    CardTextView,
+    CardRadioListView,
+    CardSliderView,
+    CardSwitchView,
+    CardDimmerView,
+    ElementColorRGBPickerView,
+    ElementColorTempPickerView
   ]
 })
 export class ViewsModule { }

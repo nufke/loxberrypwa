@@ -4,88 +4,57 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
-      {{page.name}}
+      {{(vm$ | async).page.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ng-container *ngFor="let label of labels">
-      <ion-row *ngIf="is_empty(label)">
-        <ion-label>
-          <p>{{label.name}}</p>
+  <ion-grid *ngIf="vm$ | async as vm">
+    <ng-container *ngFor="let label of vm.labels">
+      <ion-row *ngIf="label.name">
+        <ion-label class="control-label">
+         <p>{{label.name}}</p>
         </ion-label>
       </ion-row>
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let control of filter(label)">
-          <ion-card routerLink="{{control.hwid}}/{{control.uuid}}">
-            <ion-card-content>
-              <ion-item>
-                <ion-icon *ngIf="control.type !== 'i_room_controller'" color="{{control.icon.color}}"
-                  src="{{control.icon.href}}"></ion-icon>
+        <ion-col size="12" size-md="6" *ngFor="let control of filter(label) | async">
 
-                <div *ngIf="control.type === 'i_room_controller'" class="text-icon">
-                  <div>
-                    <span style="font-size: 22px;">{{control.display.temp_base}}</span>
-                    <span style="font-size: 14px;">{{control.display.temp_dec}}</span>
-                  </div>
-                </div>
-                <ion-label>
-                  <h1 *ngIf="control.type !== 'i_room_controller'">{{control.name}}</h1>
-                  <h1 *ngIf="control.type === 'i_room_controller'">{{control.display.name | translate }}</h1>
-                  <h2 style="color: {{control.display.color}};" *ngIf="control.display.text !== ''">
-                    {{control.display.text | translate}}</h2>
-                </ion-label>
+          <ng-container *ngIf="control.type === 'i_room_controller'">
+            <control-irc-view [control]="control" [view]="viewType.LIST_ITEM"></control-irc-view>
+          </ng-container>
 
-                <ng-container *ngIf="control.type === 'pushbutton'">
-                  <ion-fab-button size="small" (click)="btn(btnAction.push, $event, control)">
-                    <ion-icon name="radio-button-off-outline"></ion-icon>
-                  </ion-fab-button>
-                </ng-container>
+          <ng-container *ngIf="control.type === 'light_controller_v2'">
+            <control-light-v2-view [control]="control" [view]="viewType.LIST_ITEM"></control-light-v2-view>
+          </ng-container>
 
-                <ng-container *ngIf="control.type === 'light_controller_v2'">
-                  <ion-fab-button size="small" (click)="btn(btnAction.push, $event, control)">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-fab-button>
-                </ng-container>
+          <ng-container *ngIf="control.type === 'pushbutton'">
+            <control-pushbutton-view [control]="control" [view]="viewType.LIST_ITEM"></control-pushbutton-view>
+          </ng-container>
 
-                <ng-container *ngIf="control.type === 'radio'">
-                  <ion-fab-button size="small" (click)="btn(btnAction.down, $event, control)">
-                    <ion-icon name="remove-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button class="fab-button-1" size="small" (click)="btn(btnAction.up, $event, control)">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-fab-button>
-                </ng-container>
+          <ng-container *ngIf="control.type === 'slider'">
+            <control-slider-view [control]="control" [view]="viewType.LIST_ITEM"></control-slider-view>
+          </ng-container>
 
-                <ng-container *ngIf="control.type === 'central_jalousie'">
-                  <ion-fab-button size="small" (click)="btn(btnAction.down, $event, control)">
-                    <ion-icon name="chevron-down-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button size="small" (click)="btn(btnAction.up, $event, control)">
-                    <ion-icon name="chevron-up-outline"></ion-icon>
-                  </ion-fab-button>
-                </ng-container>
+          <ng-container *ngIf="control.type === 'switch'">
+            <control-switch-view [control]="control" [view]="viewType.LIST_ITEM"></control-switch-view>
+          </ng-container>
 
-                <ng-container *ngIf="control.type === 'slider'">
-                  <ion-fab-button size="small" (click)="btn(btnAction.minus, $event, control)">
-                    <ion-icon name="remove-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button size="small" (click)="btn(btnAction.plus, $event, control)">
-                    <ion-icon name="add-outline"></ion-icon>
-                  </ion-fab-button>
-                </ng-container>
+          <ng-container *ngIf="control.type === 'radio'">
+            <control-radio-view [control]="control" [view]="viewType.LIST_ITEM"></control-radio-view>
+          </ng-container>
 
-                <ng-container *ngIf="control.type === 'switch'">
-                  <ion-toggle color="primary" mode="ios" [(ngModel)]="control.display.toggle"
-                    (click)="btn(btnAction.toggle, $event, control)">
-                  </ion-toggle>
-                </ng-container>
+          <ng-container *ngIf="
+          (control.type !== 'i_room_controller') &&
+          (control.type !== 'light_controller_v2') &&
+          (control.type !== 'pushbutton') &&
+          (control.type !== 'slider') &&
+          (control.type !== 'switch') &&
+          (control.type !== 'radio')
+          ">
+            <control-text-state-view [control]="control" [view]="viewType.LIST_ITEM"></control-text-state-view>
+          </ng-container>
 
-              </ion-item>
-            </ion-card-content>
-          </ion-card>
         </ion-col>
       </ion-row>
     </ng-container>

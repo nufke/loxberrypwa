@@ -1,10 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { Subscription } from 'rxjs';
-import { ControlsBase } from './controls.base';
-import { Control, Category, Room } from '../../interfaces/datamodel';
+import { Control, Room, Category, View } from '../../interfaces/datamodel';
+import { ControlService } from '../../services/control.service';
+
+interface VM {
+  controls: Control[];
+  labels: Room[] | Category[];
+  page: Room | Category;
+}
 
 @Component({
   selector: 'app-controls',
@@ -12,115 +18,88 @@ import { Control, Category, Room } from '../../interfaces/datamodel';
   styleUrls: ['controls.page.scss']
 })
 export class ControlsPage
-  extends ControlsBase
-  implements OnInit, OnDestroy {
+  implements OnInit {
 
-  public controls: Control[] = [];
-  public categories: Category[] = [];
-  public rooms: Room[] = [];
-
-  public items: any[];
-  public labels: any[];
-
-  public filtered_controls: Control[];
-  private filtered_categories: string[];
-  private filtered_rooms: string[];
-
-  private domain: string;
-  private uuid: string;
-  private hwid: string;
-
-  public page: any;
-
-  public key: string;
-  public icon_color: string;
-
-  private controlsSub: Subscription;
-  private categoriesSub: Subscription;
-  private roomsSub: Subscription;
+  vm$: Observable<VM>;
+  key: string;
+  viewType = View;
 
   constructor(
     public translate: TranslateService,
-    public loxBerryService: LoxBerryService,
-    private route: ActivatedRoute)
+    private route: ActivatedRoute,
+    private controlService: ControlService
+    )
   {
-    super(translate, loxBerryService);
+    this.initVM();
+  }
 
-    this.domain = this.route.snapshot.paramMap.get('domain'); // room or category
-    this.uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category
-    this.hwid = this.route.snapshot.paramMap.get('hwid');     // hwid of room or category
+  /**
+   * initialize view model
+   *
+   * The view model will contain room and category name instead of uuid
+   */
+  private initVM(): void {
+    const domain = this.route.snapshot.paramMap.get('domain'); // room or category
+    const uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category
+    const hwid = this.route.snapshot.paramMap.get('hwid');     // hwid of room or category
 
-    if (this.domain === 'category')
+    if (domain === 'category')
       this.key = 'room';
-
-    if (this.domain === 'room')
+    if (domain === 'room')
       this.key = 'category';
 
-    this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
-      this.controls = controls
-      .sort( (a, b) => { return a.order - b.order || a.name.localeCompare(b.name) })
-
-      this.filtered_categories = controls
-        .map(item => item.category )
-        //.filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
-
-      this.filtered_rooms = controls
-        .map(item => item.room )
-        //.filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
-    });
-
-    this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
-      this.categories = categories
-      .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
-      .filter( item => this.filtered_categories.indexOf(item.name) > -1);
-
-      if (this.domain === 'category') {
-        this.page = categories.find( item => (item.uuid === this.uuid) && (item.hwid === this.hwid));
-        this.filtered_controls = this.controls.filter( item => (item.category === this.page.uuid && item.is_visible ));
-        this.items = categories;
-      }
-
-      if (this.domain === 'room')
-        this.labels = categories;
-    });
-
-    this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
-      this.rooms = rooms
-      .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); })
-      .filter( item => this.filtered_rooms.indexOf(item.name) > -1);
-
-      if (this.domain === 'room') {
-        this.page = rooms.find( item => (item.uuid === this.uuid) && (item.hwid === this.hwid));
-        this.filtered_controls = this.controls.filter( item => (item.room === this.page.uuid && item.is_visible ));
-        this.items = rooms;
-      }
-
-      if (this.domain === 'category')
-        this.labels = rooms;
-    });
-  }
-
-  public ngOnInit() : void {
-  }
-
-  public ngOnDestroy() : void {
-    if (this.controlsSub) {
-      this.controlsSub.unsubscribe();
+    if (domain === 'category') {
+      this.vm$ = combineLatest([
+        this.controlService.controls$,
+        this.controlService.categories$,
+        this.controlService.rooms$,
+      ]).pipe(
+        map(([controls, categories, rooms]) => {
+          controls = controls
+            .filter(control => control.is_visible && control.category === uuid && control.hwid === hwid)
+            .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+          let filtered_rooms = controls.map(control => control.room);
+          const vm: VM = {
+            controls: controls,
+            labels: rooms.filter( rooms => filtered_rooms.indexOf(rooms.uuid) > -1 )
+                         .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) ),
+            page: categories.find( category => (category.uuid === uuid) && (category.hwid === hwid) )
+          };
+          return vm;
+        })
+      );
     }
-    if (this.categoriesSub) {
-      this.categoriesSub.unsubscribe();
-    }
-    if (this.roomsSub) {
-      this.roomsSub.unsubscribe();
+
+    if (domain === 'room') {
+      this.vm$ = combineLatest([
+        this.controlService.controls$,
+        this.controlService.categories$,
+        this.controlService.rooms$,
+      ]).pipe(
+        map(([controls, categories, rooms]) => {
+          controls = controls
+            .filter(control => control.is_visible && control.room === uuid && control.hwid === hwid )
+            .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+          let filtered_categories = controls.map(control => control.category);
+          const vm: VM = {
+            controls: controls,
+            labels: categories.filter( category => filtered_categories.indexOf(category.uuid) > -1 )
+                              .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) ),
+            page: rooms.find( room => (room.uuid === uuid) && (room.hwid === hwid) )
+          };
+          //console.log('controls vm:', vm);
+          return vm;
+        })
+      );
     }
   }
 
-  public filter(label: any) : Control[] {
-    return this.filtered_controls.filter( resp => resp[this.key] === label.uuid );
+  ngOnInit() : void {
   }
 
-  public is_empty(label: any) : Boolean {
-    return (this.filter(label).length > 0);
+  filter(label: any) : Observable<Control[]> {
+    return this.vm$.pipe(
+      map( items => items.controls
+        .filter( resp => resp[this.key] === label.uuid )));
   }
-
 }

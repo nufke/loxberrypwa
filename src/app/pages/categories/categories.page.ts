@@ -1,8 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { IonContent } from '@ionic/angular';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { Control, Category } from '../../interfaces/datamodel'
-import { Subscription } from 'rxjs'
+import { TranslateService } from '@ngx-translate/core';
+import { ControlService } from '../../services/control.service';
+import { Category } from '../../interfaces/datamodel';
+
+interface VM {
+  categories: Category[];
+}
 
 @Component({
   selector: 'app-categories',
@@ -10,46 +16,45 @@ import { Subscription } from 'rxjs'
   styleUrls: ['categories.page.scss']
 })
 export class CategoriesPage
-  implements OnInit, OnDestroy {
+  implements OnInit {
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
-  private filtered_categories: string[];
-  public categories: Category[] = [];
+  public vm$: Observable<VM>;
 
-  private controlsSub: Subscription;
-  private categoriesSub: Subscription;
-
-  constructor(public loxBerryService: LoxBerryService) {
-
-    this.controlsSub = this.loxBerryService.getControls().subscribe((controls: Control[]) => {
-
-      this.filtered_categories = controls
-        .map(item => item.category )
-        .filter((value, index, self) => self.indexOf(value) === index) // remove duplicates
-    });
-
-    this.categoriesSub = this.loxBerryService.getCategories().subscribe((categories: Category[]) => {
-      this.categories = categories
-        .sort((a, b) => { return a.order - b.order || a.name.localeCompare(b.name); }) // sort A-Z
-        .filter( item => this.filtered_categories.indexOf(item.uuid) > -1)
-        .filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
-      });
+  constructor(
+    public translate: TranslateService,
+    private controlService: ControlService)
+  {
+    this.initVM();
   }
 
-  public ngOnInit() : void {
+  private initVM() : void {
+    this.vm$ =  combineLatest([
+      this.controlService.controls$,
+      this.controlService.categories$
+      ]).pipe(
+      map( ([controls, categories]) => {
+        controls = controls
+        .filter( control => control.is_visible );
+        let filtered_categories = controls.map(control => control.category );
+        categories = categories
+          .filter( category => category.is_visible && filtered_categories.indexOf(category.uuid) > -1)
+          //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
+          //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
+          .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+          const vm: VM = {
+            categories: categories
+          };
+          return vm;
+      })
+    );
   }
 
-  public ngOnDestroy() : void {
-    if (this.controlsSub) {
-      this.controlsSub.unsubscribe();
-    }
-    if (this.categoriesSub) {
-      this.categoriesSub.unsubscribe();
-    }
+  ngOnInit() : void {
   }
 
-  public ionViewWillEnter() : void {
+  ionViewWillEnter() : void {
     this.content.scrollToTop();
   }
 }

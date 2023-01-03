@@ -1,10 +1,8 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ComponentRef, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LoxBerryService } from '../../services/loxberry.service';
-import { Control, Category, Room } from '../../interfaces/datamodel';
-import { Subscription } from 'rxjs';
-import { ViewBase } from '../../views/view.base';
+import { Control, Subcontrol, Room, Category, View } from '../../interfaces/datamodel';
+import { ControlService } from '../../services/control.service';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
 import { ControlRadioView } from '../../views/control-radio/control-radio.view';
@@ -17,110 +15,112 @@ import { ControlIRCView } from '../../views/control-irc/control-irc.view';
 @Component({
   selector: 'app-detailed-control',
   templateUrl: 'detailed-control.page.html',
-  styleUrls: ['./detailed-control.page.scss'],
+  styleUrls: ['./detailed-control.page.scss']
 })
 export class DetailedControlPage
   implements OnInit {
+
   @ViewChild('viewcontainer', { read: ViewContainerRef, static: true })
 
-   public viewContainer: ViewContainerRef;
-   public componentRef;
+  viewContainer: ViewContainerRef;
+  componentRef;
 
-   public control : Control;
-   public category : Category;
-   public room : Room;
+  viewType = View;
 
-   public control_name: string;
+  control: Control;
+  subcontrol: Subcontrol;
 
-   private controlsSub: Subscription;
-   private categoriesSub: Subscription;
-   private roomsSub: Subscription;
+  page_name: string;
 
-   private ViewMap = {
-     'info_only_analog': ControlTextStateView,
-     'info_only_digital': ControlTextStateView,
-     'info_only_text': ControlTextStateView,
-     'text_state': ControlTextStateView,
-     'light_controller_v2': ControlLightV2View,
-     'radio': ControlRadioView,
-     'switch': ControlSwitchView,
-     'slider': ControlSliderView,
-     'pushbutton': ControlPushbuttonView,
-     'color_picker_v2': ControlColorPickerV2View,
-     'i_room_controller': ControlIRCView
-   }
+  // TODO, merge/move with IRC component
+  private irc_mode = [
+    { id: 0, name: 'Automatic' },
+    { id: 1, name: 'Automatic (currently heating)' },
+    { id: 2, name: 'Automatic (currently cooling)' },
+    { id: 3, name: 'Automatic heating' },
+    { id: 4, name: 'Automatic cooling' },
+    { id: 5, name: 'Manual heating' },
+    { id: 6, name: 'Manual cooling' }
+  ];
 
-   constructor(
-     public loxBerryService: LoxBerryService,
-     private route: ActivatedRoute,
-     public translate: TranslateService)
-   {
-     const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
-     const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
-
-     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
-     const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
-
-     this.controlsSub = loxBerryService.getControls().subscribe((controls: Control[]) => {
-      this.control = controls.find( item => (item.hwid === control_hwid && item.uuid === control_uuid) );
-
-      if (!(subcontrol_uuid && subcontrol_uuid_ext))
-        this.control_name = this.control.name;
-
-      if (this.control.type === 'i_room_controller' && this.control.display.name)
-        this.control_name = this.translate.instant(this.control.display.name);
-     });
-
-     this.categoriesSub = loxBerryService.getCategories().subscribe((categories: Category[]) => {
-       this.category = categories.find( item => item.uuid === this.control.category );
-     });
-
-     this.roomsSub = loxBerryService.getRooms().subscribe((rooms: Room[]) => {
-       this.room = rooms.find( item => item.uuid === this.control.room );
-     });
-   }
-
-   async loadControlComponent(control: Control, category : Category, room : Room ) {
-     if (!this.componentRef) { // only create if dynamic view does not exist
-       this.componentRef = this.viewContainer.createComponent(this.getControlView(control.type));
-       (<ViewBase>this.componentRef.instance).control = control;
-       (<ViewBase>this.componentRef.instance).category = category;
-       (<ViewBase>this.componentRef.instance).room = room;
-     }
-   }
-
-   private getControlView(type) {
-     let view = this.ViewMap[type];
-     if (view)
-       return this.ViewMap[type];
-     else
-       return this.ViewMap['text_state']; // default
-   }
-
-   public ngOnInit() : void {
-    const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
-    const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
-    const subcontrol_uuid_ext= this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
-
-    // assign subcontrol is specified via URL
-    if (subcontrol_uuid && subcontrol_uuid_ext && this.control) {
-      let subcontrol = this.control.subcontrols[control_hwid + '/' + subcontrol_uuid + '/' + subcontrol_uuid_ext];
-      this.control_name = subcontrol.name;
-      this.loadControlComponent(subcontrol, this.category, this.room);
-    }
-    else
-      this.loadControlComponent(this.control, this.category, this.room);
-   }
-
-   public ngOnDestroy() : void {
-     this.viewContainer.clear(); // remove dynamic view from memory
-     this.componentRef = -1;
-
-     if (this.controlsSub)
-       this.categoriesSub.unsubscribe();
-     if (this.categoriesSub)
-       this.controlsSub.unsubscribe();
-     if (this.roomsSub)
-       this.roomsSub.unsubscribe();
-   }
+  private ViewMap = {
+    'info_only_analog': ControlTextStateView,
+    'info_only_digital': ControlTextStateView,
+    'info_only_text': ControlTextStateView,
+    'text_state': ControlTextStateView,
+    'light_controller_v2': ControlLightV2View,
+    'radio': ControlRadioView,
+    'switch': ControlSwitchView,
+    'slider': ControlSliderView,
+    'pushbutton': ControlPushbuttonView,
+    'color_picker_v2': ControlColorPickerV2View,
+    'i_room_controller': ControlIRCView
   }
+
+  constructor(
+    public translate: TranslateService,
+    private route: ActivatedRoute,
+    private controlService: ControlService ) {
+
+    this.initVM();
+  }
+
+  private initVM() : void {
+    const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
+    const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
+    const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
+    const subcontrol_uuid_ext = this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
+
+    this.controlService.getControl(control_hwid, control_uuid).subscribe(
+      control => {
+        this.control = control;
+        this.page_name = (control.type === 'i_room_controller') ?
+        this.translate.instant(this.irc_mode.find(item => item.id == control.states.mode ).name) : control.name;
+      }
+    );
+    if (subcontrol_uuid != null) {
+      this.controlService.getSubcontrol(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
+        subcontrol => {
+          this.subcontrol = subcontrol;
+          this.page_name = subcontrol.name;
+        }
+      );
+    }
+  }
+
+  ngOnInit() : void {
+    this.loadControlComponent(this.control, this.subcontrol);
+  }
+
+  private loadControlComponent(control: Control, subcontrol: Subcontrol) {
+    if (!this.componentRef) { // only create if dynamic view does not exist yet
+      if (subcontrol == null) {
+        this.componentRef = this.viewContainer.createComponent(this.getControlView(control.type));
+      }
+      else {
+        this.componentRef = this.viewContainer.createComponent(this.getControlView(subcontrol.type));
+      }
+      (this.componentRef.instance).control = control;
+      (this.componentRef.instance).view = View.DETAILED;
+      if (subcontrol != null) { // for subcontrols we pass this.
+        (this.componentRef.instance).subcontrol = subcontrol;
+      }
+    }
+  }
+
+  private getControlView(type) {
+    let view = this.ViewMap[type];
+    if (view)
+      return this.ViewMap[type];
+    else
+      return this.ViewMap['text_state']; // default
+  }
+
+  public ngOnDestroy() : void {
+    this.viewContainer.clear(); // remove dynamic view from memory
+    this.componentRef = -1;
+
+    // TODO unsubscribe
+  }
+
+}
