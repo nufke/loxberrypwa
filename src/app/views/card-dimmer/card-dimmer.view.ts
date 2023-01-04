@@ -1,27 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
+import { Control, Subcontrol } from '../../interfaces/data.model';
+import { DimmerVM } from '../../interfaces/view.model';
+import { ButtonAction, View } from '../../types/types';
 import { Utils } from '../../utils/utils';
-
-interface DimmerVM {
-  control: Control;
-  subcontrol: Subcontrol;
-  ui: {
-    name: string;
-    btn_color: string;
-    slider: {
-      position: number;
-      min: number;
-      max: number;
-      step: number;
-      color: string;
-    }
-  }
-  rgb?: number[];
-}
 
 @Component({
   selector: 'card-dimmer-view',

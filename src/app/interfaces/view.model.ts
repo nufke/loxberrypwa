@@ -1,0 +1,114 @@
+import { Control, Subcontrol, Room, Category } from './data.model';
+
+/**
+ * View Models used for Components to store UI specific properties and states
+ */
+
+export interface CategoryListVM {
+  categories: Category[];
+}
+
+export interface RoomListVM {
+  rooms: Room[];
+}
+export interface ControlListVM {
+  controls: Control[];
+  labels?: Room[] | Category[];
+  page?: Room | Category;
+}
+
+export interface ColorPickerVM {
+  control: Control;
+  subcontrol: Subcontrol;
+  rgb: {
+    r: number;
+    g: number;
+    b: number;
+  }
+  position: number;
+}
+
+export interface DimmerVM {
+  control: Control;
+  subcontrol: Subcontrol;
+  ui: {
+    name: string;
+    btn_color: string;
+    slider: {
+      position: number;
+      min: number;
+      max: number;
+      step: number;
+      color: string;
+    }
+  }
+  rgb?: number[];
+}
+
+export interface RadioListItem {
+  id: number;
+  name: string;
+}
+
+export interface RadioVM {
+  control: Control;
+  ui: {
+    name: string;
+    room: string;
+    category: string;
+    radio_list: RadioListItem[];
+    selected_id: number;
+    icon?: {
+      temp_base: string;
+      temp_dec: string
+    }
+    status: {
+      text: string;
+      color: string;
+    }
+    toggle?: boolean;
+  }
+  subcontrols?: Subcontrol[];
+}
+
+export interface SliderVM {
+  control: Control;
+  ui: {
+    name: string;
+    room: string;
+    category: string;
+    slider:  {
+      position: number;
+    }
+    status: {
+      text: string;
+      color: string;
+    }
+  }
+}
+
+export interface SwitchVM {
+  control: Control;
+  subcontrol: Subcontrol;
+  ui: {
+    name: string;
+    status: {
+      text: string;
+      color: string;
+    }
+    toggle: boolean;
+  }
+}
+
+export interface TextVM {
+  control: Control;
+  ui: {
+    name: string;
+    room: string;
+    category: string;
+    status: {
+      text: string;
+      color: string;
+    }
+  }
+}

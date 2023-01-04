@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Control, Subcontrol, Category, Room } from '../interfaces/datamodel';
+import { Observable, of } from 'rxjs';
+import { switchMap } from "rxjs/operators";
+import { Control, Subcontrol, Category, Room } from '../interfaces/data.model';
 import { AppStore } from './app.store';
 
 @Injectable({ providedIn: 'root' })
@@ -8,25 +10,45 @@ export class DataService {
   constructor(public store: AppStore) {
   }
 
-  addControl(control: Control): void {
+  getControlsFromStore(): Observable<Control[]> {
+    return this.store.state$.pipe(switchMap(state => of(Object.values(state.controls))));
+  }
+
+  getCategoriesFromStore(): Observable<Category[]> {
+    return this.store.state$.pipe(switchMap(state => of(Object.values(state.categories))));
+  }
+
+  getRoomsFromStore(): Observable<Room[]> {
+    return this.store.state$.pipe(switchMap(state => of(Object.values(state.rooms))));
+  }
+
+  getSingleControlFromStore(hwid: string, uuid: string): Observable<Control> {
+    return this.store.state$.pipe(switchMap(state => of(state.controls[hwid + '/' + uuid])));
+  }
+
+  getSingleSubcontrolFromStore(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
+    return this.store.state$.pipe(switchMap(state => of(state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid])));
+  }
+
+  addControlToStore(control: Control): void {
     let state = this.store.getState();
     state.controls[this.getId(control)] = control;
     this.store.setState({ ...state });
   }
 
-  addCategory(category: Category): void {
+  addCategoryToStore(category: Category): void {
     let state = this.store.getState();
     state.categories[this.getId(category)] = category;
     this.store.setState({ ...state });
   }
 
-  addRoom(room: Room): void {
+  addRoomToStore(room: Room): void {
     let state = this.store.getState();
     state.rooms[this.getId(room)] = room;
     this.store.setState({ ...state });
   }
 
-  flushControls(): void {
+  flushControlsInStore(): void {
     let state = this.store.getState();
     state.controls = {};
     state.categories = {};
@@ -34,21 +56,21 @@ export class DataService {
     this.store.setState({ ...state });
   }
 
-  updateElement(topic, value) {
+  updateElementInStore(topic, value) {
     let state = this.store.getState();
     let topic_level = topic.split('/');
     let id = topic_level[0] + '/' + topic_level[1];
 
     if (state.controls[id])
-      this.updateElementR(state.controls[id], id, topic, value);
+      this.findAndUpdate(state.controls[id], id, topic, value);
     if (state.categories[id])
-      this.updateElementR(state.categories[id], id, topic, value);
+      this.findAndUpdate(state.categories[id], id, topic, value);
     if (state.rooms[id])
-      this.updateElementR(state.rooms[id], id, topic, value);
+      this.findAndUpdate(state.rooms[id], id, topic, value);
     this.store.setState({ ...state });
   }
 
-  private updateElementR(obj, name, topic, value) {
+  private findAndUpdate(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
       if (name + '/' + key === topic) {
         if (this.isValidJSONObject(value)) {
@@ -62,7 +84,7 @@ export class DataService {
       }
       else
         if (typeof obj[key] === 'object' && obj[key] !== null)
-          this.updateElementR(obj[key], name + '/' + key, topic, value);
+          this.findAndUpdate(obj[key], name + '/' + key, topic, value);
     });
   }
 

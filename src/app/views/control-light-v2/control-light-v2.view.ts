@@ -1,30 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Subcontrol, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-
-interface RadioListItem {
-  id: number;
-  name: string;
-}
-
-interface LightVM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    radio_list: RadioListItem[];
-    selected_id: number;
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-  subcontrols?: Subcontrol[];
-}
+import { RadioVM } from '../../interfaces/view.model';
+import { ButtonAction, View } from '../../types/types';
 
 @Component({
   selector: 'control-light-v2-view',
@@ -40,7 +21,7 @@ export class ControlLightV2View
   buttonType = ButtonAction;
   viewType = View;
 
-  vm$: Observable<LightVM>;
+  vm$: Observable<RadioVM>;
   segment: string = 'moods';
 
   constructor(
@@ -83,7 +64,7 @@ export class ControlLightV2View
         let allSubcontrols: Subcontrol[] = Object.values(control.subcontrols);
         let visibleSubcontrols = allSubcontrols.filter( subcontrol => subcontrol.is_visible );
 
-        const vm: LightVM = {
+        const vm: RadioVM = {
           control: {
             ...control,
             icon: {
@@ -112,7 +93,7 @@ export class ControlLightV2View
     // Close any open sliding items when the schedule updates
   }
 
-  clickLightButton(action: ButtonAction, vm: LightVM, $event) {
+  clickLightButton(action: ButtonAction, vm: RadioVM, $event) {
     $event.preventDefault();
     $event.stopPropagation();
 

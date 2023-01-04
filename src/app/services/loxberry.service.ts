@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Category, Room } from '../interfaces/datamodel'
+import { Control, Category, Room } from '../interfaces/data.model'
 import { MqttTopics } from '../interfaces/mqtt.api'
 import { StorageService } from './storage.service';
 import { DataService } from './data.service';
@@ -81,7 +81,7 @@ export class LoxBerryService {
       .subscribe((message: IMqttMessage) => {
         let msg = message.payload.toString();
         if (msg.length == 0 )
-          this.dataService.flushControls();
+          this.dataService.flushControlsInStore();
         else
           this.ProcessStructure(JSON.parse(msg));
     }));
@@ -129,17 +129,17 @@ export class LoxBerryService {
     Object.keys(obj.controls).forEach( key => {
       let control = this.addDisplayFields(obj.controls[key]); // TODO move elsewhere
       let name = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid;
-      this.dataService.addControl(this.processControl(control, name)); // Override full object in array
+      this.dataService.addControlToStore(this.processControl(control, name)); // Override full object in array
     });
 
     Object.keys(obj.categories).forEach( key => {
       let category = obj.categories[key];
-      this.dataService.addCategory(category); // Override full object in array
+      this.dataService.addCategoryToStore(category); // Override full object in array
     });
 
     Object.keys(obj.rooms).forEach( key => {
       let room = obj.rooms[key];
-      this.dataService.addRoom(room); // Override full object in array
+      this.dataService.addRoomToStore(room); // Override full object in array
     });
 
     this.registerTopics();
@@ -177,7 +177,7 @@ export class LoxBerryService {
     let topic = topic_in.replace(this.loxberryMqttAppTopic + '/', '');
     let value = value_in.toString();
     //console.log('process topic:', topic_in, value);
-    this.dataService.updateElement(topic, value);
+    this.dataService.updateElementInStore(topic, value);
   }
 
   unload() : void {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import iro from "@jaames/iro";
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { Control, ColorPickerVM } from '../../interfaces/datamodel';
+import { ColorPickerVM } from '../../interfaces/view.model';
 
 @Component({
   selector: 'element-color-temp-picker-view',

@@ -1,30 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-
-interface RadioListItem {
-  id: number;
-  name: string;
-}
-
-interface RadioVM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    radio_list: RadioListItem[];
-    selected_id: number;
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-  subcontrols?: Subcontrol[];
-}
+import { RadioVM } from '../../interfaces/view.model';
+import { ButtonAction, View } from '../../types/types';
 
 @Component({
   selector: 'control-radio-view',

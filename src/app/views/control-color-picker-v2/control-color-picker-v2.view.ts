@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, View, ButtonAction, ColorPickerVM } from '../../interfaces/datamodel';
+import { Control, Subcontrol } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
+import { ColorPickerVM } from '../../interfaces/view.model';
+import { View } from '../../types/types';
 import { Utils } from '../../utils/utils';
 
 @Component({

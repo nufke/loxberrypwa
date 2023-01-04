@@ -2,12 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
 import { TranslateService } from '@ngx-translate/core';
+import { ControlListVM } from '../../interfaces/view.model';
 import { ControlService } from '../../services/control.service';
-import { Control, Category, Room, View } from '../../interfaces/datamodel';
-
-interface VM {
-  controls: Control[]
-}
+import { View } from '../../types/types';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +15,7 @@ export class HomePage
   implements OnInit {
 
   viewType = View;
-  public vm$: Observable<VM>;
+  public vm$: Observable<ControlListVM>;
 
   constructor(
     public translate: TranslateService,
@@ -37,7 +34,7 @@ export class HomePage
         controls = controls
         .filter( control => control.is_favorite && control.is_visible )
         .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
-        const vm: VM = {
+        const vm: ControlListVM = {
           controls: controls
         };
         return vm;

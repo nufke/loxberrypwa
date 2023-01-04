@@ -1,16 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Room, Category, View } from '../../interfaces/datamodel';
 import { ControlService } from '../../services/control.service';
-
-interface VM {
-  controls: Control[];
-  labels: Room[] | Category[];
-  page: Room | Category;
-}
+import { Control, Room, Category } from '../../interfaces/data.model';
+import { ControlListVM } from '../../interfaces/view.model';
+import { View } from '../../types/types';
 
 @Component({
   selector: 'app-controls',
@@ -20,7 +16,7 @@ interface VM {
 export class ControlsPage
   implements OnInit {
 
-  vm$: Observable<VM>;
+  vm$: Observable<ControlListVM>;
   key: string;
   viewType = View;
 
@@ -34,7 +30,7 @@ export class ControlsPage
   }
 
   /**
-   * initialize view model
+   * Initialize view model
    *
    * The view model will contain room and category name instead of uuid
    */
@@ -59,7 +55,7 @@ export class ControlsPage
             .filter(control => control.is_visible && control.category === uuid && control.hwid === hwid)
             .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
           let filtered_rooms = controls.map(control => control.room);
-          const vm: VM = {
+          const vm: ControlListVM = {
             controls: controls,
             labels: rooms.filter( rooms => filtered_rooms.indexOf(rooms.uuid) > -1 )
                          .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) ),
@@ -81,13 +77,12 @@ export class ControlsPage
             .filter(control => control.is_visible && control.room === uuid && control.hwid === hwid )
             .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
           let filtered_categories = controls.map(control => control.category);
-          const vm: VM = {
+          const vm: ControlListVM = {
             controls: controls,
             labels: categories.filter( category => filtered_categories.indexOf(category.uuid) > -1 )
                               .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) ),
             page: rooms.find( room => (room.uuid === uuid) && (room.hwid === hwid) )
           };
-          //console.log('controls vm:', vm);
           return vm;
         })
       );
@@ -97,7 +92,7 @@ export class ControlsPage
   ngOnInit() : void {
   }
 
-  filter(label: any) : Observable<Control[]> {
+  filter(label: Room | Category) : Observable<Control[]> {
     return this.vm$.pipe(
       map( items => items.controls
         .filter( resp => resp[this.key] === label.uuid )));

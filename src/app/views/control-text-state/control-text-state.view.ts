@@ -1,25 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Room, Category, View } from '../../interfaces/datamodel';
+import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
+import { TextVM } from '../../interfaces/view.model';
+import { View } from '../../types/types';
 import * as moment from 'moment';
 
 var sprintf = require('sprintf-js').sprintf;
-
-interface VM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-}
 
 @Component({
   selector: 'control-text-state-view',
@@ -33,7 +22,7 @@ export class ControlTextStateView
   @Input() view: View;
 
   viewType = View;
-  vm$: Observable<VM>;
+  vm$: Observable<TextVM>;
 
   constructor(
     public translate: TranslateService,
@@ -59,7 +48,7 @@ export class ControlTextStateView
         let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
         let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
-        const vm: VM = {
+        const vm: TextVM = {
           control: control,
           ui: {
             name: control.name,
@@ -93,7 +82,7 @@ export class ControlTextStateView
         switch (control.details.format) {
           case '<v.u>': // date + time
             let date = new Date(Number(control.states.value) * 1000 + 1230768000000);
-            text = moment(date).format("DD-MM-YYYY hh:mm").toString();
+            text = moment(date).format("DD-MM-YYYY HH:MM").toString(); // TODO European (24) vs US (am/pm) setting
             break;
           case '<v.t>': // duration/time
             let du = Number(control.states.value) / 60;

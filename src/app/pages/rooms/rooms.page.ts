@@ -4,11 +4,7 @@ import { map } from "rxjs/operators";
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { Room } from '../../interfaces/datamodel';
-
-interface VM {
-  rooms: Room[];
-}
+import { RoomListVM } from '../../interfaces/view.model';
 
 @Component({
   selector: 'app-rooms',
@@ -20,7 +16,7 @@ export class RoomsPage
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
-  public vm$: Observable<VM>;
+  public vm$: Observable<RoomListVM>;
 
   constructor(
     public translate: TranslateService,
@@ -40,10 +36,11 @@ export class RoomsPage
         let filtered_rooms = controls.map(control => control.room );
         rooms = rooms
           .filter( room => room.is_visible && filtered_rooms.indexOf(room.uuid) > -1)
+          // TODO remove duplicates?
           //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
           //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
           .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
-          const vm: VM = {
+          const vm: RoomListVM = {
             rooms: rooms
           };
           return vm;

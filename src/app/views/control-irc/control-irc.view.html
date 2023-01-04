@@ -11,7 +11,7 @@
         <ion-label class="label">
           <h1>{{vm.ui.name}}</h1>
           <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
-            {{vm.ui.status.text}}</h2>
+            {{vm.ui.status.text | translate }}</h2>
         </ion-label>
       </ion-item>
     </ion-card-content>
@@ -36,7 +36,7 @@
           <p>{{vm.ui.room}} • {{vm.ui.category}}</p>
           <h1>{{vm.ui.name | translate }}</h1>
           <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
-            {{vm.ui.status.text}}</h2>
+            {{vm.ui.status.text | translate }}</h2>
         </ion-label>
       </ion-item>
     </ion-card-content>

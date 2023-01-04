@@ -1,22 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Subcontrol } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-
-interface SwitchVM {
-  control: Control;
-  subcontrol: Subcontrol;
-  ui: {
-    name: string;
-    status: {
-      text: string;
-      color: string;
-    }
-    toggle: boolean;
-  }
-}
+import { SwitchVM } from '../../interfaces/view.model';
 
 @Component({
   selector: 'card-switch-view',

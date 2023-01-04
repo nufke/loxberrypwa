@@ -1,5 +1,6 @@
-// In-memory Application State for the PWA
-
+/**
+ * In-memory Application State for the PWA
+ */
 export interface AppState {
   settings: { [key: string]: string;};
   controls: { [key: string]: Control };
@@ -7,6 +8,9 @@ export interface AppState {
   rooms: { [key: string]: Room };
 }
 
+/**
+ * Application State initial values
+ */
 export const INITIAL_APP_STATE: AppState = {
   settings: {},
   controls: {},
@@ -14,6 +18,9 @@ export const INITIAL_APP_STATE: AppState = {
   rooms: {}
 };
 
+/**
+ * Properties for Control elements
+ */
 
 export interface Control {
   hwid: string;                 // hardware identifier of the device
@@ -36,6 +43,10 @@ export interface Control {
   states: any;                  // control states
 }
 
+/**
+ * Properties for Subcontrol elements
+ */
+
 export interface Subcontrol {
   uuid: string;                 // unique identifier to identify the control as MQTT topic
   name: string;                 // unique identifier to identify the control as MQTT topic
@@ -51,6 +62,10 @@ export interface Subcontrol {
   order?: number;               // defines order in the App list (optional)
   states: any;                  // control states
 }
+
+/**
+ * Properties to specify Category
+ */
 
 export interface Category {
   hwid: string;                 // hardware identifier of the device
@@ -68,6 +83,10 @@ export interface Category {
   order?: number;               // defines order in list box (optional)
 }
 
+/**
+ * Properties to specify Room
+ */
+
 export interface Room {
   hwid: string;                 // hardware identifier of the device
   uuid: string;                 // unique identifier to identify the room as MQTT topic  (device-uuid)
@@ -82,29 +101,4 @@ export interface Room {
   is_visible?: boolean;         // make category invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
   order?: number;               // defines order in list box (optional)
-}
-
-export enum ButtonAction {
-  UP,
-  DOWN,
-  PLUS,
-  MINUS,
-  PUSH
-}
-
-export enum View {
-  LIST_ITEM,
-  FAVORITE,
-  DETAILED,
-}
-
-export interface ColorPickerVM {
-  control: Control;
-  subcontrol: Subcontrol;
-  rgb: {
-    r: number;
-    g: number;
-    b: number;
-  }
-  position: number;
 }

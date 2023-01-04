@@ -1,27 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
+import { SliderVM } from '../../interfaces/view.model';
+import { ButtonAction, View } from '../../types/types';
 
 var sprintf = require('sprintf-js').sprintf;
-
-interface SliderVM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    slider:  {
-      position: number;
-    }
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-}
 
 @Component({
   selector: 'control-slider-view',

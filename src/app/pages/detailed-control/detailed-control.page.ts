@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Subcontrol, Room, Category, View } from '../../interfaces/datamodel';
+import { Control, Subcontrol } from '../../interfaces/data.model';
 import { ControlService } from '../../services/control.service';
+import { View } from '../../types/types';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
 import { ControlRadioView } from '../../views/control-radio/control-radio.view';

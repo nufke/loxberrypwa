@@ -1,7 +1,8 @@
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { switchMap } from "rxjs/operators";
-import { Injectable } from '@angular/core';
-import { Control, Subcontrol, Category, Room } from '../interfaces/datamodel';
+import { Control, Subcontrol, Category, Room } from '../interfaces/data.model';
+import { DataService } from './data.service';
 import { LoxBerryService } from '../services/loxberry.service';
 import { AppStore } from './app.store';
 
@@ -9,27 +10,28 @@ import { AppStore } from './app.store';
 export class ControlService {
 
   constructor(public store: AppStore,
+    private dataService: DataService,
     public loxberryService: LoxBerryService) {
   }
 
   get controls$(): Observable<Control[]> {
-    return this.store.state$.pipe(switchMap(state => of(Object.values(state.controls))));
+    return this.dataService.getControlsFromStore();
   }
 
   get categories$(): Observable<Category[]> {
-    return this.store.state$.pipe(switchMap(state => of(Object.values(state.categories))));
+    return this.dataService.getCategoriesFromStore();
   }
 
   get rooms$(): Observable<Room[]> {
-    return this.store.state$.pipe(switchMap(state => of(Object.values(state.rooms))));
+    return this.dataService.getRoomsFromStore();
   }
 
   getControl(hwid: string, uuid: string): Observable<Control> {
-    return this.store.state$.pipe(switchMap(state => of(state.controls[hwid + '/' + uuid])));
+    return this.dataService.getSingleControlFromStore(hwid, uuid);
   }
 
   getSubcontrol(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
-    return this.store.state$.pipe(switchMap(state => of(state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid])));
+    return this.dataService.getSingleSubcontrolFromStore(hwid, uuid, subcontrol_uuid);
   }
 
   updateControl(control: Control | Subcontrol, msg: string): void {

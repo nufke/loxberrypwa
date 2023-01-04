@@ -1,23 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { Control, ButtonAction } from '../../interfaces/datamodel';
-
-interface SliderVM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    slider:  {
-      position: number;
-    }
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-}
+import { SliderVM } from '../../interfaces/view.model';
+import { ButtonAction } from '../../types/types';
 
 @Component({
   selector: 'card-slider-view',

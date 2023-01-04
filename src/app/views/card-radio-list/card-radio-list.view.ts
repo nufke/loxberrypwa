@@ -1,33 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { Control, Subcontrol } from '../../interfaces/datamodel';
-
-interface RadioListItem {
-  id: number;
-  name: string;
-}
-
-interface RadioVM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    radio_list: RadioListItem[];
-    selected_id: number;
-    icon?: {
-      temp_base: string;
-      temp_dec: string
-    }
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-  subcontrols?: Subcontrol[];
-}
-
+import { RadioVM } from '../../interfaces/view.model';
 
 @Component({
   selector: 'card-radio-list-view',

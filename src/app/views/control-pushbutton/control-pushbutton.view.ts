@@ -1,21 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-
-interface PushVM {
-  control: Control;
-  ui: {
-    room: string;
-    category: string;
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-}
+import { TextVM } from '../../interfaces/view.model';
+import { ButtonAction, View } from '../../types/types';
 
 @Component({
   selector: 'control-pushbutton-view',
@@ -31,7 +21,7 @@ export class ControlPushbuttonView
   buttonType = ButtonAction;
   viewType = View;
 
-  vm$: Observable<PushVM>;
+  vm$: Observable<TextVM>;
 
   constructor(
     public translate: TranslateService,
@@ -57,9 +47,10 @@ export class ControlPushbuttonView
         let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
         let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
-        const vm: PushVM = {
+        const vm: TextVM = {
           control: control,
           ui: {
+            name: control.name,
             room: (room && room.name) ? room.name : "unknown",
             category: (category && category.name) ? category.name : "unknown",
             status: {
@@ -73,7 +64,7 @@ export class ControlPushbuttonView
     );
   }
 
-  clickPushButton(action: ButtonAction, vm: PushVM, $event) {
+  clickPushButton(action: ButtonAction, vm: TextVM, $event) {
     $event.preventDefault();
     $event.stopPropagation();
     this.controlService.updateControl(vm.control, 'pulse');

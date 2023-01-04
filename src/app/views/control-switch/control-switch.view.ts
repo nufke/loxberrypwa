@@ -1,29 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Room, Category, View, ButtonAction } from '../../interfaces/datamodel';
+import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-
-interface RadioListItem {
-  id: number;
-  name: string;
-}
-
-interface VM {
-  control: Control;
-  ui: {
-    name: string;
-    room: string;
-    category: string;
-    radio_list: RadioListItem[];
-    status: {
-      text: string;
-      color: string;
-    }
-    toggle: boolean;
-  }
-}
+import { RadioVM } from '../../interfaces/view.model';
+import { ButtonAction, View } from '../../types/types';
 
 @Component({
   selector: 'control-switch-view',
@@ -39,7 +21,7 @@ export class ControlSwitchView
   buttonType = ButtonAction;
   viewType = View;
 
-  vm$: Observable<VM>;
+  vm$: Observable<RadioVM>;
 
   constructor(
     public translate: TranslateService,
@@ -66,7 +48,7 @@ export class ControlSwitchView
         let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
         let switchstate = (control.states.active === "1");
 
-        const vm: VM = {
+        const vm: RadioVM = {
           control: { ...control, icon: { href: control.icon.href, color: switchstate ? "primary" : "#9d9e9e" } }, // TODO select from color palette
           ui: {
             name: control.name,
@@ -76,6 +58,7 @@ export class ControlSwitchView
               { id: 0, name: this.translate.instant('Off')},
               { id: 1, name: this.translate.instant('On')}
             ],
+            selected_id: switchstate ? 1 : 0,
             status: {
               text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
               color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
@@ -88,7 +71,7 @@ export class ControlSwitchView
     );
   }
 
-  clickToggle(vm: VM, $event) {
+  clickToggle(vm: RadioVM, $event) {
     $event.preventDefault();
     $event.stopPropagation();
 
@@ -100,7 +83,7 @@ export class ControlSwitchView
     }
   }
 
-  radioChange(vm: VM, $event) {
+  radioChange(vm: RadioVM, $event) {
     $event.preventDefault();
     $event.stopPropagation();
     let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);

@@ -1,35 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Room, Category, View } from '../../interfaces/datamodel';
+import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
+import { RadioVM } from '../../interfaces/view.model';
+import { View } from '../../types/types';
 
 var sprintf = require('sprintf-js').sprintf;
-
-interface RadioListItem {
-  id: number;
-  name: string;
-}
-
-interface VM {
-  control: Control;
-  ui: {
-    name: string,
-    room: string;
-    category: string;
-    radio_list: RadioListItem[];
-    selected_id;
-    icon?: {
-      temp_base: string;
-      temp_dec: string
-    }
-    status: {
-      text: string;
-      color: string;
-    }
-  }
-}
 
 @Component({
   selector: 'control-irc-view',
@@ -43,7 +21,7 @@ export class ControlIRCView
   @Input() view: View;
 
   viewType = View;
-  vm$: Observable<VM>;
+  vm$: Observable<RadioVM>;
   segment: string = 'modes';
 
   private irc_mode = [
@@ -109,22 +87,9 @@ export class ControlIRCView
         let heating = ((mode == 1) || (mode == 3) || (mode == 5));
 
         let radio_list = heating ? this.radio_list_heating : this.radio_list_cooling;
-
-/* TODO add temperature settings to radio_list
-          control.display.radio_list.forEach( item => {
-            let sign = (item.id == 5) ? 1 : -1; // sign for increased heat
-            if (control.details.temperatures[item.id].isAbsolute)
-              item.temp = control.states.temperatures[item.id];
-            else
-              item.temp = Number(control.states.temperatures[heat_or_cool]) + sign * Number(control.states.temperatures[item.id]);
-            item.temp = ' (' + item.temp + '°C)';
-            item.name = this.translate.instant(item.name); // translate
-          });
-          //control.display.text_temp = control.display.radio_list[idxx].temp; // display temp in listbox?
-*/
         let idxx = radio_list.findIndex( item => { return item.id == state } );
 
-        const vm: VM = {
+        const vm: RadioVM = {
           control: control,
           ui: {
             name: this.translate.instant(this.irc_mode[idx].name),
