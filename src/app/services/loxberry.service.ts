@@ -104,18 +104,6 @@ export class LoxBerryService {
     return control;
   }
 
-  private addDisplayFields(control) {
-    if (!control.display) control.display = { text: "", color: null, toggle: false};
-    if (control.subcontrols) {
-      Object.keys(control.subcontrols).forEach(key => {
-        let subcontrol = control.subcontrols[key];
-        if (!subcontrol.display) subcontrol.display = { text: "", color: null, toggle: false };
-        if (!subcontrol.icon) subcontrol.icon = { href: "", color: null };
-      });
-    }
-    return control;
-  }
-
   private registerTopic(value: string) {
     let prefix = value.split('/')[0];
     if (!this.mqtt_topic_list.find( item => { return item === prefix }))
@@ -127,7 +115,7 @@ export class LoxBerryService {
     if (!obj) return;
 
     Object.keys(obj.controls).forEach( key => {
-      let control = this.addDisplayFields(obj.controls[key]); // TODO move elsewhere
+      let control = obj.controls[key];
       let name = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid;
       this.dataService.addControlToStore(this.processControl(control, name)); // Override full object in array
     });
