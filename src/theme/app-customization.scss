@@ -69,6 +69,10 @@ ion-content::part(scroll) {
   --ripple-color: transparent;
 }
 
+.card-fav {
+  height: 145px;
+}
+
 .card-header {
   margin: 0;
   padding: 0;
@@ -95,6 +99,14 @@ ion-content::part(scroll) {
   color: var(--ion-text-color, #ffffff);
 }
 
+.icon-list {
+  margin: 0 auto; // center
+  font-size: 42px;
+  margin-top: 20px; // TODO vertial align
+  margin-bottom: 6px;
+  color: var(--ion-text-color, #ffffff);
+}
+
 .text-icon {
   display: flex;
   align-items: center;
@@ -106,6 +118,10 @@ ion-content::part(scroll) {
 
 .label-listitem {
   margin-left: 15px;
+}
+
+.label-fav {
+  margin-top: 0px;
 }
 
 .label-right {
@@ -147,6 +163,18 @@ ion-content::part(scroll) {
     font-size: 13px;
   }
 }
+
+.label-list {
+    margin: 0;
+    h1 {
+      font-size: 18px;
+      line-height: 1.2;
+
+    }
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+  }
 
 // category and room labels
 .control-label {

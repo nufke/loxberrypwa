@@ -16,7 +16,7 @@ export const INITIAL_APP_STATE: AppState = {
   controls: {},
   categories: {},
   rooms: {}
-};
+}
 
 /**
  * Properties for Control elements
@@ -30,15 +30,16 @@ export interface Control {
   icon: {
     href: string;               // location or URL of SVG icon
     color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
-  };
+  }
   type: string;                 // type of control, e.g., switch, button, slider, etc.
   room: string;                 // uuid of room (hwid of room should match hwid of control)
   category: string;             // uuid of category (hwid of category should match hwid of control)
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make control invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order?: number;               // defines order in the App list (optional)
-  subcontrols?: any;            // subcontrols (optional)
+  order?: number;               // defines the order for the control page (optional)
+  homepage_order?: number;      // defines the order for the home page (optional)
+  subcontrols?: Subcontrol[];   // subcontrols (optional)
   details: any;                 // control details
   states: any;                  // control states
 }
@@ -54,7 +55,7 @@ export interface Subcontrol {
   icon: {
     href: string;               // location or URL of SVG icon
     color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
-  };
+  }
   type: string;                 // type of control, e.g., switch, button, slider, etc.
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make control invisible (optional)
@@ -75,7 +76,7 @@ export interface Category {
   icon: {
     href: string;               // location or URL of default SVG icon
     color?: string;             // color in RGB hex notation, e.g. #FFFFFF (optional)
-  };
+  }
   image?: string;               // location for the bitmap image (optional)
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make category invisible (optional)
@@ -95,7 +96,7 @@ export interface Room {
   icon: {
     href: string;               // location or URL to SVG icon
     color?: string;             // color in RGB hex notation, e.g. #FFFFFF (optional)
-  };
+  }
   image?: string;               // location for the bitmap image (optional)
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make category invisible (optional)

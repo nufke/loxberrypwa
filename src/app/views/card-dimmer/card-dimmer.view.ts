@@ -40,8 +40,8 @@ export class CardDimmerView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl(this.control.hwid, this.control.uuid),
-      this.controlService.getSubcontrol(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
+      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
     ]).pipe(
       map(([control, subcontrol]) => {
         // not all dimmer controls define the limits, instead use some defaults
@@ -54,13 +54,13 @@ export class CardDimmerView
         let button_color: string = '';
         let rgb: number[] = [];
 
-        if (subcontrol.type === 'dimmer') {
+        if (subcontrol.type === 'Dimmer') {
           position = Number(subcontrol.states.position);
           slider_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))';
           button_color = 'rgba(255, 229, 127,' + (position/100) + ')';
         }
 
-        if (subcontrol.type === 'color_picker_v2') {
+        if (subcontrol.type === 'ControlPickerV2') {
           let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
           if (hsv) {
             position = Number(hsv[3]);
@@ -92,13 +92,13 @@ export class CardDimmerView
   }
 
   sliderChange(vm: DimmerVM, $event) {
-    if (vm.subcontrol.type === 'dimmer') {
+    if (vm.subcontrol.type === 'Dimmer') {
       if (vm.subcontrol.states.position != vm.ui.slider.position) {
         this.controlService.updateControl(vm.subcontrol, String(vm.ui.slider.position));
       }
     }
 
-    if (vm.subcontrol.type === 'color_picker_v2') {
+    if (vm.subcontrol.type === 'ControlPickerV2') {
       let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
        if (hsv[3] != vm.ui.slider.position) {
         let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + vm.ui.slider.position + ')';
@@ -123,11 +123,11 @@ export class CardDimmerView
     if (position < vm.ui.slider.min) position = vm.ui.slider.min;
     if (position > vm.ui.slider.max) position = vm.ui.slider.max;
 
-    if (vm.subcontrol.type === 'dimmer') {
+    if (vm.subcontrol.type === 'Dimmer') {
       this.controlService.updateControl(vm.subcontrol, String(position));
     }
 
-    if (vm.subcontrol.type === 'color_picker_v2') {
+    if (vm.subcontrol.type === 'ControlPickerV2') {
       let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
       let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + position + ')';
       this.controlService.updateControl(vm.subcontrol, color);

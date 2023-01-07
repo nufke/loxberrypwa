@@ -29,7 +29,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
-            "type": "light_controller_v2",
+            "type": "LightControllerV2",
             "room": "2000",
             "category": "3000",
             "is_favorite": true,
@@ -52,7 +52,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
-            "type": "pushbutton",
+            "type": "Pushbutton",
             "room": "2001",
             "category": "3000",
             "is_favorite": false,
@@ -72,7 +72,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
-            "type": "switch",
+            "type": "Switch",
             "room": "2002",
             "category": "3000",
             "is_favorite": false,
@@ -92,7 +92,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/bulb-outline.svg"
             },
-            "type": "light_controller_v2",
+            "type": "LightControllerV2",
             "room": "2003",
             "category": "3000",
             "is_favorite": false,
@@ -115,7 +115,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
-            "type": "info_only_analog",
+            "type": "InfoOnlyAnalog",
             "room": "2000",
             "category": "3001",
             "is_favorite": true,
@@ -138,7 +138,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
-            "type": "info_only_analog",
+            "type": "InfoOnlyAnalog",
             "room": "2001",
             "category": "3001",
             "is_favorite": false,
@@ -161,7 +161,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
-            "type": "info_only_analog",
+            "type": "InfoOnlyAnalog",
             "room": "2002",
             "category": "3001",
             "is_favorite": false,
@@ -184,7 +184,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/thermometer-outline.svg"
             },
-            "type": "info_only_analog",
+            "type": "InfoOnlyAnalog",
             "room": "2003",
             "category": "3001",
             "is_favorite": false,
@@ -207,7 +207,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
-            "type": "slider",
+            "type": "Slider",
             "room": "2000",
             "category": "3002",
             "is_favorite": false,
@@ -233,7 +233,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
-            "type": "slider",
+            "type": "Slider",
             "room": "2001",
             "category": "3002",
             "is_favorite": false,
@@ -259,7 +259,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
-            "type": "slider",
+            "type": "Slider",
             "room": "2002",
             "category": "3002",
             "is_favorite": false,
@@ -285,7 +285,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/knob-solid.svg"
             },
-            "type": "slider",
+            "type": "Slider",
             "room": "2003",
             "category": "3002",
             "is_favorite": false,
@@ -311,7 +311,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
-            "type": "radio",
+            "type": "Radio",
             "room": "2000",
             "category": "3003",
             "is_favorite": false,
@@ -339,7 +339,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
-            "type": "radio",
+            "type": "Radio",
             "room": "2001",
             "category": "3003",
             "is_favorite": true,
@@ -367,7 +367,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
-            "type": "radio",
+            "type": "Radio",
             "room": "2002",
             "category": "3003",
             "is_favorite": false,
@@ -395,7 +395,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
             "icon": {
                 "href": "assets/svg_icons/music-solid.svg"
             },
-            "type": "radio",
+            "type": "Radio",
             "room": "2003",
             "category": "3003",
             "is_favorite": false,
@@ -503,7 +503,7 @@ Updates to the structure is *incremental*, which means changes to existing objec
 By default, each control, category and room element will subscribe and listen to messages with the MQTT prefix `loxberry/app/hwid/uuid/<key>`. For example, to update the name of the living room, you can send the following message:
 
 ```
-loxberry/app/9999/1000/name  ->  My Living Room
+loxberry/app/9999/1000/name  My Living Room
 ```
 
 Alternatively, a control field can subscribe to a dedicated MQTT topic if specified as JSON object `{ mqtt: <topic> }` in the structure. For example, the `mood_list` of the living room light controller can be updated as follows:
@@ -533,7 +533,7 @@ loxone/9999/8000  ->
 The active mood **Default** can be selected as follows:
 
 ```
-loxone/9999/8001  -> [1]
+loxone/9999/8001  [1]
 ```
 
 

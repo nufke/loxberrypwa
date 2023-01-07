@@ -25,15 +25,11 @@ export class HomePage
   }
 
   private initVM() : void {
-    this.vm$ = combineLatest([
-      this.controlService.controls$,
-      this.controlService.categories$,
-      this.controlService.rooms$,
-      ]).pipe(
-      map( ([controls, categories, rooms]) => {
+    this.vm$ = this.controlService.controls$.pipe(
+      map( controls => {
         controls = controls
-        .filter( control => control.is_favorite && control.is_visible )
-        .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+        .filter( control => control.homepage_order && control.is_visible )
+        .sort( (a, b) => ( a.homepage_order - b.homepage_order || a.name.localeCompare(b.name) ) );
         const vm: ControlListVM = {
           controls: controls
         };

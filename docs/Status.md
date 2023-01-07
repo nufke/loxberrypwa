@@ -14,8 +14,8 @@ This page lists the development status of the controls and subcontrols.
 | audio_zone               | Not started       |
 | audio_zone_v2            | Not started       |
 | car_charger              | Not started       |
-| central_jalousie         | Not started       |
-| central_light_controller | Not started       |
+| CentralJalousie         | Not started       |
+| CentralLightController | Not started       |
 | climate_controller       | Not started       |
 | climate_controller_u_s   | Not started       |
 | color_picker             | Not started       |
@@ -27,26 +27,26 @@ This page lists the development status of the controls and subcontrols.
 | gate                     | Not started       |
 | heatmixer                | Not started       |
 | hourcounter              | Not started       |
-| info_only_analog         | Available         |
-| info_only_digital        | Available         |
-| info_only_text           | Available         |
+| InfoOnlyAnalog         | Available         |
+| InfoOnlyDigital        | Available         |
+| InfoOnlyText           | Available         |
 | intercom                 | Not started       |
 | intercom_v2              | Not started       |
 | irrigation               | Not started       |
-| i_room_controller        | Under development |
+| IRoomController        | Under development |
 | i_r_c_daytimer           | Not started       |
-| jalousie                 | Not started       |
+| Jalousie                 | Not started       |
 | load_manager             | Not started       |
 | lightscene_rgb           | Not started       |
 | light_controller         | Not started       |
-| light_controller_v2      | Under development |
+| LightControllerV2      | Under development |
 | mail_box                 | Not started       |
 | meter                    | Not started       |
 | n_f_c_code_touch         | Not started       |
 | pool_controller          | Not started       |
 | presence_detector        | Not started       |
 | pulse_at                 | Not started       |
-| pushbutton               | Available         |
+| Pushbutton               | Available         |
 | radio                    | Available         |
 | remote                   | Not started       |
 | sauna                    | Not started       |

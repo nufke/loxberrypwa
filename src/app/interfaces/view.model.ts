@@ -6,11 +6,16 @@ import { Control, Subcontrol, Room, Category } from './data.model';
 
 export interface CategoryListVM {
   categories: Category[];
+  fav_categories: Category[];
+  categories_ex_fav: Category[];
 }
 
 export interface RoomListVM {
   rooms: Room[];
+  fav_rooms: Room[];
+  rooms_ex_fav: Room[];
 }
+
 export interface ControlListVM {
   controls: Control[];
   labels?: Room[] | Category[];
@@ -106,6 +111,10 @@ export interface TextVM {
     name: string;
     room: string;
     category: string;
+    icon?: {
+      temp_base: string;
+      temp_dec: string
+    }
     status: {
       text: string;
       color: string;

@@ -35,8 +35,8 @@ export class CardSwitchView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl(this.control.hwid, this.control.uuid),
-      this.controlService.getSubcontrol(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
+      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
     ]).pipe(
       map(([control, subcontrol]) => {
         let switchstate = (subcontrol.states.active === "1");

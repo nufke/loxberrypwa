@@ -12,7 +12,7 @@
     <ion-row *ngIf="mode_rgb">
       <ion-col>
         <div class="container">
-          <element-color-rgb-picker-view [vm]="vm"></element-color-rgb-picker-view>
+          <element-color-rgb-picker-view [color_picker_vm]="vm"></element-color-rgb-picker-view>
           <div class="overlay">
             <ion-fab-button class="fab_btn_temp" (click)="toggleMode()"></ion-fab-button>
           </div>
@@ -22,7 +22,7 @@
     <ion-row *ngIf="!mode_rgb">
       <ion-col>
         <div class="container">
-          <element-color-temp-picker-view [vm]="vm"></element-color-temp-picker-view>
+          <element-color-temp-picker-view [color_picker_vm]="vm"></element-color-temp-picker-view>
           <div class="overlay">
             <ion-fab-button class="fab_btn_rgb" (click)="toggleMode()"></ion-fab-button>
           </div>
@@ -42,7 +42,7 @@
     <ion-row>
       <ion-col>
         <div class="container">
-          <element-color-rgb-picker-view [vm]="vm"></element-color-rgb-picker-view>
+          <element-color-rgb-picker-view [color_picker_vm]="vm"></element-color-rgb-picker-view>
         </div>
       </ion-col>
     </ion-row>

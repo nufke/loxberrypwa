@@ -11,7 +11,7 @@ import { ButtonAction } from '../../types/types';
 })
 export class CardSliderView {
 
-  @Input() vm: SliderVM;
+  @Input() slider_vm: SliderVM;
 
   buttonType = ButtonAction;
 

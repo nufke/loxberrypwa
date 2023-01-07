@@ -3,23 +3,45 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      {{ 'Rooms' | translate }}
-    </ion-title>
+    <ion-title>{{ 'Rooms' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid *ngIf="vm$ | async as vm">
+    <ion-row *ngIf="vm.fav_rooms.length">
+      <ion-label class="control-label">
+        <p translate>Favorites</p>
+      </ion-label>
+    </ion-row>
     <ion-row>
-      <ion-col size="6" size-md="3" *ngFor="let room of vm.rooms">
-        <ion-card mode="ios" routerLink="{{room.hwid}}/{{room.uuid}}">
-          <ion-card-content>
-            <ion-item class="ion-text-center">
-              <ion-icon src="{{room.icon.href}}"></ion-icon>
+      <ion-col size="6" size-md="3" *ngFor="let room of vm.fav_rooms">
+        <ion-card class="card" *ngIf="room.is_favorite" class="card" routerLink="{{room.hwid}}/{{room.uuid}}">
+          <ion-card-content class="card-content">
+            <ion-item class="item ion-text-center">
+              <ion-icon class="icon-list" src="{{room.icon.href}}"></ion-icon>
             </ion-item>
             <ion-item>
-              <ion-label class="text-flex" text-wrap>
+              <ion-label class="label-list text-flex" text-wrap>
+                <h1>{{room.name}}</h1>
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="vm.rooms_ex_fav.length">
+      <ion-label class="control-label">
+        <p translate>All</p>
+      </ion-label>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" size-md="6" *ngFor="let room of vm.rooms_ex_fav">
+        <ion-card class="card" routerLink="{{room.hwid}}/{{room.uuid}}">
+          <ion-card-content class="card-content">
+            <ion-item class="item">
+              <ion-icon class="icon" src="{{room.icon.href}}"></ion-icon>
+              <ion-label class="label label-listitem" text-wrap>
                 <h1>{{room.name}}</h1>
               </ion-label>
             </ion-item>

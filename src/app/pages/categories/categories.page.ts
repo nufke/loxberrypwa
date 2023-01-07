@@ -34,14 +34,22 @@ export class CategoriesPage
         controls = controls
         .filter( control => control.is_visible );
         let filtered_categories = controls.map(control => control.category );
-        categories = categories
-          .filter( category => category.is_visible && filtered_categories.indexOf(category.uuid) > -1)
+        let categories_ex_fav = categories
+          .filter( category => category.is_visible && !category.is_favorite && filtered_categories.indexOf(category.uuid) > -1)
+          // TODO remove duplicates?
+          //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
+          //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
+          .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+        let fav_categories = categories
+          .filter( category => category.is_visible && category.is_favorite && filtered_categories.indexOf(category.uuid) > -1)
           // TODO remove duplicates?
           //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
           //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
           .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
           const vm: CategoryListVM = {
-            categories: categories
+            categories: categories,
+            categories_ex_fav: categories_ex_fav,
+            fav_categories: fav_categories
           };
           return vm;
       })

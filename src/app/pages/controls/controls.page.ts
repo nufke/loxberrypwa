@@ -52,13 +52,12 @@ export class ControlsPage
       ]).pipe(
         map(([controls, categories, rooms]) => {
           controls = controls
-            .filter(control => control.is_visible && control.category === uuid && control.hwid === hwid)
-            .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+            .filter(control => control.is_visible && control.category === uuid && control.hwid === hwid);
           let filtered_rooms = controls.map(control => control.room);
           const vm: ControlListVM = {
             controls: controls,
             labels: rooms.filter( rooms => filtered_rooms.indexOf(rooms.uuid) > -1 )
-                         .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) ),
+                         .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
             page: categories.find( category => (category.uuid === uuid) && (category.hwid === hwid) )
           };
           return vm;
@@ -74,13 +73,12 @@ export class ControlsPage
       ]).pipe(
         map(([controls, categories, rooms]) => {
           controls = controls
-            .filter(control => control.is_visible && control.room === uuid && control.hwid === hwid )
-            .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+            .filter(control => control.is_visible && control.room === uuid && control.hwid === hwid );
           let filtered_categories = controls.map(control => control.category);
           const vm: ControlListVM = {
             controls: controls,
             labels: categories.filter( category => filtered_categories.indexOf(category.uuid) > -1 )
-                              .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) ),
+                              .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
             page: rooms.find( room => (room.uuid === uuid) && (room.hwid === hwid) )
           };
           return vm;
@@ -95,6 +93,7 @@ export class ControlsPage
   filter(label: Room | Category) : Observable<Control[]> {
     return this.vm$.pipe(
       map( items => items.controls
-        .filter( resp => resp[this.key] === label.uuid )));
+        .filter( resp => resp[this.key] === label.uuid )
+        .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name)))));
   }
 }

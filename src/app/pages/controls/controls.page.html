@@ -20,37 +20,37 @@
       <ion-row>
         <ion-col size="12" size-md="6" *ngFor="let control of filter(label) | async">
 
-          <ng-container *ngIf="control.type === 'i_room_controller'">
+          <ng-container *ngIf="control.type === 'IRoomController'">
             <control-irc-view [control]="control" [view]="viewType.LIST_ITEM"></control-irc-view>
           </ng-container>
 
-          <ng-container *ngIf="control.type === 'light_controller_v2'">
+          <ng-container *ngIf="control.type === 'LightControllerV2'">
             <control-light-v2-view [control]="control" [view]="viewType.LIST_ITEM"></control-light-v2-view>
           </ng-container>
 
-          <ng-container *ngIf="control.type === 'pushbutton'">
+          <ng-container *ngIf="control.type === 'Pushbutton'">
             <control-pushbutton-view [control]="control" [view]="viewType.LIST_ITEM"></control-pushbutton-view>
           </ng-container>
 
-          <ng-container *ngIf="control.type === 'slider'">
+          <ng-container *ngIf="control.type === 'Slider'">
             <control-slider-view [control]="control" [view]="viewType.LIST_ITEM"></control-slider-view>
           </ng-container>
 
-          <ng-container *ngIf="control.type === 'switch'">
+          <ng-container *ngIf="control.type === 'Switch'">
             <control-switch-view [control]="control" [view]="viewType.LIST_ITEM"></control-switch-view>
           </ng-container>
 
-          <ng-container *ngIf="control.type === 'radio'">
+          <ng-container *ngIf="control.type === 'Radio'">
             <control-radio-view [control]="control" [view]="viewType.LIST_ITEM"></control-radio-view>
           </ng-container>
 
           <ng-container *ngIf="
-          (control.type !== 'i_room_controller') &&
-          (control.type !== 'light_controller_v2') &&
-          (control.type !== 'pushbutton') &&
-          (control.type !== 'slider') &&
-          (control.type !== 'switch') &&
-          (control.type !== 'radio')
+          (control.type !== 'IRoomController') &&
+          (control.type !== 'LightControllerV2') &&
+          (control.type !== 'Pushbutton') &&
+          (control.type !== 'Slider') &&
+          (control.type !== 'Switch') &&
+          (control.type !== 'Radio')
           ">
             <control-text-state-view [control]="control" [view]="viewType.LIST_ITEM"></control-text-state-view>
           </ng-container>

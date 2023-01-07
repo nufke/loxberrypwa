@@ -45,17 +45,17 @@ export class DetailedControlPage
   ];
 
   private ViewMap = {
-    'info_only_analog': ControlTextStateView,
-    'info_only_digital': ControlTextStateView,
-    'info_only_text': ControlTextStateView,
-    'text_state': ControlTextStateView,
-    'light_controller_v2': ControlLightV2View,
-    'radio': ControlRadioView,
-    'switch': ControlSwitchView,
-    'slider': ControlSliderView,
-    'pushbutton': ControlPushbuttonView,
-    'color_picker_v2': ControlColorPickerV2View,
-    'i_room_controller': ControlIRCView
+    'InfoOnlyAnalog': ControlTextStateView,
+    'InfoOnlyDigital': ControlTextStateView,
+    'InfoOnlyText': ControlTextStateView,
+    'TextState': ControlTextStateView,
+    'LightControllerV2': ControlLightV2View,
+    'Radio': ControlRadioView,
+    'Switch': ControlSwitchView,
+    'Slider': ControlSliderView,
+    'Pushbutton': ControlPushbuttonView,
+    'ControlPickerV2': ControlColorPickerV2View,
+    'IRoomController': ControlIRCView
   }
 
   constructor(
@@ -72,15 +72,15 @@ export class DetailedControlPage
     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
     const subcontrol_uuid_ext = this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
-    this.controlService.getControl(control_hwid, control_uuid).subscribe(
+    this.controlService.getControl$(control_hwid, control_uuid).subscribe(
       control => {
         this.control = control;
-        this.page_name = (control.type === 'i_room_controller') ?
+        this.page_name = (control.type === 'IRoomController') ?
         this.translate.instant(this.irc_mode.find(item => item.id == control.states.mode ).name) : control.name;
       }
     );
     if (subcontrol_uuid != null) {
-      this.controlService.getSubcontrol(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
+      this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
         subcontrol => {
           this.subcontrol = subcontrol;
           this.page_name = subcontrol.name;
@@ -114,7 +114,7 @@ export class DetailedControlPage
     if (view)
       return this.ViewMap[type];
     else
-      return this.ViewMap['text_state']; // default
+      return this.ViewMap['TextState']; // default
   }
 
   public ngOnDestroy() : void {

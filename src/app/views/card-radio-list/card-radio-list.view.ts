@@ -11,7 +11,7 @@ import { RadioVM } from '../../interfaces/view.model';
 export class CardRadioListView
   implements OnInit {
 
-  @Input() vm: RadioVM;
+  @Input() radio_vm: RadioVM;
 
   constructor(
     public translate: TranslateService,
@@ -23,20 +23,20 @@ export class CardRadioListView
 
   radioGroupChange(vm: RadioVM, $event) {
 
-    if (vm.control.type === 'radio') {
+    if (vm.control.type === 'Radio') {
       let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);
       let msg = String(vm.ui.radio_list[idx].id);
       if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
       this.controlService.updateControl(vm.control, msg);
     }
 
-    if (vm.control.type === 'light_controller_v2') {
+    if (vm.control.type === 'LightControllerV2') {
       let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);
       let msg = 'changeTo/' + String(vm.ui.radio_list[idx].id);
       this.controlService.updateControl(vm.control, msg);
     }
 
-    if (vm.control.type === 'i_room_controller') {
+    if (vm.control.type === 'IRoomController') {
       //TODO
     }
   }

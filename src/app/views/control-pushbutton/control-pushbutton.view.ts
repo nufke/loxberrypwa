@@ -39,7 +39,7 @@ export class ControlPushbuttonView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.hwid, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(

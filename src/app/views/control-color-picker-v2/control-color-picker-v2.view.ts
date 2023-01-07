@@ -42,8 +42,8 @@ export class ControlColorPickerV2View
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl(this.control.hwid, this.control.uuid),
-      this.controlService.getSubcontrol(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
+      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
     ]).pipe(
       map(([control, subcontrol]) => {
         let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);

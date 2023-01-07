@@ -40,7 +40,7 @@ export class ControlTextStateView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.hwid, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(
@@ -68,17 +68,17 @@ export class ControlTextStateView
   processText(control): string {
     let text: string;
     switch (control.type) {
-      case 'info_only_text':
+      case 'InfoOnlyText':
         text = sprintf(control.details.format, control.states.text);
         break;
-      case 'info_only_digital':
+      case 'InfoOnlyDigital':
         let active = (control.states.active === "1");
         text = active ? control.details.text.on : control.details.text.off;
         break;
-      case 'text_state':
+      case 'TextState':
         text = control.states.text_and_icon;
         break;
-      case 'info_only_analog':
+      case 'InfoOnlyAnalog':
         switch (control.details.format) {
           case '<v.u>': // date + time
             let date = new Date(Number(control.states.value) * 1000 + 1230768000000);
@@ -100,7 +100,7 @@ export class ControlTextStateView
             break;
           case '<v.j>': // combined value
             control.details.format = '%f'; // TODO: check
-          case '<v.i>': // combined pushbutton
+          case '<v.i>': // combined Pushbutton
             control.details.format = '%f'; // TODO: check
           case '<v.c>': // color
             control.details.format = '#%6h'; // TODO: check
@@ -128,7 +128,7 @@ export class ControlTextStateView
   processColor(control): string {
     let color: string;
     switch (control.type) {
-      case 'info_only_digital':
+      case 'InfoOnlyDigital':
         let active = (control.states.active === "1");
         color = active ? control.details.color.on : control.details.color.off;
         break;

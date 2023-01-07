@@ -40,18 +40,18 @@ export class ControlRadioView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.hwid, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
         let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
         let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-
+console.log('update');
         let selected_id = Number(control.states.active_output);
         if (!selected_id) selected_id = 0;
-        let radio_list = Object.entries(control.details.outputs).map(entry => ({ id: Number(entry[0]), name: String(entry[1]) }));
-        radio_list.push({ id: 0, name: control.details.all_off });
+        let radio_list = [{ id: 0, name: control.details.all_off }]
+          .concat(Object.entries(control.details.outputs).map(entry => ({ id: Number(entry[0]), name: String(entry[1]) })));
         let idx = radio_list.findIndex(item => { return item.id === selected_id });
 
         const vm: RadioVM = {

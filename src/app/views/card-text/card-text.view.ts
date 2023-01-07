@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
+import { TextVM } from '../../interfaces/view.model';
 
 @Component({
   selector: 'card-text-view',
@@ -9,7 +10,7 @@ import { ControlService } from '../../services/control.service';
 })
 export class CardTextView {
 
-  @Input() vm: any; // TODO define explicit interface
+  @Input() text_vm: TextVM;
 
   constructor(
     public translate: TranslateService,

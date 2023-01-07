@@ -12,7 +12,7 @@ import { ColorPickerVM } from '../../interfaces/view.model';
 export class ElementColorTempPickerView
   implements OnInit {
 
-  @Input() vm: ColorPickerVM;
+  @Input() color_picker_vm: ColorPickerVM;
 
   TempPicker;
 
@@ -23,7 +23,7 @@ export class ElementColorTempPickerView
 
   ngOnChanges() {
     if (this.TempPicker)
-      this.TempPicker.color.set(this.vm.rgb);
+      this.TempPicker.color.set(this.color_picker_vm.rgb);
   }
 
   ngOnInit() {
@@ -46,8 +46,8 @@ export class ElementColorTempPickerView
   }
 
   updateColor(color) {
-    let hsv_color = 'hsv(' + Math.round(color.hsv.h) + ',' + Math.round(color.hsv.s) + ',' + this.vm.position + ')';
-    this.controlService.updateControl(this.vm.subcontrol, hsv_color);
+    let hsv_color = 'hsv(' + Math.round(color.hsv.h) + ',' + Math.round(color.hsv.s) + ',' + this.color_picker_vm.position + ')';
+    this.controlService.updateControl(this.color_picker_vm.subcontrol, hsv_color);
   }
 
 }

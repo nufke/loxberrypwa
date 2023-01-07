@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { switchMap } from "rxjs/operators";
 import { Control, Subcontrol, Category, Room } from '../interfaces/data.model';
 import { AppStore } from './app.store';
 
@@ -10,64 +9,59 @@ export class DataService {
   constructor(public store: AppStore) {
   }
 
-  getControlsFromStore(): Observable<Control[]> {
-    return this.store.state$.pipe(switchMap(state => of(Object.values(state.controls))));
+  getControlsFromStore$(): Observable<Control[]> {
+    return this.store.select$((state) => Object.values(state.controls));
   }
 
-  getCategoriesFromStore(): Observable<Category[]> {
-    return this.store.state$.pipe(switchMap(state => of(Object.values(state.categories))));
+  getCategoriesFromStore$(): Observable<Category[]> {
+    return this.store.select$((state) => Object.values(state.categories));
   }
 
-  getRoomsFromStore(): Observable<Room[]> {
-    return this.store.state$.pipe(switchMap(state => of(Object.values(state.rooms))));
+  getRoomsFromStore$(): Observable<Room[]> {
+    return this.store.select$((state) => Object.values(state.rooms));
   }
 
-  getSingleControlFromStore(hwid: string, uuid: string): Observable<Control> {
-    return this.store.state$.pipe(switchMap(state => of(state.controls[hwid + '/' + uuid])));
+  getSingleControlFromStore$(hwid: string, uuid: string): Observable<Control> {
+    return this.store.select$((state) => state.controls[hwid + '/' + uuid]);
   }
 
-  getSingleSubcontrolFromStore(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
-    return this.store.state$.pipe(switchMap(state => of(state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid])));
+  getSingleSubcontrolFromStore$(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
+    return this.store.select$((state) => state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid]);
   }
 
   addControlToStore(control: Control): void {
-    let state = this.store.getState();
-    state.controls[this.getId(control)] = control;
-    this.store.setState({ ...state });
+    this.store.setState((state) => { state.controls[this.getId(control)] = control; return state; });
   }
 
   addCategoryToStore(category: Category): void {
-    let state = this.store.getState();
-    state.categories[this.getId(category)] = category;
-    this.store.setState({ ...state });
+    this.store.setState((state) => { state.categories[this.getId(category)] = category; return state; });
   }
 
   addRoomToStore(room: Room): void {
-    let state = this.store.getState();
-    state.rooms[this.getId(room)] = room;
-    this.store.setState({ ...state });
+    this.store.setState((state) => { state.rooms[this.getId(room)] = room; return state; });
   }
 
   flushControlsInStore(): void {
-    let state = this.store.getState();
-    state.controls = {};
-    state.categories = {};
-    state.rooms = {};
-    this.store.setState({ ...state });
+    this.store.setState((state) => {
+      state.controls = {};
+      state.categories = {};
+      state.rooms = {};
+      return state;
+    });
   }
 
   updateElementInStore(topic, value) {
-    let state = this.store.getState();
-    let topic_level = topic.split('/');
-    let id = topic_level[0] + '/' + topic_level[1];
-
-    if (state.controls[id])
-      this.findAndUpdate(state.controls[id], id, topic, value);
-    if (state.categories[id])
-      this.findAndUpdate(state.categories[id], id, topic, value);
-    if (state.rooms[id])
-      this.findAndUpdate(state.rooms[id], id, topic, value);
-    this.store.setState({ ...state });
+    this.store.setState((state) => {
+      let topic_level = topic.split('/');
+      let id = topic_level[0] + '/' + topic_level[1];
+      if (state.controls[id])
+        this.findAndUpdate(state.controls[id], id, topic, value);
+      if (state.categories[id])
+        this.findAndUpdate(state.categories[id], id, topic, value);
+      if (state.rooms[id])
+        this.findAndUpdate(state.rooms[id], id, topic, value);
+      return state;
+    });
   }
 
   private findAndUpdate(obj, name, topic, value) {

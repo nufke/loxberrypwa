@@ -12,7 +12,7 @@ import { ColorPickerVM } from '../../interfaces/view.model';
 export class ElementColorRGBPickerView
   implements OnInit {
 
-  @Input() vm: ColorPickerVM;
+  @Input() color_picker_vm: ColorPickerVM;
 
   ColorPicker;
 
@@ -23,14 +23,14 @@ export class ElementColorRGBPickerView
 
   ngOnChanges() {
     if (this.ColorPicker)
-      this.ColorPicker.color.set(this.vm.rgb);
+      this.ColorPicker.color.set(this.color_picker_vm.rgb);
   }
 
   ngOnInit() {
     this.ColorPicker = iro.ColorPicker(".picker",
     {
       width: 280,
-      color: this.vm.rgb,
+      color: this.color_picker_vm.rgb,
       borderWidth: 8,
       borderColor: "#232425", // same as card
       handleRadius: 10,
@@ -40,8 +40,8 @@ export class ElementColorRGBPickerView
   }
 
   updateColor(color) {
-    let hsv_color = 'hsv(' + Math.round(color.hsv.h) + ',' + Math.round(color.hsv.s) + ',' + this.vm.position + ')';
-    this.controlService.updateControl(this.vm.subcontrol, hsv_color);
+    let hsv_color = 'hsv(' + Math.round(color.hsv.h) + ',' + Math.round(color.hsv.s) + ',' + this.color_picker_vm.position + ')';
+    this.controlService.updateControl(this.color_picker_vm.subcontrol, hsv_color);
   }
 
 }
