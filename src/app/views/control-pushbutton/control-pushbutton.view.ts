@@ -44,24 +44,28 @@ export class ControlPushbuttonView
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
-        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-
-        const vm: TextVM = {
-          control: control,
-          ui: {
-            name: control.name,
-            room: (room && room.name) ? room.name : "unknown",
-            category: (category && category.name) ? category.name : "unknown",
-            status: {
-              text: control.details.active,
-              color: "#9d9e9e" // TODO select from color palette
-            }
-          }
-        };
-        return vm;
+        return this.updateVM(control, categories, rooms);
       })
     );
+  }
+
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): TextVM {
+    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+
+    const vm: TextVM = {
+      control: control,
+      ui: {
+        name: control.name,
+        room: (room && room.name) ? room.name : "unknown",
+        category: (category && category.name) ? category.name : "unknown",
+        status: {
+          text: control.states.active,
+          color: "#9d9e9e" // TODO select from color palette
+        }
+      }
+    };
+    return vm;
   }
 
   clickPushButton(action: ButtonAction, vm: TextVM, $event) {

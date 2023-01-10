@@ -3,13 +3,11 @@ import { Observable, of } from 'rxjs';
 import { Control, Subcontrol, Category, Room } from '../interfaces/data.model';
 import { DataService } from './data.service';
 import { LoxBerryService } from '../services/loxberry.service';
-import { AppStore } from './app.store';
 
 @Injectable({ providedIn: 'root' })
 export class ControlService {
 
-  constructor(public store: AppStore,
-    private dataService: DataService,
+  constructor(private dataService: DataService,
     public loxberryService: LoxBerryService) {
   }
 

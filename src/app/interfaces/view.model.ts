@@ -6,14 +6,14 @@ import { Control, Subcontrol, Room, Category } from './data.model';
 
 export interface CategoryListVM {
   categories: Category[];
-  fav_categories: Category[];
-  categories_ex_fav: Category[];
+  categories_list: Category[];
+  categories_favs: Category[];
 }
 
 export interface RoomListVM {
   rooms: Room[];
-  fav_rooms: Room[];
-  rooms_ex_fav: Room[];
+  rooms_list: Room[];
+  rooms_favs: Room[];
 }
 
 export interface ControlListVM {

@@ -6,66 +6,66 @@ This page lists the development status of the controls and subcontrols.
 
 | (Sub)Control             | Status            |
 |--------------------------|-------------------|
-| aal_emergency            | Not started       |
-| aal_smart_alarm          | Not started       |
-| alarm                    | Not started       |
-| alarm_chain              | Not started       |
-| alarm_clock              | Not started       |
-| audio_zone               | Not started       |
-| audio_zone_v2            | Not started       |
-| car_charger              | Not started       |
-| CentralJalousie         | Not started       |
-| CentralLightController | Not started       |
-| climate_controller       | Not started       |
-| climate_controller_u_s   | Not started       |
-| color_picker             | Not started       |
-| color_picker_v2          | Under development |
-| daytimer                 | Under development |
-| dimmer                   | Available         |
-| energy_manager           | Not started       |
-| fronius                  | Not started       |
-| gate                     | Not started       |
-| heatmixer                | Not started       |
-| hourcounter              | Not started       |
-| InfoOnlyAnalog         | Available         |
-| InfoOnlyDigital        | Available         |
-| InfoOnlyText           | Available         |
-| intercom                 | Not started       |
-| intercom_v2              | Not started       |
-| irrigation               | Not started       |
-| IRoomController        | Under development |
-| i_r_c_daytimer           | Not started       |
+| AalEmergency             | Not started       |
+| AalSmartAlarm            | Not started       |
+| Alarm                    | Not started       |
+| AlarmChain               | Not started       |
+| AlarmClock               | Not started       |
+| AudioZone                | Not started       |
+| AudioZoneV2              | Not started       |
+| CarCharger               | Not started       |
+| CentralJalousie          | Not started       |
+| CentralLightController   | Not started       |
+| ClimateController        | Not started       |
+| ClimateControllerUS      | Not started       |
+| ColorPicker              | Not started       |
+| ColorPickerV2            | Under development |
+| Daytimer                 | Under development |
+| Dimmer                   | Available         |
+| EnergyManager            | Not started       |
+| Fronius                  | Not started       |
+| Gate                     | Not started       |
+| Heatmixer                | Not started       |
+| Hourcounter              | Not started       |
+| InfoOnlyAnalog           | Available         |
+| InfoOnlyDigital          | Available         |
+| InfoOnlyText             | Available         |
+| Intercom                 | Not started       |
+| IntercomV2               | Not started       |
+| Irrigation               | Not started       |
+| IRoomController          | Under development |
+| IRCDaytimer              | Not started       |
 | Jalousie                 | Not started       |
-| load_manager             | Not started       |
-| lightscene_rgb           | Not started       |
-| light_controller         | Not started       |
-| LightControllerV2      | Under development |
-| mail_box                 | Not started       |
-| meter                    | Not started       |
-| n_f_c_code_touch         | Not started       |
-| pool_controller          | Not started       |
-| presence_detector        | Not started       |
-| pulse_at                 | Not started       |
+| LoadManager              | Not started       |
+| LightsceneRGB            | Not started       |
+| LightController          | Not started       |
+| LightControllerV2        | Under development |
+| MailBox                  | Not started       |
+| Meter                    | Not started       |
+| NFCCodeTouch             | Not started       |
+| PoolController           | Not started       |
+| PresenceDetector         | Not started       |
+| PulseAt                  | Not started       |
 | Pushbutton               | Available         |
-| radio                    | Available         |
-| remote                   | Not started       |
-| sauna                    | Not started       |
-| sequential               | Not started       |
-| slider                   | Available         |
-| smoke_alarm              | Not started       |
-| solar_pump_controller    | Not started       |
-| steak_thermo             | Not started       |
-| switch                   | Available         |
-| system_scheme            | Not started       |
-| text_state               | Available         |
-| timed_switch             | Not started       |
-| tracker                  | Not started       |
-| up_down_digital          | Not started       |
-| value_selector           | Not started       |
-| ventilation              | Not started       |
-| webpage                  | Not started       |
-| window                   | Not started       |
-| window_monitor           | Not started       |
+| Radio                    | Available         |
+| Remote                   | Not started       |
+| Sauna                    | Not started       |
+| Sequential               | Not started       |
+| Slider                   | Available         |
+| SmokeAlarm               | Not started       |
+| SolarPumpController      | Not started       |
+| SteakThermo              | Not started       |
+| Switch                   | Available         |
+| SystemScheme             | Not started       |
+| TextState                | Available         |
+| TimedSwitch              | Not started       |
+| Tracker                  | Not started       |
+| UpDownDigital            | Not started       |
+| ValueSelector            | Not started       |
+| Ventilation              | Not started       |
+| Webpage                  | Not started       |
+| Window                   | Not started       |
+| WindowMonitor            | Not started       |
 
 ## Other capabilties and features
 

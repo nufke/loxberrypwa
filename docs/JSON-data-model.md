@@ -38,8 +38,7 @@ Fields indicated with '?' are optional
   is_favorite?: boolean;              // elevate to favorite item (optional)
   is_visible?: boolean;               // make control invisible
   is_protected?: boolean;             // passwd/PIN protected control (optional)
-  order?: number;                     // defines the order for the control page (optional)
-  homepage_order?: number;            // defines the order for the home page (optional)
+  order?: number[];                   // defines the order for controls (optional)
   details: { ... }                    // details of the control (values control dependent)
   states: { ... }                     // states of the control (values control dependent)
   subcontrols?: { ... }               // subcontrols (values control dependent) (optional)
@@ -85,7 +84,7 @@ The nested JSON structure for the control `details` and `states` depend on the t
   is_favorite?: boolean;              // make favorite item (optional)
   is_visible?: boolean;               // make category invisible
   is_protected?: boolean;             // passwd/PIN protected control (optional)
-  order?: number;                     // defines order in list box (optional)
+  order?: number[];                   // defines the order for categories (optional)
 }
 ```
 
@@ -104,6 +103,6 @@ The nested JSON structure for the control `details` and `states` depend on the t
   is_favorite?: boolean;              // make favorite item (optional)
   is_visible?: boolean;               // make room invisible
   is_protected?: boolean;             // passwd/PIN protected control (optional)
-  order?: number;                     // defines order in list box (optional)
+  order?: number[];                   // defines the order for rooms (optional)
 }
 ```

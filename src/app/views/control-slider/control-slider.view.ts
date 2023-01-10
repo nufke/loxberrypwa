@@ -46,25 +46,29 @@ export class ControlSliderView
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
-        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-
-        const vm: SliderVM = {
-          control: control,
-          ui: {
-            name: control.name,
-            room: (room && room.name) ? room.name : "unknown",
-            category: (category && category.name) ? category.name : "unknown",
-            slider: { position: Number(control.states.value) },
-            status: {
-              text: sprintf(control.details.format, control.states.value),
-              color: "#9d9e9e" // TODO select from color palette
-            }
-          }
-        };
-        return vm;
+        return this.updateVM(control, categories, rooms);
       })
     );
+  }
+
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): SliderVM {
+    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+
+    const vm: SliderVM = {
+      control: control,
+      ui: {
+        name: control.name,
+        room: (room && room.name) ? room.name : "unknown",
+        category: (category && category.name) ? category.name : "unknown",
+        slider: { position: Number(control.states.value) },
+        status: {
+          text: sprintf(control.details.format, control.states.value),
+          color: "#9d9e9e" // TODO select from color palette
+        }
+      }
+    };
+    return vm;
   }
 
   // TODO reuse card-slider-view?

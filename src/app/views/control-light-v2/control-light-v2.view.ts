@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { Control, Subcontrol, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { RadioVM } from '../../interfaces/view.model';
+import { RadioVM, RadioListItem } from '../../interfaces/view.model';
 import { ButtonAction, View } from '../../types/types';
 
 @Component({
@@ -23,6 +23,9 @@ export class ControlLightV2View
 
   vm$: Observable<RadioVM>;
   segment: string = 'moods';
+  entries: any; // TODO define type
+  mood_list: RadioListItem[];
+  text: string;
 
   constructor(
     public translate: TranslateService,
@@ -45,49 +48,60 @@ export class ControlLightV2View
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
-        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-
-        let selected_id = control.states.active_moods[0];
-        let mood_list = control.states.mood_list; // TODO only load once?
-        let text = '';
-
-        if (mood_list) {
-          if (selected_id) {
-            let mood_idx = mood_list.findIndex(item => { return item.id == selected_id });
-            text = mood_list[mood_idx].name;
-          }
-          else
-            text = this.translate.instant('Manual');
-        }
-
-        let allSubcontrols: Subcontrol[] = Object.values(control.subcontrols);
-        let visibleSubcontrols = allSubcontrols.filter( subcontrol => subcontrol.is_visible );
-
-        const vm: RadioVM = {
-          control: {
-            ...control,
-            icon: {
-              href: control.icon.href,
-              color: (selected_id != 778) ? "primary" : "#9d9e9e" }
-            }, // TODO select from color palette
-          ui: {
-            name: control.name,
-            room: (room && room.name) ? room.name : "unknown",
-            category: (category && category.name) ? category.name : "unknown",
-            radio_list: mood_list,
-            selected_id: selected_id,
-            status: {
-              text: text,
-              color: (selected_id != 778) ? "#69c350" : "#9d9e9e" // TODO select from color palette
-            }
-          },
-          subcontrols: visibleSubcontrols,
-        };
-        return vm;
+        return this.updateVM(control, categories, rooms);
       })
     );
   }
+
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
+    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+    let selected_id = control.states.active_moods[0];
+
+    /* only update radio_list if we have new entries, since it might cause GUI interruptions */
+    if (this.entries !== control.states.mood_list) {
+      this.mood_list = control.states.mood_list;
+
+      if (this.mood_list) {
+        if (selected_id) {
+          let mood_idx = this.mood_list.findIndex(item => { return item.id == selected_id });
+          this.text = this.mood_list[mood_idx].name;
+        }
+        else
+          this.text = this.translate.instant('Manual');
+      }
+    }
+
+    let visibleSubcontrols = [];
+
+    if (control.subcontrols) {
+      let allSubcontrols: Subcontrol[] = Object.values(control.subcontrols);
+      visibleSubcontrols = allSubcontrols.filter( subcontrol => subcontrol.is_visible );
+    }
+
+    const vm: RadioVM = {
+      control: {
+        ...control,
+        icon: {
+          href: control.icon.href,
+          color: (selected_id != 778) ? "primary" : "#9d9e9e" }
+        }, // TODO select from color palette
+      ui: {
+        name: control.name,
+        room: (room && room.name) ? room.name : "unknown",
+        category: (category && category.name) ? category.name : "unknown",
+        radio_list: this.mood_list,
+        selected_id: selected_id,
+        status: {
+          text: this.text,
+          color: (selected_id != 778) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+        }
+      },
+      subcontrols: visibleSubcontrols,
+    };
+    return vm;
+  }
+
 
   updateSegment() {
     // Close any open sliding items when the schedule updates

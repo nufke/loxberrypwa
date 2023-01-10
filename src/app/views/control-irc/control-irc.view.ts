@@ -73,43 +73,47 @@ export class ControlIRCView
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
-        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-
-        let temp = sprintf("%.1f", control.states.temp_actual).split('.');
-        let idx = this.irc_mode.findIndex(item => { return item.id == control.states.mode });
-
-        let subcontrols = Object.keys(control.subcontrols);
-        let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
-
-        let heat_or_cool = 1; // TODO default: heating?
-        let mode = control.states.mode;
-        let heating = ((mode == 1) || (mode == 3) || (mode == 5));
-
-        let radio_list = heating ? this.radio_list_heating : this.radio_list_cooling;
-        let idxx = radio_list.findIndex( item => { return item.id == state } );
-
-        const vm: RadioVM = {
-          control: control,
-          ui: {
-            name: this.translate.instant(this.irc_mode[idx].name),
-            room: (room && room.name) ? room.name : "unknown",
-            category: (category && category.name) ? category.name : "unknown",
-            radio_list: radio_list,
-            selected_id: state,
-            icon: {
-              temp_base: temp[0],
-              temp_dec: '.' + temp[1]
-            },
-            status: {
-              text: radio_list[idxx].name, // translate in scss to enable radio selection highlighting
-              color: (idxx > 0) ? "#69c350" : "#9d9e9e" // TODO select from color palette
-            }
-          }
-        };
-        return vm;
+        return this.updateVM(control, categories, rooms);
       })
     );
+  }
+
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
+    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+
+    let temp = sprintf("%.1f", control.states.temp_actual).split('.');
+    let idx = this.irc_mode.findIndex(item => { return item.id == control.states.mode });
+
+    let subcontrols = Object.keys(control.subcontrols);
+    let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
+
+    let heat_or_cool = 1; // TODO default: heating?
+    let mode = control.states.mode;
+    let heating = ((mode == 1) || (mode == 3) || (mode == 5));
+
+    let radio_list = heating ? this.radio_list_heating : this.radio_list_cooling;
+    let idxx = radio_list.findIndex( item => { return item.id == state } );
+
+    const vm: RadioVM = {
+      control: control,
+      ui: {
+        name: this.translate.instant(this.irc_mode[idx].name),
+        room: (room && room.name) ? room.name : "unknown",
+        category: (category && category.name) ? category.name : "unknown",
+        radio_list: radio_list,
+        selected_id: state,
+        icon: {
+          temp_base: temp[0],
+          temp_dec: '.' + temp[1]
+        },
+        status: {
+          text: radio_list[idxx].name, // translate in scss to enable radio selection highlighting
+          color: (idxx > 0) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+        }
+      }
+    };
+    return vm;
   }
 
   updateSegment() {

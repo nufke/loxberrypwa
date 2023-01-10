@@ -45,24 +45,28 @@ export class ControlTextStateView
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
-        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-
-        const vm: TextVM = {
-          control: control,
-          ui: {
-            name: control.name,
-            room: (room && room.name) ? room.name : "unknown",
-            category: (category && category.name) ? category.name : "unknown",
-            status: {
-              text: this.processText(control),
-              color: this.processColor(control),
-            }
-          }
-        };
-        return vm;
+        return this.updateVM(control, categories, rooms);
       })
     );
+  }
+
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): TextVM {
+    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+
+    const vm: TextVM = {
+      control: control,
+      ui: {
+        name: control.name,
+        room: (room && room.name) ? room.name : "unknown",
+        category: (category && category.name) ? category.name : "unknown",
+        status: {
+          text: this.processText(control),
+          color: this.processColor(control),
+        }
+      }
+    };
+    return vm;
   }
 
   processText(control): string {

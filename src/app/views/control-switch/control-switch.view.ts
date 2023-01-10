@@ -44,31 +44,35 @@ export class ControlSwitchView
       this.controlService.rooms$,
     ]).pipe(
       map(([control, categories, rooms]) => {
-        let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-        let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-        let switchstate = (control.states.active === "1");
-
-        const vm: RadioVM = {
-          control: { ...control, icon: { href: control.icon.href, color: switchstate ? "primary" : "#9d9e9e" } }, // TODO select from color palette
-          ui: {
-            name: control.name,
-            room: (room && room.name) ? room.name : "unknown",
-            category: (category && category.name) ? category.name : "unknown",
-            radio_list: [
-              { id: 0, name: this.translate.instant('Off')},
-              { id: 1, name: this.translate.instant('On')}
-            ],
-            selected_id: switchstate ? 1 : 0,
-            status: {
-              text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
-              color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
-            },
-            toggle: switchstate,
-          }
-        };
-        return vm;
+        return this.updateVM(control, categories, rooms);
       })
     );
+  }
+
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
+    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
+    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+    let switchstate = (control.states.active === "1");
+    console.log('update');
+    const vm: RadioVM = {
+      control: { ...control, icon: { href: control.icon.href, color: switchstate ? "primary" : "#9d9e9e" } }, // TODO select from color palette
+      ui: {
+        name: control.name,
+        room: (room && room.name) ? room.name : "unknown",
+        category: (category && category.name) ? category.name : "unknown",
+        radio_list: [
+          { id: 0, name: this.translate.instant('Off')},
+          { id: 1, name: this.translate.instant('On')}
+        ],
+        selected_id: switchstate ? 1 : 0,
+        status: {
+          text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
+          color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
+        },
+        toggle: switchstate,
+      }
+    };
+    return vm;
   }
 
   clickToggle(vm: RadioVM, $event) {

@@ -9,13 +9,13 @@
 
 <ion-content>
   <ion-grid *ngIf="vm$ | async as vm">
-    <ion-row *ngIf="vm.fav_rooms.length">
+    <ion-row *ngIf="vm.rooms_favs.length">
       <ion-label class="control-label">
         <p translate>Favorites</p>
       </ion-label>
     </ion-row>
     <ion-row>
-      <ion-col size="6" size-md="3" *ngFor="let room of vm.fav_rooms">
+      <ion-col size="6" size-md="3" *ngFor="let room of vm.rooms_favs">
         <ion-card class="card" *ngIf="room.is_favorite" class="card" routerLink="{{room.hwid}}/{{room.uuid}}">
           <ion-card-content class="card-content">
             <ion-item class="item ion-text-center">
@@ -30,13 +30,13 @@
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="vm.rooms_ex_fav.length">
+    <ion-row *ngIf="vm.rooms_list.length">
       <ion-label class="control-label">
-        <p translate>All</p>
+        <p translate>Other rooms</p>
       </ion-label>
     </ion-row>
     <ion-row>
-      <ion-col size="12" size-md="6" *ngFor="let room of vm.rooms_ex_fav">
+      <ion-col size="12" size-md="6" *ngFor="let room of vm.rooms_list">
         <ion-card class="card" routerLink="{{room.hwid}}/{{room.uuid}}">
           <ion-card-content class="card-content">
             <ion-item class="item">

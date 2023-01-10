@@ -37,8 +37,7 @@ export interface Control {
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make control invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order?: number;               // defines the order for the control page (optional)
-  homepage_order?: number;      // defines the order for the home page (optional)
+  order?: number[];             // defines the order for the controls (optional)
   subcontrols?: Subcontrol[];   // subcontrols (optional)
   details: any;                 // control details
   states: any;                  // control states
@@ -60,7 +59,7 @@ export interface Subcontrol {
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make control invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order?: number;               // defines order in the App list (optional)
+  order: number[];              // defines the order of subcontrols (optional)
   states: any;                  // control states
 }
 
@@ -81,7 +80,7 @@ export interface Category {
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make category invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order?: number;               // defines order in list box (optional)
+  order?: number[];             // defines the order for categories (optional)
 }
 
 /**
@@ -101,5 +100,5 @@ export interface Room {
   is_favorite?: boolean;        // elevate to favorite item (optional)
   is_visible?: boolean;         // make category invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order?: number;               // defines order in list box (optional)
+  order?: number[];             // defines the order for rooms (optional)
 }

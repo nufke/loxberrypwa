@@ -39,22 +39,26 @@ export class CardSwitchView
       this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
     ]).pipe(
       map(([control, subcontrol]) => {
-        let switchstate = (subcontrol.states.active === "1");
-        const vm: SwitchVM = {
-          control: control,
-          subcontrol: subcontrol,
-          ui: {
-            name: subcontrol.name,
-            status: {
-              text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
-              color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
-            },
-            toggle: switchstate,
-          }
-        };
-        return vm;
+        return this.updateVM(control, subcontrol);
       })
     );
+  }
+
+  private updateVM(control: Control, subcontrol: Subcontrol): SwitchVM {
+    let switchstate = (subcontrol.states.active === "1");
+    const vm: SwitchVM = {
+      control: control,
+      subcontrol: subcontrol,
+      ui: {
+        name: subcontrol.name,
+        status: {
+          text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
+          color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
+        },
+        toggle: switchstate,
+      }
+    };
+    return vm;
   }
 
   clickToggle(vm: SwitchVM, $event) {

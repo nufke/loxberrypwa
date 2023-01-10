@@ -1,75 +1,101 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Control, Subcontrol, Category, Room } from '../interfaces/data.model';
-import { AppStore } from './app.store';
+import { shareReplay } from 'rxjs/operators';
+import { Control, Subcontrol, Category, Room, AppState, INITIAL_APP_STATE } from '../interfaces/data.model';
+import { Store } from './store';
 
 @Injectable({ providedIn: 'root' })
-export class DataService {
+export class DataService extends Store<AppState> {
 
-  constructor(public store: AppStore) {
+  constructor() {
+    super(INITIAL_APP_STATE);
   }
 
   getControlsFromStore$(): Observable<Control[]> {
-    return this.store.select$((state) => Object.values(state.controls));
+    return this.select$((state) => Object.values(state.controls)).pipe(
+      shareReplay()
+    );
   }
 
   getCategoriesFromStore$(): Observable<Category[]> {
-    return this.store.select$((state) => Object.values(state.categories));
+    return this.select$((state) => Object.values(state.categories)).pipe(
+      shareReplay()
+    );
   }
 
   getRoomsFromStore$(): Observable<Room[]> {
-    return this.store.select$((state) => Object.values(state.rooms));
+    return this.select$((state) => Object.values(state.rooms)).pipe(
+      shareReplay()
+    );
   }
 
   getSingleControlFromStore$(hwid: string, uuid: string): Observable<Control> {
-    return this.store.select$((state) => state.controls[hwid + '/' + uuid]);
+    return this.select$((state) => state.controls[hwid + '/' + uuid]).pipe(
+      shareReplay()
+    );
   }
 
   getSingleSubcontrolFromStore$(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
-    return this.store.select$((state) => state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid]);
+    return this.select$((state) =>
+      state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid]).pipe(
+        shareReplay()
+      );
+
   }
 
   addControlToStore(control: Control): void {
-    this.store.setState((state) => { state.controls[this.getId(control)] = control; return state; });
+    this.setState((state) => {
+      state.controls[this.getId(control)] = control;
+      return ({ ...state })
+    });
   }
 
   addCategoryToStore(category: Category): void {
-    this.store.setState((state) => { state.categories[this.getId(category)] = category; return state; });
+    this.setState((state) => {
+      state.categories[this.getId(category)] = category;
+      return ({ ...state });
+    });
   }
 
   addRoomToStore(room: Room): void {
-    this.store.setState((state) => { state.rooms[this.getId(room)] = room; return state; });
+    this.setState((state) => {
+      state.rooms[this.getId(room)] = room;
+      return ({ ...state });
+    });
   }
 
   flushControlsInStore(): void {
-    this.store.setState((state) => {
-      state.controls = {};
-      state.categories = {};
-      state.rooms = {};
-      return state;
+    this.setState({
+      controls: {},
+      categories: {},
+      rooms: {},
     });
   }
 
   updateElementInStore(topic, value) {
-    this.store.setState((state) => {
-      let topic_level = topic.split('/');
-      let id = topic_level[0] + '/' + topic_level[1];
-      if (state.controls[id])
+    let topic_level = topic.split('/');
+    let id = topic_level[0] + '/' + topic_level[1];
+
+    this.setState((state) => {
+      if (state.controls[id]) {
         this.findAndUpdate(state.controls[id], id, topic, value);
-      if (state.categories[id])
+      }
+      if (state.categories[id]) {
         this.findAndUpdate(state.categories[id], id, topic, value);
-      if (state.rooms[id])
+      }
+      if (state.rooms[id]) {
         this.findAndUpdate(state.rooms[id], id, topic, value);
-      return state;
+      }
+      return ({ ...this.state });
     });
   }
 
-  private findAndUpdate(obj, name, topic, value) {
+  private async findAndUpdate(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
       if (name + '/' + key === topic) {
         if (this.isValidJSONObject(value)) {
           obj[key] = JSON.parse(value);
-          //console.log('update key/value (json):', name + '/' + key, obj[key]);
+          //console.log('update key/value (json):', name + '/' + key, JSON.parse(value));
         }
         else {
           obj[key] = value;

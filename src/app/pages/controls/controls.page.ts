@@ -94,6 +94,6 @@ export class ControlsPage
     return this.vm$.pipe(
       map( items => items.controls
         .filter( resp => resp[this.key] === label.uuid )
-        .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name)))));
+        .sort( (a, b) => ( a.order[0] - b.order[0] || a.name.localeCompare(b.name)))));
   }
 }

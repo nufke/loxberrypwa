@@ -46,17 +46,21 @@ export class ControlColorPickerV2View
       this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
     ]).pipe(
       map(([control, subcontrol]) => {
-        let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
-        let rgb = Utils.hsv2rgb(Number(hsv[1]), Number(hsv[2]), 100); // use maximum luninance (100%)
-        const vm: ColorPickerVM = {
-          control: control,
-          subcontrol: subcontrol,
-          rgb: {r: rgb[0], g: rgb[1], b: rgb[2]},
-          position: Number(hsv[3]),
-        };
-        return vm;
+        return this.updateVM(control, subcontrol);
       })
     );
+  }
+
+  private updateVM(control: Control, subcontrol: Subcontrol): ColorPickerVM {
+    let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+    let rgb = Utils.hsv2rgb(Number(hsv[1]), Number(hsv[2]), 100); // use maximum luninance (100%)
+    const vm: ColorPickerVM = {
+      control: control,
+      subcontrol: subcontrol,
+      rgb: {r: rgb[0], g: rgb[1], b: rgb[2]},
+      position: Number(hsv[3]),
+    };
+    return vm;
   }
 
   updateSegment() {

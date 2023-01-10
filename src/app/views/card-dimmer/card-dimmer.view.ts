@@ -34,7 +34,7 @@ export class CardDimmerView
   }
 
   private initVM(): void {
-    if ((this.subcontrol == undefined)||(this.control == undefined)) {
+    if ((this.subcontrol == undefined) || (this.control == undefined)) {
       console.error('Component \'card-dimmer\' not available for rendering.');
       return;
     }
@@ -44,51 +44,55 @@ export class CardDimmerView
       this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
     ]).pipe(
       map(([control, subcontrol]) => {
-        // not all dimmer controls define the limits, instead use some defaults
-        let min = (subcontrol.states.min == undefined || subcontrol.states.min === '') ? 0 : Number(subcontrol.states.min);
-        let max = (subcontrol.states.max == undefined  || subcontrol.states.max === '') ? 100 : Number(subcontrol.states.max);
-        let step = (subcontrol.states.step == undefined || subcontrol.states.step === '') ? 1 : Number(subcontrol.states.step);
-
-        let position: number = 0;
-        let slider_color: string = '';
-        let button_color: string = '';
-        let rgb: number[] = [];
-
-        if (subcontrol.type === 'Dimmer') {
-          position = Number(subcontrol.states.position);
-          slider_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))';
-          button_color = 'rgba(255, 229, 127,' + (position/100) + ')';
-        }
-
-        if (subcontrol.type === 'ControlPickerV2') {
-          let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
-          if (hsv) {
-            position = Number(hsv[3]);
-            let rgb = Utils.hsv2rgb(Number(hsv[1]), Number(hsv[2]), 100);
-            slider_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + '))';
-            button_color = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (position/100) + ')';
-          }
-        }
-
-        const vm: DimmerVM = {
-          control: control,
-          subcontrol: subcontrol,
-          ui: {
-            name: (this.view === View.DETAILED) ? subcontrol.name : this.translate.instant('Brightness'),
-            btn_color: (position < 10) ? '#31373e' : button_color, // TODO update for white template
-            slider: {
-              position: position,
-              min: min,
-              max: max,
-              step: step,
-              color: slider_color,
-            },
-          },
-          rgb: rgb,
-        };
-        return vm;
+        return this.updateVM(control, subcontrol);
       })
     );
+  }
+
+  private updateVM(control: Control, subcontrol: Subcontrol): DimmerVM {
+    // not all dimmer controls define the limits, instead use some defaults
+    let min = (subcontrol.states.min == undefined || subcontrol.states.min === '') ? 0 : Number(subcontrol.states.min);
+    let max = (subcontrol.states.max == undefined || subcontrol.states.max === '') ? 100 : Number(subcontrol.states.max);
+    let step = (subcontrol.states.step == undefined || subcontrol.states.step === '') ? 1 : Number(subcontrol.states.step);
+
+    let position: number = 0;
+    let slider_color: string = '';
+    let button_color: string = '';
+    let rgb: number[] = [];
+
+    if (subcontrol.type === 'Dimmer') {
+      position = Number(subcontrol.states.position);
+      slider_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))';
+      button_color = 'rgba(255, 229, 127,' + (position / 100) + ')';
+    }
+
+    if (subcontrol.type === 'ControlPickerV2') {
+      let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+      if (hsv) {
+        position = Number(hsv[3]);
+        let rgb = Utils.hsv2rgb(Number(hsv[1]), Number(hsv[2]), 100);
+        slider_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + '))';
+        button_color = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (position / 100) + ')';
+      }
+    }
+
+    const vm: DimmerVM = {
+      control: control,
+      subcontrol: subcontrol,
+      ui: {
+        name: (this.view === View.DETAILED) ? subcontrol.name : this.translate.instant('Brightness'),
+        btn_color: (position < 10) ? '#31373e' : button_color, // TODO update for white template
+        slider: {
+          position: position,
+          min: min,
+          max: max,
+          step: step,
+          color: slider_color,
+        },
+      },
+      rgb: rgb,
+    };
+    return vm;
   }
 
   sliderChange(vm: DimmerVM, $event) {
@@ -100,7 +104,7 @@ export class CardDimmerView
 
     if (vm.subcontrol.type === 'ControlPickerV2') {
       let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
-       if (hsv[3] != vm.ui.slider.position) {
+      if (hsv[3] != vm.ui.slider.position) {
         let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + vm.ui.slider.position + ')';
         this.controlService.updateControl(vm.subcontrol, color);
       }

@@ -34,22 +34,22 @@ export class CategoriesPage
         controls = controls
         .filter( control => control.is_visible );
         let filtered_categories = controls.map(control => control.category );
-        let categories_ex_fav = categories
+        let categories_list = categories
           .filter( category => category.is_visible && !category.is_favorite && filtered_categories.indexOf(category.uuid) > -1)
           // TODO remove duplicates?
           //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
           //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
-          .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
-        let fav_categories = categories
+          .sort( (a, b) => ( a.order[0] - b.order[0] || a.name.localeCompare(b.name) ) );
+        let categories_favs = categories
           .filter( category => category.is_visible && category.is_favorite && filtered_categories.indexOf(category.uuid) > -1)
           // TODO remove duplicates?
           //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
           //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
-          .sort( (a, b) => ( a.order - b.order || a.name.localeCompare(b.name) ) );
+          .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) );
           const vm: CategoryListVM = {
             categories: categories,
-            categories_ex_fav: categories_ex_fav,
-            fav_categories: fav_categories
+            categories_list: categories_list,
+            categories_favs: categories_favs
           };
           return vm;
       })

@@ -28,8 +28,8 @@ export class HomePage
     this.vm$ = this.controlService.controls$.pipe(
       map( controls => {
         controls = controls
-        .filter( control => control.homepage_order && control.is_visible )
-        .sort( (a, b) => ( a.homepage_order - b.homepage_order || a.name.localeCompare(b.name) ) );
+        .filter( control => (control.order[2] > 0) && control.is_visible )
+        .sort( (a, b) => ( a.order[2] - b.order[2] || a.name.localeCompare(b.name) ) );
         const vm: ControlListVM = {
           controls: controls
         };
