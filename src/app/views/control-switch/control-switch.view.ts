@@ -53,7 +53,7 @@ export class ControlSwitchView
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
     let switchstate = (control.states.active === "1");
-    console.log('update');
+
     const vm: RadioVM = {
       control: { ...control, icon: { href: control.icon.href, color: switchstate ? "primary" : "#9d9e9e" } }, // TODO select from color palette
       ui: {

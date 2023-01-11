@@ -31,7 +31,8 @@ export class HomePage
         .filter( control => (control.order[2] > 0) && control.is_visible )
         .sort( (a, b) => ( a.order[2] - b.order[2] || a.name.localeCompare(b.name) ) );
         const vm: ControlListVM = {
-          controls: controls
+          controls: null,
+          favorites: controls
         };
         return vm;
       })

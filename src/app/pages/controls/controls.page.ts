@@ -56,6 +56,8 @@ export class ControlsPage
           let filtered_rooms = controls.map(control => control.room);
           const vm: ControlListVM = {
             controls: controls,
+            favorites: controls.filter(control => control.is_favorite)
+                               .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) ),
             labels: rooms.filter( rooms => filtered_rooms.indexOf(rooms.uuid) > -1 )
                          .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
             page: categories.find( category => (category.uuid === uuid) && (category.hwid === hwid) )
@@ -77,6 +79,8 @@ export class ControlsPage
           let filtered_categories = controls.map(control => control.category);
           const vm: ControlListVM = {
             controls: controls,
+            favorites: controls.filter(control => control.is_favorite)
+                               .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) ),
             labels: categories.filter( category => filtered_categories.indexOf(category.uuid) > -1 )
                               .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
             page: rooms.find( room => (room.uuid === uuid) && (room.hwid === hwid) )
@@ -90,10 +94,10 @@ export class ControlsPage
   ngOnInit() : void {
   }
 
-  filter(label: Room | Category) : Observable<Control[]> {
+  filter_list(label: Room | Category) : Observable<Control[]> {
     return this.vm$.pipe(
       map( items => items.controls
-        .filter( resp => resp[this.key] === label.uuid )
+        .filter( item => item[this.key] === label.uuid)
         .sort( (a, b) => ( a.order[0] - b.order[0] || a.name.localeCompare(b.name)))));
   }
 }

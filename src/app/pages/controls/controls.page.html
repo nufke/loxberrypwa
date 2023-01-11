@@ -10,6 +10,55 @@
 </ion-header>
 
 <ion-content>
+  <ng-container *ngIf="vm$ | async as vm">
+    <ion-grid *ngIf="vm.favorites.length">
+      <ion-row>
+        <ion-label class="control-label">
+          <p translate>Favorites</p>
+        </ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" size-md="3" *ngFor="let control of vm.favorites">
+
+          <ng-container *ngIf="control.type === 'IRoomController'">
+            <control-irc-view [control]="control" [view]="viewType.FAVORITE"></control-irc-view>
+          </ng-container>
+
+          <ng-container *ngIf="control.type === 'LightControllerV2'">
+            <control-light-v2-view [control]="control" [view]="viewType.FAVORITE"></control-light-v2-view>
+          </ng-container>
+
+          <ng-container *ngIf="control.type === 'Pushbutton'">
+            <control-pushbutton-view [control]="control" [view]="viewType.FAVORITE"></control-pushbutton-view>
+          </ng-container>
+
+          <ng-container *ngIf="control.type === 'Slider'">
+            <control-slider-view [control]="control" [view]="viewType.FAVORITE"></control-slider-view>
+          </ng-container>
+
+          <ng-container *ngIf="control.type === 'Switch'">
+            <control-switch-view [control]="control" [view]="viewType.FAVORITE"></control-switch-view>
+          </ng-container>
+
+          <ng-container *ngIf="control.type === 'Radio'">
+            <control-radio-view [control]="control" [view]="viewType.FAVORITE"></control-radio-view>
+          </ng-container>
+
+          <ng-container *ngIf="
+        (control.type !== 'IRoomController') &&
+        (control.type !== 'LightControllerV2') &&
+        (control.type !== 'Pushbutton') &&
+        (control.type !== 'Slider') &&
+        (control.type !== 'Switch') &&
+        (control.type !== 'Radio')
+        ">
+            <control-text-state-view [control]="control" [view]="viewType.FAVORITE"></control-text-state-view>
+          </ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
   <ion-grid *ngIf="vm$ | async as vm">
     <ng-container *ngFor="let label of vm.labels">
       <ion-row *ngIf="label.name">
@@ -18,7 +67,7 @@
         </ion-label>
       </ion-row>
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let control of filter(label) | async">
+        <ion-col size="12" size-md="6" *ngFor="let control of filter_list(label) | async">
 
           <ng-container *ngIf="control.type === 'IRoomController'">
             <control-irc-view [control]="control" [view]="viewType.LIST_ITEM"></control-irc-view>

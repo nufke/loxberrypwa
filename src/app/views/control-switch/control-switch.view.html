@@ -53,8 +53,8 @@
       <ion-col>
         <ion-radio-group class="radio-group" value="{{vm.ui.status.text}}" (ionChange)="radioChange(vm, $event)">
           <div *ngFor="let item of vm.ui.radio_list">
-              <div *ngIf="item.name !== ''" class="selected-{{vm.ui.status.text === item.name}}">
-                  <ion-item class="radio-item">
+              <div *ngIf="item.name !== ''">
+                  <ion-item class="radio-item selected-{{vm.ui.status.text === item.name}}">
                       <ion-label class="label">
                           <h2>{{item.name}}</h2>
                       </ion-label>

@@ -18,6 +18,7 @@ export interface RoomListVM {
 
 export interface ControlListVM {
   controls: Control[];
+  favorites: Control[];
   labels?: Room[] | Category[];
   page?: Room | Category;
 }
