@@ -27,7 +27,7 @@
         <ion-item>
           <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
           <ion-label>
-            {{ 'Langauge' | translate }}
+            {{ 'Language' | translate }}
           </ion-label>
           <ion-select #langSelect interface="popover" value="{{language}}" (ionChange)="setLanguage(langSelect.value)">
             <ion-select-option *ngFor="let lang of translate.getLangs()" [value]="lang">{{lang}}</ion-select-option>
