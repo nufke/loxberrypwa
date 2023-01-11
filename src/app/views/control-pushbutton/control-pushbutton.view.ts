@@ -60,7 +60,7 @@ export class ControlPushbuttonView
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
         status: {
-          text: control.states.active,
+          text: '', // TODO should we show pushbutton text, e.g. control.states.active,
           color: "#9d9e9e" // TODO select from color palette
         }
       }
