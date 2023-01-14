@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Subcontrol } from '../interfaces/data.model'
+import { Control, Subcontrol, Settings } from '../interfaces/data.model'
 import { MqttTopics } from '../interfaces/mqtt.api'
 import { StorageService } from './storage.service';
 import { DataService } from './data.service';
@@ -13,45 +13,19 @@ import { DataService } from './data.service';
 export class LoxBerryService {
 
   private mqttSubscription: Subscription[] = [];
-
   private mqttTopicMapping: any = {};
   private mqttPrefixList: string[] = [];
-
   private registeredTopics: string[] = [];
 
-  private loxberryMqttIP: string = '';
-  private loxberryMqttPort: string = '';
-  private loxberryMqttUsername: string = '';
-  private loxberryMqttPassw: string = '';
   private loxberryMqttConnected: boolean = false;
   private loxberryMqttAppTopic: string = '';
 
   constructor(
     private mqttService: MqttService,
     public translate: TranslateService,
-    private storageService: StorageService,
     private dataService: DataService)
   {
-    this.storageService.getSettings().subscribe( settings => {
-      if (settings) {
-        this.loxberryMqttIP = settings.loxberryMqttIP;
-        this.loxberryMqttPort = settings.loxberryMqttPort;
-        this.loxberryMqttUsername = settings.loxberryMqttUsername;
-        this.loxberryMqttPassw = settings.loxberryMqttPassw;
-        this.loxberryMqttAppTopic = settings.loxberryMqttAppTopic;
-
-        // only connect if all configuration options are valid
-        if (!this.loxberryMqttConnected
-             && this.loxberryMqttUsername
-             && this.loxberryMqttPassw
-             && this.loxberryMqttIP
-             && this.loxberryMqttPort
-             && this.loxberryMqttAppTopic) {
-          this.connectToMqtt();
-          this.registerStructureTopic();
-        }
-      }
-    });
+    this.initService();
 
     this.mqttService.state.subscribe((s: MqttConnectionState) => {
       const status = s === MqttConnectionState.CONNECTED ? 'connected' : 'disconnected';
@@ -59,14 +33,32 @@ export class LoxBerryService {
   });
   }
 
-  private connectToMqtt() {
+  private initService() {
+    this.dataService.getSettingsFromStore$().subscribe( settings => {
+      // only connect if all mqtt configuration options are valid
+      if (!this.loxberryMqttConnected
+          && settings.mqtt
+          && settings.mqtt.username
+          && settings.mqtt.password
+          && settings.mqtt.hostname
+          && settings.mqtt.port
+          && settings.mqtt.topic) {
+        this.loxberryMqttAppTopic = settings.mqtt.topic;
+        this.connectToMqtt(settings); // TODO change connect/disconnect/reconnect strategy
+        this.registerStructureTopic();
+
+      }
+    });
+  }
+
+  private connectToMqtt(settings: Settings) {
     console.log('Connecting to LoxBerry Mqtt Broker...');
     this.mqttService.connect(
     {
-      username: this.loxberryMqttUsername,
-      password: this.loxberryMqttPassw,
-      hostname: this.loxberryMqttIP,
-      port: Number(this.loxberryMqttPort)
+      username: settings.mqtt.username,
+      password: settings.mqtt.password,
+      hostname: settings.mqtt.hostname,
+      port: settings.mqtt.port,
     });
     this.loxberryMqttConnected = true;
   }

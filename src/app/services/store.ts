@@ -48,6 +48,4 @@ export abstract class Store<T> {
     this._state.next(newState);
   }
 
-
-
 }

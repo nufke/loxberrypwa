@@ -1,8 +1,9 @@
 # Status
 
-## Controls
+This page lists the development status of the controls and subcontrols, and future requirements and features.
+For additional requests or ideas, you can raise an [issue](https://github.com/nufke/loxberrypwa/issues) or submit a [pull request](https://github.com/nufke/loxberrypwa/pulls).
 
-This page lists the development status of the controls and subcontrols.
+## Controls
 
 | (Sub)Control             | Status            |
 |--------------------------|-------------------|
@@ -67,20 +68,30 @@ This page lists the development status of the controls and subcontrols.
 | Window                   | Not started       |
 | WindowMonitor            | Not started       |
 
-## Other capabilties and features
+## Other capabilities
 
-| Feature                  | Status                 |
-|--------------------------|------------------------|
-| calendar                 | Not started            |
-| dark / light theme       | Available              |
-| homescreen widgets       | Not started            |
-| internationalization     | Available (NL, DE, US) |
-| loxberry plugins         | Not started            |
-| push messages            | Not started            |
-| screensaver              | Not started            |
-| splashscreen             | Not started            |
-| statistics / history     | Not started            |
-| statusbar                | Not started            |
-| systemessages            | Not started            |
-| voice control            | Not started            |
-| weather forecast         | Not started            |
+| Feature                     | Status                 |
+|-----------------------------|------------------------|
+| alarm sync w mobile alarm   | Not started            |
+| calendar                    | Not started            |
+| dark / light theme          | Available              |
+| homescreen widgets          | Not started            |
+| internationalization        | Available (NL, DE, US) |
+| loxberry plugins            | Not started            |
+| pin protected controls      | Not started            |
+| push messages               | Not started            |
+| screensaver                 | Not started            |
+| splashscreen                | Not started            |
+| statistics / history        | Not started            |
+| statusbar (time, temp, etc) | Not started            |
+| connection status indicator | Not started            |
+| system messages             | Not started            |
+| voice control               | Not started            |
+| weather forecast            | Not started            |
+
+## Other proposals
+
+* region-dependent time/date notation (e.g. 8:00pm vs 20:00h)
+* region dependent number formatting or scientific notation (e.g. 1000000 displayed as 1.000.000 or 1,000,000 or 1E+06 )
+* option to disable control pushdown to detailed level
+* temperature notation (°C / °F)

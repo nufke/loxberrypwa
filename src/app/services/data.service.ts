@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { Control, Subcontrol, Category, Room, AppState, INITIAL_APP_STATE } from '../interfaces/data.model';
+import { Control, Subcontrol, Category, Room, Settings, AppState, INITIAL_APP_STATE } from '../interfaces/data.model';
 import { Store } from './store';
 
 @Injectable({ providedIn: 'root' })
@@ -41,6 +41,22 @@ export class DataService extends Store<AppState> {
         shareReplay()
       );
 
+  }
+
+  getSettingsFromStore$(): Observable<Settings> {
+    return this.select$((state) => state.settings).pipe(
+      shareReplay()
+    );
+  }
+
+  getCurrentSettingsFromStore(): Settings {
+    return this.state.settings;
+  }
+
+  putSettingsInStore(settings: Settings) {
+    this.setState({
+      settings: settings}
+    );
   }
 
   addControlToStore(control: Control): void {

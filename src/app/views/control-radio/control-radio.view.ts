@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { RadioVM } from '../../interfaces/view.model';
+import { RadioVM, RadioListItem } from '../../interfaces/view.model';
 import { ButtonAction, View } from '../../types/types';
 
 @Component({
@@ -24,8 +24,8 @@ export class ControlRadioView
   vm$: Observable<RadioVM>;
 
   segment: string = 'moods';
-  entries;
-  radio_list;
+  entries: RadioListItem[];
+  radio_list: RadioListItem[];
 
   constructor(
     public translate: TranslateService,

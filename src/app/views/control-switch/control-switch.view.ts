@@ -4,7 +4,7 @@ import { map } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { RadioVM } from '../../interfaces/view.model';
+import { RadioVM, RadioListItem } from '../../interfaces/view.model';
 import { ButtonAction, View } from '../../types/types';
 
 @Component({
@@ -22,6 +22,8 @@ export class ControlSwitchView
   viewType = View;
 
   vm$: Observable<RadioVM>;
+
+  radio_list: RadioListItem[];
 
   constructor(
     public translate: TranslateService,
@@ -54,16 +56,21 @@ export class ControlSwitchView
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
     let switchstate = (control.states.active === "1");
 
+    /* only update radio_list if we have new entries, since it might cause GUI interruptions */
+    if (!this.radio_list) {
+      this.radio_list = [
+        { id: 0, name: this.translate.instant('Off')},
+        { id: 1, name: this.translate.instant('On')}
+      ];
+    }
+
     const vm: RadioVM = {
       control: { ...control, icon: { href: control.icon.href, color: switchstate ? "primary" : "#9d9e9e" } }, // TODO select from color palette
       ui: {
         name: control.name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        radio_list: [
-          { id: 0, name: this.translate.instant('Off')},
-          { id: 1, name: this.translate.instant('On')}
-        ],
+        radio_list: this.radio_list,
         selected_id: switchstate ? 1 : 0,
         status: {
           text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),

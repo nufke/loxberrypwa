@@ -2,17 +2,60 @@
  * In-memory Application State for the PWA
  */
 export interface AppState {
-  settings: { [key: string]: string;};
+  settings: Settings;
   controls: { [key: string]: Control };
   categories: { [key: string]: Category };
   rooms: { [key: string]: Room };
 }
 
 /**
+ * Properties for Settings
+ */
+ export interface Settings {
+  app?: AppSettings;
+  mqtt?: MqttSettings;
+}
+
+/**
+ * Properties for App Settings
+ */
+ export interface AppSettings {
+  dark_theme: boolean;
+  language: string;
+}
+
+/**
+ * Properties for MQTT Settings
+ */
+ export interface MqttSettings {
+  hostname: string;
+  port: number;
+  username: string;
+  password: string;
+  topic: string;
+}
+
+export const INITIAL_MQTT_SETTINGS: MqttSettings = {
+  hostname: '',
+  port: null,
+  username: '',
+  password: '',
+  topic: ''
+}
+
+export const INITIAL_APP_SETTINGS: AppSettings = {
+  dark_theme: false,
+  language: 'en'
+}
+
+/**
  * Application State initial values
  */
 export const INITIAL_APP_STATE: AppState = {
-  settings: {},
+  settings: {
+    app: INITIAL_APP_SETTINGS,
+    mqtt: INITIAL_MQTT_SETTINGS
+  },
   controls: {},
   categories: {},
   rooms: {}
@@ -21,7 +64,6 @@ export const INITIAL_APP_STATE: AppState = {
 /**
  * Properties for Control elements
  */
-
 export interface Control {
   hwid: string;                 // hardware identifier of the device
   uuid: string;                 // unique identifier to identify the control as MQTT topic
@@ -46,7 +88,6 @@ export interface Control {
 /**
  * Properties for Subcontrol elements
  */
-
 export interface Subcontrol {
   uuid: string;                 // unique identifier to identify the control as MQTT topic
   name: string;                 // unique identifier to identify the control as MQTT topic
@@ -66,7 +107,6 @@ export interface Subcontrol {
 /**
  * Properties to specify Category
  */
-
 export interface Category {
   hwid: string;                 // hardware identifier of the device
   uuid: string;                 // unique identifier to identify the category as MQTT topic
@@ -86,7 +126,6 @@ export interface Category {
 /**
  * Properties to specify Room
  */
-
 export interface Room {
   hwid: string;                 // hardware identifier of the device
   uuid: string;                 // unique identifier to identify the room as MQTT topic  (device-uuid)

@@ -44,13 +44,13 @@ export class MenuPage implements OnInit {
     private storageService: StorageService,
     public translate: TranslateService )
   {
-    this.storageService.getSettings().subscribe( settings =>
+    this.storageService.settings$.subscribe( settings =>
     {
       if (settings) {
-        this.darkTheme = settings.appDarkTheme;
+        this.darkTheme = settings.app.dark_theme;
         document.body.classList.toggle('dark', this.darkTheme);
 
-        this.language = settings.appLanguage;
+        this.language = settings.app.language;
         this.translate.use(this.language);
       }
     });
@@ -61,13 +61,22 @@ export class MenuPage implements OnInit {
 
   onToggleDarkTheme() {
     document.body.classList.toggle('dark', this.darkTheme);
-    this.storageService.store( { appDarkTheme: this.darkTheme } );
+    this.saveMenuSettings();
   }
 
   setLanguage(lang: string) {
     this.language = lang;
     this.translate.use(lang);
-    this.storageService.store( { appLanguage: this.language } );
+    this.saveMenuSettings();
   }
 
+  private saveMenuSettings() {
+    this.storageService.saveSettings(
+      {
+        app: {
+          dark_theme: this.darkTheme,
+          language: this.language
+        }
+      });
+  }
 }

@@ -6,17 +6,17 @@ Note that the icons and images use relative paths, referencing the source direct
 
 ## Load structure
 
-To initialize the App with a structure, send it over MQTT as string to topic `/loxberry/app/structure`:
+To initialize the App with a structure, send the structure as JSON string with topic `/loxberry/app/structure`:
 
 ```
-/loxberry/app/structure  '{ "controls": { ... },  "categories": { ... }, "rooms": { ... } }'
+/loxberry/app/structure  { "controls": { ... },  "categories": { ... }, "rooms": { ... } }
 ```
 
-Make sure that the keys of the controls, categories and rooms, use string format `hwid/uuid`, and match with the values for `hwid` and `uuid` in each element.
+Make sure that the keys of the controls, categories and rooms, use the format `hwid/uuid`, and match with the values for `hwid` and `uuid` in each element.
 
-The string values of `room` and `category` should match with the `uuid` of these elements. It is assumed that room and category in a control belong to the same `hwid`.
+The string values of `room` and `category` should match with the `uuid` of these elements. It is assumed that `uuid` for the room and category in a control belong to the same `hwid`.
 
-Updates to the structure are *incremental*, which means changes to existing objects will be overridden and old objects remain available. To reset/flush all elements in the App, an empty string message should be sent to `/loxberry/app/structure`.
+Sending updated structures are considered *incremental*, which means changes to existing objects will be overridden and old objects remain available. To reset/flush all elements in the App, an empty string message should be sent to `/loxberry/app/structure`.
 
 ### Simple JSON example
 

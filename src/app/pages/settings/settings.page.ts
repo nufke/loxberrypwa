@@ -4,6 +4,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { NavController } from '@ionic/angular';
+import { MqttSettings, INITIAL_MQTT_SETTINGS } from '../../interfaces/data.model';
 
 @Component({
   selector: 'app-settings',
@@ -11,13 +12,8 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  credentials: FormGroup;
-
-  public loxberryMqttIP: string = '';
-  public loxberryMqttPort: string = '';
-  public loxberryMqttUsername: string = '';
-  public loxberryMqttPassw: string = '';
-  public loxberryMqttAppTopic: string = '';
+  mqttForm: FormGroup;
+  mqttSettingsForm: MqttSettings = INITIAL_MQTT_SETTINGS;
   private action: string;
 
   constructor(
@@ -28,18 +24,17 @@ export class SettingsPage implements OnInit {
     private storageService: StorageService,
     private route: ActivatedRoute,
     private navCtrl: NavController
-  )
-  {
-    this.storageService.getSettings().subscribe( settings =>
-    {
-      if (settings){
-        this.loxberryMqttIP = settings.loxberryMqttIP;
-        this.loxberryMqttPort = settings.loxberryMqttPort;
-        this.loxberryMqttUsername = settings.loxberryMqttUsername;
-        this.loxberryMqttPassw = settings.loxberryMqttPassw;
-        this.loxberryMqttAppTopic = settings.loxberryMqttAppTopic;
-        this.updateFields();
-      }
+  ) {
+    this.mqttForm = this.fb.group({
+      mqtt_hostname: ['', Validators.required],
+      mqtt_port: ['', Validators.required],
+      mqtt_username: ['', Validators.required],
+      mqtt_password: ['', Validators.required],
+      mqtt_topic: ['', Validators.required]
+    });
+
+    this.storageService.settings$.subscribe(settings => {
+      this.updateForm(settings.mqtt);
     });
   }
 
@@ -48,47 +43,47 @@ export class SettingsPage implements OnInit {
     // this.action = this.route.snapshot.paramMap.get('action');
     // if (this.action === 'logout') this.logout();
 
-    this.credentials = this.fb.group({
-      mqtt_ipaddress: ['', Validators.required],
-      mqtt_port: ['', Validators.required],
-      mqtt_username: ['', Validators.required],
-      mqtt_passw: ['', Validators.required],
-      mqtt_app_topic: ['', Validators.required]
-    });
-
-    // get initial values
-    this.updateFields();
+    this.updateForm(this.mqttSettingsForm);
   }
 
-  async updateFields() {
-    if (this.credentials) {
-      this.credentials.setValue({
-          'mqtt_ipaddress': this.loxberryMqttIP,
-          'mqtt_port': this.loxberryMqttPort,
-          'mqtt_username': this.loxberryMqttUsername,
-          'mqtt_passw': this.loxberryMqttPassw,
-          'mqtt_app_topic': this.loxberryMqttAppTopic
-      })
+  async updateForm(settings: MqttSettings) {
+    if (settings) {
+      this.mqttSettingsForm.hostname = settings.hostname;
+      this.mqttSettingsForm.port = settings.port;
+      this.mqttSettingsForm.username = settings.username;
+      this.mqttSettingsForm.password = settings.password;
+      this.mqttSettingsForm.topic = settings.topic;
+
+      if (this.mqttForm) {
+        this.mqttForm.setValue({
+          'mqtt_hostname': settings.hostname,
+          'mqtt_port': settings.port,
+          'mqtt_username': settings.username,
+          'mqtt_password': settings.password,
+          'mqtt_topic': settings.topic
+        })
+      }
     }
   }
 
-  async save_settings() {
+  async saveSettings() {
     const loading = await this.loadingController.create({
       cssClass: 'spinner',
-      spinner​: 'crescent',
+      spinner: 'crescent',
       message: 'Please wait...'
     });
 
     await loading.present();
+    let mqttSettings = await this.processFields(this.mqttForm);
 
-    this.loxberryMqttPassw = this.credentials.value.passw;
-    await this.storageService.store(
-    {
-      loxberryMqttIP: this.credentials.value.mqtt_ipaddress,
-      loxberryMqttPort: this.credentials.value.mqtt_port,
-      loxberryMqttUsername: this.credentials.value.mqtt_username,
-      loxberryMqttPassw: this.credentials.value.mqtt_passw,
-      loxberryMqttAppTopic: this.credentials.value.mqtt_app_topic,
+    await this.storageService.saveSettings({
+      mqtt: {
+        hostname: mqttSettings.hostname,
+        port: mqttSettings.port,
+        username: mqttSettings.username,
+        password: mqttSettings.password,
+        topic: mqttSettings.topic,
+      }
     });
 
     await loading.dismiss();
@@ -96,8 +91,41 @@ export class SettingsPage implements OnInit {
 
   }
 
-  public cancel() {
+  cancel() {
     this.navCtrl.navigateRoot('');
+  }
+
+  async reset() {
+    await this.updateForm({
+      hostname: '',
+      port: null,
+      username: '',
+      password: '',
+      topic: ''
+    });
+    this.storageService.cleanStorage();
+  }
+
+  private async processFields(mqttForm: FormGroup): Promise<MqttSettings> {
+    let hostname: string = mqttForm.value.mqtt_hostname;
+    let port: number = mqttForm.value.mqtt_port;
+
+    if (hostname.includes("http://")) {    // check if user added prefix
+      hostname = hostname.replace('http://', '');     // remove http from IP
+    }
+
+    if (hostname.match(":[0-9]{4,6}")) {   // check if user added port
+      port = Number(hostname.split(':')[1]); // if given, override port
+      hostname = hostname.split(':')[0]; // remove port from IP address
+    }
+
+    return ({
+      hostname: hostname,
+      port: port,
+      username: mqttForm.value.mqtt_username,
+      password: mqttForm.value.mqtt_password,
+      topic: mqttForm.value.mqtt_topic
+    });
   }
 
 }

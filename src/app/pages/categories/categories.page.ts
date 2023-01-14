@@ -26,7 +26,7 @@ export class CategoriesPage
   }
 
   private initVM() : void {
-    this.vm$ =  combineLatest([
+    this.vm$ = combineLatest([
       this.controlService.controls$,
       this.controlService.categories$
       ]).pipe(
