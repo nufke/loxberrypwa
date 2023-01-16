@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Control, Subcontrol } from '../../interfaces/data.model';
@@ -19,18 +21,17 @@ import { ControlIRCView } from '../../views/control-irc/control-irc.view';
   styleUrls: ['./detailed-control.page.scss']
 })
 export class DetailedControlPage
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @ViewChild('viewcontainer', { read: ViewContainerRef, static: true })
 
   viewContainer: ViewContainerRef;
   componentRef;
-
   viewType = View;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   control: Control;
   subcontrol: Subcontrol;
-
   page_name: string;
 
   // TODO, merge/move with IRC component
@@ -62,8 +63,18 @@ export class DetailedControlPage
     public translate: TranslateService,
     private route: ActivatedRoute,
     private controlService: ControlService ) {
-
     this.initVM();
+  }
+
+  ngOnInit() : void {
+    this.loadControlComponent(this.control, this.subcontrol);
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+    this.viewContainer.clear(); // remove dynamic view from memory
+    this.componentRef = -1;
   }
 
   private initVM() : void {
@@ -72,7 +83,7 @@ export class DetailedControlPage
     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
     const subcontrol_uuid_ext = this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
-    this.controlService.getControl$(control_hwid, control_uuid).subscribe(
+    this.controlService.getControl$(control_hwid, control_uuid).pipe(takeUntil(this.destroy$)).subscribe(
       control => {
         this.control = control;
         this.page_name = (control.type === 'IRoomController') ?
@@ -80,17 +91,13 @@ export class DetailedControlPage
       }
     );
     if (subcontrol_uuid != null) {
-      this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
+      this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).pipe(takeUntil(this.destroy$)).subscribe(
         subcontrol => {
           this.subcontrol = subcontrol;
           this.page_name = subcontrol.name;
         }
       );
     }
-  }
-
-  ngOnInit() : void {
-    this.loadControlComponent(this.control, this.subcontrol);
   }
 
   private loadControlComponent(control: Control, subcontrol: Subcontrol) {
@@ -116,12 +123,4 @@ export class DetailedControlPage
     else
       return this.ViewMap['TextState']; // default
   }
-
-  public ngOnDestroy() : void {
-    this.viewContainer.clear(); // remove dynamic view from memory
-    this.componentRef = -1;
-
-    // TODO unsubscribe
-  }
-
 }

@@ -40,7 +40,6 @@ export class DataService extends Store<AppState> {
       state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid]).pipe(
         shareReplay()
       );
-
   }
 
   getSettingsFromStore$(): Observable<Settings> {

@@ -14,7 +14,7 @@ export class ElementColorTempPickerView
 
   @Input() color_picker_vm: ColorPickerVM;
 
-  TempPicker;
+  TempPicker; // TODO add type
 
   constructor(
     public translate: TranslateService,

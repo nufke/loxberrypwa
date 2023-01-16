@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -12,17 +12,29 @@ import { RoomListVM } from '../../interfaces/view.model';
   styleUrls: ['rooms.page.scss']
 })
 export class RoomsPage
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
-  public vm$: Observable<RoomListVM>;
+  vm$: Observable<RoomListVM>;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
-    private controlService: ControlService)
-  {
+    private controlService: ControlService) {
+  }
+
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
+  ionViewWillEnter() : void {
+    this.content.scrollToTop();
   }
 
   private initVM() : void {
@@ -54,14 +66,9 @@ export class RoomsPage
             rooms_favs: rooms_favs
           };
           return vm;
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 
-  ngOnInit() : void {
-  }
-
-  public ionViewWillEnter() : void {
-    this.content.scrollToTop();
-  }
 }

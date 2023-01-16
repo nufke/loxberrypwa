@@ -28,7 +28,9 @@ export class LoxBerryService {
     this.initService();
 
     this.mqttService.state.subscribe((s: MqttConnectionState) => {
-      const status = s === MqttConnectionState.CONNECTED ? 'connected' : 'disconnected';
+      let connectionStatus: boolean = (s === MqttConnectionState.CONNECTED);
+      const status = connectionStatus ? 'connected' : 'disconnected';
+      //this.loxberryMqttConnected = connectionStatus;
       console.log('LoxBerry Mqtt client connection status: ', status);
   });
   }
@@ -36,7 +38,8 @@ export class LoxBerryService {
   private initService() {
     this.dataService.getSettingsFromStore$().subscribe( settings => {
       // only connect if all mqtt configuration options are valid
-      if (!this.loxberryMqttConnected
+      if (settings
+          && !this.loxberryMqttConnected
           && settings.mqtt
           && settings.mqtt.username
           && settings.mqtt.password
@@ -44,9 +47,8 @@ export class LoxBerryService {
           && settings.mqtt.port
           && settings.mqtt.topic) {
         this.loxberryMqttAppTopic = settings.mqtt.topic;
-        this.connectToMqtt(settings); // TODO change connect/disconnect/reconnect strategy
+        this.connectToMqtt(settings);
         this.registerStructureTopic();
-
       }
     });
   }
@@ -59,11 +61,13 @@ export class LoxBerryService {
       password: settings.mqtt.password,
       hostname: settings.mqtt.hostname,
       port: settings.mqtt.port,
+      protocol: 'wss',
     });
     this.loxberryMqttConnected = true;
   }
 
   private registerStructureTopic() {
+    console.log('register Structure...');
     let topic = this.loxberryMqttAppTopic + '/structure';
     this.mqttSubscription.push( this.mqttService.observe(topic)
       .subscribe((message: IMqttMessage) => {

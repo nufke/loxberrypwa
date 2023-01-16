@@ -34,7 +34,8 @@ export class SettingsPage implements OnInit {
     });
 
     this.storageService.settings$.subscribe(settings => {
-      this.updateForm(settings.mqtt);
+      if (settings && settings.mqtt)
+        this.updateForm(settings.mqtt);
     });
   }
 
@@ -83,6 +84,7 @@ export class SettingsPage implements OnInit {
         username: mqttSettings.username,
         password: mqttSettings.password,
         topic: mqttSettings.topic,
+
       }
     });
 

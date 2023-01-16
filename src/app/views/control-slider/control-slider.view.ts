@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -15,23 +15,28 @@ var sprintf = require('sprintf-js').sprintf;
   styleUrls: ['./control-slider.view.scss'],
 })
 export class ControlSliderView
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @Input() control: Control;
   @Input() view: View;
 
   buttonType = ButtonAction;
   viewType = View;
-
   vm$: Observable<SliderVM>;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -47,7 +52,8 @@ export class ControlSliderView
     ]).pipe(
       map(([control, categories, rooms]) => {
         return this.updateVM(control, categories, rooms);
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 

@@ -38,7 +38,7 @@ export function createTranslateLoader(http: HttpClient) {
     AppRoutingModule,
     MqttModule.forRoot(MQTT_SERVICE_OPTIONS),
     HttpClientModule,
-    ServiceWorkerModule.register('ngsw-worker.js',
+    ServiceWorkerModule.register('/ngsw-worker.js',
     {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

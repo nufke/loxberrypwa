@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { RadioVM } from '../../interfaces/view.model';
@@ -8,17 +8,13 @@ import { RadioVM } from '../../interfaces/view.model';
   templateUrl: 'card-radio-list.view.html',
   styleUrls: ['./card-radio-list.view.scss'],
 })
-export class CardRadioListView
-  implements OnInit {
+export class CardRadioListView {
 
   @Input() radio_vm: RadioVM;
 
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
-  }
-
-  ngOnInit() {
   }
 
   radioGroupChange(vm: RadioVM, $event) {

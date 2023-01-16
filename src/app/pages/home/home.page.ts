@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { TranslateService } from '@ngx-translate/core';
 import { ControlListVM } from '../../interfaces/view.model';
 import { ControlService } from '../../services/control.service';
@@ -12,16 +12,25 @@ import { View } from '../../types/types';
   styleUrls: ['home.page.scss']
 })
 export class HomePage
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   viewType = View;
-  public vm$: Observable<ControlListVM>;
+  vm$: Observable<ControlListVM>;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
-    private controlService: ControlService)
-  {
+    private controlService: ControlService) {
+      this.initVM();
+  }
+
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   private initVM() : void {
@@ -35,11 +44,9 @@ export class HomePage
           favorites: controls
         };
         return vm;
-      })
+      }),
+      takeUntil(this.destroy$)
     );
-  }
-
-  ngOnInit() : void {
   }
 
 }

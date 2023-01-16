@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject, combineLatest } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { Control, Subcontrol } from '../../interfaces/data.model';
@@ -14,7 +14,7 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./card-dimmer.view.scss'],
 })
 export class CardDimmerView
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @Input() control: Control;
   @Input() subcontrol: Subcontrol;
@@ -23,14 +23,20 @@ export class CardDimmerView
   vm$: Observable<DimmerVM>;
   buttonType = ButtonAction;
   viewType = View;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -45,7 +51,8 @@ export class CardDimmerView
     ]).pipe(
       map(([control, subcontrol]) => {
         return this.updateVM(control, subcontrol);
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 

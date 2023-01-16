@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { Control, Subcontrol } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -14,16 +14,16 @@ import { Utils } from '../../utils/utils';
   styleUrls: ['./control-color-picker-v2.view.scss'],
 })
 export class ControlColorPickerV2View
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @Input() control: Control;
   @Input() subcontrol: Subcontrol;
   @Input() view: View;
 
   vm$: Observable<ColorPickerVM>;
-
-  public segment: string = 'color';
-  public mode_rgb: Boolean;
+  segment: string = 'color';
+  mode_rgb: Boolean;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
@@ -31,8 +31,13 @@ export class ControlColorPickerV2View
     this.mode_rgb = true;
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -47,7 +52,8 @@ export class ControlColorPickerV2View
     ]).pipe(
       map(([control, subcontrol]) => {
         return this.updateVM(control, subcontrol);
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 

@@ -37,8 +37,8 @@ export class MenuPage implements OnInit {
     }
   ];
 
-  public darkTheme: boolean = false;
-  public language: string;
+  darkTheme: boolean = false;
+  language: string;
 
   constructor(
     private storageService: StorageService,
@@ -46,7 +46,7 @@ export class MenuPage implements OnInit {
   {
     this.storageService.settings$.subscribe( settings =>
     {
-      if (settings) {
+      if (settings && settings.app) {
         this.darkTheme = settings.app.dark_theme;
         document.body.classList.toggle('dark', this.darkTheme);
 

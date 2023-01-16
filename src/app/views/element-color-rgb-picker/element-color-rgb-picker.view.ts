@@ -14,7 +14,7 @@ export class ElementColorRGBPickerView
 
   @Input() color_picker_vm: ColorPickerVM;
 
-  ColorPicker;
+  ColorPicker; // TODO add type
 
   constructor(
     public translate: TranslateService,

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -14,19 +14,27 @@ import { View } from '../../types/types';
   styleUrls: ['controls.page.scss']
 })
 export class ControlsPage
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   vm$: Observable<ControlListVM>;
   key: string;
   viewType = View;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private controlService: ControlService
-    )
-  {
+    private controlService: ControlService) {
+
+  }
+
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   /**
@@ -63,7 +71,8 @@ export class ControlsPage
             page: categories.find( category => (category.uuid === uuid) && (category.hwid === hwid) )
           };
           return vm;
-        })
+        }),
+        takeUntil(this.destroy$)
       );
     }
 
@@ -89,9 +98,6 @@ export class ControlsPage
         })
       );
     }
-  }
-
-  ngOnInit() : void {
   }
 
   filter_list(label: Room | Category) : Observable<Control[]> {

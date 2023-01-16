@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -13,27 +13,31 @@ import { ButtonAction, View } from '../../types/types';
   styleUrls: ['./control-radio.view.scss'],
 })
 export class ControlRadioView
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @Input() control: Control;
   @Input() view: View;
 
   buttonType = ButtonAction;
   viewType = View;
-
   vm$: Observable<RadioVM>;
-
   segment: string = 'moods';
   entries: RadioListItem[];
   radio_list: RadioListItem[];
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -49,7 +53,8 @@ export class ControlRadioView
     ]).pipe(
       map(([control, categories, rooms]) => {
         return this.updateVM(control, categories, rooms);
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 

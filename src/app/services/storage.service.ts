@@ -34,7 +34,6 @@ export class StorageService {
   async saveSettings(settings: Settings) : Promise<void> {
     let currentSettings: Settings = this.dataService.getCurrentSettingsFromStore();
     let s = { ...currentSettings, ...settings};
-    console.log('save settings ', s);
     this.dataService.putSettingsInStore(s);
     return encryptStorage.setItem(SETTINGS_TOKEN_KEY, JSON.stringify(s));
   }

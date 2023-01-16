@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from "rxjs/operators";
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
+import { map, takeUntil } from "rxjs/operators";
 import { Control, Subcontrol } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -12,20 +12,26 @@ import { SwitchVM } from '../../interfaces/view.model';
   styleUrls: ['./card-switch.view.scss'],
 })
 export class CardSwitchView
-  implements OnInit {
+  implements OnInit, OnDestroy {
 
   @Input() control: Control;
   @Input() subcontrol: Subcontrol;
 
   vm$: Observable<SwitchVM>;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
   }
 
-  ngOnInit() {
+  ngOnInit() : void {
     this.initVM();
+  }
+
+  ngOnDestroy() : void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -40,7 +46,8 @@ export class CardSwitchView
     ]).pipe(
       map(([control, subcontrol]) => {
         return this.updateVM(control, subcontrol);
-      })
+      }),
+      takeUntil(this.destroy$)
     );
   }
 
