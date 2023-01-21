@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from "rxjs/operators";
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Control, Subcontrol } from '../../interfaces/data.model';
@@ -28,7 +26,6 @@ export class DetailedControlPage
   viewContainer: ViewContainerRef;
   componentRef;
   viewType = View;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   control: Control;
   subcontrol: Subcontrol;
@@ -71,8 +68,6 @@ export class DetailedControlPage
   }
 
   ngOnDestroy() : void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
     this.viewContainer.clear(); // remove dynamic view from memory
     this.componentRef = -1;
   }
@@ -83,7 +78,7 @@ export class DetailedControlPage
     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
     const subcontrol_uuid_ext = this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
-    this.controlService.getControl$(control_hwid, control_uuid).pipe(takeUntil(this.destroy$)).subscribe(
+    this.controlService.getControl$(control_hwid, control_uuid).subscribe(
       control => {
         this.control = control;
         this.page_name = (control.type === 'IRoomController') ?
@@ -91,7 +86,7 @@ export class DetailedControlPage
       }
     );
     if (subcontrol_uuid != null) {
-      this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).pipe(takeUntil(this.destroy$)).subscribe(
+      this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
         subcontrol => {
           this.subcontrol = subcontrol;
           this.page_name = subcontrol.name;

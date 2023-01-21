@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { shareReplay, distinctUntilKeyChanged } from 'rxjs/operators';
 import { Control, Subcontrol, Category, Room, Settings, AppState, INITIAL_APP_STATE } from '../interfaces/data.model';
 import { Store } from './store';
 
@@ -11,39 +11,9 @@ export class DataService extends Store<AppState> {
     super(INITIAL_APP_STATE);
   }
 
-  getControlsFromStore$(): Observable<Control[]> {
-    return this.select$((state) => Object.values(state.controls)).pipe(
-      shareReplay()
-    );
-  }
-
-  getCategoriesFromStore$(): Observable<Category[]> {
-    return this.select$((state) => Object.values(state.categories)).pipe(
-      shareReplay()
-    );
-  }
-
-  getRoomsFromStore$(): Observable<Room[]> {
-    return this.select$((state) => Object.values(state.rooms)).pipe(
-      shareReplay()
-    );
-  }
-
-  getSingleControlFromStore$(hwid: string, uuid: string): Observable<Control> {
-    return this.select$((state) => state.controls[hwid + '/' + uuid]).pipe(
-      shareReplay()
-    );
-  }
-
-  getSingleSubcontrolFromStore$(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
-    return this.select$((state) =>
-      state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid]).pipe(
-        shareReplay()
-      );
-  }
-
-  getSettingsFromStore$(): Observable<Settings> {
+  get settings$(): Observable<Settings> {
     return this.select$((state) => state.settings).pipe(
+      distinctUntilKeyChanged('mqtt'),
       shareReplay()
     );
   }
@@ -87,39 +57,36 @@ export class DataService extends Store<AppState> {
     });
   }
 
-  updateElementInStore(topic, value) {
+  async updateElementInStore(topic, value) {
     let topic_level = topic.split('/');
     let id = topic_level[0] + '/' + topic_level[1];
-
     this.setState((state) => {
+
       if (state.controls[id]) {
-        this.findAndUpdate(state.controls[id], id, topic, value);
+        this.findAndUpdate1(state.controls[id], id, topic, value);
       }
+
       if (state.categories[id]) {
-        this.findAndUpdate(state.categories[id], id, topic, value);
+        this.findAndUpdate1(state.categories[id], id, topic, value);
       }
+
       if (state.rooms[id]) {
-        this.findAndUpdate(state.rooms[id], id, topic, value);
+        this.findAndUpdate1(state.rooms[id], id, topic, value);
       }
-      return ({ ...this.state });
+      return ({ ...state });
     });
   }
 
-  private async findAndUpdate(obj, name, topic, value) {
+  private findAndUpdate1(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
       if (name + '/' + key === topic) {
-        if (this.isValidJSONObject(value)) {
-          obj[key] = JSON.parse(value);
-          //console.log('update key/value (json):', name + '/' + key, JSON.parse(value));
-        }
-        else {
-          obj[key] = value;
-          //console.log('update key/value:', name + '/' + key, value);
-        }
+        obj[key] = this.isValidJSONObject(value) ? JSON.parse(value) : value;
+        //console.log('update topic', topic, obj[key] );
+        return;
       }
       else
         if (typeof obj[key] === 'object' && obj[key] !== null)
-          this.findAndUpdate(obj[key], name + '/' + key, topic, value);
+          this.findAndUpdate1(obj[key], name + '/' + key, topic, value);
     });
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from "rxjs/operators";
+import { Observable } from 'rxjs';
+import { map } from "rxjs/operators";
 import { TranslateService } from '@ngx-translate/core';
 import { ControlListVM } from '../../interfaces/view.model';
 import { ControlService } from '../../services/control.service';
@@ -16,7 +16,6 @@ export class HomePage
 
   viewType = View;
   vm$: Observable<ControlListVM>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
@@ -29,8 +28,6 @@ export class HomePage
   }
 
   ngOnDestroy() : void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   private initVM() : void {
@@ -44,8 +41,7 @@ export class HomePage
           favorites: controls
         };
         return vm;
-      }),
-      takeUntil(this.destroy$)
+      })
     );
   }
 

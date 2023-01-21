@@ -1,7 +1,10 @@
+import { StateChangeListener } from "@capacitor/app";
+
 /**
  * In-memory Application State for the PWA
  */
 export interface AppState {
+  mode: Mode;
   settings: Settings;
   controls: { [key: string]: Control };
   categories: { [key: string]: Category };
@@ -35,6 +38,13 @@ export interface AppState {
   topic: string;
 }
 
+/**
+ * Properties for App operational mode
+ */
+ export interface Mode {
+  connected: boolean
+}
+
 export const INITIAL_MQTT_SETTINGS: MqttSettings = {
   hostname: '',
   port: null,
@@ -48,10 +58,15 @@ export const INITIAL_APP_SETTINGS: AppSettings = {
   language: 'en'
 }
 
+export const INITIAL_MODE: Mode = {
+  connected: false
+}
+
 /**
  * Application State initial values
  */
 export const INITIAL_APP_STATE: AppState = {
+  mode: INITIAL_MODE,
   settings: {
     app: INITIAL_APP_SETTINGS,
     mqtt: INITIAL_MQTT_SETTINGS
@@ -80,7 +95,7 @@ export interface Control {
   is_visible?: boolean;         // make control invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
   order?: number[];             // defines the order for the controls (optional)
-  subcontrols?: Subcontrol[];   // subcontrols (optional)
+  subcontrols?: any;            // subcontrols (optional)
   details: any;                 // control details
   states: any;                  // control states
 }

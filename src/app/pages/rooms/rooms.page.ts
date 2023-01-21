@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { map, takeUntil } from "rxjs/operators";
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -17,7 +17,6 @@ export class RoomsPage
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
   vm$: Observable<RoomListVM>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
@@ -29,8 +28,6 @@ export class RoomsPage
   }
 
   ngOnDestroy() : void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   ionViewWillEnter() : void {
@@ -66,8 +63,7 @@ export class RoomsPage
             rooms_favs: rooms_favs
           };
           return vm;
-      }),
-      takeUntil(this.destroy$)
+      })
     );
   }
 

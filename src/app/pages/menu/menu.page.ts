@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { StorageService } from '../../services/storage.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-menu',
@@ -40,11 +41,13 @@ export class MenuPage implements OnInit {
   darkTheme: boolean = false;
   language: string;
 
+  private storageSubscription: Subscription;
+
   constructor(
     private storageService: StorageService,
     public translate: TranslateService )
   {
-    this.storageService.settings$.subscribe( settings =>
+    this.storageSubscription = this.storageService.settings$.subscribe( settings =>
     {
       if (settings && settings.app) {
         this.darkTheme = settings.app.dark_theme;
@@ -56,7 +59,11 @@ export class MenuPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.storageSubscription.unsubscribe();
   }
 
   onToggleDarkTheme() {

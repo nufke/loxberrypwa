@@ -29,7 +29,7 @@ export abstract class Store<T> {
   /**
    * selector to grab a specified slice of data from the store
    */
-   protected select$<K>(selector: (state: T) => K): Observable<K> {
+   select$<K>(selector: (state: T) => K): Observable<K> {
     return this.state$.pipe(
       map(selector),
       shareReplay()

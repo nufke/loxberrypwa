@@ -4,7 +4,6 @@ import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { TranslateService } from '@ngx-translate/core';
 import { Control, Subcontrol, Settings } from '../interfaces/data.model'
 import { MqttTopics } from '../interfaces/mqtt.api'
-import { StorageService } from './storage.service';
 import { DataService } from './data.service';
 
 @Injectable({
@@ -28,15 +27,14 @@ export class LoxBerryService {
     this.initService();
 
     this.mqttService.state.subscribe((s: MqttConnectionState) => {
-      let connectionStatus: boolean = (s === MqttConnectionState.CONNECTED);
-      const status = connectionStatus ? 'connected' : 'disconnected';
-      //this.loxberryMqttConnected = connectionStatus;
+      this.loxberryMqttConnected = (s === MqttConnectionState.CONNECTED);
+      const status = this.loxberryMqttConnected ? 'connected' : 'disconnected';
       console.log('LoxBerry Mqtt client connection status: ', status);
-  });
+    });
   }
 
   private initService() {
-    this.dataService.getSettingsFromStore$().subscribe( settings => {
+    this.dataService.settings$.subscribe( settings => {
       // only connect if all mqtt configuration options are valid
       if (settings
           && !this.loxberryMqttConnected
@@ -61,9 +59,11 @@ export class LoxBerryService {
       password: settings.mqtt.password,
       hostname: settings.mqtt.hostname,
       port: settings.mqtt.port,
+      keepalive: 5,          // Keep alive 5s
+      connectTimeout: 1000,  // Timeout period 1s
+      reconnectPeriod: 5000, // Reconnect period 5s
       protocol: 'wss',
     });
-    this.loxberryMqttConnected = true;
   }
 
   private registerStructureTopic() {
@@ -87,10 +87,9 @@ export class LoxBerryService {
        }
        else {
          if (key === 'mqtt') {
-            // console.log('element name, value:', name,  control[key] );
             this.mqttTopicMapping[control[key]] = name;
             this.registerTopicPrefix(control[key]);
-         }
+          }
        }
     });
     return control;
@@ -132,25 +131,33 @@ export class LoxBerryService {
       let fullTopicName = this.loxberryMqttAppTopic + '/+/+' + topicName;
       if (this.registeredTopics.includes(fullTopicName)) {
         console.log("Topic already exists and ignored:", fullTopicName );
-        return;
       }
-      //console.log("register topic name:", fullTopicName );
-      this.registeredTopics.push(fullTopicName);
-      this.mqttSubscription.push( this.mqttService.observe(fullTopicName)
-      .subscribe((message: IMqttMessage) => {
-        //console.log('MQTT received: ', message.topic, message.payload.toString());
-        this.processTopic(message.topic, message.payload.toString() );
-      }));
+      else {
+        console.log("register topic name:", fullTopicName );
+        this.registeredTopics.push(fullTopicName);
+        this.mqttSubscription.push( this.mqttService.observe(fullTopicName)
+        .subscribe((message: IMqttMessage) => {
+          //console.log('MQTT received: ', message.topic, message.payload.toString());
+          this.processTopic(message.topic, message.payload.toString() );
+        }));
+      }
     });
 
     this.mqttPrefixList.forEach( prefix => {
       let topicName = prefix + "/#";
-      //console.log("register topic prefix:", topicName );
-      this.mqttSubscription.push( this.mqttService.observe(topicName)
-        .subscribe((message: IMqttMessage) => {
-        //console.log('MQTT received: ', message.topic, message.payload.toString());
-        this.processTopic(this.mqttTopicMapping[message.topic], message.payload.toString());
-      }));
+      if (this.registeredTopics.includes(topicName)) {
+        console.log("Topic already exists and ignored:", topicName );
+        return;
+      }
+      else {
+        //console.log("register topic prefix:", topicName );
+        this.registeredTopics.push(topicName);
+        this.mqttSubscription.push( this.mqttService.observe(topicName)
+          .subscribe((message: IMqttMessage) => {
+          //console.log('MQTT received: ', message.topic, message.payload.toString());
+          this.processTopic(this.mqttTopicMapping[message.topic], message.payload.toString());
+        }));
+      }
     });
   }
 

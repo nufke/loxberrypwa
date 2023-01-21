@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { map, takeUntil } from "rxjs/operators";
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -23,7 +23,6 @@ export class ControlIRCView
   viewType = View;
   vm$: Observable<RadioVM>;
   segment: string = 'modes';
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   private irc_mode = [
     { id: 0, name: 'Automatic' },
@@ -63,8 +62,6 @@ export class ControlIRCView
   }
 
   ngOnDestroy() : void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -80,8 +77,7 @@ export class ControlIRCView
     ]).pipe(
       map(([control, categories, rooms]) => {
         return this.updateVM(control, categories, rooms);
-      }),
-      takeUntil(this.destroy$)
+      })
     );
   }
 

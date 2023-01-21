@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { map, takeUntil } from "rxjs/operators";
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { IonContent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { CategoryListVM } from '../../interfaces/view.model';
@@ -17,7 +17,6 @@ export class CategoriesPage
   @ViewChild(IonContent, { static: false }) content: IonContent;
 
   vm$: Observable<CategoryListVM>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
@@ -29,8 +28,6 @@ export class CategoriesPage
   }
 
   ngOnDestroy() : void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   ionViewWillEnter() : void {
@@ -64,8 +61,7 @@ export class CategoriesPage
             categories_favs: categories_favs
           };
           return vm;
-      }),
-      takeUntil(this.destroy$)
+      })
     );
   }
 

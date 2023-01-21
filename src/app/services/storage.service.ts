@@ -24,7 +24,7 @@ export class StorageService {
   }
 
   get settings$(): Observable<Settings> {
-    return this.dataService.getSettingsFromStore$();
+    return this.dataService.settings$;
   }
 
   private async getSettingsFromEncryptedStorage() : Promise<Settings> {

@@ -50,3 +50,5 @@ Alternatively, you can also make use of URLs to your favorite icons and images i
 ## Deploy the PWA
 
 After building and testing the PWA on your development platform (e.g. Linux desktop), copy the `www` directory to your production server (e.g. LoxBerry or Raspberry Pi) and update the configuration of your webserver (e.g. Apache2) to get access to the webpage the PWA is running. Alternatively, you could use `nodejs` and `http-server` to launch the PWA.
+
+**Note that PWA deployment requires secure connections using HTTPS and WSS, which means your webserver and MQTT broker should support this.**

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { map, takeUntil } from "rxjs/operators";
+import { Observable, combineLatest } from 'rxjs';
+import { map } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
@@ -23,7 +23,6 @@ export class ControlTextStateView
 
   viewType = View;
   vm$: Observable<TextVM>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     public translate: TranslateService,
@@ -35,8 +34,6 @@ export class ControlTextStateView
   }
 
   ngOnDestroy() : void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   private initVM(): void {
@@ -52,8 +49,7 @@ export class ControlTextStateView
     ]).pipe(
       map(([control, categories, rooms]) => {
         return this.updateVM(control, categories, rooms);
-      }),
-      takeUntil(this.destroy$)
+      })
     );
   }
 
