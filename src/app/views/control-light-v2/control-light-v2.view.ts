@@ -58,7 +58,7 @@ export class ControlLightV2View
   private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-    let selected_id = control.states.active_moods[0];
+    let selected_id = control.states.active_moods[0]; /* if undefined/empty, mode is most likely manual (see below) */
 
     /* only update radio_list if we have new entries, since it might cause GUI interruptions */
     if (this.entries !== control.states.mood_list) {
@@ -69,7 +69,7 @@ export class ControlLightV2View
           let mood_idx = this.mood_list.findIndex(item => { return item.id == selected_id });
           this.text = this.mood_list[mood_idx].name;
         }
-        else
+        else /* undefined/empty, so manual */
           this.text = this.translate.instant('Manual');
       }
     }
@@ -103,7 +103,6 @@ export class ControlLightV2View
     };
     return vm;
   }
-
 
   updateSegment() {
     // Close any open sliding items when the schedule updates

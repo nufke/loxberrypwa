@@ -10,10 +10,7 @@ import { ViewsModule } from '../../views/views.module';
 
 @NgModule({
   imports: [
-    IonicModule.forRoot({
-      rippleEffect: false,
-      animated: false
-    }),
+    IonicModule,
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: ControlsPage }]),

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MqttModule, IMqttServiceOptions } from 'ngx-mqtt';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { ServiceWorkerModule } from '@angular/service-worker';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';

@@ -8,7 +8,8 @@ import { StorageService } from '../../services/storage.service';
   templateUrl: './menu.page.html',
   styleUrls: ['./menu.page.scss'],
 })
-export class MenuPage implements OnInit {
+export class MenuPage
+  implements OnInit, OnDestroy {
 
   Pages = [
     {

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { LoxBerryService } from '../../services/loxberry.service';
 
 @Component({
   selector: 'app-tabs',
@@ -10,8 +9,7 @@ import { LoxBerryService } from '../../services/loxberry.service';
 export class TabsPage {
 
   constructor(
-    private navCtrl: NavController,
-    public loxBerryService: LoxBerryService ) // TODO who should contruct LoxBerryService?
+    private navCtrl: NavController)
   {}
 
   click(tab: string) {

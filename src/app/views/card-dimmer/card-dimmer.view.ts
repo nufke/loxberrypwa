@@ -69,7 +69,7 @@ export class CardDimmerView
       button_color = 'rgba(255, 229, 127,' + (position / 100) + ')';
     }
 
-    if (subcontrol.type === 'ControlPickerV2') {
+    if (subcontrol.type === 'ColorPickerV2') {
       let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
       if (hsv) {
         position = Number(hsv[3]);
@@ -100,15 +100,15 @@ export class CardDimmerView
 
   sliderChange(vm: DimmerVM, $event) {
     if (vm.subcontrol.type === 'Dimmer') {
-      if (vm.subcontrol.states.position != vm.ui.slider.position) {
-        this.controlService.updateControl(vm.subcontrol, String(vm.ui.slider.position));
+      if (vm.subcontrol.states.position != $event.detail.value) {
+        this.controlService.updateControl(vm.subcontrol, String($event.detail.value));
       }
     }
 
-    if (vm.subcontrol.type === 'ControlPickerV2') {
+    if (vm.subcontrol.type === 'ColorPickerV2') {
       let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
-      if (hsv[3] != vm.ui.slider.position) {
-        let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + vm.ui.slider.position + ')';
+      if (hsv[3] != $event.detail.value) {
+        let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + String($event.detail.value) + ')';
         this.controlService.updateControl(vm.subcontrol, color);
       }
     }
@@ -134,9 +134,9 @@ export class CardDimmerView
       this.controlService.updateControl(vm.subcontrol, String(position));
     }
 
-    if (vm.subcontrol.type === 'ControlPickerV2') {
+    if (vm.subcontrol.type === 'ColorPickerV2') {
       let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
-      let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + position + ')';
+      let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + String(position) + ')';
       this.controlService.updateControl(vm.subcontrol, color);
     }
   }

@@ -14,7 +14,7 @@
             </ion-icon>
           </ion-fab-button>
         </ng-container>
-        <ng-container *ngIf="vm.subcontrol.type === 'ControlPickerV2'">
+        <ng-container *ngIf="vm.subcontrol.type === 'ColorPickerV2'">
           <ion-fab-button class="fab-button-slider btn_dimmer" style="background-color: {{vm.ui.btn_color}}"
             routerLink="{{subcontrol.uuid}}">
             <ion-icon class="rgb_icon" name="color-filter-outline" style="color: var(--ion-text-color, #666666);">
@@ -30,7 +30,7 @@
       </ion-fab-button>
       <ion-range class="range" style="--bar-background: {{vm.ui.slider.color}};" min="{{vm.ui.slider.min}}"
         max="{{vm.ui.slider.max}}" step="{{vm.ui.slider.step}}" debounce="50" (ionChange)="sliderChange(vm, $event)"
-        [(ngModel)]="vm.ui.slider.position">
+        [ngModel]="vm.ui.slider.position">
       </ion-range>
       <ion-fab-button class="fab-button-slider icon-slider-right" (click)="clickDimmerButton(buttonType.UP, vm, $event)">
         <ion-icon name="sunny" style="color: #4e5761"></ion-icon>

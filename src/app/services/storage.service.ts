@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EncryptStorage } from 'encrypt-storage';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DataService } from './data.service';
 import { Settings } from '../interfaces/data.model';
 

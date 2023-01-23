@@ -9,7 +9,7 @@
             {{vm.ui.status.text}}</h2>
         </ion-label>
         <ng-container>
-          <ion-toggle class="toggle" color="primary" mode="ios" [(ngModel)]="vm.ui.toggle"
+          <ion-toggle class="toggle" color="primary" mode="ios" [ngModel]="vm.ui.toggle"
             (click)="clickToggle(vm, $event)">
           </ion-toggle>
         </ng-container>
@@ -24,7 +24,7 @@
       <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
         <ion-label></ion-label>
-        <ion-toggle class="toggle" color="primary" mode="ios" [(ngModel)]="vm.ui.toggle"
+        <ion-toggle class="toggle" color="primary" mode="ios" [ngModel]="vm.ui.toggle"
           (click)="clickToggle(vm, $event)">
         </ion-toggle>
       </ion-item>

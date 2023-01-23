@@ -52,7 +52,7 @@ export class DetailedControlPage
     'Switch': ControlSwitchView,
     'Slider': ControlSliderView,
     'Pushbutton': ControlPushbuttonView,
-    'ControlPickerV2': ControlColorPickerV2View,
+    'ColorPickerV2': ControlColorPickerV2View,
     'IRoomController': ControlIRCView
   }
 

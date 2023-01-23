@@ -91,7 +91,6 @@ export class ControlIRCView
     let subcontrols = Object.keys(control.subcontrols);
     let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
 
-    let heat_or_cool = 1; // TODO default: heating?
     let mode = control.states.mode;
     let heating = ((mode == 1) || (mode == 3) || (mode == 5));
 

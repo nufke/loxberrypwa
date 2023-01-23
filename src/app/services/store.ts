@@ -1,5 +1,5 @@
 import { Observable, BehaviorSubject,  } from 'rxjs';
-import { map, distinctUntilChanged, shareReplay } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 
 interface SetStateCallback<T> {
 	( currentState: T ): Partial<T>;

@@ -21,8 +21,8 @@ export class CardSliderView {
   }
 
   sliderChange(vm: SliderVM, $event) {
-    if (vm.control.states.value != vm.ui.slider.position) {
-      this.controlService.updateControl(vm.control, String(vm.ui.slider.position));
+    if (vm.control.states.value != $event.detail.value) {
+      this.controlService.updateControl(vm.control, String($event.detail.value));
     }
   }
 
