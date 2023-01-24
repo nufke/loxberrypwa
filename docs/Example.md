@@ -9,7 +9,7 @@ Note that the icons and images use relative paths, referencing the source direct
 To initialize the App with a structure, send the structure as JSON string with topic `/loxberry/app/structure`:
 
 ```
-/loxberry/app/structure  { "controls": { ... },  "categories": { ... }, "rooms": { ... } }
+/loxberry/app/structure '{ "controls": { ... },  "categories": { ... }, "rooms": { ... } }'
 ```
 
 Make sure that the keys of the controls, categories and rooms, use the format `hwid/uuid`, and match with the values for `hwid` and `uuid` in each element.

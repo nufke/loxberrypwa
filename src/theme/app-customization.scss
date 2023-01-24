@@ -70,8 +70,13 @@ ion-content::part(scroll) {
   --background: var(--ion-card-background, #fbfbfb);
 }
 
+.card-center {
+  max-width: 400px;
+  margin: auto;
+}
+
 .card-fav {
-  height: 145px;
+  height: 140px;
 }
 
 .card-header {
@@ -160,7 +165,7 @@ ion-content::part(scroll) {
     line-height: 1.2;
   }
   p {
-    margin-top: 3px;
+    //margin-top: 3px;
     letter-spacing: 0.01em;
     font-size: 13px;
   }

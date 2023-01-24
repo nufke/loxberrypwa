@@ -11,7 +11,7 @@ The topic prefix can be specified in the App settings. In this example, the topi
 The MQTT settings API is used to send an initial App structure in the form of a single JSON object containing all controls, categories, and rooms, to MQTT topic `/loxberry/app/structure`. The upload is incremental, which means changes to existing objects will be overridden and old objects remain available. To flush all objects, an empty string message should be sent to `/loxberry/app/structure`.
 
 ```
-/loxberry/app/structure  { "controls": { ... },  "categories": { ... }, "rooms": { ... } }
+/loxberry/app/structure '{ "controls": { ... },  "categories": { ... }, "rooms": { ... } }'
 ```
 
 More information on the JSON data model is given [here](https://github.com/nufke/loxberrypwa/wiki/JSON-data-model)
