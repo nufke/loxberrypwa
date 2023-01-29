@@ -1,7 +1,7 @@
 <ng-container *ngIf="view===viewType.LIST_ITEM">
   <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
     <ion-card-content class="card-content">
-      <ion-item>
+      <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
         <ion-label class="label label-listitem">
           <h1>{{vm.control.name}}</h1>
@@ -9,9 +9,12 @@
             {{vm.ui.status.text}}</h2>
         </ion-label>
         <ng-container>
-          <ion-toggle class="toggle" color="primary" mode="ios" [ngModel]="vm.ui.toggle"
-            (click)="clickToggle(vm, $event)">
-          </ion-toggle>
+          <ion-fab-button class="fab-button" size="small" (click)="clickButton(buttonType.DOWN, vm, $event)">
+            <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button class="fab-button" size="small" (click)="clickButton(buttonType.UP, vm, $event)">
+            <ion-icon class="icon" name="chevron-up-outline"></ion-icon>
+          </ion-fab-button>
         </ng-container>
       </ion-item>
     </ion-card-content>
@@ -24,9 +27,12 @@
       <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
         <ion-label></ion-label>
-        <ion-toggle class="toggle" color="primary" mode="ios" [ngModel]="vm.ui.toggle"
-          (click)="clickToggle(vm, $event)">
-        </ion-toggle>
+        <ion-fab-button class="fab-button" size="small" (click)="clickButton(buttonType.DOWN, vm, $event)">
+          <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button class="fab-button" size="small" (click)="clickButton(buttonType.UP, vm, $event)">
+          <ion-icon class="icon" name="chevron-up-outline"></ion-icon>
+        </ion-fab-button>
       </ion-item>
     </ion-card-header>
     <ion-card-content class="card-content">
@@ -46,24 +52,24 @@
   <ion-grid class="grid-center" *ngIf="vm$ | async as vm">
     <ion-row>
       <ion-col>
-        <card-text-view [text_vm]="vm"></card-text-view>
+          <card-text-view [text_vm]="vm"></card-text-view>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-radio-group class="radio-group" value="{{vm.ui.status.text}}" (ionChange)="radioChange(vm, $event)">
-          <div *ngFor="let item of vm.ui.radio_list">
-              <div *ngIf="item.name !== ''">
-                  <ion-item class="radio-item selected-{{vm.ui.status.text === item.name}}">
-                      <ion-label class="label">
-                          <h2>{{item.name}}</h2>
-                      </ion-label>
-                      <ion-radio class="radio" value="{{item.name}}"></ion-radio>
-                  </ion-item>
-              </div>
-          </div>
-      </ion-radio-group>
-      </ion-col>
+      <ion-button class="push-button" expand="block" (click)="clickButton(buttonType.DOWN, vm, $event)">
+        <ion-label class="label">
+          <h1 translate>Down</h1>
+        </ion-label>
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button class="push-button" expand="block" (click)="clickButton(buttonType.UP, vm, $event)">
+        <ion-label class="label">
+          <h1 translate>Up</h1>
+        </ion-label>
+      </ion-button>
+    </ion-col>
     </ion-row>
   </ion-grid>
 </ng-container>

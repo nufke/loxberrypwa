@@ -12,6 +12,7 @@ import { ControlSliderView } from '../../views/control-slider/control-slider.vie
 import { ControlPushbuttonView } from '../../views/control-pushbutton/control-pushbutton.view';
 import { ControlColorPickerV2View } from '../../views/control-color-picker-v2/control-color-picker-v2.view';
 import { ControlIRCView } from '../../views/control-irc/control-irc.view';
+import { ControlUpDownDigitalView } from '../../views/control-up-down-digital/control-up-down-digital.view';
 
 @Component({
   selector: 'app-detailed-control',
@@ -53,7 +54,9 @@ export class DetailedControlPage
     'Slider': ControlSliderView,
     'Pushbutton': ControlPushbuttonView,
     'ColorPickerV2': ControlColorPickerV2View,
-    'IRoomController': ControlIRCView
+    'IRoomController': ControlIRCView,
+    'UpDownDigital': ControlUpDownDigitalView
+
   }
 
   constructor(

@@ -18,6 +18,7 @@
     "Comfort Cooling": "Comfort cooling",
     "Comfort Heating": "Comfort heating",
     "Dark mode": "Dark Mode",
+    "Down": "Down",
     "Economy": "Economy temperature",
     "Empty House": "Empty House",
     "Favorites": "Favorites",
@@ -44,5 +45,6 @@
     "Rooms": "Rooms",
     "Save settings": "Save settings",
     "Settings": "Settings",
+    "Up": "Up",
     "Username": "Username"
 }

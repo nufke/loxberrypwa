@@ -8,7 +8,7 @@
 </ion-segment>
 
 <ng-container *ngIf="segment === 'color'">
-  <ion-grid *ngIf="vm$ | async as vm" style="max-width:450px">
+  <ion-grid class="grid-center" *ngIf="vm$ | async as vm">
     <ion-row *ngIf="mode_rgb">
       <ion-col>
         <div class="container">
@@ -38,7 +38,7 @@
 </ng-container>
 
 <ng-container *ngIf="segment === 'sequence'">
-  <ion-grid *ngIf="vm$ | async as vm" style="max-width:450px">
+  <ion-grid class="grid-center" *ngIf="vm$ | async as vm">
     <ion-row>
       <ion-col>
         <div class="container">

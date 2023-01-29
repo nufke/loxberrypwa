@@ -1,9 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button *ngIf="!isHome"></ion-back-button>
+      <ion-menu-button *ngIf="isHome"></ion-menu-button>
     </ion-buttons>
-    <ion-title>
+    <ion-title translate>
       {{(vm$ | async).page.name}}
     </ion-title>
   </ion-toolbar>
@@ -45,65 +46,77 @@
               <control-radio-view [control]="control" [view]="viewType.FAVORITE"></control-radio-view>
             </ng-container>
 
+            <ng-container *ngIf="control.type === 'UpDownDigital'">
+              <control-up-down-digital-view [control]="control" [view]="viewType.FAVORITE"></control-up-down-digital-view>
+            </ng-container>
+
             <ng-container *ngIf="
         (control.type !== 'IRoomController') &&
         (control.type !== 'LightControllerV2') &&
         (control.type !== 'Pushbutton') &&
         (control.type !== 'Slider') &&
         (control.type !== 'Switch') &&
-        (control.type !== 'Radio')
+        (control.type !== 'Radio') &&
+        (control.type !== 'UpDownDigital')
         ">
               <control-text-state-view [control]="control" [view]="viewType.FAVORITE"></control-text-state-view>
             </ng-container>
           </ion-col>
         </ion-row>
       </ng-container>
-      <ng-container *ngFor="let label of vm.labels">
-        <ion-row *ngIf="label.name">
-          <ion-label class="control-label">
-            <p>{{label.name}}</p>
-          </ion-label>
-        </ion-row>
-        <ion-row>
-          <ion-col size="12" size-md="6" *ngFor="let control of filter_list(label) | async">
+      <ng-container *ngIf="vm.labels">
+        <ng-container *ngFor="let label of vm.labels">
+          <ion-row *ngIf="label.name">
+            <ion-label class="control-label">
+              <p>{{label.name}}</p>
+            </ion-label>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12" size-md="6" *ngFor="let control of filter_list(label) | async">
 
-            <ng-container *ngIf="control.type === 'IRoomController'">
-              <control-irc-view [control]="control" [view]="viewType.LIST_ITEM"></control-irc-view>
-            </ng-container>
+              <ng-container *ngIf="control.type === 'IRoomController'">
+                <control-irc-view [control]="control" [view]="viewType.LIST_ITEM"></control-irc-view>
+              </ng-container>
 
-            <ng-container *ngIf="control.type === 'LightControllerV2'">
-              <control-light-v2-view [control]="control" [view]="viewType.LIST_ITEM"></control-light-v2-view>
-            </ng-container>
+              <ng-container *ngIf="control.type === 'LightControllerV2'">
+                <control-light-v2-view [control]="control" [view]="viewType.LIST_ITEM"></control-light-v2-view>
+              </ng-container>
 
-            <ng-container *ngIf="control.type === 'Pushbutton'">
-              <control-pushbutton-view [control]="control" [view]="viewType.LIST_ITEM"></control-pushbutton-view>
-            </ng-container>
+              <ng-container *ngIf="control.type === 'Pushbutton'">
+                <control-pushbutton-view [control]="control" [view]="viewType.LIST_ITEM"></control-pushbutton-view>
+              </ng-container>
 
-            <ng-container *ngIf="control.type === 'Slider'">
-              <control-slider-view [control]="control" [view]="viewType.LIST_ITEM"></control-slider-view>
-            </ng-container>
+              <ng-container *ngIf="control.type === 'Slider'">
+                <control-slider-view [control]="control" [view]="viewType.LIST_ITEM"></control-slider-view>
+              </ng-container>
 
-            <ng-container *ngIf="control.type === 'Switch'">
-              <control-switch-view [control]="control" [view]="viewType.LIST_ITEM"></control-switch-view>
-            </ng-container>
+              <ng-container *ngIf="control.type === 'Switch'">
+                <control-switch-view [control]="control" [view]="viewType.LIST_ITEM"></control-switch-view>
+              </ng-container>
 
-            <ng-container *ngIf="control.type === 'Radio'">
-              <control-radio-view [control]="control" [view]="viewType.LIST_ITEM"></control-radio-view>
-            </ng-container>
+              <ng-container *ngIf="control.type === 'Radio'">
+                <control-radio-view [control]="control" [view]="viewType.LIST_ITEM"></control-radio-view>
+              </ng-container>
 
-            <ng-container *ngIf="
+              <ng-container *ngIf="control.type === 'UpDownDigital'">
+                <control-up-down-digital-view [control]="control" [view]="viewType.LIST_ITEM"></control-up-down-digital-view>
+              </ng-container>
+
+              <ng-container *ngIf="
           (control.type !== 'IRoomController') &&
           (control.type !== 'LightControllerV2') &&
           (control.type !== 'Pushbutton') &&
           (control.type !== 'Slider') &&
           (control.type !== 'Switch') &&
-          (control.type !== 'Radio')
+          (control.type !== 'Radio') &&
+          (control.type !== 'UpDownDigital')
           ">
-              <control-text-state-view [control]="control" [view]="viewType.LIST_ITEM"></control-text-state-view>
-            </ng-container>
+                <control-text-state-view [control]="control" [view]="viewType.LIST_ITEM"></control-text-state-view>
+              </ng-container>
 
-          </ion-col>
-        </ion-row>
+            </ion-col>
+          </ion-row>
+        </ng-container>
       </ng-container>
     </ion-grid>
   </ng-container>

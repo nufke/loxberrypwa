@@ -19,6 +19,7 @@ export class ControlsPage
   vm$: Observable<ControlListVM>;
   key: string;
   viewType = View;
+  isHome: boolean;
 
   constructor(
     public translate: TranslateService,
@@ -50,6 +51,7 @@ export class ControlsPage
       this.key = 'category';
 
     if (domain === 'category') {
+      this.isHome = false;
       this.vm$ = combineLatest([
         this.controlService.controls$,
         this.controlService.categories$,
@@ -73,6 +75,7 @@ export class ControlsPage
     }
 
     if (domain === 'room') {
+      this.isHome = false;
       this.vm$ = combineLatest([
         this.controlService.controls$,
         this.controlService.categories$,
@@ -89,6 +92,24 @@ export class ControlsPage
             labels: categories.filter( category => filtered_categories.indexOf(category.uuid) > -1 )
                               .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
             page: rooms.find( room => (room.uuid === uuid) && (room.hwid === hwid) )
+          };
+          return vm;
+        })
+      );
+    }
+
+    if (domain === null /* home */) {
+      this.isHome = true;
+      this.vm$ = this.controlService.controls$.pipe(
+        map( controls => {
+          controls = controls
+          .filter( control => (control.order[2] > 0) && control.is_visible )
+          .sort( (a, b) => ( a.order[2] - b.order[2] || a.name.localeCompare(b.name) ) );
+          const vm: ControlListVM = {
+            controls: null,
+            favorites: controls,
+            labels: null,
+            page: { name: 'Home'}
           };
           return vm;
         })

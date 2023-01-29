@@ -20,7 +20,7 @@ export interface ControlListVM {
   controls: Control[];
   favorites: Control[];
   labels?: Room[] | Category[];
-  page?: Room | Category;
+  page?: Room | Category | { name: string };
 }
 
 export interface ColorPickerVM {

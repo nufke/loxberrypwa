@@ -17,4 +17,4 @@ Different services are introduced acting as *middle layer* to manage the communi
 
 The application front-end implements the pages and views for the Graphical User Interface (GUI). The *view model* concept has been introduced to decouple the data model from the App state, focusing on visualization and managing GUI-related state changes in the front-end only, without poluting the central App state.
 
-This architecture has been created to manage the dynamics in state changes in front-end and back-end at the same time, where user interaction via the GUI happes concurrently with MQTT updates coming from other application via the MQTT Broker.
+This architecture has been created to manage the dynamics in state changes in front-end and back-end at the same time, where user interaction via the GUI happens concurrently with MQTT updates coming from other application via a MQTT Broker.

@@ -12,6 +12,7 @@ import { ControlLightV2View } from './control-light-v2/control-light-v2.view';
 import { ControlRadioView } from './control-radio/control-radio.view';
 import { ControlIRCView } from './control-irc/control-irc.view';
 import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
+import { ControlUpDownDigitalView } from './control-up-down-digital/control-up-down-digital.view';
 import { CardTextView } from './card-text/card-text.view';
 import { CardSliderView } from './card-slider/card-slider.view';
 import { CardRadioListView } from './card-radio-list/card-radio-list.view';
@@ -37,6 +38,7 @@ import { ElementColorTempPickerView } from './element-color-temp-picker/element-
     ControlRadioView,
     ControlColorPickerV2View,
     ControlIRCView,
+    ControlUpDownDigitalView,
     CardTextView,
     CardRadioListView,
     CardSliderView,
@@ -56,6 +58,7 @@ import { ElementColorTempPickerView } from './element-color-temp-picker/element-
     ControlRadioView,
     ControlColorPickerV2View,
     ControlIRCView,
+    ControlUpDownDigitalView,
     CardTextView,
     CardRadioListView,
     CardSliderView,

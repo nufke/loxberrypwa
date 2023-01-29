@@ -63,16 +63,16 @@ ion-content::part(scroll) {
 // global ionic restyling
 // TODO should we overrile default ionic styles???
 
+.grid-center {
+  max-width: 1024px;
+  margin: auto;
+}
+
 .card {
   margin: 0;
   border-radius: 5px;
   --ripple-color: transparent;
   --background: var(--ion-card-background, #fbfbfb);
-}
-
-.card-center {
-  max-width: 400px;
-  margin: auto;
 }
 
 .card-fav {
