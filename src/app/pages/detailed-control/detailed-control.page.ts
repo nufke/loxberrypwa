@@ -13,6 +13,7 @@ import { ControlPushbuttonView } from '../../views/control-pushbutton/control-pu
 import { ControlColorPickerV2View } from '../../views/control-color-picker-v2/control-color-picker-v2.view';
 import { ControlIRCView } from '../../views/control-irc/control-irc.view';
 import { ControlUpDownDigitalView } from '../../views/control-up-down-digital/control-up-down-digital.view';
+import { ControlJalousieView } from '../../views/control-jalousie/control-jalousie.view';
 
 @Component({
   selector: 'app-detailed-control',
@@ -55,8 +56,8 @@ export class DetailedControlPage
     'Pushbutton': ControlPushbuttonView,
     'ColorPickerV2': ControlColorPickerV2View,
     'IRoomController': ControlIRCView,
-    'UpDownDigital': ControlUpDownDigitalView
-
+    'UpDownDigital': ControlUpDownDigitalView,
+    'Jalousie': ControlJalousieView
   }
 
   constructor(

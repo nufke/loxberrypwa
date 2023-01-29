@@ -50,6 +50,10 @@
               <control-up-down-digital-view [control]="control" [view]="viewType.FAVORITE"></control-up-down-digital-view>
             </ng-container>
 
+            <ng-container *ngIf="control.type === 'Jalousie'">
+              <control-jalousie-view [control]="control" [view]="viewType.FAVORITE"></control-jalousie-view>
+            </ng-container>
+
             <ng-container *ngIf="
         (control.type !== 'IRoomController') &&
         (control.type !== 'LightControllerV2') &&
@@ -57,7 +61,8 @@
         (control.type !== 'Slider') &&
         (control.type !== 'Switch') &&
         (control.type !== 'Radio') &&
-        (control.type !== 'UpDownDigital')
+        (control.type !== 'UpDownDigital') &&
+        (control.type !== 'Jalousie')
         ">
               <control-text-state-view [control]="control" [view]="viewType.FAVORITE"></control-text-state-view>
             </ng-container>
@@ -102,6 +107,10 @@
                 <control-up-down-digital-view [control]="control" [view]="viewType.LIST_ITEM"></control-up-down-digital-view>
               </ng-container>
 
+              <ng-container *ngIf="control.type === 'Jalousie'">
+                <control-jalousie-view [control]="control" [view]="viewType.LIST_ITEM"></control-jalousie-view>
+              </ng-container>
+
               <ng-container *ngIf="
           (control.type !== 'IRoomController') &&
           (control.type !== 'LightControllerV2') &&
@@ -109,7 +118,8 @@
           (control.type !== 'Slider') &&
           (control.type !== 'Switch') &&
           (control.type !== 'Radio') &&
-          (control.type !== 'UpDownDigital')
+          (control.type !== 'UpDownDigital') &&
+          (control.type !== 'Jalousie')
           ">
                 <control-text-state-view [control]="control" [view]="viewType.LIST_ITEM"></control-text-state-view>
               </ng-container>

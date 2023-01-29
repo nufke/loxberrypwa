@@ -36,19 +36,19 @@ export class ControlIRCView
 
   private radio_list_heating = [
     { id: 0, name: 'Economy' },
-    { id: 1, name: 'Comfort Heating' },
-    { id: 3, name: 'Empty House' },
-    { id: 4, name: 'Heat Protection' },
-    { id: 5, name: 'Increased Heat' },
+    { id: 1, name: 'Comfort heating' },
+    { id: 3, name: 'Empty house' },
+    { id: 4, name: 'Heat protection' },
+    { id: 5, name: 'Increased heat' },
     { id: 6, name: 'Party' }
   ];
 
   private radio_list_cooling = [
     { id: 0, name: 'Economy' },
-    { id: 2, name: 'Comfort Cooling' },
-    { id: 3, name: 'Empty House' },
-    { id: 4, name: 'Heat Protection' },
-    { id: 5, name: 'Increased Heat' },
+    { id: 2, name: 'Comfort cooling' },
+    { id: 3, name: 'Empty house' },
+    { id: 4, name: 'Heat protection' },
+    { id: 5, name: 'Increased heat' },
     { id: 6, name: 'Party' }
   ];
 

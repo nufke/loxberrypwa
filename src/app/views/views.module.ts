@@ -13,6 +13,7 @@ import { ControlRadioView } from './control-radio/control-radio.view';
 import { ControlIRCView } from './control-irc/control-irc.view';
 import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
 import { ControlUpDownDigitalView } from './control-up-down-digital/control-up-down-digital.view';
+import { ControlJalousieView } from './control-jalousie/control-jalousie.view';
 import { CardTextView } from './card-text/card-text.view';
 import { CardSliderView } from './card-slider/card-slider.view';
 import { CardRadioListView } from './card-radio-list/card-radio-list.view';
@@ -20,6 +21,8 @@ import { CardSwitchView } from './card-switch/card-switch.view';
 import { CardDimmerView } from './card-dimmer/card-dimmer.view';
 import { ElementColorRGBPickerView } from './element-color-rgb-picker/element-color-rgb-picker.view';
 import { ElementColorTempPickerView } from './element-color-temp-picker/element-color-temp-picker.view';
+import { LongPressDirective } from '../directives/long-press.directive';
+import { DoubleClickDirective } from '../directives/double-click.directive';
 
 @NgModule({
   imports: [
@@ -27,9 +30,11 @@ import { ElementColorTempPickerView } from './element-color-temp-picker/element-
     IonicModule,
     FormsModule,
     RouterModule,
-    TranslateModule //.forChild()
+    TranslateModule
   ],
   declarations: [
+    LongPressDirective,
+    DoubleClickDirective,
     ControlTextStateView,
     ControlSwitchView,
     ControlSliderView,
@@ -39,6 +44,7 @@ import { ElementColorTempPickerView } from './element-color-temp-picker/element-
     ControlColorPickerV2View,
     ControlIRCView,
     ControlUpDownDigitalView,
+    ControlJalousieView,
     CardTextView,
     CardRadioListView,
     CardSliderView,
@@ -59,6 +65,7 @@ import { ElementColorTempPickerView } from './element-color-temp-picker/element-
     ControlColorPickerV2View,
     ControlIRCView,
     ControlUpDownDigitalView,
+    ControlJalousieView,
     CardTextView,
     CardRadioListView,
     CardSliderView,
