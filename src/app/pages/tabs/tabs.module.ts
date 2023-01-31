@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TabsPageRoutingModule } from './tabs-routing.module';
 import { TabsPage } from './tabs.page';
+import { DirectivesModule } from '../../directives/directives.module'
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { TabsPage } from './tabs.page';
     CommonModule,
     FormsModule,
     TabsPageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    DirectivesModule
   ],
   declarations: [TabsPage]
 })

@@ -1,8 +1,8 @@
 {
   "name": "LoxBerry App",
   "short_name": "LoxBerry",
-  "theme_color": "#69c350",
-  "background_color": "#0b0c0d",
+  "theme_color": "#161819",
+  "background_color": "#161819",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

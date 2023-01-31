@@ -36,7 +36,7 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 | Irrigation               | Not started       |
 | IRoomController          | Under development |
 | IRCDaytimer              | Not started       |
-| Jalousie                 | Available         |
+| Jalousie                 | Under development |
 | LoadManager              | Not started       |
 | LightsceneRGB            | Not started       |
 | LightController          | Not started       |

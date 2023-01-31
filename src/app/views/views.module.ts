@@ -21,8 +21,7 @@ import { CardSwitchView } from './card-switch/card-switch.view';
 import { CardDimmerView } from './card-dimmer/card-dimmer.view';
 import { ElementColorRGBPickerView } from './element-color-rgb-picker/element-color-rgb-picker.view';
 import { ElementColorTempPickerView } from './element-color-temp-picker/element-color-temp-picker.view';
-import { LongPressDirective } from '../directives/long-press.directive';
-import { DoubleClickDirective } from '../directives/double-click.directive';
+import { DirectivesModule } from '../directives/directives.module'
 
 @NgModule({
   imports: [
@@ -30,11 +29,10 @@ import { DoubleClickDirective } from '../directives/double-click.directive';
     IonicModule,
     FormsModule,
     RouterModule,
-    TranslateModule
+    TranslateModule,
+    DirectivesModule
   ],
   declarations: [
-    LongPressDirective,
-    DoubleClickDirective,
     ControlTextStateView,
     ControlSwitchView,
     ControlSliderView,

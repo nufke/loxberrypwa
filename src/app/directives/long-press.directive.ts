@@ -1,7 +1,9 @@
 import { Directive, ElementRef, EventEmitter, Output } from "@angular/core";
 import { Gesture, GestureController } from "@ionic/angular";
 
-@Directive({ selector: "[long-press]" })
+@Directive({
+  selector: "[long-press]"
+})
 export class LongPressDirective {
   private nativeElement: HTMLElement;
   private pressGesture: Gesture;

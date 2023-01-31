@@ -86,7 +86,7 @@ export class ControlLightV2View
         ...control,
         icon: {
           href: control.icon.href,
-          color: (selected_id != 778) ? "primary" : "#9d9e9e" }
+          color: ((selected_id != 778) && (selected_id != undefined)) ? "primary" : "#9d9e9e" }
         }, // TODO select from color palette
       ui: {
         name: control.name,
@@ -96,7 +96,7 @@ export class ControlLightV2View
         selected_id: selected_id,
         status: {
           text: this.text,
-          color: (selected_id != 778) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+          color: ((selected_id != 778) && (selected_id != undefined)) ? "#69c350" : "#9d9e9e" // TODO select from color palette
         }
       },
       subcontrols: visibleSubcontrols,
