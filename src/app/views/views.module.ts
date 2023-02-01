@@ -14,6 +14,7 @@ import { ControlIRCView } from './control-irc/control-irc.view';
 import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
 import { ControlUpDownDigitalView } from './control-up-down-digital/control-up-down-digital.view';
 import { ControlJalousieView } from './control-jalousie/control-jalousie.view';
+import { ControlWebpageView } from './control-webpage/control-webpage.view';
 import { CardTextView } from './card-text/card-text.view';
 import { CardSliderView } from './card-slider/card-slider.view';
 import { CardRadioListView } from './card-radio-list/card-radio-list.view';
@@ -43,6 +44,7 @@ import { DirectivesModule } from '../directives/directives.module'
     ControlIRCView,
     ControlUpDownDigitalView,
     ControlJalousieView,
+    ControlWebpageView,
     CardTextView,
     CardRadioListView,
     CardSliderView,
@@ -64,6 +66,7 @@ import { DirectivesModule } from '../directives/directives.module'
     ControlIRCView,
     ControlUpDownDigitalView,
     ControlJalousieView,
+    ControlWebpageView,
     CardTextView,
     CardRadioListView,
     CardSliderView,

@@ -29,7 +29,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1000/cmd",
             "name": "Lighting Livingroom",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "href": "assets/icons/svg/bulb-outline.svg"
             },
             "type": "LightControllerV2",
             "room": "2000",
@@ -67,7 +67,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1001/cmd",
             "name": "Lighting Kitchen",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "href": "assets/icons/svg/bulb-outline.svg"
             },
             "type": "Pushbutton",
             "room": "2001",
@@ -91,7 +91,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1002/cmd",
             "name": "Lighting Bath",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "href": "assets/icons/svg/bulb-outline.svg"
             },
             "type": "Switch",
             "room": "2002",
@@ -115,7 +115,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1003/cmd",
             "name": "Lighting Bed",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "href": "assets/icons/svg/bulb-outline.svg"
             },
             "type": "LightControllerV2",
             "room": "2003",
@@ -142,7 +142,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1004/cmd",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "href": "assets/icons/svg/thermometer-outline.svg"
             },
             "type": "InfoOnlyAnalog",
             "room": "2000",
@@ -169,7 +169,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1005/cmd",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "href": "assets/icons/svg/thermometer-outline.svg"
             },
             "type": "InfoOnlyAnalog",
             "room": "2001",
@@ -196,7 +196,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1006/cmd",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "href": "assets/icons/svg/thermometer-outline.svg"
             },
             "type": "InfoOnlyAnalog",
             "room": "2002",
@@ -223,7 +223,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1007/cmd",
             "name": "Temperature",
             "icon": {
-                "href": "assets/svg_icons/thermometer-outline.svg"
+                "href": "assets/icons/svg/thermometer-outline.svg"
             },
             "type": "InfoOnlyAnalog",
             "room": "2003",
@@ -250,7 +250,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1008/cmd",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "href": "assets/icons/svg/knob-solid.svg"
             },
             "type": "Slider",
             "room": "2000",
@@ -280,7 +280,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1009/cmd",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "href": "assets/icons/svg/knob-solid.svg"
             },
             "type": "Slider",
             "room": "2001",
@@ -310,7 +310,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1010/cmd",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "href": "assets/icons/svg/knob-solid.svg"
             },
             "type": "Slider",
             "room": "2002",
@@ -340,7 +340,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1011/cmd",
             "name": "Thermostat",
             "icon": {
-                "href": "assets/svg_icons/knob-solid.svg"
+                "href": "assets/icons/svg/knob-solid.svg"
             },
             "type": "Slider",
             "room": "2003",
@@ -370,7 +370,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1012/cmd",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "href": "assets/icons/svg/music-solid.svg"
             },
             "type": "Radio",
             "room": "2000",
@@ -402,7 +402,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1013/cmd",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "href": "assets/icons/svg/music-solid.svg"
             },
             "type": "Radio",
             "room": "2001",
@@ -434,7 +434,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "mqtt_cmd": "nodered/9999/1014/cmd",
             "name": "Musicplayer",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "href": "assets/icons/svg/music-solid.svg"
             },
             "type": "Radio",
             "room": "2002",
@@ -466,7 +466,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "name": "Musicplayer",
             "mqtt_cmd": "nodered/9999/1015/cmd",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "href": "assets/icons/svg/music-solid.svg"
             },
             "type": "Radio",
             "room": "2003",
@@ -499,7 +499,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "3000",
             "name": "Lighting",
             "icon": {
-                "href": "assets/svg_icons/bulb-outline.svg"
+                "href": "assets/icons/svg/bulb-outline.svg"
             },
             "is_favorite": true,
             "is_visible": true,
@@ -513,7 +513,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "3001",
             "name": "Sensors",
             "icon": {
-                "href": "assets/svg_icons/map-marker-solid.svg"
+                "href": "assets/icons/svg/map-marker-solid.svg"
             },
             "is_favorite": false,
             "is_visible": true,
@@ -527,7 +527,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "3002",
             "name": "Audio",
             "icon": {
-                "href": "assets/svg_icons/music-solid.svg"
+                "href": "assets/icons/svg/music-solid.svg"
             },
             "is_favorite": false,
             "is_visible": true,
@@ -541,7 +541,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "3003",
             "name": "Heating",
             "icon": {
-                "href": "assets/svg_icons/home-heating-solid.svg"
+                "href": "assets/icons/svg/home-heating-solid.svg"
             },
             "is_favorite": false,
             "is_visible": true,
@@ -557,7 +557,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "2000",
             "name": "Living Room",
             "icon": {
-                "href": "assets/svg_icons/couch-solid.svg"
+                "href": "assets/icons/svg/couch-solid.svg"
             },
             "is_favorite": true,
             "is_visible": true,
@@ -572,7 +572,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "2001",
             "name": "Kitchen",
             "icon": {
-                "href": "assets/svg_icons/utensils-solid.svg"
+                "href": "assets/icons/svg/utensils-solid.svg"
             },
             "is_favorite": false,
             "is_visible": true,
@@ -584,7 +584,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "2002",
             "name": "Bathroom",
             "icon": {
-                "href": "assets/svg_icons/shower-solid.svg"
+                "href": "assets/icons/svg/shower-solid.svg"
             },
             "is_favorite": false,
             "is_visible": true,
@@ -599,7 +599,7 @@ Sending updated structures are considered *incremental*, which means changes to 
             "uuid": "2003",
             "name": "Bedroom",
             "icon": {
-                "href": "assets/svg_icons/bed-outline.svg"
+                "href": "assets/icons/svg/bed-outline.svg"
             },
             "is_favorite": false,
             "is_visible": true,

@@ -1,20 +1,19 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
+import { Browser } from '@capacitor/browser';
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { SliderVM } from '../../interfaces/view.model';
+import { TextVM } from '../../interfaces/view.model';
 import { ButtonAction, View } from '../../types/types';
 
-var sprintf = require('sprintf-js').sprintf;
-
 @Component({
-  selector: 'control-slider-view',
-  templateUrl: 'control-slider.view.html',
-  styleUrls: ['./control-slider.view.scss'],
+  selector: 'control-webpage-view',
+  templateUrl: 'control-webpage.view.html',
+  styleUrls: ['./control-webpage.view.scss'],
 })
-export class ControlSliderView
+export class ControlWebpageView
   implements OnInit, OnDestroy {
 
   @Input() control: Control;
@@ -22,7 +21,7 @@ export class ControlSliderView
 
   buttonType = ButtonAction;
   viewType = View;
-  vm$: Observable<SliderVM>;
+  vm$: Observable<TextVM>;
 
   constructor(
     public translate: TranslateService,
@@ -38,7 +37,7 @@ export class ControlSliderView
 
   private initVM(): void {
     if (this.control == undefined) {
-      console.error('Component \'control-slider\' not available for rendering.');
+      console.error('Component \'control-webpage\' not available for rendering.');
       return;
     }
 
@@ -53,27 +52,18 @@ export class ControlSliderView
     );
   }
 
-  private updateVM(control: Control, categories: Category[], rooms: Room[]): SliderVM {
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): TextVM {
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-    let text = '';
-    let position = 0;
 
-    if (control.states.value && control.details.format)
-      text = sprintf(control.details.format, control.states.value);
-
-    if (control.states.value)
-      position = Number(control.states.value)
-
-    const vm: SliderVM = {
+    const vm: TextVM = {
       control: control,
       ui: {
         name: control.name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        slider: { position: position },
         status: {
-          text: text,
+          text: 'Web Link',
           color: "#9d9e9e" // TODO select from color palette
         }
       }
@@ -81,27 +71,15 @@ export class ControlSliderView
     return vm;
   }
 
-  // TODO reuse card-slider-view?
-  clickSliderButton(action: ButtonAction, vm: SliderVM, $event) {
+  clickPushButton(action: ButtonAction, vm: TextVM, $event) {
     $event.preventDefault();
     $event.stopPropagation();
 
-    let min = Number(vm.control.details.min);
-    let max = Number(vm.control.details.max);
-    let step = Number(vm.control.details.step);
-    let position: number;
+    let url = vm.control.details.url_hd;
+    if (!url) url = vm.control.details.url;
 
-    if (action === ButtonAction.PLUS) {
-      position = vm.ui.slider.position + step;
-    }
-    else {
-      position = vm.ui.slider.position - step;
-    }
-
-    if (position < min) position = min;
-    if (position > max) position = max;
-
-    this.controlService.updateControl(vm.control, String(position));
+    console.log('url:', url);
+    Browser.open({ url: url });
   }
 
 }

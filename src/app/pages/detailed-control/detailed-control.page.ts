@@ -14,6 +14,7 @@ import { ControlColorPickerV2View } from '../../views/control-color-picker-v2/co
 import { ControlIRCView } from '../../views/control-irc/control-irc.view';
 import { ControlUpDownDigitalView } from '../../views/control-up-down-digital/control-up-down-digital.view';
 import { ControlJalousieView } from '../../views/control-jalousie/control-jalousie.view';
+import { ControlWebpageView } from '../../views/control-webpage/control-webpage.view';
 
 @Component({
   selector: 'app-detailed-control',
@@ -57,7 +58,8 @@ export class DetailedControlPage
     'ColorPickerV2': ControlColorPickerV2View,
     'IRoomController': ControlIRCView,
     'UpDownDigital': ControlUpDownDigitalView,
-    'Jalousie': ControlJalousieView
+    'Jalousie': ControlJalousieView,
+    'Webpage': ControlWebpageView
   }
 
   constructor(

@@ -23,7 +23,7 @@ export class TabsPage {
     if (event?.swipeType === 'moveend') {
       const currentTab = this.tabs.getSelected();
       const nextTab = this.getNextTab(currentTab, event?.dirX);
-      if (nextTab) this.tabs.select(nextTab);
+      if (nextTab) this.navCtrl.navigateRoot(nextTab);
     }
   }
 
@@ -38,6 +38,7 @@ export class TabsPage {
       case 'category':
         if (direction === 'right') return 'room'; else return null;
         break;
+      default: /* none */
     }
   }
 }

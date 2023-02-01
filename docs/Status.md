@@ -64,7 +64,7 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 | UpDownDigital            | Available         |
 | ValueSelector            | Not started       |
 | Ventilation              | Not started       |
-| Webpage                  | Not started       |
+| Webpage                  | Available         |
 | Window                   | Not started       |
 | WindowMonitor            | Not started       |
 
@@ -78,10 +78,10 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 | homescreen widgets          | Not started            |
 | internationalization        | Available (NL, DE, US) |
 | loxberry plugins            | Not started            |
-| pin protected controls      | Not started            |
+| pin protected pages         | Not started            |
 | push messages               | Not started            |
 | screensaver                 | Not started            |
-| splashscreen                | Not started            |
+| splashscreen                | Available              |
 | statistics / history        | Not started            |
 | statusbar (time, temp, etc) | Not started            |
 | connection status indicator | Not started            |

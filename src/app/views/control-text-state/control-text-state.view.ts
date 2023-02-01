@@ -122,7 +122,9 @@ export class ControlTextStateView
           case '<v.3>': // float in x.yy notation
             control.details.format = '%.3f';
           default:
-            text = sprintf(control.details.format, control.states.value);
+            if (control.states.value && control.details.format)
+              text = sprintf(control.details.format, control.states.value);
+            else text = '';
             break;
         }
         break;

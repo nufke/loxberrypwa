@@ -25,7 +25,6 @@ export class ControlsPage
     public translate: TranslateService,
     private route: ActivatedRoute,
     private controlService: ControlService) {
-
   }
 
   ngOnInit() : void {
