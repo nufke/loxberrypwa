@@ -6,6 +6,7 @@ import { ControlService } from '../../services/control.service';
 import { View } from '../../types/types';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
+import { ControlCentralLightView } from '../../views/control-central-light/control-central-light.view';
 import { ControlRadioView } from '../../views/control-radio/control-radio.view';
 import { ControlSwitchView } from '../../views/control-switch/control-switch.view';
 import { ControlSliderView } from '../../views/control-slider/control-slider.view';
@@ -51,6 +52,7 @@ export class DetailedControlPage
     'InfoOnlyText': ControlTextStateView,
     'TextState': ControlTextStateView,
     'LightControllerV2': ControlLightV2View,
+    "CentralLightController": ControlCentralLightView,
     'Radio': ControlRadioView,
     'Switch': ControlSwitchView,
     'Slider': ControlSliderView,

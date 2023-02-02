@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription, } from 'rxjs';
-import { map, filter, buffer, debounceTime } from "rxjs/operators";
+import { tap, map, filter, buffer, debounceTime } from "rxjs/operators";
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { TranslateService } from '@ngx-translate/core';
 import { Control, Subcontrol, Settings } from '../interfaces/data.model'
@@ -153,6 +153,7 @@ export class LoxBerryService
         console.log("Register topic name:", topicName );
         this.registeredTopics.push(topicName);
         this.mqttSubscription.push( this.mqttService.observe(topicName).pipe(
+          //tap( message => console.log('message', message.topic, message.payload.toString())),
           map( message => ({...message, topic: this.mqttTopicMapping[message.topic]})),
           filter(items => items.length > 0),
           buffer(this.mqttService.observe(topicName).pipe(debounceTime(10))), /* collect all transactions within 10ms */

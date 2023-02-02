@@ -86,17 +86,17 @@ export class ControlLightV2View
         ...control,
         icon: {
           href: control.icon.href,
-          color: ((selected_id != 778) && (selected_id != undefined)) ? "primary" : "#9d9e9e" }
-        }, // TODO select from color palette
+          color: (selected_id === 778) ? "#9d9e9e" : "primary" } // TODO select from color palette
+        },
       ui: {
-        name: control.name,
+        name: room.name, // TODO now compatible with Lx
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
         radio_list: this.mood_list,
         selected_id: selected_id,
         status: {
           text: this.text,
-          color: ((selected_id != 778) && (selected_id != undefined)) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+          color: (selected_id === 778) ? "#9d9e9e" : "#69c350" // TODO select from color palette
         }
       },
       subcontrols: visibleSubcontrols,
@@ -129,4 +129,10 @@ export class ControlLightV2View
     this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
   }
 
+  selectChange(vm: RadioVM, event) {
+    console.log(event);
+    let mood_list = this.control.states.mood_list;
+    let mood_idx = vm.ui.radio_list.findIndex(item => { return item.name == event.detail.value });
+    this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
+  }
 }

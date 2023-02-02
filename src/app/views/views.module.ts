@@ -9,6 +9,7 @@ import { ControlSwitchView } from './control-switch/control-switch.view';
 import { ControlSliderView } from './control-slider/control-slider.view';
 import { ControlPushbuttonView } from './control-pushbutton/control-pushbutton.view';
 import { ControlLightV2View } from './control-light-v2/control-light-v2.view';
+import { ControlCentralLightView } from './control-central-light/control-central-light.view';
 import { ControlRadioView } from './control-radio/control-radio.view';
 import { ControlIRCView } from './control-irc/control-irc.view';
 import { ControlColorPickerV2View } from './control-color-picker-v2/control-color-picker-v2.view';
@@ -39,6 +40,7 @@ import { DirectivesModule } from '../directives/directives.module'
     ControlSliderView,
     ControlPushbuttonView,
     ControlLightV2View,
+    ControlCentralLightView,
     ControlRadioView,
     ControlColorPickerV2View,
     ControlIRCView,
@@ -61,6 +63,7 @@ import { DirectivesModule } from '../directives/directives.module'
     ControlSliderView,
     ControlPushbuttonView,
     ControlLightV2View,
+    ControlCentralLightView,
     ControlRadioView,
     ControlColorPickerV2View,
     ControlIRCView,

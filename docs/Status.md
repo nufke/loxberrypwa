@@ -16,7 +16,7 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 | AudioZoneV2              | Not started       |
 | CarCharger               | Not started       |
 | CentralJalousie          | Not started       |
-| CentralLightController   | Not started       |
+| CentralLightController   | Under development |
 | ClimateController        | Not started       |
 | ClimateControllerUS      | Not started       |
 | ColorPicker              | Not started       |

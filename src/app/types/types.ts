@@ -21,4 +21,5 @@ export enum ButtonAction {
   DETAILED,
   FAVORITE,
   LIST_ITEM,
+  LIST_ITEM_POPUP
 }

@@ -76,10 +76,32 @@
       </ion-row>
       <ion-row>
         <ion-col size="12" size-md="6" *ngFor="let subcontrol of vm.subcontrols">
-          <card-dimmer-view *ngIf="subcontrol.type === 'Dimmer'" [control]="control" [subcontrol]="subcontrol" [view]="viewType.DETAILED"></card-dimmer-view>
-          <card-dimmer-view *ngIf="subcontrol.type === 'ColorPickerV2'" [control]="control" [subcontrol]="subcontrol" [view]="viewType.DETAILED"></card-dimmer-view>
-          <card-switch-view *ngIf="subcontrol.type === 'Switch'" [control]="control" [subcontrol]="subcontrol"></card-switch-view>
+          <card-dimmer-view *ngIf="subcontrol.type === 'Dimmer'" [control]="control" [subcontrol]="subcontrol"
+            [view]="viewType.DETAILED"></card-dimmer-view>
+          <card-dimmer-view *ngIf="subcontrol.type === 'ColorPickerV2'" [control]="control" [subcontrol]="subcontrol"
+            [view]="viewType.DETAILED"></card-dimmer-view>
+          <card-switch-view *ngIf="subcontrol.type === 'Switch'" [control]="control"
+            [subcontrol]="subcontrol"></card-switch-view>
         </ion-col>
       </ion-row>
     </ion-grid>
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="view===viewType.LIST_ITEM_POPUP">
+  <ion-card class="card" *ngIf="vm$ | async as vm">
+    <ion-card-content class="card-content">
+      <ion-item class="item">
+        <ion-icon class="icon_50" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
+        <ion-label class="label label-listitem">
+          <h1>{{vm.ui.name}}</h1>
+        </ion-label>
+        <ion-select interface="popover" style="color: {{vm.ui.status.color}};" class="select-no-icon" placeholder="{{vm.ui.status.text}}" (ionChange)="selectChange(vm, $event)">
+          <ng-container *ngFor="let item of vm.ui.radio_list">
+            <ion-select-option value="{{item.name}}">{{item.name}}</ion-select-option>
+          </ng-container>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ng-container>
