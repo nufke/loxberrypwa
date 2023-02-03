@@ -29,7 +29,7 @@
           <ion-label>
             {{ 'Language' | translate }}
           </ion-label>
-          <ion-select #langSelect  value="{{language}}" (ionChange)="setLanguage(langSelect.value)"> <!--interface="popover"-->
+          <ion-select #langSelect interface="popover" value="{{language}}" (ionChange)="setLanguage(langSelect.value)"> <!--interface="popover"-->
             <ion-select-option *ngFor="let lang of translate.getLangs()" [value]="lang">{{lang}}</ion-select-option>
           </ion-select>
         </ion-item>

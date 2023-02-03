@@ -96,10 +96,8 @@
         <ion-label class="label label-listitem">
           <h1>{{vm.ui.name}}</h1>
         </ion-label>
-        <ion-select interface="popover" style="color: {{vm.ui.status.color}};" class="select-no-icon" placeholder="{{vm.ui.status.text}}" (ionChange)="selectChange(vm, $event)">
-          <ng-container *ngFor="let item of vm.ui.radio_list">
-            <ion-select-option value="{{item.name}}">{{item.name}}</ion-select-option>
-          </ng-container>
+        <ion-select interface="popover" style="color: {{vm.ui.status.color}};" class="select-no-icon" [ngModel]="vm.ui.status.text" (ionChange)="selectChange(vm, $event)">
+          <ion-select-option *ngFor="let item of vm.ui.radio_list" [value]="item.name">{{item.name}}</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-card-content>
