@@ -16,7 +16,7 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 | AudioZoneV2              | Not started       |
 | CarCharger               | Not started       |
 | CentralJalousie          | Not started       |
-| CentralLightController   | Under development |
+| CentralLightController   | Available         |
 | ClimateController        | Not started       |
 | ClimateControllerUS      | Not started       |
 | ColorPicker              | Not started       |
@@ -70,24 +70,25 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 
 ## Other capabilities
 
-| Feature                     | Status                 |
-|-----------------------------|------------------------|
-| alarm sync w mobile alarm   | Not started            |
-| calendar                    | Not started            |
-| dark / light theme          | Available              |
-| homescreen widgets          | Not started            |
-| internationalization        | Available (NL, DE, US) |
-| loxberry plugins            | Not started            |
-| pin protected pages         | Not started            |
-| push messages               | Not started            |
-| screensaver                 | Not started            |
-| splashscreen                | Available              |
-| statistics / history        | Not started            |
-| statusbar (time, temp, etc) | Not started            |
-| connection status indicator | Not started            |
-| system messages             | Not started            |
-| voice control               | Not started            |
-| weather forecast            | Not started            |
+| Feature                     | Status                   |
+|-----------------------------|--------------------------|
+| alarm sync w mobile alarm   | Not started              |
+| calendar                    | Not started              |
+| connection status indicator | Not started              |
+| dark / light theme          | Available                |
+| homescreen widgets          | Not started              |
+| internationalization        | Available (NL, DE, US)   |
+| kiosk / room mode (tablet)  | Not started              |
+| loxberry plugins            | Not started              |
+| pin protected pages         | Not started              |
+| push messages               | Not started              |
+| screensaver                 | Not started              |
+| splashscreen                | Available (Android only) |
+| statistics / history        | Not started              |
+| statusbar (time, temp, etc) | Not started              |
+| system messages             | Not started              |
+| voice control               | Not started              |
+| weather forecast            | Not started              |
 
 ## Other proposals
 

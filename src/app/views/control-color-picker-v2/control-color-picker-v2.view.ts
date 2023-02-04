@@ -30,11 +30,11 @@ export class ControlColorPickerV2View
     this.mode_rgb = true;
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
   private initVM(): void {

@@ -21,15 +21,23 @@ export class CardRadioListView {
 
     if (vm.control.type === 'Radio') {
       let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);
-      let msg = String(vm.ui.radio_list[idx].id);
-      if (msg === "0") msg = "reset"; // loxone requires reset instead of ID
-      this.controlService.updateControl(vm.control, msg);
+
+      /* only send update if mood exists and selected_id is different */
+      if (vm.ui.radio_list[idx] && vm.ui.radio_list[idx].id != vm.ui.selected_id ) {
+        let msg = String(vm.ui.radio_list[idx].id);
+        if (msg === "0") msg = "reset"; /* Loxone requires reset instead of ID */
+        this.controlService.updateControl(vm.control, msg);
+      }
     }
 
     if (vm.control.type === 'LightControllerV2') {
       let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);
-      let msg = 'changeTo/' + String(vm.ui.radio_list[idx].id);
-      this.controlService.updateControl(vm.control, msg);
+
+      /* only send update if mood exists and selected_id is different */
+      if (vm.ui.radio_list[idx] && vm.ui.radio_list[idx].id != vm.ui.selected_id ) {
+        let msg = 'changeTo/' + String(vm.ui.radio_list[idx].id);
+        this.controlService.updateControl(vm.control, msg);
+      }
     }
 
     if (vm.control.type === 'IRoomController') {

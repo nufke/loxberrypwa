@@ -28,11 +28,11 @@ export class ControlSwitchView
     public controlService: ControlService) {
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
   private initVM(): void {
@@ -66,7 +66,13 @@ export class ControlSwitchView
     }
 
     const vm: RadioVM = {
-      control: { ...control, icon: { href: control.icon.href, color: switchstate ? "primary" : "#9d9e9e" } }, // TODO select from color palette
+      control: {
+        ...control,
+        icon: {
+          href: control.icon.href,
+          color: switchstate ? "primary" : "#9d9e9e" // TODO select from color palette
+        }
+      },
       ui: {
         name: control.name,
         room: (room && room.name) ? room.name : "unknown",

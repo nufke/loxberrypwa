@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Subcontrol } from '../../interfaces/data.model';
+import { Subscription } from 'rxjs';
+import { Control, Subcontrol, Room } from '../../interfaces/data.model';
 import { ControlService } from '../../services/control.service';
 import { View } from '../../types/types';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
@@ -32,8 +33,12 @@ export class DetailedControlPage
   viewType = View;
 
   control: Control;
+  rooms: Room[];
   subcontrol: Subcontrol;
   page_name: string;
+
+  private controlSubscription: Subscription;
+  private roomSubscription: Subscription;
 
   // TODO, merge/move with IRC component
   private irc_mode = [
@@ -71,28 +76,47 @@ export class DetailedControlPage
     this.initVM();
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.loadControlComponent(this.control, this.subcontrol);
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
     this.viewContainer.clear(); // remove dynamic view from memory
     this.componentRef = -1;
+    this.controlSubscription.unsubscribe();
+    this.roomSubscription.unsubscribe();
   }
 
-  private initVM() : void {
+  private initVM(): void {
     const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
     const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
     const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
     const subcontrol_uuid_ext = this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
 
-    this.controlService.getControl$(control_hwid, control_uuid).subscribe(
+    this.roomSubscription = this.controlService.rooms$.subscribe(
+      rooms => { this.rooms = rooms;
+    });
+
+    this.controlSubscription = this.controlService.getControl$(control_hwid, control_uuid).subscribe(
       control => {
         this.control = control;
-        this.page_name = (control.type === 'IRoomController') ?
-        this.translate.instant(this.irc_mode.find(item => item.id == control.states.mode ).name) : control.name;
+        let room = this.rooms.find( room => (room.uuid === control.room) && (room.hwid === control.hwid));
+
+        switch (control.type) {
+          case 'IRoomController':
+            this.page_name = this.translate.instant(this.irc_mode.find(item => item.id == control.states.mode ).name);
+            break;
+          case 'LightControllerV2':
+            /* TODO: Loxone replaces default controller name with room name, should we keep it? */
+            this.page_name = (control.name === this.translate.instant('Lightcontroller') &&
+              room != undefined) ? room.name : control.name;
+            break;
+          default:
+            this.page_name = control.name;
+        }
       }
     );
+
     if (subcontrol_uuid != null) {
       this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
         subcontrol => {

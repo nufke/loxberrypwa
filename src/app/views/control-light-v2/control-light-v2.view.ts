@@ -31,11 +31,11 @@ export class ControlLightV2View
     public controlService: ControlService) {
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
   private initVM(): void {
@@ -61,17 +61,15 @@ export class ControlLightV2View
     let selected_id = control.states.active_moods[0]; /* if undefined/empty, mode is most likely manual (see below) */
 
     /* only update radio_list if we have new entries, since it might cause GUI interruptions */
-    if (this.entries !== control.states.mood_list) {
+    if (control.states.mood_list && (this.entries !== control.states.mood_list)) {
       this.mood_list = control.states.mood_list;
 
-      if (this.mood_list) {
-        if (selected_id) {
-          let mood_idx = this.mood_list.findIndex(item => { return item.id == selected_id });
-          this.text = this.mood_list[mood_idx].name;
-        }
-        else /* undefined/empty, so manual */
-          this.text = this.translate.instant('Manual');
+      if (selected_id) {
+        let mood_idx = this.mood_list.findIndex(item => { return item.id == selected_id });
+        this.text = this.mood_list[mood_idx].name;
       }
+      else /* undefined/empty, so manual */
+        this.text = this.translate.instant('Manual');
     }
 
     let visibleSubcontrols = [];
@@ -86,10 +84,12 @@ export class ControlLightV2View
         ...control,
         icon: {
           href: control.icon.href,
-          color: (selected_id === 778) ? "#9d9e9e" : "primary" } // TODO select from color palette
-        },
+          color: (selected_id === 778) ? "#9d9e9e" : "primary" // TODO select from color palette
+        }
+      },
       ui: {
-        name: room.name, // TODO now compatible with Lx
+        /* TODO: Loxone replaces default controller name with room name, should we keep it? */
+        name: (control.name === this.translate.instant('Lightcontroller')) ? room.name : control.name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
         radio_list: this.mood_list,
@@ -130,9 +130,12 @@ export class ControlLightV2View
   }
 
   selectChange(vm: RadioVM, event) {
-    console.log(event);
     let mood_list = this.control.states.mood_list;
     let mood_idx = vm.ui.radio_list.findIndex(item => { return item.name == event.detail.value });
-    this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
+
+    /* only send update if mood exists and selected_id is different */
+    if (mood_list[mood_idx] && mood_list[mood_idx].id != vm.ui.selected_id)
+      this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
   }
+
 }

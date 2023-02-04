@@ -23,18 +23,18 @@ export class CategoriesPage
     private controlService: ControlService) {
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
-  ionViewWillEnter() : void {
+  ionViewWillEnter(): void {
     this.content.scrollToTop();
   }
 
-  private initVM() : void {
+  private initVM(): void {
     this.vm$ = combineLatest([
       this.controlService.controls$,
       this.controlService.categories$

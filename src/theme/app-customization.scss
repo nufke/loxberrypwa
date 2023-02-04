@@ -111,10 +111,10 @@ ion-content::part(scroll) {
 }
 
 .select-no-icon {
-  --placeholder-opacity: 100%;
-  --padding-end: 6px;
   font-size: 18px;
   letter-spacing: 0.01em;
+  padding: 0 6px 0 0; /* top right bottom left */
+  margin: -1px 0 0 0; /* TODO align text in centrallightcontroller */
 }
 
 .icon {
@@ -125,7 +125,7 @@ ion-content::part(scroll) {
 
 .icon_50 {
   font-size: 32px;
-  height: 50px;
+  height: 45px;
   color: var(--ion-text-color, #666666);
 }
 

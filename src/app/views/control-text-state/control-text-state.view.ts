@@ -29,11 +29,11 @@ export class ControlTextStateView
     public controlService: ControlService) {
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
   private initVM(): void {

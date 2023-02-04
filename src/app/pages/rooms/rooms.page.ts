@@ -24,23 +24,23 @@ export class RoomsPage
     private controlService: ControlService) {
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
-  ionViewWillEnter() : void {
+  ionViewWillEnter(): void {
     this.content.scrollToTop();
   }
 
-  private initVM() : void {
-    this.vm$ =  combineLatest([
+  private initVM(): void {
+    this.vm$ = combineLatest([
       this.controlService.controls$,
       this.controlService.rooms$
-      ]).pipe(
-      map( ([controls, rooms]) => {
+    ]).pipe(
+      map(([controls, rooms]) => {
         return this.updateVM(controls, rooms);
       })
     );
@@ -48,21 +48,21 @@ export class RoomsPage
 
   private updateVM(controls: Control[], rooms: Room[]): RoomListVM {
     controls = controls
-      .filter( control => control.is_visible );
-    let filtered_rooms = controls.map(control => control.room );
+      .filter(control => control.is_visible);
+    let filtered_rooms = controls.map(control => control.room);
     let rooms_list = rooms
-      .filter( room => room.is_visible && !room.is_favorite && filtered_rooms.indexOf(room.uuid) > -1)
+      .filter(room => room.is_visible && !room.is_favorite && filtered_rooms.indexOf(room.uuid) > -1)
       // TODO remove duplicates?
       //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
       //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
-      .sort( (a, b) => ( a.order[0] - b.order[0] || a.name.localeCompare(b.name) ) );
+      .sort((a, b) => (a.order[0] - b.order[0] || a.name.localeCompare(b.name)));
 
     let rooms_favs = rooms
-      .filter( room => room.is_visible && room.is_favorite && filtered_rooms.indexOf(room.uuid) > -1)
+      .filter(room => room.is_visible && room.is_favorite && filtered_rooms.indexOf(room.uuid) > -1)
       // TODO remove duplicates?
       //.filter((value, index, self) => self.indexOf(value) === index) // TODO remove duplicates
       //.filter((value, index, self) => index === self.findIndex((t) => ( t.name === value.name ))) // remove items with duplicate names
-      .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) );
+      .sort((a, b) => (a.order[1] - b.order[1] || a.name.localeCompare(b.name)));
 
     const vm: RoomListVM = {
       rooms: rooms,

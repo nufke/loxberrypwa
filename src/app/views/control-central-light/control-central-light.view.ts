@@ -41,11 +41,11 @@ export class ControlCentralLightView
     public controlService: ControlService) {
   }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.initVM();
   }
 
-  ngOnDestroy() : void {
+  ngOnDestroy(): void {
   }
 
   private initVM(): void {
@@ -70,23 +70,64 @@ export class ControlCentralLightView
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
-    let controls_list = control.details.controls.map(control => control.uuid);;
+    let controlsList = control.details.controls.map(control => control.uuid);
+    let filteredControls = controls.filter(controls => controlsList.indexOf(controls.uuid) > -1)
+
+    let numLightsOn: number = controlsList.length;
+    let text = '';
+    let lightOn = false; // default off;
+
+    filteredControls.forEach(control => {
+      if (control.states.active_moods[0])
+       if (control.states.active_moods[0] === 778) numLightsOn--;
+    });
+
+    /* sort using roon names, since this is used for the CentralLightController */
+    let sortedControls = filteredControls.sort((a, b) => (
+      this.getRoomName(rooms, a.hwid, a.room).localeCompare(this.getRoomName(rooms, b.hwid, b.room))));
+
+    switch (numLightsOn) {
+      case 0:
+        text = this.translate.instant('All') + ' ' + this.translate.instant('Lights off').toLowerCase();
+        lightOn = false;
+        break;
+      case 1:
+        text = '1 ' + this.translate.instant('Light on').toLowerCase();;
+        lightOn = true;
+        break;
+      case controlsList.length:
+        text = this.translate.instant('All') + ' ' + this.translate.instant('Lights on').toLowerCase();
+        lightOn = true;
+        break;
+      default:
+        text = numLightsOn + ' ' + this.translate.instant('Lights on').toLowerCase();
+        lightOn = true;
+    }
 
     const vm: ListVM = {
-      control: control,
-      controls: controls.filter( controls => controls_list.indexOf(controls.uuid) > -1 )
-                        .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) ),
+      control: {
+        ...control,
+        icon: {
+          href: control.icon.href,
+          color: lightOn ? "primary" : "#9d9e9e" // TODO select from color palette
+        }
+      },
+      controls: sortedControls,
       ui: {
         name: control.name,
         room: room.name,
         category: category.name,
         status: {
-          text: '',
-          color: ''
+          text: text,
+          color: lightOn ? "#69c350" : "#9d9e9e", // TODO use color palette
         }
       }
     };
     return vm;
+  }
+
+  getRoomName(rooms: Room[], hwid: string, uuid:string): string{
+    return rooms.find(room => room.uuid === uuid && room.hwid === hwid).name;
   }
 
   updateSegment() {
