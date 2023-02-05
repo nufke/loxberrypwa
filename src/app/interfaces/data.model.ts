@@ -95,7 +95,7 @@ export interface Control {
   is_visible?: boolean;         // make control invisible (optional)
   is_protected?: boolean;       // passwd/PIN protected control (optional)
   order?: number[];             // defines the order for the controls (optional)
-  subcontrols?: any;            // subcontrols (optional)
+  subcontrols?: Subcontrol[];   // subcontrols (optional)
   details: any;                 // control details
   states: any;                  // control states
 }

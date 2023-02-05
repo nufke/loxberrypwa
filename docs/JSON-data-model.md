@@ -23,7 +23,7 @@ This model is used within the app to manage the properties of the control elemen
 Fields indicated with '?' are optional
 
 ```
-{
+interface Control {
   hwid: string;                       // hardware identifier of the device
   uuid: string;                       // unique identifier to identify the control as MQTT topic
   mqtt_cmd: string;                   // MQTT topic to send command
@@ -72,7 +72,7 @@ The nested JSON structure for the control `details` and `states` depend on the t
 ## Interface for categories
 
 ```
-{
+interface Category {
   hwid: string;                       // hardware identifier of the device
   uuid: string;                       // unique identifier to identify the category as MQTT topic
   name: string;                       // GUI name
@@ -91,7 +91,7 @@ The nested JSON structure for the control `details` and `states` depend on the t
 ## Interface for rooms
 
 ```
-{
+interface Room {
   hwid: string;                       // hardware identifier of the device
   uuid: string;                       // unique identifier to identify the room as MQTT topic
   name: string;                       // GUI name
