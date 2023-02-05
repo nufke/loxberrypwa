@@ -114,7 +114,7 @@ ion-content::part(scroll) {
   font-size: 18px;
   letter-spacing: 0.01em;
   padding: 0 6px 0 0; /* top right bottom left */
-  margin: -1px 0 0 0; /* TODO align text in centrallightcontroller */
+  margin: -2px 3px 0 0; /* TODO align text for ion-select */
 }
 
 .icon {
@@ -262,6 +262,10 @@ ion-content::part(scroll) {
   .selected-true {
     --ion-item-background: var(--ion-card-selected);
   }
+}
+
+.radio-label {
+  margin-left: 3px;
 }
 
 // TODO hide radio button, other approach?

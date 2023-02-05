@@ -2,7 +2,7 @@
   <div *ngFor="let item of radio_vm.ui.radio_list">
     <div *ngIf="item.name!=''">
       <ion-item class="radio-item selected-{{radio_vm.ui.status.text==item.name}}">
-        <ion-label class="label">
+        <ion-label class="label radio-label">
           <h2>
             <span>{{item.name | translate}}</span>
             <!--<span *ngIf="radio_vm.ui.icon.temp_base!=''"> ({{radio_vm.ui.icon.temp_base}}{{radio_vm.ui.icon.temp_dec}})</span>-->

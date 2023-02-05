@@ -24,7 +24,7 @@ export class ControlLightV2View
   segment: string = 'moods';
   entries: RadioListItem[];
   mood_list: RadioListItem[];
-  text: string;
+  text: string = '';
 
   constructor(
     public translate: TranslateService,
@@ -84,7 +84,7 @@ export class ControlLightV2View
         ...control,
         icon: {
           href: control.icon.href,
-          color: (selected_id === 778) ? "#9d9e9e" : "primary" // TODO select from color palette
+          color: (selected_id !== 778 && this.text.length) ? "primary" : "#9d9e9e" // TODO select from color palette
         }
       },
       ui: {
@@ -96,7 +96,7 @@ export class ControlLightV2View
         selected_id: selected_id,
         status: {
           text: this.text,
-          color: (selected_id === 778) ? "#9d9e9e" : "#69c350" // TODO select from color palette
+          color: (selected_id !== 778 && this.text.length) ? "#69c350" : "#9d9e9e" // TODO select from color palette
         }
       },
       subcontrols: visibleSubcontrols,

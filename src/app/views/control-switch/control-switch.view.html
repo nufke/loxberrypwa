@@ -55,7 +55,7 @@
           <div *ngFor="let item of vm.ui.radio_list">
               <div *ngIf="item.name !== ''">
                   <ion-item class="radio-item selected-{{vm.ui.status.text === item.name}}">
-                      <ion-label class="label">
+                      <ion-label class="label radio-label">
                           <h2>{{item.name}}</h2>
                       </ion-label>
                       <ion-radio class="radio" value="{{item.name}}"></ion-radio>
