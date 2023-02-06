@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { Control, Subcontrol, Room } from '../../interfaces/data.model';
 import { ControlService } from '../../services/control.service';
 import { View } from '../../types/types';
+import { ControlAlarmView } from '../../views/control-alarm/control-alarm.view';
+import { ControlAlarmHistoryView } from '../../views/control-alarm-history/control-alarm-history.view';
 import { ControlTextStateView } from '../../views/control-text-state/control-text-state.view';
 import { ControlLightV2View } from '../../views/control-light-v2/control-light-v2.view';
 import { ControlCentralLightView } from '../../views/control-central-light/control-central-light.view';
@@ -36,6 +38,7 @@ export class DetailedControlPage
   rooms: Room[];
   subcontrol: Subcontrol;
   page_name: string;
+  type: string;
 
   private controlSubscription: Subscription;
   private roomSubscription: Subscription;
@@ -66,7 +69,9 @@ export class DetailedControlPage
     'IRoomController': ControlIRCView,
     'UpDownDigital': ControlUpDownDigitalView,
     'Jalousie': ControlJalousieView,
-    'Webpage': ControlWebpageView
+    'Webpage': ControlWebpageView,
+    'Alarm': ControlAlarmView,
+    'AlarmHistory': ControlAlarmHistoryView
   }
 
   constructor(
@@ -77,7 +82,7 @@ export class DetailedControlPage
   }
 
   ngOnInit(): void {
-    this.loadControlComponent(this.control, this.subcontrol);
+    this.loadControlComponent(this.control, this.type);
   }
 
   ngOnDestroy(): void {
@@ -100,6 +105,7 @@ export class DetailedControlPage
     this.controlSubscription = this.controlService.getControl$(control_hwid, control_uuid).subscribe(
       control => {
         this.control = control;
+        this.type = control.type;
         let room = this.rooms.find( room => (room.uuid === control.room) && (room.hwid === control.hwid));
 
         switch (control.type) {
@@ -118,27 +124,32 @@ export class DetailedControlPage
     );
 
     if (subcontrol_uuid != null) {
+      if (subcontrol_uuid === 'history') {
+        this.subcontrol = null;
+        this.type = 'AlarmHistory';
+        this.page_name = 'Meldingsgeschiedenis';
+        return;
+      }
+    }
+
+    if (subcontrol_uuid != null && subcontrol_uuid_ext != null) {
       this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
         subcontrol => {
           this.subcontrol = subcontrol;
+          this.type = subcontrol.type;
           this.page_name = subcontrol.name;
         }
       );
     }
   }
 
-  private loadControlComponent(control: Control, subcontrol: Subcontrol) {
+  private loadControlComponent(control: Control, type: string) {
     if (!this.componentRef) { // only create if dynamic view does not exist yet
-      if (subcontrol == null) {
-        this.componentRef = this.viewContainer.createComponent(this.getControlView(control.type));
-      }
-      else {
-        this.componentRef = this.viewContainer.createComponent(this.getControlView(subcontrol.type));
-      }
+      this.componentRef = this.viewContainer.createComponent(this.getControlView(type));
       (this.componentRef.instance).control = control;
       (this.componentRef.instance).view = View.DETAILED;
-      if (subcontrol != null) { // for subcontrols we pass this.
-        (this.componentRef.instance).subcontrol = subcontrol;
+      if (this.subcontrol != null) { // for subcontrols we pass this.
+        (this.componentRef.instance).subcontrol = this.subcontrol;
       }
     }
   }

@@ -9,7 +9,7 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 |--------------------------|-------------------|
 | AalEmergency             | Not started       |
 | AalSmartAlarm            | Not started       |
-| Alarm                    | Not started       |
+| Alarm                    | Under development |
 | AlarmChain               | Not started       |
 | AlarmClock               | Not started       |
 | AudioZone                | Not started       |

@@ -122,3 +122,25 @@ export interface TextVM {
     }
   }
 }
+
+export interface AlarmVM {
+  control: Control;
+  ui: {
+    name: string;
+    room: string;
+    category: string;
+    icon?: {
+      temp_base: string;
+      temp_dec: string
+    }
+    status: {
+      text: string;
+      color: string;
+    }
+    button: {
+      armedTxt: string;
+      armedDelayTxt: string;
+    }
+    armed: boolean;
+  }
+}

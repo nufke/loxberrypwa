@@ -85,7 +85,13 @@ export class ControlIRCView
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
-    let temp = sprintf("%.1f", control.states.temp_actual).split('.');
+    let temp = ['',''];
+
+    if (control.states.temp_actual) {
+      temp = sprintf("%.1f", control.states.temp_actual).split('.');
+      temp[1] = '.' + temp[1];
+    }
+
     let idx = this.irc_mode.findIndex(item => { return item.id == control.states.mode });
 
     let subcontrols = Object.keys(control.subcontrols);
@@ -107,7 +113,7 @@ export class ControlIRCView
         selected_id: state,
         icon: {
           temp_base: temp[0],
-          temp_dec: '.' + temp[1]
+          temp_dec: temp[1]
         },
         status: {
           text: radio_list[idxx].name, // translate in scss to enable radio selection highlighting

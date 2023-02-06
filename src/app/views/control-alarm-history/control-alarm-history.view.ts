@@ -10,11 +10,11 @@ import { ButtonAction, View } from '../../types/types';
 var sprintf = require('sprintf-js').sprintf;
 
 @Component({
-  selector: 'control-jalousie-view',
-  templateUrl: 'control-jalousie.view.html',
-  styleUrls: ['./control-jalousie.view.scss'],
+  selector: 'control-alarm-history-view',
+  templateUrl: 'control-alarm-history.view.html',
+  styleUrls: ['./control-alarm-history.view.scss'],
 })
-export class ControlJalousieView
+export class ControlAlarmHistoryView
   implements OnInit, OnDestroy {
 
   @Input() control: Control;
@@ -38,7 +38,7 @@ export class ControlJalousieView
 
   private initVM(): void {
     if (this.control == undefined) {
-      console.error('Component \'control-jalousie\' not available for rendering.');
+      console.error('Component \'control-alarm-history\' not available for rendering.');
       return;
     }
 
@@ -57,13 +57,18 @@ export class ControlJalousieView
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
-    let position = control.states.position * 100;
-    let text = sprintf("%1.0f%% ", position) + this.translate.instant('Closed').toLowerCase();
-    if (position < 1) text = this.translate.instant('Opened');
-    if (position > 99) text = this.translate.instant('Closed');
+    let armed = Number(control.states.armed) ? true : false;
+    let icon = armed ? 'assets/icons/svg/00000000-0000-000a-2200000000000000.svg' : 'assets/icons/svg/00000000-0000-000b-2200000000000000.svg'
+    let text = armed ? 'Armed' : 'Disarmed';
 
     const vm: TextVM = {
-      control: control,
+      control: {
+        ...control,
+        icon: {
+          href: icon,
+          color: ''
+        },
+      },
       ui: {
         name: control.name,
         room: (room && room.name) ? room.name : "unknown",
@@ -77,34 +82,4 @@ export class ControlJalousieView
     return vm;
   }
 
-  clickButton(action: ButtonAction, vm: TextVM, $event) {
-    if ($event) { /* only prevent in list and favs */
-      $event.preventDefault();
-      $event.stopPropagation();
-    }
-    switch (action) {
-      case ButtonAction.UP:
-        this.controlService.updateControl(vm.control, 'up');
-        break;
-      case ButtonAction.UP_OFF:
-          this.controlService.updateControl(vm.control, 'UpOff');
-        break;
-      case ButtonAction.DOWN:
-        this.controlService.updateControl(vm.control, 'down');
-        break;
-      case ButtonAction.DOWN_OFF:
-          this.controlService.updateControl(vm.control, 'DownOff');
-          break;
-      case ButtonAction.FULL_OPEN:
-        this.controlService.updateControl(vm.control, 'FullUp');
-        break;
-      case ButtonAction.FULL_CLOSE:
-        this.controlService.updateControl(vm.control, 'FullDown');
-        break;
-      case ButtonAction.SHADE:
-        this.controlService.updateControl(vm.control, 'shade');
-        break;
-      default: /* none */
-    }
-  }
 }

@@ -4,6 +4,8 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ControlAlarmView } from './control-alarm/control-alarm.view';
+import { ControlAlarmHistoryView } from './control-alarm-history/control-alarm-history.view';
 import { ControlTextStateView } from './control-text-state/control-text-state.view';
 import { ControlSwitchView } from './control-switch/control-switch.view';
 import { ControlSliderView } from './control-slider/control-slider.view';
@@ -35,6 +37,8 @@ import { DirectivesModule } from '../directives/directives.module'
     DirectivesModule
   ],
   declarations: [
+    ControlAlarmView,
+    ControlAlarmHistoryView,
     ControlTextStateView,
     ControlSwitchView,
     ControlSliderView,
@@ -58,6 +62,8 @@ import { DirectivesModule } from '../directives/directives.module'
   exports: [
     IonicModule,
     RouterModule,
+    ControlAlarmView,
+    ControlAlarmHistoryView,
     ControlTextStateView,
     ControlSwitchView,
     ControlSliderView,

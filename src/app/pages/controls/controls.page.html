@@ -62,6 +62,10 @@
               <control-central-light-view [control]="control" [view]="viewType.FAVORITE"></control-central-light-view>
             </ng-container>
 
+            <ng-container *ngIf="control.type === 'Alarm'">
+              <control-alarm-view [control]="control" [view]="viewType.FAVORITE"></control-alarm-view>
+            </ng-container>
+
             <ng-container *ngIf="
         (control.type !== 'IRoomController') &&
         (control.type !== 'LightControllerV2') &&
@@ -72,7 +76,8 @@
         (control.type !== 'UpDownDigital') &&
         (control.type !== 'Jalousie') &&
         (control.type !== 'Webpage') &&
-        (control.type !== 'CentralLightController')
+        (control.type !== 'CentralLightController') &&
+        (control.type !== 'Alarm')
         ">
               <control-text-state-view [control]="control" [view]="viewType.FAVORITE"></control-text-state-view>
             </ng-container>
@@ -129,6 +134,10 @@
                 <control-central-light-view [control]="control" [view]="viewType.LIST_ITEM"></control-central-light-view>
               </ng-container>
 
+              <ng-container *ngIf="control.type === 'Alarm'">
+                <control-alarm-view [control]="control" [view]="viewType.LIST_ITEM"></control-alarm-view>
+              </ng-container>
+
               <ng-container *ngIf="
           (control.type !== 'IRoomController') &&
           (control.type !== 'LightControllerV2') &&
@@ -139,7 +148,8 @@
           (control.type !== 'UpDownDigital') &&
           (control.type !== 'Jalousie') &&
           (control.type !== 'Webpage') &&
-          (control.type !== 'CentralLightController')
+          (control.type !== 'CentralLightController') &&
+          (control.type !== 'Alarm')
           ">
                 <control-text-state-view [control]="control" [view]="viewType.LIST_ITEM"></control-text-state-view>
               </ng-container>

@@ -39,6 +39,11 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
+        path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid',
+        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
+        //canActivate: [AuthGuard]
+      },
+      {
         path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid/:subcontrol_uuid_ext',
         loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
         //canActivate: [AuthGuard]
