@@ -139,7 +139,6 @@ export interface AlarmVM {
     }
     button: {
       armedTxt: string;
-      armedDelayTxt: string;
     }
     armed: boolean;
   }

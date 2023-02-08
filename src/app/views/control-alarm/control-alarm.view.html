@@ -43,17 +43,32 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-card class="card ion-activatable ripple-parent" (click)="armed(vm, $event)">
-          <ion-ripple-effect class="ripple-color"></ion-ripple-effect>
+        <ion-button class="push-button" expand="block" (click)="armed(vm, $event)">
+          <ion-label class="label">
+            <h1>{{vm.ui.button.armedTxt}}</h1>
+          </ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button class="push-button" expand="block" routerLink="history">
+          <ion-label class="label">
+            <h1 translate>History</h1>
+          </ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card class="card">
           <ion-card-content class="card-content">
-            <ion-item class="item" style="--background: transparent; text-align: center;">
+            <ion-item class="item">
               <ion-label class="label">
-                <h1 translate>{{vm.ui.button.armedTxt}}</h1>
+                <h1 translate>Arming delayed</h1>
               </ion-label>
-              <ion-fab-button *ngIf="!vm.ui.armed" class="fab-button-abs" horizontal="end" size="small"
-                (click)="armedDelayed(vm, $event)">
-                <ion-icon src="assets/icons/svg/IconsFilled/timer-2.svg" name="radio-button-off-outline"></ion-icon>
-              </ion-fab-button>
+              <ion-toggle class="toggle" color="primary" mode="ios" [(ngModel)]="delayedon">
+              </ion-toggle>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -61,11 +76,17 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button class="push-button" expand="block" routerLink="s">
-          <ion-label class="label">
-            <h1 translate>History</h1>
-          </ion-label>
-        </ion-button>
+        <ion-card class="card">
+          <ion-card-content class="card-content">
+            <ion-item class="item">
+              <ion-label class="label">
+                <h1 translate>Presence detection</h1>
+              </ion-label>
+              <ion-toggle class="toggle" color="primary" mode="ios" [(ngModel)]="presence" (click)="presenceToggle(vm, $event)">
+              </ion-toggle>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>

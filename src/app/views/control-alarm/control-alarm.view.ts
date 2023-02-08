@@ -24,6 +24,9 @@ export class ControlAlarmView
   viewType = View;
   vm$: Observable<AlarmVM>;
 
+  delayedon: boolean = false; // TODO store as App state
+  presence: boolean = true;   // TODO store as App state
+
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
@@ -58,8 +61,9 @@ export class ControlAlarmView
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
     let armed = Number(control.states.armed) ? true : false;
-    let icon = armed ? 'assets/icons/svg/00000000-0000-000a-2200000000000000.svg' : 'assets/icons/svg/00000000-0000-000b-2200000000000000.svg'
+    let icon = armed ? 'assets/icons/svg/00000000-0000-000a-2200000000000000.svg' : 'assets/icons/svg/00000000-0000-000b-2200000000000000.svg';
     let text = armed ? 'Armed' : 'Disarmed';
+    let bttnText = armed ? 'Disarm alarm' : 'Arm alarm';
 
     const vm: AlarmVM = {
       control: {
@@ -74,12 +78,11 @@ export class ControlAlarmView
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
         status: {
-          text: text,
+          text: this.translate.instant(text),
           color: "#9d9e9e" // TODO select from color palette
         },
         button: {
-          armedTxt: armed ? 'Disarm alarm' : 'Arm alarm',
-          armedDelayTxt: armed ? 'Disarm alarm' : 'Arm alarm with delay',
+          armedTxt: this.translate.instant(bttnText),
         },
         armed: armed,
       }
@@ -88,13 +91,26 @@ export class ControlAlarmView
   }
 
   armed(vm, event) {
-    this.controlService.updateControl(vm.control, 'on');
+    let cmd;
+
+    if (!vm.ui.armed) { /* disarmed -> armed */
+      if (this.delayedon) cmd = 'delayedon/';
+        else cmd = 'on/';
+      cmd += this.presence ? '1' : '0';
+    }
+    else { /* armed -> disarmed */
+      cmd = 'off';
+    }
+
+    this.controlService.updateControl(vm.control, cmd);
   }
 
-  armedDelayed(vm, event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.controlService.updateControl(vm.control, 'delayedon');
+  presenceToggle(vm, event) {
+    let cmd;
+    if (vm.ui.armed) { /* only change presence detection when armed */
+      cmd = 'dismv/' + (this.presence ? '1' : '0');
+      this.controlService.updateControl(vm.control, cmd);
+    }
   }
 
   showHistory(vm, event) {
