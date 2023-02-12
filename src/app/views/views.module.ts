@@ -25,6 +25,7 @@ import { CardSwitchView } from './card-switch/card-switch.view';
 import { CardDimmerView } from './card-dimmer/card-dimmer.view';
 import { ElementColorRGBPickerView } from './element-color-rgb-picker/element-color-rgb-picker.view';
 import { ElementColorTempPickerView } from './element-color-temp-picker/element-color-temp-picker.view';
+import { ElementThermostatView } from './element-thermostat/element-thermostat.view';
 import { DirectivesModule } from '../directives/directives.module'
 
 @NgModule({
@@ -57,7 +58,8 @@ import { DirectivesModule } from '../directives/directives.module'
     CardSwitchView,
     CardDimmerView,
     ElementColorRGBPickerView,
-    ElementColorTempPickerView
+    ElementColorTempPickerView,
+    ElementThermostatView
   ],
   exports: [
     IonicModule,
@@ -82,7 +84,8 @@ import { DirectivesModule } from '../directives/directives.module'
     CardSwitchView,
     CardDimmerView,
     ElementColorRGBPickerView,
-    ElementColorTempPickerView
+    ElementColorTempPickerView,
+    ElementThermostatView
   ]
 })
 export class ViewsModule { }
