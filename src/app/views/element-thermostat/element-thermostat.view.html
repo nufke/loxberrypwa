@@ -1,31 +1,23 @@
 <div style="display: flex; justify-content: center;">
-  <svg [attr.width]="props.width" [attr.height]="props.height" style="{{styles.svg}}" [attr.viewBox]="getViewBox()">
-    <g #svg_group>
-    </g>
-    <circle [attr.cx]="radius" [attr.cy]="radius" [attr.r]="radius*0.842" fill="transparent"
-      stroke="rgba(255, 255, 255, 0.1)" stroke-width="40"></circle>
-    <circle #toucharea [attr.cx]="radius" [attr.cy]="radius" [attr.r]="radius" fill="transparent"></circle>
-    <text [attr.x]="radius" [attr.y]="radius - this.radius / 2.2" style="{{styles.description}}">{{props.hvacMode}}</text>
-    <text [attr.x]="radius" [attr.y]="radius - this.radius / 3" style="{{styles.description}}">set to</text>
-    <text [attr.x]="radius" [attr.y]="radius" style="{{styles.targettemp}}">
-      {{targetTemperatureStr}}
-    </text>
-    <text [attr.x]="radius + this.radius / 2.5" [attr.y]="radius - this.radius / 8.5" style="{{styles.targettempdot}}">
-      {{targetTemperatureDotStr}}
-    </text>
-    <text [attr.x]="ambientPosition[0]" [attr.y]="ambientPosition[1]" style="{{styles.ambienttemp}}">
-      {{ambientTemperatureStr}}
-    </text>
-    <text [attr.x]="radius" [attr.y]="radius" style="{{styles.away}}">AWAY</text>
-    <path [attr.d]="leafDef" style="{{styles.leaf}}" [attr.transform]="getTransform()"></path>
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M 7 12 l 9 9 9-9"
-      fill="transparent" stroke="#fff" [attr.transform]="'translate(120, 298)'" (click)="btnDown($event)"></path>
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M 7 12 l 9-9 9 9"
-      fill="transparent" stroke="#fff" [attr.transform]="'translate(205, 306)'" (click)="btnUp($event)"></path>
-  </svg>
+  <div #thermostat></div>
 </div>
 
 <!--
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-fab-button class="fab-button" (click)="clickButton(buttonType.DOWN, vm, $event)">
+        <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-col>
+    <ion-col>
+      <ion-fab-button class="fab-button" (click)="clickButton(buttonType.DOWN, vm, $event)">
+        <ion-icon class="icon" name="chevron-down-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
 <ion-item>
   <ion-range class="range" min="20" max="60" step="1" (ionChange)="ambientTemperatureChange($event)"
     [(ngModel)]="ambientTemperature2"></ion-range>

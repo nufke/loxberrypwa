@@ -72,27 +72,29 @@ For additional requests or ideas, you can raise an [issue](https://github.com/nu
 
 | Feature                     | Status                   |
 |-----------------------------|--------------------------|
-| alarm sync w mobile alarm   | Not started              |
-| calendar                    | Not started              |
-| connection status indicator | Not started              |
-| dark / light theme          | Available                |
-| homescreen widgets          | Not started              |
-| internationalization        | Available (NL, DE, US)   |
-| kiosk / room mode (tablet)  | Not started              |
-| loxberry plugins            | Not started              |
-| pin protected pages         | Not started              |
-| push messages               | Not started              |
-| screensaver                 | Not started              |
-| splashscreen                | Available (Android only) |
-| statistics / history        | Not started              |
-| statusbar (time, temp, etc) | Not started              |
-| system messages             | Not started              |
-| voice control               | Not started              |
-| weather forecast            | Not started              |
+| Alarm sync w mobile alarm   | Not started              |
+| Calendar                    | Not started              |
+| Connection status indicator | Not started              |
+| Dark / Light theme          | Available                |
+| Homescreen widgets          | Not started              |
+| Internationalization        | Available (NL, DE, US)   |
+| Kiosk / room mode (tablet)  | Not started              |
+| LoxBerry plugins            | Not started              |
+| Pin protected pages         | Not started              |
+| Push messages               | Not started              |
+| Screensaver                 | Not started              |
+| Splashscreen                | Available (Android only) |
+| Statistics / history        | Not started              |
+| Statusbar (time, temp, etc) | Not started              |
+| System messages             | Not started              |
+| Boice control               | Not started              |
+| Weather forecast            | Not started              |
 
-## Other proposals
+## Other proposals and ideas
 
-* region-dependent time/date notation (e.g. 8:00pm vs 20:00h)
-* region dependent number formatting or scientific notation (e.g. 1000000 displayed as 1.000.000 or 1,000,000 or 1E+06 )
-* option to disable control pushdown to detailed level
-* temperature notation (°C / °F)
+* Region-dependent time/date notation (e.g. 8:00pm vs 20:00h)
+* Region dependent number formatting or scientific notation (e.g. 1000000 displayed as 1.000.000 or 1,000,000 or 1E+06 )
+* Option to disable control pushdown to detailed level
+* Temperature notation (°C / °F)
+* Interface with Synology DSM (e.g. Surveillance Station)
+* Sync alarmclock(s) with mobile settings

@@ -34,24 +34,20 @@ interface propTypes {
 export class ElementThermostatView
   implements OnInit {
 
-  @ViewChild('svg_group', { static: true }) svgGroup: ElementRef;
-  @ViewChild('toucharea', { static: true }) touchArea: ElementRef;
+  @ViewChild('thermostat', { static: true }) thermostat: ElementRef;
 
   @Input() text_vm: TextVM;
 
   // TODO define ViewModel
   styles;
   ambientPosition;
-  leafDef;
   radius;
   diameter;
   translate;
-  tickArray;
-  dial;
 
-  ambientTemperatureStr;
-  targetTemperatureStr;
-  targetTemperatureDotStr;
+  ambientTemperatureStr = '';
+  targetTemperatureStr = '';
+  targetTemperatureDotStr = '';
 
   tickPoints;
   tickPointsAmbient;
@@ -65,8 +61,30 @@ export class ElementThermostatView
   ticksOuterRadius;
   ticksInnerRadius;
 
+  interval;
+
   ambientTemperature2; // TODO dummy
   targetTemperature2; // TODO dummy
+
+  svg = {
+    root: null,
+    group: null,
+    dial: null,
+    tickArray: [],
+    ring: null,
+    touchArea: null,
+    txtState: null,
+    txtSetTo: null,
+    txtTargetTemp: null,
+    txtTargetTempDot: null,
+    txtAmbientTemp: null,
+    leaf: null,
+    txtAway: null,
+    iconUp: null,
+    iconDown: null,
+    btnUp: null,
+    btnDown: null
+  }
 
   props: propTypes = {
     height: '350px',
@@ -127,19 +145,24 @@ export class ElementThermostatView
   ngOnInit() {
     this.init();
     this.render();
-    this.touchArea.nativeElement.addEventListener('mouseup', this.dragEnd.bind(this));
-    this.touchArea.nativeElement.addEventListener('mouseleave', this.dragEnd.bind(this));
-    this.touchArea.nativeElement.addEventListener('touchend', this.dragEnd.bind(this));
-    this.touchArea.nativeElement.addEventListener('mousemove', this.dragMove.bind(this));
-    this.touchArea.nativeElement.addEventListener('touchmove', this.dragMove.bind(this));
-  }
 
-  getViewBox() {
-    return '0 0 ' + this.diameter + ' ' + this.diameter;
-  }
+    // Add event listeners for temperate scolling
+    this.svg.touchArea.addEventListener('mouseup', this.dragEnd.bind(this));
+    this.svg.touchArea.addEventListener('mousedown', this.dragEnd.bind(this));
+    this.svg.touchArea.addEventListener('mouseleave', this.dragEnd.bind(this));
+    this.svg.touchArea.addEventListener('click', this.dragEnd.bind(this));
+    this.svg.touchArea.addEventListener('touchend', this.dragEnd.bind(this));
+    this.svg.touchArea.addEventListener('mousemove', this.dragMove.bind(this));
+    this.svg.touchArea.addEventListener('touchmove', this.dragMove.bind(this));
+    this.svg.touchArea.addEventListener('touchmove', this.dragMove.bind(this));
 
-  getTransform() {
-    return 'translate(' + this.translate[0] + ',' + this.translate[1] + ')';
+    // Add event listeners for buttons
+    this.svg.btnDown.addEventListener('click', this.btnDown.bind(this));
+    this.svg.btnDown.addEventListener('touchstart', this.btnDownStart.bind(this));
+    this.svg.btnDown.addEventListener('touchend', this.btnDownEnd.bind(this));
+    this.svg.btnUp.addEventListener('click', this.btnUp.bind(this));
+    this.svg.btnUp.addEventListener('touchstart', this.btnUpStart.bind(this));
+    this.svg.btnUp.addEventListener('touchend', this.btnUpEnd.bind(this));
   }
 
   targetTemperatureChange($event) {
@@ -152,12 +175,40 @@ export class ElementThermostatView
     this.render();
   }
 
-  btnUp(ev) {
-    console.log('btnUp', ev);
+  btnUp($event) {
+    this.props.targetTemperature += 0.5;
+    if (this.props.targetTemperature > this.props.maxValue)
+      this.props.targetTemperature = this.props.maxValue;
+    this.render();
   }
 
-  btnDown(ev) {
-    console.log('btnDown', ev);
+  btnDown($event) {
+    this.props.targetTemperature -= 0.5;
+    if (this.props.targetTemperature < this.props.minValue)
+      this.props.targetTemperature = this.props.minValue;
+    this.render();
+  }
+
+  btnDownStart($event) {
+    this.interval = setInterval(() => {
+      this.btnDown($event)
+      this.render();
+    }, 80);
+  }
+
+  btnUpStart($event) {
+    this.interval = setInterval(() => {
+      this.btnUp($event)
+      this.render();
+    }, 80);
+  }
+
+  btnDownEnd($event) {
+    clearInterval(this.interval);
+  }
+
+  btnUpEnd($event) {
+    clearInterval(this.interval);
   }
 
   private getStyles() {
@@ -173,13 +224,17 @@ export class ElementThermostatView
         'WebkitTransition': 'fill 0.5s',
         'transition': 'fill 0.5s',
       },
+      ring: {
+        'fill': 'transparent',
+        'stroke': 'rgba(255, 255, 255, 0.1)',
+        'stroke-width': '40',
+      },
       description: {
         'fill': 'white',
         'text-anchor': 'middle',
-        'text-transform': 'uppercase',
-        //'font-family': 'Helvetica, sans-serif',
+        'font-family': 'Helvetica, sans-serif',
         'alignment-baseline': 'central',
-        'font-size': '17px',
+        'font-size': '14px',
         'font-weight': 'normal',
         'visibility': (this.props.away ? 'hidden' : 'visible'),
       },
@@ -273,6 +328,12 @@ export class ElementThermostatView
     return element;
   }
 
+  private createSVGTextElement(tag, text, attributes, appendTo) {
+    let element = this.createSVGElement(tag, attributes, appendTo)
+    element.textContent = text;
+    return element;
+  }
+
   // Set attributes for an element
   private attr(element, attrs) {
     for (let key in attrs) {
@@ -303,15 +364,27 @@ export class ElementThermostatView
   private init() {
     const _self = this;
     this.setMixMaxRange();
-    this.tickArray = [];
+    this.svg.tickArray = [];
+
+    // draw svg root component
+    this.svg.root = this.createSVGElement('svg', {
+      width: this.props.width,
+      height: this.props.height,
+      viewBox: '0 0 ' + this.diameter + ' ' + this.diameter,
+      style: this.styles.svg,
+    }, this.thermostat.nativeElement);
 
     // draw dial
-    this.dial = this.createSVGElement('circle', {
+    this.svg.dial = this.createSVGElement('circle', {
       cx: this.radius,
       cy: this.radius,
       r: this.radius,
       style: this.styles.dial
-    }, this.svgGroup.nativeElement);
+    }, this.svg.root);
+
+    // draw svg group
+    this.svg.group = this.createSVGElement('g', {
+    }, this.svg.root);
 
     // draw ticks
     for (let iTick = 0; iTick < this.props.numTicks; iTick++) {
@@ -325,25 +398,135 @@ export class ElementThermostatView
         style: {
           fill: 'rgba(255, 255, 255, 0.3)'
         },
-      }, this.svgGroup.nativeElement);
-      this.tickArray.push(tickElement);
+      }, this.svg.group);
+      this.svg.tickArray.push(tickElement);
     }
+
+    // draw ring
+    this.svg.ring = this.createSVGElement('circle', {
+      cx: this.radius,
+      cy: this.radius,
+      r: this.radius * 0.842,
+      style: this.styles.ring
+    }, this.svg.root);
+
+    // draw toucharea
+    this.svg.touchArea = this.createSVGElement('circle', {
+      cx: this.radius,
+      cy: this.radius,
+      r: this.radius,
+      style: {
+        fill: 'transparent'
+      },
+    }, this.svg.root);
+
+    // draw text 'heating' or 'cooling'
+    this.svg.txtState = this.createSVGTextElement('text', this.props.hvacMode.toUpperCase(), {
+      x: this.radius,
+      y: this.radius - this.radius / 2.2,
+      style: this.styles.description,
+    }, this.svg.root);
+
+    // draw text 'set to'
+    this.svg.txtSetTo = this.createSVGTextElement('text', ('set to').toUpperCase(), {
+      x: this.radius,
+      y: this.radius - this.radius / 3,
+      style: this.styles.description,
+    }, this.svg.root);
+
+    // draw text targetTemperature
+    this.svg.txtTargetTemp = this.createSVGTextElement('text', this.targetTemperatureStr, {
+      x: this.radius,
+      y: this.radius,
+      style: this.styles.targettemp,
+    }, this.svg.root);
+
+    // draw text targetTemperature dot
+    this.svg.txtTargetTempDot = this.createSVGTextElement('text', this.targetTemperatureDotStr, {
+      x: this.radius + this.radius / 2.5,
+      y: this.radius - this.radius / 8.5,
+      style: this.styles.targettempdot,
+    }, this.svg.root);
+
+    // draw text ambientTemperature
+    this.svg.txtAmbientTemp = this.createSVGTextElement('text', this.ambientTemperatureStr, {
+      x: (this.ambientPosition && this.ambientPosition[0]) ? this.ambientPosition[0] : '',
+      y: (this.ambientPosition && this.ambientPosition[1]) ? this.ambientPosition[1] : '',
+      style: this.styles.ambienttemp,
+    }, this.svg.root);
+
+    // draw text 'AWAY'
+    this.svg.txtAway = this.createSVGTextElement('text', 'AWAY', {
+      x: this.radius,
+      y: this.radius,
+      style: this.styles.away,
+    }, this.svg.root);
 
     // Determines the positioning of the leaf, should it be displayed.
     const leafScale = this.radius / 5 / 100;
-    this.leafDef = ['M', 3, 84, 'c', 24, 17, 51, 18, 73, -6, 'C', 100, 52, 100,
+    let leafSVG = ['M', 3, 84, 'c', 24, 17, 51, 18, 73, -6, 'C', 100, 52, 100,
       22, 100, 4, 'c', -13, 15, -37, 9, -70, 19, 'C', 4, 32, 0, 63, 0, 76, 'c',
       6, -7, 18, -17, 33, -23, 24, -9, 34, -9, 48, -20, -9, 10, -20, 16, -43, 24,
       'C', 22, 63, 8, 78, 3, 84, 'z',
     ].map(
       (point) => _self.mapLeafPoint(point, leafScale)
     ).join(' ');
+
     this.translate = [this.radius - (leafScale * 100 * 0.5), this.radius * 1.3];
+
+    // draw leaf
+    this.svg.leaf = this.createSVGElement('path', {
+      d: leafSVG,
+      style: this.styles.leaf,
+      transform: 'translate(' + this.translate[0] + ',' + this.translate[1] + ')'
+    }, this.svg.root);
+
+    // draw icon down
+    this.svg.iconDown = this.createSVGElement('path', {
+      d: 'M 7 12 l 9 9 9-9',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      'stroke-width': '3',
+      'stroke': '#fff',
+      'fill': 'transparent',
+      transform: 'translate(125, 299)'
+    }, this.svg.root);
+
+    // draw icon up
+    this.svg.iconUp = this.createSVGElement('path', {
+      d: 'M 7 12 l 9-9 9 9',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      'stroke-width': '3',
+      'stroke': '#fff',
+      'fill': 'transparent',
+      transform: 'translate(200, 307)'
+    }, this.svg.root);
+
+    // draw invisible area for button down
+    this.svg.btnDown = this.createSVGElement('circle', {
+      cx: 140,
+      cy: 315,
+      r: 30,
+      style: {
+        fill: 'transparent'
+      }
+    }, this.svg.root);
+
+    // draw invisible area for button up
+    this.svg.btnUp = this.createSVGElement('circle', {
+      cx: 215,
+      cy: 315,
+      r: 30,
+      style: {
+        fill: 'transparent'
+      }
+    }, this.svg.root);
   }
 
   private render() {
     this.setMixMaxRange();
-    this.tickArray.forEach((tick, iTick) => {
+    this.svg.tickArray.forEach((tick, iTick) => {
       let isMarkerTarget = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.max : iTick === this.min;
       let isMarkerAmbient = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.min : iTick === this.max;
       let isActive = iTick >= this.min && iTick <= this.max;
@@ -383,8 +566,8 @@ export class ElementThermostatView
 
     // Update ambient and target Temperature and do rounding to 0.5
     this.ambientTemperatureStr = this.props.ambientTemperature.toFixed(1);
-
     this.targetTemperatureStr = String(Math.floor(this.props.targetTemperature));
+
     let dot = this.props.targetTemperature % 1;
     if (dot < 0.25)
       this.targetTemperatureDotStr = '';
@@ -397,26 +580,34 @@ export class ElementThermostatView
       this.targetTemperatureStr = String(Math.ceil(this.props.targetTemperature));
     }
 
+    // render target and ambient temperature
+    this.svg.txtTargetTemp.textContent = this.targetTemperatureStr;
+    this.svg.txtTargetTempDot.textContent = this.targetTemperatureDotStr;
+    this.svg.txtAmbientTemp.textContent = this.ambientTemperatureStr;
+
+    this.attr(this.svg.txtAmbientTemp, {
+      x: (this.ambientPosition && this.ambientPosition[0]) ? this.ambientPosition[0] : '',
+      y: (this.ambientPosition && this.ambientPosition[1]) ? this.ambientPosition[1] : '',
+      style: this.styles.ambienttemp,
+    });
+
     // Update heating / cooling dial color depending on temperatures
     if (this.props.hvacMode === 'heating' && this.props.targetTemperature > this.props.ambientTemperature) {
-      console.log('heating!');
-      this.attr(this.dial, {
+      this.attr(this.svg.dial, {
         style: {
           fill: '#E36304'
         }
       });
     }
     else if (this.props.hvacMode === 'cooling' && this.props.targetTemperature < this.props.ambientTemperature) {
-      console.log('cooling!');
-      this.attr(this.dial, {
+      this.attr(this.svg.dial, {
         style: {
           fill: '#007AF1'
         }
       });
     }
     else {
-      console.log('normal');
-      this.attr(this.dial, {
+      this.attr(this.svg.dial, {
         style: {
           fill: '#0a0c0d' // TODO ion-background-color bark/light
         }
@@ -425,7 +616,7 @@ export class ElementThermostatView
   }
 
   private eventPosition(ev) {
-    let area = this.touchArea.nativeElement.getBoundingClientRect();
+    let area = this.svg.touchArea.getBoundingClientRect();
     let x0 = area.left + area.width / 2;
     let y0 = area.top + area.height / 2;
     if (ev.targetTouches && ev.targetTouches.length) {  //
