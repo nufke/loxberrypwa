@@ -5,17 +5,12 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'app',
     component: TabsPage,
     children: [
       {
         path: 'home',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
-        //canActivate: [AuthGuard]
-      },
-      {
-        path: 'home/:control_hwid/:control_uuid',
-        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
         //canActivate: [AuthGuard]
       },
       {
@@ -32,27 +27,32 @@ const routes: Routes = [
         path: ':domain/:hwid/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
-      },
-      {
-        path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid',
-        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
-        //canActivate: [AuthGuard]
-      },
-      {
-        path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid',
-        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
-        //canActivate: [AuthGuard]
-      },
-      {
-        path: ':domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid/:subcontrol_uuid_ext',
-        loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
-        //canActivate: [AuthGuard]
-      },
-      {
-        path: '',
-        redirectTo: '/home',
       }
     ]
+  },
+  {
+    path: 'app/home/:control_hwid/:control_uuid',
+    loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
+    //canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/:domain/:hwid/:uuid/:control_hwid/:control_uuid',
+    loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
+    //canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/:domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid',
+    loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
+    //canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/:domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid/:subcontrol_uuid_ext',
+    loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
+    //canActivate: [AuthGuard]
+  },
+  {
+    path: '',
+    redirectTo: '/app/home',
   }
 ];
 
@@ -60,4 +60,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }
