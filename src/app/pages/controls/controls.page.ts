@@ -40,75 +40,60 @@ export class ControlsPage
    * The view model will contain room and category name instead of uuid
    */
   private initVM(): void {
-    const domain = this.route.snapshot.paramMap.get('domain'); // room or category
     const uuid = this.route.snapshot.paramMap.get('uuid');     // uuid of room or category
     const hwid = this.route.snapshot.paramMap.get('hwid');     // hwid of room or category
 
-    if (domain === 'category')
-      this.key = 'room';
-    if (domain === 'room')
-      this.key = 'category';
+    this.isHome = false;
+    this.vm$ = combineLatest([
+      this.controlService.controls$,
+      this.controlService.categories$,
+      this.controlService.rooms$,
+    ]).pipe(
+      map(([controls, categories, rooms]) => {
+        let labels;
+        let keys;
+        let filtered_labels;
+        let filtered_controls = controls
+          .filter(control => control.is_visible && control.category === uuid && control.hwid === hwid);
+        if (filtered_controls.length) { // TODO check if there are no controls at all....
+          this.key = 'room'
+          keys = categories;
+          labels = rooms;
+          filtered_labels = filtered_controls.map(control => control.room);
+        }
+        else {
+          filtered_controls = controls
+            .filter(control => control.is_visible && control.room === uuid && control.hwid === hwid);
+          this.key = 'category'
+          keys = rooms;
+          labels = categories;
+          filtered_labels = filtered_controls.map(control => control.category);
+        }
+        const vm: ControlListVM = {
+          controls: filtered_controls,
+          favorites: filtered_controls.filter(control => control.is_favorite)
+            .sort((a, b) => (a.order[1] - b.order[1] || a.name.localeCompare(b.name))),
+          labels: labels.filter(item => filtered_labels.indexOf(item.uuid) > -1)
+            .sort((a, b) => (a.name.localeCompare(b.name))),
+          page: keys.find(item => (item.uuid === uuid) && (item.hwid === hwid))
+        };
+        return vm;
+      })
+    );
 
-    if (domain === 'category') {
-      this.isHome = false;
-      this.vm$ = combineLatest([
-        this.controlService.controls$,
-        this.controlService.categories$,
-        this.controlService.rooms$,
-      ]).pipe(
-        map(([controls, categories, rooms]) => {
-          controls = controls
-            .filter(control => control.is_visible && control.category === uuid && control.hwid === hwid);
-          let filtered_rooms = controls.map(control => control.room);
-          const vm: ControlListVM = {
-            controls: controls,
-            favorites: controls.filter(control => control.is_favorite)
-                               .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) ),
-            labels: rooms.filter( rooms => filtered_rooms.indexOf(rooms.uuid) > -1 )
-                         .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
-            page: categories.find( category => (category.uuid === uuid) && (category.hwid === hwid) )
-          };
-          return vm;
-        })
-      );
-    }
-
-    if (domain === 'room') {
-      this.isHome = false;
-      this.vm$ = combineLatest([
-        this.controlService.controls$,
-        this.controlService.categories$,
-        this.controlService.rooms$,
-      ]).pipe(
-        map(([controls, categories, rooms]) => {
-          controls = controls
-            .filter(control => control.is_visible && control.room === uuid && control.hwid === hwid );
-          let filtered_categories = controls.map(control => control.category);
-          const vm: ControlListVM = {
-            controls: controls,
-            favorites: controls.filter(control => control.is_favorite)
-                               .sort( (a, b) => ( a.order[1] - b.order[1] || a.name.localeCompare(b.name) ) ),
-            labels: categories.filter( category => filtered_categories.indexOf(category.uuid) > -1 )
-                              .sort( (a, b) => ( a.name.localeCompare(b.name) ) ),
-            page: rooms.find( room => (room.uuid === uuid) && (room.hwid === hwid) )
-          };
-          return vm;
-        })
-      );
-    }
-
-    if (domain === null /* home */) {
+    /* home */
+    if (uuid === null && hwid === null) {
       this.isHome = true;
       this.vm$ = this.controlService.controls$.pipe(
-        map( controls => {
+        map(controls => {
           controls = controls
-          .filter( control => (control.order[2] > 0) && control.is_visible )
-          .sort( (a, b) => ( a.order[2] - b.order[2] || a.name.localeCompare(b.name) ) );
+            .filter(control => (control.order[2] > 0) && control.is_visible)
+            .sort((a, b) => (a.order[2] - b.order[2] || a.name.localeCompare(b.name)));
           const vm: ControlListVM = {
             controls: null,
             favorites: controls,
             labels: null,
-            page: { name: 'Home'}
+            page: { name: 'Home' }
           };
           return vm;
         })
@@ -116,10 +101,10 @@ export class ControlsPage
     }
   }
 
-  filter_list(label: Room | Category) : Observable<Control[]> {
+  filter_list(label: Room | Category): Observable<Control[]> {
     return this.vm$.pipe(
-      map( items => items.controls
-        .filter( item => item[this.key] === label.uuid)
-        .sort( (a, b) => ( a.order[0] - b.order[0] || a.name.localeCompare(b.name)))));
+      map(items => items.controls
+        .filter(item => item[this.key] === label.uuid)
+        .sort((a, b) => (a.order[0] - b.order[0] || a.name.localeCompare(b.name)))));
   }
 }

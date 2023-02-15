@@ -18,7 +18,7 @@ export class TabsPage {
     // TODO check other mechanism to navigate to tab root page
     this.navCtrl.navigateRoot(tab);
   }
-
+/*
   onSwipe(event) {
     if (event?.swipeType === 'moveend') {
       const currentTab = this.tabs.getSelected();
@@ -38,7 +38,8 @@ export class TabsPage {
       case 'category':
         if (direction === 'right') return 'room'; else return null;
         break;
-      default: /* none */
+      default:
     }
   }
+  */
 }

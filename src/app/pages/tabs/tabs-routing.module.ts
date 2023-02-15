@@ -19,15 +19,21 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
+        path: 'room/:hwid/:uuid',
+        loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
+        //canActivate: [AuthGuard]
+      },
+      {
         path: 'category',
         loadChildren: () => import('../categories/categories.module').then(m => m.CategoriesPageModule),
         //canActivate: [AuthGuard]
       },
       {
-        path: ':domain/:hwid/:uuid',
+        path: 'category/:hwid/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
-      }
+      },
+
     ]
   },
   {
@@ -52,8 +58,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/app/home',
-  }
+    redirectTo: 'app/home',
+  },
 ];
 
 @NgModule({
