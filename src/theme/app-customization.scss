@@ -60,8 +60,36 @@ ion-content::part(scroll) {
   padding-right: 15px;
 }
 
-// global ionic restyling
-// TODO should we overrile default ionic styles???
+// Global Ionic component restyling
+// TODO should we overrule more default ionic styles???
+
+// action sheet popup for central elements
+ion-action-sheet.actionsheet .action-sheet-group {
+  background: var(--ion-toolbar-background);
+}
+
+ion-action-sheet.actionsheet .action-sheet-title {
+  color: #fff;
+  background: var(--ion-card-background, #fbfbfb);
+}
+
+ion-action-sheet.actionsheet .action-sheet-selected {
+  color: var(--ion-color-primary, #69c350);
+  background: var(--ion-card-selected);
+  font-weight: normal;
+}
+
+@media (any-hover: hover) {
+  ion-action-sheet.actionsheet .action-sheet-button:hover {
+    color: #000000;
+  }
+}
+
+ion-action-sheet.actionsheet ion-backdrop {
+  opacity: 0.6;
+}
+
+// custom Ionic component styling
 
 .grid-center {
   max-width: 1024px;
@@ -71,6 +99,8 @@ ion-content::part(scroll) {
 .card {
   margin: 0;
   border-radius: 5px;
+  --ripple-color: transparent;
+  //--background: var(--ion-card-background, #fbfbfb);
 }
 
 .ripple-color {

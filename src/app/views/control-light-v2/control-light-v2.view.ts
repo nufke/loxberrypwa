@@ -26,6 +26,11 @@ export class ControlLightV2View
   mood_list: RadioListItem[];
   text: string = '';
 
+  customActionSheetOptions = {
+    header: '',
+    cssClass: 'actionsheet',
+  };
+
   constructor(
     public translate: TranslateService,
     public controlService: ControlService) {
@@ -78,6 +83,8 @@ export class ControlLightV2View
       let allSubcontrols: Subcontrol[] = Object.values(control.subcontrols);
       visibleSubcontrols = allSubcontrols.filter( subcontrol => subcontrol.is_visible );
     }
+
+    this.customActionSheetOptions.header = (category.name) + ' ' + (room && room.name) ? room.name : "unknown";
 
     const vm: RadioVM = {
       control: {
