@@ -471,13 +471,13 @@ ion-action-sheet.actionsheet ion-backdrop {
 
 // TODO workaround for footer in ion-content field
 .footer{
-  margin: auto;
+  margin: 0;
   position: absolute;
   text-align: center;
   bottom: 20px;
   width: 100%;
 }
 
-.slides {
+.swiper {
   height: 100px;
 }

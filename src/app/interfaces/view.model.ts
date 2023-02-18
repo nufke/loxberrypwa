@@ -77,6 +77,29 @@ export interface RadioVM {
   subcontrols?: Subcontrol[];
 }
 
+export interface IRCVM {
+  control: Control;
+  ui: {
+    name: string;
+    room: string;
+    category: string;
+    temp_target: number,
+    temp_actual: number,
+    mode_list: RadioListItem[];
+    mode: number;
+    preset_list: RadioListItem[];
+    preset: number;
+    icon: {
+      temp_base: string;
+      temp_dec: string
+    }
+    status: {
+      text: string;
+      color: string;
+    }
+  }
+}
+
 export interface SliderVM {
   control: Control;
   ui: {

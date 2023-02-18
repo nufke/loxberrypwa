@@ -9,7 +9,7 @@
           </div>
         </div>
         <ion-label class="label">
-          <h1>{{vm.ui.name}}</h1>
+          <h1 translate>{{vm.ui.name}}</h1>
           <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
             {{vm.ui.status.text | translate }}</h2>
         </ion-label>
@@ -34,7 +34,7 @@
       <ion-item class="item">
         <ion-label class="label label-fav">
           <p>{{vm.ui.room}} • {{vm.ui.category}}</p>
-          <h1>{{vm.ui.name | translate }}</h1>
+          <h1 translate>{{vm.ui.name | translate }}</h1>
           <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
             {{vm.ui.status.text | translate }}</h2>
         </ion-label>
@@ -46,36 +46,31 @@
 <ng-container *ngIf="view===viewType.DETAILED">
 
   <ion-grid class="grid-center" *ngIf="vm$ | async as vm">
-    <!--  <ion-row>
-        <ion-col>
-          <card-text-view [text_vm]="vm"></card-text-view>
-        </ion-col>
-      </ion-row>-->
     <ion-row>
       <ion-col>
         <!-- TODO add daytimer-->
-        <element-thermostat-view [text_vm]="vm"></element-thermostat-view>
+        <element-thermostat-view [irc_vm]="vm"></element-thermostat-view>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <swiper class="slides" [pagination]="true">
+  <swiper class="swiper" [pagination]="true">
     <ng-template swiperSlide>
       <ion-label class="label">
         <h1>41%</h1>
-        <p>Inside humidity</p>
+        <p>Humidity indoor</p>
       </ion-label>
     </ng-template>
     <ng-template swiperSlide>
       <ion-label class="label">
         <h1>61%</h1>
-        <p>Outside humidity</p>
+        <p>Humidity outdoor</p>
       </ion-label>
     </ng-template>
     <ng-template swiperSlide>
       <ion-label class="label">
         <h1>5.1</h1>
-        <p>Outside temperature</p>
+        <p>Temperature outdoor</p>
       </ion-label>
     </ng-template>
   </swiper>
@@ -118,13 +113,13 @@
   </ion-grid>
 
   <ng-container *ngIf="vm$ | async as vm">
-    <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsModes" [ngModel]="ircSelectedMode"
+    <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsModes" [ngModel]="vm.ui.name"
       interface="action-sheet" #modes (ionChange)='setMode(vm, $event)' hidden="true">
-      <ion-select-option *ngFor="let item of ircModes" [value]="item.name" translate>{{item.name}}</ion-select-option>
+      <ion-select-option *ngFor="let item of vm.ui.mode_list" [value]="item.name" translate>{{item.name}}</ion-select-option>
     </ion-select>
     <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsPreset"
       [ngModel]="vm.ui.status.text" interface="action-sheet" #presets (ionChange)='setPreset(vm, $event)' hidden="true">
-      <ion-select-option *ngFor="let item of vm.ui.radio_list" [value]="item.name"
+      <ion-select-option *ngFor="let item of vm.ui.preset_list" [value]="item.name"
         translate>{{item.name}}</ion-select-option>
     </ion-select>
   </ng-container>

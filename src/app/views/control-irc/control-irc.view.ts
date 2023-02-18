@@ -6,7 +6,7 @@ import SwiperCore, { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swi
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { RadioVM } from '../../interfaces/view.model';
+import { IRCVM } from '../../interfaces/view.model';
 import { View } from '../../types/types';
 
 SwiperCore.use([Autoplay, Keyboard, Pagination, Scrollbar, Zoom]);
@@ -27,8 +27,7 @@ export class ControlIRCView
   @Input() view: View;
 
   viewType = View;
-  vm$: Observable<RadioVM>;
-  segment: string = 'modes';
+  vm$: Observable<IRCVM>;
 
   ircModes = [
     { id: 0, name: 'Automatic' },
@@ -39,8 +38,6 @@ export class ControlIRCView
     { id: 5, name: 'Manual heating' },
     { id: 6, name: 'Manual cooling' }
   ];
-
-  ircSelectedMode: string;
 
   private radioListHeating = [
     { id: 0, name: 'Economy' },
@@ -99,7 +96,7 @@ export class ControlIRCView
     );
   }
 
-  private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
+  private updateVM(control: Control, categories: Category[], rooms: Room[]): IRCVM {
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
@@ -111,7 +108,6 @@ export class ControlIRCView
     }
 
     let idx = this.ircModes.findIndex(item => { return item.id == control.states.mode });
-    this.ircSelectedMode = this.ircModes[idx].name;
 
     let subcontrols = Object.keys(control.subcontrols);
     let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
@@ -119,32 +115,32 @@ export class ControlIRCView
     let mode = control.states.mode;
     let heating = ((mode == 1) || (mode == 3) || (mode == 5));
 
-    let radio_list = heating ? this.radioListHeating : this.radioListCooling;
-    let idxx = radio_list.findIndex( item => { return item.id == state } );
+    let preset_list = heating ? this.radioListHeating : this.radioListCooling;
+    let idxx = preset_list.findIndex( item => { return item.id == state } );
 
-    const vm: RadioVM = {
+    const vm: IRCVM = {
       control: control,
       ui: {
-        name: this.translate.instant(this.ircSelectedMode),
+        name: this.ircModes[idx].name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        radio_list: radio_list,
-        selected_id: state,
+        temp_target: Number(control.states.temp_target),
+        temp_actual: Number(control.states.temp_actual),
+        mode_list: this.ircModes,
+        mode: idx,
+        preset_list: preset_list,
+        preset: idxx,
         icon: {
           temp_base: temp[0],
           temp_dec: temp[1]
         },
         status: {
-          text: radio_list[idxx].name, // translate in scss to enable radio selection highlighting
+          text: preset_list[idxx].name, // translate in scss to enable radio selection highlighting
           color: (idxx > 0) ? "#69c350" : "#9d9e9e" // TODO select from color palette
         }
       }
     };
     return vm;
-  }
-
-  updateSegment() {
-    // Close any open sliding items when the schedule updates
   }
 
   openSelectPresets() {

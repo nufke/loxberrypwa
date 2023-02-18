@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { TextVM } from '../../interfaces/view.model';
+import { IRCVM } from '../../interfaces/view.model';
 
 interface propTypes {
   /* Height of the thermostat (ex: 50% or 400px) */
@@ -22,8 +22,12 @@ interface propTypes {
   ambientTemperature: number;
   /* Desired temperature that the thermostat attempts to reach */
   targetTemperature: number;
-  /* Current state of operations within the thermostat */
+  /* Current mode of operation within the thermostat */
   hvacMode: string;  /* 'off', 'heating', 'cooling' */
+  /* Current heating state */
+  is_heating: boolean;
+  /* Current cooling state */
+  is_cooling: boolean;
 };
 
 @Component({
@@ -36,7 +40,7 @@ export class ElementThermostatView
 
   @ViewChild('thermostat', { static: true }) thermostat: ElementRef;
 
-  @Input() text_vm: TextVM;
+  @Input() irc_vm: IRCVM;
 
   // TODO define ViewModel
   styles;
@@ -77,11 +81,14 @@ export class ElementThermostatView
     txtTargetTempDot: null,
     txtAmbientTemp: null,
     leaf: null,
+    heating: null,
+    cooling: null,
     txtAway: null,
     iconUp: null,
     iconDown: null,
     btnUp: null,
-    btnDown: null
+    btnDown: null,
+    unit: null
   }
 
   props: propTypes = {
@@ -92,8 +99,10 @@ export class ElementThermostatView
     maxValue: 30, //TODO C/F settings (C30, F86)
     away: false,
     leaf: true,
-    ambientTemperature: 16.5,
-    targetTemperature: 21.5,
+    is_heating: true,
+    is_cooling: true,
+    ambientTemperature: 10,
+    targetTemperature: 10,
     hvacMode: 'heating'
   };
 
@@ -138,6 +147,11 @@ export class ElementThermostatView
 
     // The styles change based on state.
     this.styles = this.getStyles();
+  }
+
+  ngOnChanges() {
+    this.props.targetTemperature = this.irc_vm.ui.temp_target;
+    this.props.ambientTemperature = this.irc_vm.ui.temp_actual;
   }
 
   ngOnInit() {
@@ -220,7 +234,6 @@ export class ElementThermostatView
       description: {
         'fill': 'white',
         'text-anchor': 'middle',
-        'font-family': 'Helvetica, sans-serif',
         'alignment-baseline': 'central',
         'font-size': '14px',
         'font-weight': 'normal',
@@ -267,10 +280,29 @@ export class ElementThermostatView
         'fill': '#13EB13',
         'opacity': (this.props.leaf ? '1' : '0'),
         'visibility': (this.props.away ? 'hidden' : 'visible'),
-        'WebkitTransition': 'opacity 0.5s',
-        'transition': 'opacity 0.5s',
         'pointer-events': 'none',
-      }
+        'style': 'transition: opacity 0.5s'
+      },
+      heating: {
+        'fill': '#e73246',
+        'opacity': (this.props.is_heating ? '1' : '0'),
+        'visibility': (this.props.away ? 'hidden' : 'visible'),
+        'pointer-events': 'none',
+        'style': 'transition: opacity 0.5s'
+      },
+      cooling: {
+        'fill': '#00b0db',
+        'opacity': (this.props.is_cooling ? '1' : '0'),
+        'visibility': (this.props.away ? 'hidden' : 'visible'),
+        'pointer-events': 'none',
+        'style': 'transition: opacity 0.5s'
+      },
+      unit: {
+        'fill': 'white',
+        'text-anchor': 'middle',
+        'alignment-baseline': 'central',
+        'font-size': '20px'
+      },
     };
   }
 
@@ -302,7 +334,7 @@ export class ElementThermostatView
     return val;
   }
 
-  private mapLeafPoint(point, scale) {
+  private scalePoint(point, scale) {
     return isNaN(point) ? point : point * scale;
   }
 
@@ -342,9 +374,9 @@ export class ElementThermostatView
       actualMinValue = Math.min(this.props.ambientTemperature, this.props.targetTemperature);
       actualMaxValue = Math.max(this.props.ambientTemperature, this.props.targetTemperature);
     }
-    this.ticks.min= this.restrictToRange(Math.round((actualMinValue - this.props.minValue)
+    this.ticks.min = this.restrictToRange(Math.round((actualMinValue - this.props.minValue)
       / this.ticks.rangeValue * this.props.numTicks), 0, this.props.numTicks - 1);
-    this.ticks.max= this.restrictToRange(Math.round((actualMaxValue - this.props.minValue)
+    this.ticks.max = this.restrictToRange(Math.round((actualMaxValue - this.props.minValue)
       / this.ticks.rangeValue * this.props.numTicks), 0, this.props.numTicks - 1);
   }
 
@@ -456,16 +488,28 @@ export class ElementThermostatView
       6, -7, 18, -17, 33, -23, 24, -9, 34, -9, 48, -20, -9, 10, -20, 16, -43, 24,
       'C', 22, 63, 8, 78, 3, 84, 'z',
     ].map(
-      (point) => _self.mapLeafPoint(point, leafScale)
+      (point) => _self.scalePoint(point, leafScale)
     ).join(' ');
 
-    this.translate = [this.radius - (leafScale * 100 * 0.5), this.radius * 1.3];
+    this.translate = [this.radius - (leafScale * 100 * 0.5), this.radius * 1.4];
 
-    // draw leaf
+    // draw leaf symbol
     this.svg.leaf = this.createSVGElement('path', {
       d: leafSVG,
       style: this.styles.leaf,
-      transform: 'translate(' + this.translate[0] + ',' + this.translate[1] + ')'
+      transform: 'translate(' + this.translate[0] + ',' + this.translate[1] + ')',
+    }, this.svg.root);
+
+    this.svg.heating = this.createSVGElement('path', {
+      d: "M394.23 197.56a300.43 300.43 0 00-53.37-90C301.2 61.65 249.05 32 208 32a16 16 0 00-15.48 20c13.87 53-14.88 97.07-45.31 143.72C122 234.36 96 274.27 96 320c0 88.22 71.78 160 160 160s160-71.78 160-160c0-43.3-7.32-84.49-21.77-122.44zm-105.9 221.13C278 429.69 265.05 432 256 432s-22-2.31-32.33-13.31S208 390.24 208 368c0-25.14 8.82-44.28 17.34-62.78 4.95-10.74 10-21.67 13-33.37a8 8 0 0112.49-4.51A126.48 126.48 0 01275 292c18.17 24 29 52.42 29 76 0 22.24-5.42 39.77-15.67 50.69z",
+      style: this.styles.heating,
+      transform: 'scale(0.05) translate(1700, 3000)',
+    }, this.svg.root);
+
+    this.svg.cooling = this.createSVGElement('path', {
+      d: "M461 349l-34-19.64a89.53 89.53 0 0120.94-16 22 22 0 00-21.28-38.51 133.62 133.62 0 00-38.55 32.1L300 256l88.09-50.86a133.46 133.46 0 0038.55 32.1 22 22 0 1021.28-38.51 89.74 89.74 0 01-20.94-16l34-19.64A22 22 0 10439 125l-34 19.63a89.74 89.74 0 01-3.42-26.15A22 22 0 00380 96h-.41a22 22 0 00-22 21.59 133.61 133.61 0 008.5 49.41L278 217.89V116.18a133.5 133.5 0 0047.07-17.33 22 22 0 00-22.71-37.69A89.56 89.56 0 01278 71.27V38a22 22 0 00-44 0v33.27a89.56 89.56 0 01-24.36-10.11 22 22 0 10-22.71 37.69A133.5 133.5 0 00234 116.18v101.71L145.91 167a133.61 133.61 0 008.52-49.43 22 22 0 00-22-21.59H132a22 22 0 00-21.59 22.41 89.74 89.74 0 01-3.41 26.19L73 125a22 22 0 10-22 38.1l34 19.64a89.74 89.74 0 01-20.94 16 22 22 0 1021.28 38.51 133.62 133.62 0 0038.55-32.1L212 256l-88.09 50.86a133.62 133.62 0 00-38.55-32.1 22 22 0 10-21.28 38.51 89.74 89.74 0 0120.94 16L51 349a22 22 0 1022 38.1l34-19.63a89.74 89.74 0 013.42 26.15A22 22 0 00132 416h.41a22 22 0 0022-21.59 133.61 133.61 0 00-8.5-49.41L234 294.11v101.71a133.5 133.5 0 00-47.07 17.33 22 22 0 1022.71 37.69A89.56 89.56 0 01234 440.73V474a22 22 0 0044 0v-33.27a89.56 89.56 0 0124.36 10.11 22 22 0 0022.71-37.69A133.5 133.5 0 00278 395.82V294.11L366.09 345a133.61 133.61 0 00-8.52 49.43 22 22 0 0022 21.59h.43a22 22 0 0021.59-22.41 89.74 89.74 0 013.41-26.19l34 19.63A22 22 0 10461 349z",
+      style: this.styles.cooling,
+      transform: 'scale(0.05) translate(1700, 3600)',
     }, this.svg.root);
 
     // draw icon down
@@ -509,14 +553,21 @@ export class ElementThermostatView
         fill: 'transparent'
       }
     }, this.svg.root);
+
+    // draw unit text °C
+    this.svg.unit = this.createSVGTextElement('°C', {
+      x: this.radius + 70,
+      y: this.radius + 30,
+      style: this.styles.unit,
+    }, this.svg.root);
   }
 
   private render() {
     this.setMixMaxRange();
     this.svg.tickArray.forEach((tick, iTick) => {
-      let isMarkerTarget = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.ticks.max: iTick === this.ticks.min;
-      let isMarkerAmbient = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.ticks.min: iTick === this.ticks.max;
-      let isActive = iTick >= this.ticks.min&& iTick <= this.ticks.max;
+      let isMarkerTarget = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.ticks.max : iTick === this.ticks.min;
+      let isMarkerAmbient = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.ticks.min : iTick === this.ticks.max;
+      let isActive = iTick >= this.ticks.min && iTick <= this.ticks.max;
       this.attr(tick, {
         d: this.pointsToPath(
           this.rotatePoints(
@@ -544,9 +595,9 @@ export class ElementThermostatView
     let degs = this.ticks.degrees * (peggedValue - this.props.minValue) / this.ticks.rangeValue - this.ticks.offsetDegrees;
 
     if (peggedValue > this.props.targetTemperature) {
-      degs += 8;
+      degs += 9;
     } else {
-      degs -= 8;
+      degs -= 9;
     }
 
     this.ambientPosition = this.rotatePoint(lblAmbientPosition, degs, [this.radius, this.radius]);
@@ -587,25 +638,32 @@ export class ElementThermostatView
 
     // Update heating / cooling dial color depending on temperatures
     if (this.props.hvacMode === 'heating' && this.props.targetTemperature > this.props.ambientTemperature) {
-      this.attr(this.svg.dial, {
+      this.attr(this.svg.heating, {
         style: {
-          fill: '#E36304'
-        }
-      });
-    }
-    else if (this.props.hvacMode === 'cooling' && this.props.targetTemperature < this.props.ambientTemperature) {
-      this.attr(this.svg.dial, {
-        style: {
-          fill: '#007AF1'
+          'opacity': 1,
         }
       });
     }
     else {
-      this.attr(this.svg.dial, {
-        style: {
-          fill: '#0a0c0d' // TODO ion-background-color bark/light
-        }
-      });
+      if (this.props.hvacMode === 'cooling' && this.props.targetTemperature < this.props.ambientTemperature) {
+        this.attr(this.svg.cooling, {
+          style: {
+            'opacity': 1,
+          }
+        });
+      }
+      else {
+        this.attr(this.svg.heating, {
+          style: {
+            'opacity': 0,
+          }
+        });
+        this.attr(this.svg.cooling, {
+          style: {
+            'opacity': 0,
+          }
+        });
+      }
     }
   }
 
@@ -640,13 +698,13 @@ export class ElementThermostatView
     this.calcAngleDegrees(a[0], a[1]);
   }
 
-  // workaround to compute text box before DOM rendering
+  // workaround to compute size of text box before DOM rendering
   getTextSize(element) {
-    const clonedElt = element.cloneNode(true)
+    const clonedElement = element.cloneNode(true)
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.appendChild(clonedElt);
+    svg.appendChild(clonedElement);
     document.body.appendChild(svg);
-    const { x, y, width, height } = clonedElt.getBBox();
+    const { x, y, width, height } = clonedElement.getBBox();
     document.body.removeChild(svg);
     return { x, y, width, height };
   }
