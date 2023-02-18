@@ -96,6 +96,13 @@ ion-action-sheet.actionsheet ion-backdrop {
   margin: auto;
 }
 
+.col-center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card {
   margin: 0;
   border-radius: 5px;
@@ -234,12 +241,20 @@ ion-action-sheet.actionsheet ion-backdrop {
     h1 {
       font-size: 18px;
       line-height: 1.2;
-
     }
     height: 42px;
     align-items: center;
     justify-content: center;
   }
+
+.label-fab {
+  position: absolute;
+  bottom: -20px;
+  p {
+    font-size: 12px;
+    //letter-spacing: 0.01em;
+  }
+}
 
 // category and room labels
 .control-label {
@@ -280,6 +295,13 @@ ion-action-sheet.actionsheet ion-backdrop {
   --ripple-color: transparent;
   margin: 0;
   padding: 0;
+}
+
+.fab-outline {
+  --border-color: var(--ion-card-selected);
+  --border-width: 1px;
+  --border-style: solid;
+  --background: transparent;
 }
 
 .selected-true {
@@ -445,4 +467,17 @@ ion-action-sheet.actionsheet ion-backdrop {
   --border-style: solid;
   --background: conic-gradient(red, magenta, blue, aqua, lime, yellow, red);
   transform: rotateZ(90deg);
+}
+
+// TODO workaround for footer in ion-content field
+.footer{
+  margin: auto;
+  position: absolute;
+  text-align: center;
+  bottom: 20px;
+  width: 100%;
+}
+
+.slides {
+  height: 100px;
 }

@@ -44,27 +44,25 @@ export class ElementThermostatView
   radius;
   diameter;
   translate;
+  interval;
 
   ambientTemperatureStr = '';
   targetTemperatureStr = '';
   targetTemperatureDotStr = '';
 
-  tickPoints;
-  tickPointsAmbient;
-  tickPointsTarget;
-  min;
-  max;
-  rangeValue;
-  theta;
-  tickDegrees;
-  offsetDegrees;
-  ticksOuterRadius;
-  ticksInnerRadius;
-
-  interval;
-
-  ambientTemperature2; // TODO dummy
-  targetTemperature2; // TODO dummy
+  ticks = {
+    points: [],
+    pointsAmbient: [],
+    pointsTarget: [],
+    min: null,
+    max: null,
+    rangeValue: null,
+    theta: null,
+    degrees: null,
+    offsetDegrees: null,
+    outerRadius: null,
+    innerRadius: null
+  }
 
   svg = {
     root: null,
@@ -107,35 +105,35 @@ export class ElementThermostatView
 
     this.diameter = 350;
     this.radius = this.diameter / 2;
-    this.rangeValue = this.props.maxValue - this.props.minValue;
+    this.ticks.rangeValue = this.props.maxValue - this.props.minValue;
 
-    this.ticksOuterRadius = this.diameter / 30;
-    this.ticksInnerRadius = this.diameter / 8;
+    this.ticks.outerRadius = this.diameter / 30;
+    this.ticks.innerRadius = this.diameter / 8;
 
-    this.tickDegrees = 300;
-    this.offsetDegrees = 180 - (360 - this.tickDegrees) / 2;
-    this.theta = this.tickDegrees / this.props.numTicks;
+    this.ticks.degrees = 300;
+    this.ticks.offsetDegrees = 180 - (360 - this.ticks.degrees) / 2;
+    this.ticks.theta = this.ticks.degrees / this.props.numTicks;
 
     // Renders the degree ticks around the outside of the thermostat.
-    this.tickPoints = [
-      [this.radius - 1, this.ticksOuterRadius],
-      [this.radius + 1, this.ticksOuterRadius],
-      [this.radius + 1, this.ticksInnerRadius],
-      [this.radius - 1, this.ticksInnerRadius],
+    this.ticks.points = [
+      [this.radius - 1, this.ticks.outerRadius],
+      [this.radius + 1, this.ticks.outerRadius],
+      [this.radius + 1, this.ticks.innerRadius],
+      [this.radius - 1, this.ticks.innerRadius],
     ];
 
-    this.tickPointsTarget = [
-      [this.radius - 2.5, this.ticksOuterRadius],
-      [this.radius + 2.5, this.ticksOuterRadius],
-      [this.radius + 2.5, this.ticksInnerRadius + 20],
-      [this.radius - 2.5, this.ticksInnerRadius + 20],
+    this.ticks.pointsTarget = [
+      [this.radius - 2.5, this.ticks.outerRadius],
+      [this.radius + 2.5, this.ticks.outerRadius],
+      [this.radius + 2.5, this.ticks.innerRadius + 20],
+      [this.radius - 2.5, this.ticks.innerRadius + 20],
     ];
 
-    this.tickPointsAmbient = [
-      [this.radius - 2.5, this.ticksOuterRadius],
-      [this.radius + 2.5, this.ticksOuterRadius],
-      [this.radius + 2.5, this.ticksInnerRadius],
-      [this.radius - 2.5, this.ticksInnerRadius],
+    this.ticks.pointsAmbient = [
+      [this.radius - 2.5, this.ticks.outerRadius],
+      [this.radius + 2.5, this.ticks.outerRadius],
+      [this.radius + 2.5, this.ticks.innerRadius],
+      [this.radius - 2.5, this.ticks.innerRadius],
     ];
 
     // The styles change based on state.
@@ -163,16 +161,6 @@ export class ElementThermostatView
     this.svg.btnUp.addEventListener('click', this.btnUp.bind(this));
     this.svg.btnUp.addEventListener('touchstart', this.btnUpStart.bind(this));
     this.svg.btnUp.addEventListener('touchend', this.btnUpEnd.bind(this));
-  }
-
-  targetTemperatureChange($event) {
-    this.props.targetTemperature = this.targetTemperature2 / 2;
-    this.render();
-  }
-
-  ambientTemperatureChange($event) {
-    this.props.ambientTemperature = this.ambientTemperature2 / 2;
-    this.render();
   }
 
   btnUp($event) {
@@ -282,8 +270,7 @@ export class ElementThermostatView
         'WebkitTransition': 'opacity 0.5s',
         'transition': 'opacity 0.5s',
         'pointer-events': 'none',
-      },
-      leaf2: "fill: '#13EB13'"
+      }
     };
   }
 
@@ -328,9 +315,9 @@ export class ElementThermostatView
     return element;
   }
 
-  private createSVGTextElement(tag, text, attributes, appendTo) {
-    let element = this.createSVGElement(tag, attributes, appendTo)
-    element.textContent = text;
+  private createSVGTextElement(text, attributes, appendTo) {
+    let element = this.createSVGElement('text', attributes, appendTo);
+    element.appendChild(document.createTextNode(text));
     return element;
   }
 
@@ -355,10 +342,10 @@ export class ElementThermostatView
       actualMinValue = Math.min(this.props.ambientTemperature, this.props.targetTemperature);
       actualMaxValue = Math.max(this.props.ambientTemperature, this.props.targetTemperature);
     }
-    this.min = this.restrictToRange(Math.round((actualMinValue - this.props.minValue)
-      / this.rangeValue * this.props.numTicks), 0, this.props.numTicks - 1);
-    this.max = this.restrictToRange(Math.round((actualMaxValue - this.props.minValue)
-      / this.rangeValue * this.props.numTicks), 0, this.props.numTicks - 1);
+    this.ticks.min= this.restrictToRange(Math.round((actualMinValue - this.props.minValue)
+      / this.ticks.rangeValue * this.props.numTicks), 0, this.props.numTicks - 1);
+    this.ticks.max= this.restrictToRange(Math.round((actualMaxValue - this.props.minValue)
+      / this.ticks.rangeValue * this.props.numTicks), 0, this.props.numTicks - 1);
   }
 
   private init() {
@@ -392,8 +379,8 @@ export class ElementThermostatView
         key: ['tick-', iTick].join(''),
         d: this.pointsToPath(
           this.rotatePoints(
-            this.tickPoints,
-            iTick * this.theta - this.offsetDegrees,
+            this.ticks.points,
+            iTick * this.ticks.theta - this.ticks.offsetDegrees,
             [this.radius, this.radius])),
         style: {
           fill: 'rgba(255, 255, 255, 0.3)'
@@ -421,42 +408,42 @@ export class ElementThermostatView
     }, this.svg.root);
 
     // draw text 'heating' or 'cooling'
-    this.svg.txtState = this.createSVGTextElement('text', this.props.hvacMode.toUpperCase(), {
+    this.svg.txtState = this.createSVGTextElement(this.props.hvacMode.toUpperCase(), {
       x: this.radius,
       y: this.radius - this.radius / 2.2,
       style: this.styles.description,
     }, this.svg.root);
 
     // draw text 'set to'
-    this.svg.txtSetTo = this.createSVGTextElement('text', ('set to').toUpperCase(), {
+    this.svg.txtSetTo = this.createSVGTextElement(('set to').toUpperCase(), {
       x: this.radius,
       y: this.radius - this.radius / 3,
       style: this.styles.description,
     }, this.svg.root);
 
     // draw text targetTemperature
-    this.svg.txtTargetTemp = this.createSVGTextElement('text', this.targetTemperatureStr, {
+    this.svg.txtTargetTemp = this.createSVGTextElement(this.targetTemperatureStr, {
       x: this.radius,
       y: this.radius,
       style: this.styles.targettemp,
     }, this.svg.root);
 
     // draw text targetTemperature dot
-    this.svg.txtTargetTempDot = this.createSVGTextElement('text', this.targetTemperatureDotStr, {
+    this.svg.txtTargetTempDot = this.createSVGTextElement(this.targetTemperatureDotStr, {
       x: this.radius + this.radius / 2.5,
       y: this.radius - this.radius / 8.5,
       style: this.styles.targettempdot,
     }, this.svg.root);
 
     // draw text ambientTemperature
-    this.svg.txtAmbientTemp = this.createSVGTextElement('text', this.ambientTemperatureStr, {
+    this.svg.txtAmbientTemp = this.createSVGTextElement(this.ambientTemperatureStr, {
       x: (this.ambientPosition && this.ambientPosition[0]) ? this.ambientPosition[0] : '',
       y: (this.ambientPosition && this.ambientPosition[1]) ? this.ambientPosition[1] : '',
       style: this.styles.ambienttemp,
     }, this.svg.root);
 
     // draw text 'AWAY'
-    this.svg.txtAway = this.createSVGTextElement('text', 'AWAY', {
+    this.svg.txtAway = this.createSVGTextElement('AWAY', {
       x: this.radius,
       y: this.radius,
       style: this.styles.away,
@@ -527,14 +514,14 @@ export class ElementThermostatView
   private render() {
     this.setMixMaxRange();
     this.svg.tickArray.forEach((tick, iTick) => {
-      let isMarkerTarget = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.max : iTick === this.min;
-      let isMarkerAmbient = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.min : iTick === this.max;
-      let isActive = iTick >= this.min && iTick <= this.max;
+      let isMarkerTarget = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.ticks.max: iTick === this.ticks.min;
+      let isMarkerAmbient = (this.props.targetTemperature > this.props.ambientTemperature) ? iTick === this.ticks.min: iTick === this.ticks.max;
+      let isActive = iTick >= this.ticks.min&& iTick <= this.ticks.max;
       this.attr(tick, {
         d: this.pointsToPath(
           this.rotatePoints(
-            (isMarkerTarget || isMarkerAmbient) ? (isMarkerTarget ? this.tickPointsTarget : this.tickPointsAmbient) : this.tickPoints,
-            iTick * this.theta - this.offsetDegrees,
+            (isMarkerTarget || isMarkerAmbient) ? (isMarkerTarget ? this.ticks.pointsTarget : this.ticks.pointsAmbient) : this.ticks.points,
+            iTick * this.ticks.theta - this.ticks.offsetDegrees,
             [this.radius, this.radius])),
         style: {
           fill: isActive ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.3)',
@@ -546,7 +533,7 @@ export class ElementThermostatView
     // to the left or right of the tick range.
     const lblAmbientPosition = [
       this.radius,
-      this.ticksOuterRadius - (this.ticksOuterRadius - this.ticksInnerRadius) / 2,
+      this.ticks.outerRadius - (this.ticks.outerRadius - this.ticks.innerRadius) / 2,
     ];
 
     const peggedValue = this.restrictToRange(
@@ -554,7 +541,7 @@ export class ElementThermostatView
       this.props.minValue,
       this.props.maxValue);
 
-    let degs = this.tickDegrees * (peggedValue - this.props.minValue) / this.rangeValue - this.offsetDegrees;
+    let degs = this.ticks.degrees * (peggedValue - this.props.minValue) / this.ticks.rangeValue - this.ticks.offsetDegrees;
 
     if (peggedValue > this.props.targetTemperature) {
       degs += 8;
@@ -589,6 +576,13 @@ export class ElementThermostatView
       x: (this.ambientPosition && this.ambientPosition[0]) ? this.ambientPosition[0] : '',
       y: (this.ambientPosition && this.ambientPosition[1]) ? this.ambientPosition[1] : '',
       style: this.styles.ambienttemp,
+    });
+
+    // align .5 temperature notation with base temperature
+    let textArea = this.getTextSize(this.svg.txtTargetTemp);
+    this.attr(this.svg.txtTargetTempDot, {
+      x: 175 + textArea.width / 2 + 12, // TODO variables for coordinates
+      y: 175 - textArea.height / 2 + 39 // TODO variables for coordinates
     });
 
     // Update heating / cooling dial color depending on temperatures
@@ -627,10 +621,10 @@ export class ElementThermostatView
   }
 
   private calcAngleDegrees(x, y) {
-    let angle = Math.atan2(y, x) * 180 / Math.PI + (360 - this.tickDegrees);
+    let angle = Math.atan2(y, x) * 180 / Math.PI + (360 - this.ticks.degrees);
     if (angle < 0) angle += 360;
-    if (angle <= this.tickDegrees) {
-      this.props.targetTemperature = (angle / this.tickDegrees) * (this.props.maxValue - this.props.minValue) + this.props.minValue;
+    if (angle <= this.ticks.degrees) {
+      this.props.targetTemperature = (angle / this.ticks.degrees) * (this.props.maxValue - this.props.minValue) + this.props.minValue;
       this.render();
     }
   }
@@ -644,6 +638,24 @@ export class ElementThermostatView
     ev.preventDefault();
     let a = this.eventPosition(ev);
     this.calcAngleDegrees(a[0], a[1]);
+  }
+
+  getSVGTextSize(str: string, style) {
+    let element = this.createSVGTextElement(str, style, document.body);
+    let bbox = element.getBBox();
+    element.parentNode.removeChild(element);
+    return bbox;
+  }
+
+  // workaround to compute text box before DOM rendering
+  getTextSize(element) {
+    const clonedElt = element.cloneNode(true)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.appendChild(clonedElt);
+    document.body.appendChild(svg);
+    const { x, y, width, height } = clonedElt.getBBox();
+    document.body.removeChild(svg);
+    return { x, y, width, height };
   }
 
 }

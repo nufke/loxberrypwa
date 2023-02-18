@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, Input, OnInit, OnDestroy } from '@angular/core';
+import { IonSelect } from '@ionic/angular';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
 import { Control, Room, Category } from '../../interfaces/data.model';
@@ -16,6 +17,8 @@ var sprintf = require('sprintf-js').sprintf;
 })
 export class ControlIRCView
   implements OnInit, OnDestroy {
+    @ViewChild('modes') selectModesRef: IonSelect;
+    @ViewChild('presets') selectPresetsRef: IonSelect;
 
   @Input() control: Control;
   @Input() view: View;
@@ -24,7 +27,7 @@ export class ControlIRCView
   vm$: Observable<RadioVM>;
   segment: string = 'modes';
 
-  private irc_mode = [
+  irc_mode = [
     { id: 0, name: 'Automatic' },
     { id: 1, name: 'Automatic (currently heating)' },
     { id: 2, name: 'Automatic (currently cooling)' },
@@ -51,6 +54,21 @@ export class ControlIRCView
     { id: 5, name: 'Increased heat' },
     { id: 6, name: 'Party' }
   ];
+
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+
+  selectOptionsPreset = {
+    header: 'Select temperature preset',
+    cssClass: 'actionsheet',
+  };
+
+  selectOptionsModes = {
+    header: 'Select operating mode',
+    cssClass: 'actionsheet',
+  };
 
   constructor(
     public translate: TranslateService,
@@ -126,6 +144,26 @@ export class ControlIRCView
 
   updateSegment() {
     // Close any open sliding items when the schedule updates
+  }
+
+  openSelectPresets() {
+    setTimeout(()=>{
+      this.selectPresetsRef.open();
+    }, 2);
+  }
+
+  openSelectModes() {
+    setTimeout(()=>{
+      this.selectModesRef.open();
+    }, 2);
+  }
+
+  setMode(vm, event) {
+    console.log('Selected operating mode is', event.detail.value);
+  }
+
+  setPreset(vm, event) {
+    console.log('Selected preset is', event.detail.value);
   }
 
 }
