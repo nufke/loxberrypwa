@@ -640,13 +640,6 @@ export class ElementThermostatView
     this.calcAngleDegrees(a[0], a[1]);
   }
 
-  getSVGTextSize(str: string, style) {
-    let element = this.createSVGTextElement(str, style, document.body);
-    let bbox = element.getBBox();
-    element.parentNode.removeChild(element);
-    return bbox;
-  }
-
   // workaround to compute text box before DOM rendering
   getTextSize(element) {
     const clonedElt = element.cloneNode(true)

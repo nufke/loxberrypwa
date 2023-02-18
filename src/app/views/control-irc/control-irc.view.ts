@@ -2,11 +2,14 @@ import { Component, ViewChild, Input, OnInit, OnDestroy } from '@angular/core';
 import { IonSelect } from '@ionic/angular';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
+import SwiperCore, { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swiper';
 import { Control, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { RadioVM } from '../../interfaces/view.model';
 import { View } from '../../types/types';
+
+SwiperCore.use([Autoplay, Keyboard, Pagination, Scrollbar, Zoom]);
 
 var sprintf = require('sprintf-js').sprintf;
 
@@ -27,7 +30,7 @@ export class ControlIRCView
   vm$: Observable<RadioVM>;
   segment: string = 'modes';
 
-  irc_mode = [
+  ircModes = [
     { id: 0, name: 'Automatic' },
     { id: 1, name: 'Automatic (currently heating)' },
     { id: 2, name: 'Automatic (currently cooling)' },
@@ -37,7 +40,9 @@ export class ControlIRCView
     { id: 6, name: 'Manual cooling' }
   ];
 
-  private radio_list_heating = [
+  ircSelectedMode: string;
+
+  private radioListHeating = [
     { id: 0, name: 'Economy' },
     { id: 1, name: 'Comfort heating' },
     { id: 3, name: 'Empty house' },
@@ -46,7 +51,7 @@ export class ControlIRCView
     { id: 6, name: 'Party' }
   ];
 
-  private radio_list_cooling = [
+  private radioListCooling = [
     { id: 0, name: 'Economy' },
     { id: 2, name: 'Comfort cooling' },
     { id: 3, name: 'Empty house' },
@@ -54,11 +59,6 @@ export class ControlIRCView
     { id: 5, name: 'Increased heat' },
     { id: 6, name: 'Party' }
   ];
-
-  slideOpts = {
-    initialSlide: 1,
-    speed: 400
-  };
 
   selectOptionsPreset = {
     header: 'Select temperature preset',
@@ -110,7 +110,8 @@ export class ControlIRCView
       temp[1] = '.' + temp[1];
     }
 
-    let idx = this.irc_mode.findIndex(item => { return item.id == control.states.mode });
+    let idx = this.ircModes.findIndex(item => { return item.id == control.states.mode });
+    this.ircSelectedMode = this.ircModes[idx].name;
 
     let subcontrols = Object.keys(control.subcontrols);
     let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
@@ -118,13 +119,13 @@ export class ControlIRCView
     let mode = control.states.mode;
     let heating = ((mode == 1) || (mode == 3) || (mode == 5));
 
-    let radio_list = heating ? this.radio_list_heating : this.radio_list_cooling;
+    let radio_list = heating ? this.radioListHeating : this.radioListCooling;
     let idxx = radio_list.findIndex( item => { return item.id == state } );
 
     const vm: RadioVM = {
       control: control,
       ui: {
-        name: this.translate.instant(this.irc_mode[idx].name),
+        name: this.translate.instant(this.ircSelectedMode),
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
         radio_list: radio_list,

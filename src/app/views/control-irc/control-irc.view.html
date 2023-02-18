@@ -59,26 +59,26 @@
     </ion-row>
   </ion-grid>
 
-  <ion-slides class="slides" pager="true" [options]="slideOpts">
-    <ion-slide>
+  <swiper class="slides" [pagination]="true">
+    <ng-template swiperSlide>
       <ion-label class="label">
         <h1>41%</h1>
         <p>Inside humidity</p>
       </ion-label>
-    </ion-slide>
-    <ion-slide>
+    </ng-template>
+    <ng-template swiperSlide>
       <ion-label class="label">
         <h1>61%</h1>
         <p>Outside humidity</p>
       </ion-label>
-    </ion-slide>
-    <ion-slide>
+    </ng-template>
+    <ng-template swiperSlide>
       <ion-label class="label">
         <h1>5.1</h1>
         <p>Outside temperature</p>
       </ion-label>
-    </ion-slide>
-  </ion-slides>
+    </ng-template>
+  </swiper>
 
   <ion-grid class="footer">
     <ion-row>
@@ -118,9 +118,9 @@
   </ion-grid>
 
   <ng-container *ngIf="vm$ | async as vm">
-    <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsModes" [ngModel]="vm.ui.name"
+    <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsModes" [ngModel]="ircSelectedMode"
       interface="action-sheet" #modes (ionChange)='setMode(vm, $event)' hidden="true">
-      <ion-select-option *ngFor="let item of irc_mode" [value]="item.name" translate>{{item.name}}</ion-select-option>
+      <ion-select-option *ngFor="let item of ircModes" [value]="item.name" translate>{{item.name}}</ion-select-option>
     </ion-select>
     <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsPreset"
       [ngModel]="vm.ui.status.text" interface="action-sheet" #presets (ionChange)='setPreset(vm, $event)' hidden="true">
