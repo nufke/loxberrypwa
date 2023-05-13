@@ -85,6 +85,7 @@ export interface IRCVM {
     category: string;
     temp_target: number,
     temp_actual: number,
+    temp_unit: string,
     mode_list: RadioListItem[];
     mode: number;
     preset_list: RadioListItem[];

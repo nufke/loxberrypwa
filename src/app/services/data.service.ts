@@ -24,8 +24,8 @@ export class DataService extends Store<AppState> {
 
   putSettingsInStore(settings: Settings) {
     this.setState({
-      settings: settings}
-    );
+      settings: settings
+    });
   }
 
   flushControlsInStore(): void {

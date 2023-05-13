@@ -120,7 +120,7 @@
     <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsPreset"
       [ngModel]="vm.ui.status.text" interface="action-sheet" #presets (ionChange)='setPreset(vm, $event)' hidden="true">
       <ion-select-option *ngFor="let item of vm.ui.preset_list" [value]="item.name"
-        translate>{{item.name}}</ion-select-option>
+        >{{(item.name| translate)}} ({{item.value}}{{vm.ui.temp_unit}})</ion-select-option>
     </ion-select>
   </ng-container>
 

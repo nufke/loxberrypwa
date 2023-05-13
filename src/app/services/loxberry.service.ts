@@ -24,8 +24,7 @@ export class LoxBerryService
   constructor(
     private mqttService: MqttService,
     public translate: TranslateService,
-    private dataService: DataService)
-  {
+    private dataService: DataService) {
     this.initService();
 
     this.mqttService.state.subscribe((s: MqttConnectionState) => {
@@ -42,15 +41,15 @@ export class LoxBerryService
   }
 
   private initService() {
-    this.dataService.settings$.subscribe( settings => {
+    this.dataService.settings$.subscribe(settings => {
       // only connect if all mqtt configuration options are valid
       if (settings
-          && settings.mqtt
-          && settings.mqtt.username
-          && settings.mqtt.password
-          && settings.mqtt.hostname
-          && settings.mqtt.port
-          && settings.mqtt.topic) {
+        && settings.mqtt
+        && settings.mqtt.username
+        && settings.mqtt.password
+        && settings.mqtt.hostname
+        && settings.mqtt.port
+        && settings.mqtt.topic) {
         this.loxberryMqttAppTopic = settings.mqtt.topic;
         this.connectToMqtt(settings);
       }
@@ -60,16 +59,16 @@ export class LoxBerryService
   private connectToMqtt(settings: Settings) {
     console.log('Connecting to LoxBerry MQTT Broker...');
     this.mqttService.connect(
-    {
-      username: settings.mqtt.username,
-      password: settings.mqtt.password,
-      hostname: settings.mqtt.hostname,
-      port: settings.mqtt.port,
-      keepalive: 5,          // Keep alive 5s
-      connectTimeout: 5000,  // Timeout period 5s
-      reconnectPeriod: 5000, // Reconnect period 5s
-      protocol: 'wss',
-    });
+      {
+        username: settings.mqtt.username,
+        password: settings.mqtt.password,
+        hostname: settings.mqtt.hostname,
+        port: settings.mqtt.port,
+        keepalive: 5,          // Keep alive 5s
+        connectTimeout: 5000,  // Timeout period 5s
+        reconnectPeriod: 5000, // Reconnect period 5s
+        protocol: 'wss',
+      });
   }
 
   private registerStructureTopic() {
@@ -82,33 +81,7 @@ export class LoxBerryService
           this.dataService.flushControlsInStore();
         else
           this.processStructure(JSON.parse(msg));
-    });
-
-  }
-
-  // TODO keep mqtt field in structure (do not alter it)
-  private processControl(control: Control, name: string) {
-    Object.keys(control).forEach(key => {
-       if (typeof control[key] === 'object' && control[key] !== null) {
-         this.processControl(control[key], name + '/' + key);
-         if (control[key].mqtt) control[key] = ""; // remove mqtt object
-       }
-       else {
-         if (key === 'mqtt') {
-            this.mqttTopicMapping[control[key]] = name.replace(this.loxberryMqttAppTopic + '/', '');
-            this.registerTopicPrefix(control[key]);
-          }
-       }
-    });
-    return control;
-  }
-
-  private registerTopicPrefix(value: string) {
-    let prefix = value.split('/')[0];
-    if (!this.mqttPrefixList.find( item => { return item === prefix })) {
-      this.mqttPrefixList.push(prefix);
-      console.log('Registered topic prefix: ', prefix);
-    }
+      });
   }
 
   // TODO: only items will be added, not removed
@@ -125,16 +98,41 @@ export class LoxBerryService
     this.registerTopics();
   }
 
-  private registerTopics() {
-    MqttTopics.forEach( topicName => {
-      let fullTopicName = this.loxberryMqttAppTopic + '/+/+' + topicName;
-      if (this.registeredTopics.includes(fullTopicName)) {
-        console.log("Topic already exists and ignored:", fullTopicName );
+  // TODO keep mqtt field in structure (do not alter it)
+  private processControl(control: Control, name: string) {
+    Object.keys(control).forEach(key => {
+      if (typeof control[key] === 'object' && control[key] !== null) {
+        this.processControl(control[key], name + '/' + key);
+        if (control[key].mqtt) control[key] = ""; // remove mqtt object
       }
       else {
-        console.log("Register topic name:", fullTopicName );
+        if (key === 'mqtt') {
+          this.mqttTopicMapping[control[key]] = name.replace(this.loxberryMqttAppTopic + '/', '');
+          this.registerTopicPrefix(control[key]);
+        }
+      }
+    });
+    return control;
+  }
+
+  private registerTopicPrefix(value: string) {
+    let prefix = value.split('/')[0];
+    if (!this.mqttPrefixList.find(item => { return item === prefix })) {
+      this.mqttPrefixList.push(prefix);
+      console.log('Registered topic prefix: ', prefix);
+    }
+  }
+
+  private registerTopics() {
+    MqttTopics.forEach(topicName => {
+      let fullTopicName = this.loxberryMqttAppTopic + '/+/+' + topicName;
+      if (this.registeredTopics.includes(fullTopicName)) {
+        console.log("Topic already exists and ignored:", fullTopicName);
+      }
+      else {
+        console.log("Register topic name:", fullTopicName);
         this.registeredTopics.push(fullTopicName);
-        this.mqttSubscription.push( this.mqttService.observe(fullTopicName).pipe(
+        this.mqttSubscription.push(this.mqttService.observe(fullTopicName).pipe(
           filter(items => items.length > 0),
           buffer(this.mqttService.observe(fullTopicName).pipe(debounceTime(10))), /* collect all transactions within 10ms */
         ).subscribe((items: IMqttMessage[]) => {
@@ -144,17 +142,17 @@ export class LoxBerryService
       }
     });
 
-    this.mqttPrefixList.forEach( prefix => {
+    this.mqttPrefixList.forEach(prefix => {
       let topicName = prefix + "/#";
       if (this.registeredTopics.includes(topicName)) {
-        console.log("Topic already exists and ignored:", topicName );
+        console.log("Topic already exists and ignored:", topicName);
       }
       else {
-        console.log("Register topic name:", topicName );
+        console.log("Register topic name:", topicName);
         this.registeredTopics.push(topicName);
-        this.mqttSubscription.push( this.mqttService.observe(topicName).pipe(
+        this.mqttSubscription.push(this.mqttService.observe(topicName).pipe(
           //tap( message => console.log('message', message.topic, message.payload.toString())),
-          map( message => ({...message, topic: this.mqttTopicMapping[message.topic]})),
+          map(message => ({ ...message, topic: this.mqttTopicMapping[message.topic] })),
           filter(items => items.length > 0),
           buffer(this.mqttService.observe(topicName).pipe(debounceTime(10))), /* collect all transactions within 10ms */
         ).subscribe((items: IMqttMessage[]) => {
@@ -167,7 +165,7 @@ export class LoxBerryService
 
   private unregisterTopics(): void {
     console.log('Unsubscribe from MQTT topics...');
-    this.mqttSubscription.forEach( (item) => { item.unsubscribe(); } );
+    this.mqttSubscription.forEach((item) => { item.unsubscribe(); });
     this.mqttSubscription = []; /* empty Subscriptions */
     this.registeredTopics = []; /* empty registered topics */
     this.mqttTopicMapping = []; /* empty mapping */

@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject,  } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map, shareReplay } from "rxjs/operators";
 
 interface SetStateCallback<T> {

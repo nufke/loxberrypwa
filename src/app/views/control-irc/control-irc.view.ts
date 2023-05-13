@@ -29,7 +29,7 @@ export class ControlIRCView
   viewType = View;
   vm$: Observable<IRCVM>;
 
-  ircModes = [
+  private ircModesDefaults = [
     { id: 0, name: 'Automatic' },
     { id: 1, name: 'Automatic (currently heating)' },
     { id: 2, name: 'Automatic (currently cooling)' },
@@ -39,22 +39,15 @@ export class ControlIRCView
     { id: 6, name: 'Manual cooling' }
   ];
 
-  private radioListHeating = [
-    { id: 0, name: 'Economy' },
-    { id: 1, name: 'Comfort heating' },
-    { id: 3, name: 'Empty house' },
-    { id: 4, name: 'Heat protection' },
-    { id: 5, name: 'Increased heat' },
-    { id: 6, name: 'Party' }
-  ];
-
-  private radioListCooling = [
-    { id: 0, name: 'Economy' },
-    { id: 2, name: 'Comfort cooling' },
-    { id: 3, name: 'Empty house' },
-    { id: 4, name: 'Heat protection' },
-    { id: 5, name: 'Increased heat' },
-    { id: 6, name: 'Party' }
+  private temperatureModesDefaults = [
+    { id: 0, name: 'Economy', value: null },
+    { id: 1, name: 'Comfort heating', value: null },
+    { id: 2, name: 'Comfort cooling', value: null },
+    { id: 3, name: 'Empty house', value: null },
+    { id: 4, name: 'Heat protection', value: null },
+    { id: 5, name: 'Increased heat', value: null },
+    { id: 6, name: 'Party', value: null },
+    { id: 7, name: 'Manual', value: null }
   ];
 
   selectOptionsPreset = {
@@ -100,43 +93,61 @@ export class ControlIRCView
     let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
     let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
 
+    let temperatureModes = [...this.temperatureModesDefaults];
+    let ircModes = [...this.ircModesDefaults];
+
     let temp = ['',''];
+    let mode = control.states.mode;
+    let heatCoolId = ((mode == 1) || (mode == 3) || (mode == 5)) ? 1 : 2; // heating=id:1, cooling=id:2
 
     if (control.states.temp_actual) {
       temp = sprintf("%.1f", control.states.temp_actual).split('.');
       temp[1] = '.' + temp[1];
     }
 
-    let idx = this.ircModes.findIndex(item => { return item.id == control.states.mode });
+    let isAbsoluteTemp = control.details.temperatures;
+
+    temperatureModes.forEach( (item, index) => {
+      if (isAbsoluteTemp[index] && !isAbsoluteTemp[index].isAbsolute) {
+        let sign = -1;
+        if (index == 5) sign = 1; // increased head should be addition
+        item.value = Number(control.states.temperatures[heatCoolId]) + sign * Number(control.states.temperatures[index]);
+      }
+      else {
+       item.value = Number(control.states.temperatures[index]);
+      }
+    })
+
+    let ircModeId = ircModes.findIndex(item => { return item.id == control.states.mode });
 
     let subcontrols = Object.keys(control.subcontrols);
     let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
 
-    let mode = control.states.mode;
-    let heating = ((mode == 1) || (mode == 3) || (mode == 5));
-
-    let preset_list = heating ? this.radioListHeating : this.radioListCooling;
-    let idxx = preset_list.findIndex( item => { return item.id == state } );
+    let removeIdx = temperatureModes.findIndex( item => item.id === (3-heatCoolId) );
+    temperatureModes.splice( removeIdx, 1 );
+    let presetList = temperatureModes;
+    let presentId = presetList.findIndex( item => item.id == state );
 
     const vm: IRCVM = {
       control: control,
       ui: {
-        name: this.ircModes[idx].name,
+        name: ircModes[ircModeId].name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
         temp_target: Number(control.states.temp_target),
         temp_actual: Number(control.states.temp_actual),
-        mode_list: this.ircModes,
-        mode: idx,
-        preset_list: preset_list,
-        preset: idxx,
+        temp_unit: '°C', // TODO make configurable
+        mode_list: ircModes,
+        mode: ircModeId,
+        preset_list: presetList,
+        preset: presentId,
         icon: {
           temp_base: temp[0],
           temp_dec: temp[1]
         },
         status: {
-          text: preset_list[idxx].name, // translate in scss to enable radio selection highlighting
-          color: (idxx > 0) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+          text: presetList[presentId].name, // translate in scss to enable radio selection highlighting
+          color: (presentId > 0) ? "#69c350" : "#9d9e9e" // TODO select from color palette
         }
       }
     };

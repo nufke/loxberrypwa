@@ -14,7 +14,7 @@ export interface AppState {
 /**
  * Properties for Settings
  */
- export interface Settings {
+export interface Settings {
   app?: AppSettings;
   mqtt?: MqttSettings;
 }
@@ -22,7 +22,7 @@ export interface AppState {
 /**
  * Properties for App Settings
  */
- export interface AppSettings {
+export interface AppSettings {
   dark_theme: boolean;
   language: string;
 }
@@ -30,7 +30,7 @@ export interface AppState {
 /**
  * Properties for MQTT Settings
  */
- export interface MqttSettings {
+export interface MqttSettings {
   hostname: string;
   port: number;
   username: string;
@@ -41,7 +41,7 @@ export interface AppState {
 /**
  * Properties for App operational mode
  */
- export interface Mode {
+export interface Mode {
   connected: boolean
 }
 
