@@ -30,9 +30,11 @@ export class DataService extends Store<AppState> {
 
   flushControlsInStore(): void {
     this.setState({
-      controls: {},
-      categories: {},
-      rooms: {},
+      structure: {
+        controls: {},
+        categories: {},
+        rooms: {}
+      }
     });
   }
 
@@ -41,17 +43,17 @@ export class DataService extends Store<AppState> {
 
       Object.keys(obj.controls).forEach(key => {
         let control = obj.controls[key];
-        state.controls[this.getId(control)] = control;
+        state.structure.controls[this.getId(control)] = control;
       });
 
       Object.keys(obj.categories).forEach(key => {
         let category = obj.categories[key];
-        state.categories[this.getId(category)] = category;
+        state.structure.categories[this.getId(category)] = category;
       });
 
       Object.keys(obj.rooms).forEach(key => {
         let room = obj.rooms[key];
-        state.rooms[this.getId(room)] = room;
+        state.structure.rooms[this.getId(room)] = room;
       });
 
       return ({ ...state })
@@ -65,19 +67,19 @@ export class DataService extends Store<AppState> {
         if (!message.topic) return;
         let topics = message.topic.split('/');
         let value = message.payload.toString();
-        //console.log('updateElementInStore', message.topic, value);
+        console.log('updateElementInStore', message.topic, value);
         let id = topics[0] + '/' + topics[1];
 
-        if (state.controls[id]) {
-          this.stateUpdate(state.controls[id], id, message.topic, value);
+        if (state.structure.controls[id]) {
+          this.stateUpdate(state.structure.controls[id], id, message.topic, value);
         }
 
-        if (state.categories[id]) {
-          this.stateUpdate(state.categories[id], id, message.topic, value);
+        if (state.structure.categories[id]) {
+          this.stateUpdate(state.structure.categories[id], id, message.topic, value);
         }
 
-        if (state.rooms[id]) {
-          this.stateUpdate(state.rooms[id], id, message.topic, value);
+        if (state.structure.rooms[id]) {
+          this.stateUpdate(state.structure.rooms[id], id, message.topic, value);
         }
       });
       return ({ ...state });
@@ -109,7 +111,7 @@ export class DataService extends Store<AppState> {
   }
 
   private getId(obj: Control | Category | Room): string {
-    return obj.hwid + '/' + obj.uuid;
+    return obj.serialNr + '/' + obj.uuid;
   }
 
 }

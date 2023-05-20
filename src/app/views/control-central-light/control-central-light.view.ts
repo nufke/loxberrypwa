@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, Room, Category } from '../../interfaces/data.model';
+import { Control, SubControl, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { RadioVM, RadioListItem } from '../../interfaces/view.model';
@@ -55,7 +55,7 @@ export class ControlCentralLightView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
       this.controlService.controls$,
       this.controlService.categories$,
       this.controlService.rooms$,
@@ -67,8 +67,8 @@ export class ControlCentralLightView
   }
 
   private updateVM(control: Control, controls: Control[], categories: Category[], rooms: Room[]): ListVM {
-    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+    let room: Room = rooms.find(room => room.uuid === control.room && room.serialNr === control.serialNr);
+    let category: Category = categories.find(category => category.uuid === control.category && category.serialNr === control.serialNr);
 
     let controlsList = control.details.controls.map(control => control.uuid);
     let filteredControls = controls.filter(controls => controlsList.indexOf(controls.uuid) > -1)
@@ -78,13 +78,13 @@ export class ControlCentralLightView
     let lightOn = false; // default off;
 
     filteredControls.forEach(control => {
-      if (control.states.active_moods[0])
-       if (control.states.active_moods[0] === 778) numLightsOn--;
+      if (control.states.activeMoods[0])
+       if (control.states.activeMoods[0] === 778) numLightsOn--;
     });
 
     /* sort using roon names, since this is used for the CentralLightController */
     let sortedControls = filteredControls.sort((a, b) => (
-      this.getRoomName(rooms, a.hwid, a.room).localeCompare(this.getRoomName(rooms, b.hwid, b.room))));
+      this.getRoomName(rooms, a.serialNr, a.room).localeCompare(this.getRoomName(rooms, b.serialNr, b.room))));
 
     switch (numLightsOn) {
       case 0:
@@ -126,8 +126,8 @@ export class ControlCentralLightView
     return vm;
   }
 
-  getRoomName(rooms: Room[], hwid: string, uuid:string): string{
-    return rooms.find(room => room.uuid === uuid && room.hwid === hwid).name;
+  getRoomName(rooms: Room[], serialNr: string, uuid: string): string{
+    return rooms.find(room => room.uuid === uuid && room.serialNr === serialNr).name;
   }
 
   updateSegment() {

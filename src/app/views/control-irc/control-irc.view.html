@@ -1,11 +1,11 @@
 <ng-container *ngIf="view===viewType.LIST_ITEM">
-  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.serialNr}}/{{vm.control.uuid}}">
     <ion-card-content class="card-content">
       <ion-item class="item">
         <div class="icon text-icon">
           <div>
-            <span style="font-size: 22px;">{{vm.ui.icon.temp_base}}</span>
-            <span style="font-size: 14px;">{{vm.ui.icon.temp_dec}}</span>
+            <span style="font-size: 22px;">{{vm.ui.icon.tempBase}}</span>
+            <span style="font-size: 14px;">{{vm.ui.icon.tempDec}}</span>
           </div>
         </div>
         <ion-label class="label">
@@ -19,13 +19,13 @@
 </ng-container>
 
 <ng-container *ngIf="view===viewType.FAVORITE">
-  <ion-card class="card card-fav" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+  <ion-card class="card card-fav" *ngIf="vm$ | async as vm" routerLink="{{vm.control.serialNr}}/{{vm.control.uuid}}">
     <ion-card-header class="card-header">
       <ion-item class="item">
         <div class="icon text-icon">
           <div>
-            <span style="font-size: 22px;">{{vm.ui.icon.temp_base}}</span>
-            <span style="font-size: 14px;">{{vm.ui.icon.temp_dec}}</span>
+            <span style="font-size: 22px;">{{vm.ui.icon.tempBase}}</span>
+            <span style="font-size: 14px;">{{vm.ui.icon.tempDec}}</span>
           </div>
         </div>
       </ion-item>
@@ -115,12 +115,12 @@
   <ng-container *ngIf="vm$ | async as vm">
     <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsModes" [ngModel]="vm.ui.name"
       interface="action-sheet" #modes (ionChange)='setMode(vm, $event)' hidden="true">
-      <ion-select-option *ngFor="let item of vm.ui.mode_list" [value]="item.name" translate>{{item.name}}</ion-select-option>
+      <ion-select-option *ngFor="let item of vm.ui.modeList" [value]="item.name" translate>{{item.name}}</ion-select-option>
     </ion-select>
     <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="selectOptionsPreset"
       [ngModel]="vm.ui.status.text" interface="action-sheet" #presets (ionChange)='setPreset(vm, $event)' hidden="true">
-      <ion-select-option *ngFor="let item of vm.ui.preset_list" [value]="item.name"
-        >{{(item.name| translate)}} ({{item.value}}{{vm.ui.temp_unit}})</ion-select-option>
+      <ion-select-option *ngFor="let item of vm.ui.presetList" [value]="item.name"
+        >{{(item.name| translate)}} ({{item.value}}{{vm.ui.tempUnit}})</ion-select-option>
     </ion-select>
   </ng-container>
 

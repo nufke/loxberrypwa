@@ -1,5 +1,5 @@
 <ng-container *ngIf="view===viewType.LIST_ITEM">
-  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.serialNr}}/{{vm.control.uuid}}">
     <ion-card-content class="card-content">
       <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
@@ -19,7 +19,7 @@
 </ng-container>
 
 <ng-container *ngIf="view===viewType.FAVORITE">
-  <ion-card class="card card-fav" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+  <ion-card class="card card-fav" *ngIf="vm$ | async as vm" routerLink="{{vm.control.serialNr}}/{{vm.control.uuid}}">
     <ion-card-header class="card-header">
       <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>

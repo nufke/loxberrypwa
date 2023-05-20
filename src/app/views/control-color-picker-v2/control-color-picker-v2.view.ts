@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol } from '../../interfaces/data.model';
+import { Control, SubControl } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { ColorPickerVM } from '../../interfaces/view.model';
@@ -17,7 +17,7 @@ export class ControlColorPickerV2View
   implements OnInit, OnDestroy {
 
   @Input() control: Control;
-  @Input() subcontrol: Subcontrol;
+  @Input() subControl: SubControl;
   @Input() view: View;
 
   vm$: Observable<ColorPickerVM>;
@@ -38,27 +38,27 @@ export class ControlColorPickerV2View
   }
 
   private initVM(): void {
-    if ((this.subcontrol == undefined)||(this.control == undefined)) {
+    if ((this.subControl == undefined)||(this.control == undefined)) {
       console.error('Component \'control-color-picker-v2\' not available for rendering.');
       return;
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
-      this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
+      this.controlService.getSubControl$(this.control.serialNr, this.control.uuid, this.subControl.uuid),
     ]).pipe(
-      map(([control, subcontrol]) => {
-        return this.updateVM(control, subcontrol);
+      map(([control, subControl]) => {
+        return this.updateVM(control, subControl);
       })
     );
   }
 
-  private updateVM(control: Control, subcontrol: Subcontrol): ColorPickerVM {
-    let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+  private updateVM(control: Control, subControl: SubControl): ColorPickerVM {
+    let hsv = subControl.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
     let rgb = Utils.hsv2rgb(Number(hsv[1]), Number(hsv[2]), 100); // use maximum luninance (100%)
     const vm: ColorPickerVM = {
       control: control,
-      subcontrol: subcontrol,
+      subControl: subControl,
       rgb: {r: rgb[0], g: rgb[1], b: rgb[2]},
       position: Number(hsv[3]),
     };

@@ -30,12 +30,8 @@ export class SettingsPage implements OnInit {
       mqtt_port: ['', Validators.required],
       mqtt_username: ['', Validators.required],
       mqtt_password: ['', Validators.required],
-      mqtt_topic: ['', Validators.required]
-    });
-
-    this.storageService.settings$.subscribe(settings => {
-      if (settings && settings.mqtt)
-        this.updateForm(settings.mqtt);
+      mqtt_app_topic: ['', Validators.required],
+      mqtt_ms_topic: ['', Validators.required]
     });
   }
 
@@ -44,25 +40,30 @@ export class SettingsPage implements OnInit {
     // this.action = this.route.snapshot.paramMap.get('action');
     // if (this.action === 'logout') this.logout();
 
-    this.updateForm(this.mqttSettingsForm);
+    this.storageService.settings$.subscribe(settings => {
+      if (settings && settings.mqtt)
+        this.updateForm(settings.mqtt);
+    });
   }
 
   async updateForm(settings: MqttSettings) {
     if (settings) {
-      this.mqttSettingsForm.hostname = settings.hostname;
-      this.mqttSettingsForm.port = settings.port;
-      this.mqttSettingsForm.username = settings.username;
-      this.mqttSettingsForm.password = settings.password;
-      this.mqttSettingsForm.topic = settings.topic;
+      if (settings.hostname) this.mqttSettingsForm.hostname = settings.hostname;
+      if (settings.port) this.mqttSettingsForm.port = settings.port;
+      if (settings.username) this.mqttSettingsForm.username = settings.username;
+      if (settings.password) this.mqttSettingsForm.password = settings.password;
+      if (settings.app_topic) this.mqttSettingsForm.app_topic = settings.app_topic;
+      if (settings.ms_topic) this.mqttSettingsForm.ms_topic = settings.ms_topic;
 
       if (this.mqttForm) {
         this.mqttForm.setValue({
-          'mqtt_hostname': settings.hostname,
-          'mqtt_port': settings.port,
-          'mqtt_username': settings.username,
-          'mqtt_password': settings.password,
-          'mqtt_topic': settings.topic
-        })
+          'mqtt_hostname': this.mqttSettingsForm.hostname,
+          'mqtt_port': this.mqttSettingsForm.port,
+          'mqtt_username': this.mqttSettingsForm.username,
+          'mqtt_password': this.mqttSettingsForm.password,
+          'mqtt_app_topic': this.mqttSettingsForm.app_topic,
+          'mqtt_ms_topic': this.mqttSettingsForm.ms_topic
+        });
       }
     }
   }
@@ -83,8 +84,8 @@ export class SettingsPage implements OnInit {
         port: mqttSettings.port,
         username: mqttSettings.username,
         password: mqttSettings.password,
-        topic: mqttSettings.topic,
-
+        app_topic: mqttSettings.app_topic,
+        ms_topic: mqttSettings.ms_topic
       }
     });
 
@@ -103,7 +104,8 @@ export class SettingsPage implements OnInit {
       port: null,
       username: '',
       password: '',
-      topic: ''
+      app_topic: '',
+      ms_topic: ''
     });
     this.storageService.cleanStorage();
   }
@@ -126,7 +128,8 @@ export class SettingsPage implements OnInit {
       port: port,
       username: mqttForm.value.mqtt_username,
       password: mqttForm.value.mqtt_password,
-      topic: mqttForm.value.mqtt_topic
+      app_topic: mqttForm.value.mqtt_app_topic,
+      ms_topic: mqttForm.value.mqtt_ms_topic
     });
   }
 

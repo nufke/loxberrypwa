@@ -3,7 +3,7 @@ import { Subscription, } from 'rxjs';
 import { tap, map, filter, buffer, debounceTime } from "rxjs/operators";
 import { IMqttMessage, MqttService, MqttConnectionState } from 'ngx-mqtt';
 import { TranslateService } from '@ngx-translate/core';
-import { Control, Subcontrol, Settings } from '../interfaces/data.model'
+import { Control, Structure, SubControl, Settings } from '../interfaces/data.model'
 import { MqttTopics } from '../interfaces/mqtt.api'
 import { DataService } from './data.service';
 
@@ -20,6 +20,7 @@ export class LoxBerryService
 
   private loxberryMqttConnected: boolean = false;
   private loxberryMqttAppTopic: string = '';
+  private loxberryMqttMsTopic: string = '';
 
   constructor(
     private mqttService: MqttService,
@@ -49,8 +50,10 @@ export class LoxBerryService
         && settings.mqtt.password
         && settings.mqtt.hostname
         && settings.mqtt.port
-        && settings.mqtt.topic) {
-        this.loxberryMqttAppTopic = settings.mqtt.topic;
+        && settings.mqtt.app_topic
+        && settings.mqtt.ms_topic) {
+        this.loxberryMqttAppTopic = settings.mqtt.app_topic;
+        this.loxberryMqttMsTopic = settings.mqtt.ms_topic;
         this.connectToMqtt(settings);
       }
     });
@@ -71,48 +74,156 @@ export class LoxBerryService
       });
   }
 
-  private registerStructureTopic() {
-    console.log('Register Structure...');
-    let topic = this.loxberryMqttAppTopic + '/structure';
+  private registerStructureTopic() { // TODO: register more than 1
+    console.log('Subscribe to structure...');
+    let topic = this.loxberryMqttMsTopic + '/structure';
     this.mqttSubscription[0] = this.mqttService.observe(topic)
       .subscribe((message: IMqttMessage) => {
         let msg = message.payload.toString();
-        if (msg.length == 0 )
+        if (msg.length == 0)
           this.dataService.flushControlsInStore();
-        else
-          this.processStructure(JSON.parse(msg));
+        else {
+          this.processStructure(JSON.parse(msg), this.loxberryMqttMsTopic);
+        }
       });
   }
 
   // TODO: only items will be added, not removed
-  private processStructure(obj: any) {
+  private processStructure(obj: any, mqttTopic: string) {
+    let structure: Structure = {
+      categories: {},
+      rooms: {},
+      controls: {}
+    };
+    let iconName = '';
+    let iconPath = 'assets/icons/svg'; // TODO move to configuration
+    let deviceSerialNr = obj.msInfo.serialNr;
+
     if (!obj) return;
+    console.log('Processing received structure...');
+
+    Object.keys(obj.cats).forEach(key => {
+      let category = obj.cats[key];
+      let catId = deviceSerialNr + '/' + category.uuid;
+      structure.categories[catId] =
+      {
+        ...category,
+        serialNr: deviceSerialNr,
+        icon: { href: iconPath + '/' + category.image },
+        isVisible: true,
+        order: [
+          category.name.toLowerCase().charCodeAt(0) - 86, /* order as listitem (1=highest) */
+          11 - category.defaultRating                     /* order as favorite (1=highest) */
+        ],
+      };
+    });
+
+    Object.keys(obj.rooms).forEach(key => {
+      let room = obj.rooms[key];
+      let roomId = deviceSerialNr + '/' + room.uuid;
+      structure.rooms[roomId] =
+      {
+        ...room,
+        serialNr: deviceSerialNr,
+        icon: {
+          href: iconPath + '/' + room.image,
+          color: room.color
+        },
+        isVisible: true,
+        order: [
+          room.name.toLowerCase().charCodeAt(0) - 86, /* order as listitem (1=highest) */
+          11 - room.defaultRating                     /* order as favorite (1=highest) */
+        ],
+      };
+    });
 
     Object.keys(obj.controls).forEach(key => {
       let control = obj.controls[key];
-      let name = this.loxberryMqttAppTopic + '/' + control.hwid + '/' + control.uuid;
-      obj.controls[key] = this.processControl(control, name); // TODO merge with updateStructureInStore
+      let controlId = deviceSerialNr + '/' + control.uuidAction;
+      if (control.defaultIcon && (control.defaultIcon.length > 0)) {
+        iconName = iconPath + '/' + control.defaultIcon;
+        if (iconName.search(".svg") == -1) // ext not found
+          iconName = iconName + ".svg";
+      }
+      else {
+        if (control.type === 'Daytimer') {
+          iconName = iconPath + '/IconsFilled/daytimer.svg'; // TODO missing shipped lib?
+        }
+        else {// take icon from category
+          iconName = Object.values(structure.categories).find(element => element.uuid === control.cat).icon.href;
+        }
+      }
+
+      structure.controls[controlId] =
+      {
+        ...control,
+        serialNr: deviceSerialNr,
+        uuid: control.uuidAction,
+        mqtt: mqttTopic + '/' + control.uuidAction + '/cmd',
+        icon: { href: iconName },
+        category: control.cat,
+        isFavorite: (control.defaultRating > 0),
+        isVisible: true,
+        states: this.processStates(control, mqttTopic, deviceSerialNr),
+        subControls: this.processSubControls(control.subControls, mqttTopic, deviceSerialNr),
+        order: [
+          control.name.toLowerCase().charCodeAt(0) - 86, /* order as listitem (1=highest) */
+          control.name.toLowerCase().charCodeAt(0) - 86, /* order as favorite (1=highest) */
+          control.isFavorite ? (11 - control.defaultRating) : 0 /* order for homepage (1=highest) */
+        ]
+      };
     });
 
-    this.dataService.updateStructureInStore(obj);
+    this.dataService.updateStructureInStore(structure);
     this.registerTopics();
   }
 
-  // TODO keep mqtt field in structure (do not alter it)
-  private processControl(control: Control, name: string) {
-    Object.keys(control).forEach(key => {
-      if (typeof control[key] === 'object' && control[key] !== null) {
-        this.processControl(control[key], name + '/' + key);
-        if (control[key].mqtt) control[key] = ""; // remove mqtt object
-      }
-      else {
-        if (key === 'mqtt') {
-          this.mqttTopicMapping[control[key]] = name.replace(this.loxberryMqttAppTopic + '/', '');
-          this.registerTopicPrefix(control[key]);
+  processSubControls(obj: any, mqttTopic: string, serialNr: string) {
+    let subControls = {};
+    if (obj) {
+      Object.keys(obj).forEach(key => {
+        let subControl = obj[key];
+        let subId = serialNr + '/' + subControl.uuidAction;
+        subControls[subId] =
+        {
+          ...subControl,
+          uuid: subControl.uuidAction,
+          isVisible: true,
+          states: this.processStates(subControl, mqttTopic, serialNr)
+        };
+      });
+    }
+    return subControls;
+  }
+
+  processStates(obj: any, mqttTopic: string, serialNr: string) {
+    let nstates = {};
+    if (obj && obj.states) {
+      Object.keys(obj.states).forEach(key => {
+        let state = obj.states[key];
+        if (Array.isArray(state)) { // handle array,
+          let list = [];
+          state.forEach( (element, index) => {
+            list.push(''); // empty item
+            let name = mqttTopic + '/' + element;
+            let name2 = serialNr + '/' + obj.uuidAction + '/states/' + key + '/' + index;
+            this.mqttTopicMapping[name] = name2;
+            //console.log('register state1:', name, name2);
+            this.registerTopicPrefix(name);
+          });
+          nstates[key] = list;
         }
-      }
-    });
-    return control;
+        else {
+          nstates[key] = ''; // empty item
+          let name = mqttTopic + '/' + obj.states[key];
+          let name2 = serialNr + '/' + obj.uuidAction + '/states/' + key;
+          this.mqttTopicMapping[name] = name2;
+          //console.log('register state2:', name, name2);
+          this.registerTopicPrefix(name);
+        }
+      });
+    }
+    return nstates;
   }
 
   private registerTopicPrefix(value: string) {
@@ -175,8 +286,8 @@ export class LoxBerryService
     this.unregisterTopics();
   }
 
-  sendMessage(obj: Control | Subcontrol, value: string) {
-    let topic = obj.mqtt_cmd;
+  sendMessage(obj: Control | SubControl, value: string) {
+    let topic = obj.mqtt;
 
     if (!topic) {
       console.log('Topic ' + topic + ' not found. Nothing published.');

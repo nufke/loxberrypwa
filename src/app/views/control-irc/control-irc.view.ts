@@ -79,7 +79,7 @@ export class ControlIRCView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(
@@ -90,8 +90,8 @@ export class ControlIRCView
   }
 
   private updateVM(control: Control, categories: Category[], rooms: Room[]): IRCVM {
-    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+    let room: Room = rooms.find(room => room.uuid === control.room && room.serialNr === control.serialNr);
+    let category: Category = categories.find(category => category.uuid === control.category && category.serialNr === control.serialNr);
 
     let temperatureModes = [...this.temperatureModesDefaults];
     let ircModes = [...this.ircModesDefaults];
@@ -100,8 +100,8 @@ export class ControlIRCView
     let mode = control.states.mode;
     let heatCoolId = ((mode == 1) || (mode == 3) || (mode == 5)) ? 1 : 2; // heating=id:1, cooling=id:2
 
-    if (control.states.temp_actual) {
-      temp = sprintf("%.1f", control.states.temp_actual).split('.');
+    if (control.states.tempActual) {
+      temp = sprintf("%.1f", control.states.tempActual).split('.');
       temp[1] = '.' + temp[1];
     }
 
@@ -120,8 +120,8 @@ export class ControlIRCView
 
     let ircModeId = ircModes.findIndex(item => { return item.id == control.states.mode });
 
-    let subcontrols = Object.keys(control.subcontrols);
-    let state = control.subcontrols[subcontrols[0]].states.value; // TODO read states from both subcontrols?
+    let subControls = Object.keys(control.subControls);
+    let state = control.subControls[subControls[0]].states.value; // TODO read states from both subControls?
 
     let removeIdx = temperatureModes.findIndex( item => item.id === (3-heatCoolId) );
     temperatureModes.splice( removeIdx, 1 );
@@ -134,16 +134,16 @@ export class ControlIRCView
         name: ircModes[ircModeId].name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        temp_target: Number(control.states.temp_target),
-        temp_actual: Number(control.states.temp_actual),
-        temp_unit: '°C', // TODO make configurable
-        mode_list: ircModes,
+        tempTarget: Number(control.states.tempTarget),
+        tempActual: Number(control.states.tempActual),
+        tempUnit: '°C', // TODO make configurable
+        modeList: ircModes,
         mode: ircModeId,
-        preset_list: presetList,
+        presetList: presetList,
         preset: presentId,
         icon: {
-          temp_base: temp[0],
-          temp_dec: temp[1]
+          tempBase: temp[0],
+          tempDec: temp[1]
         },
         status: {
           text: presetList[presentId].name, // translate in scss to enable radio selection highlighting

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { Control, Subcontrol, Category, Room } from '../interfaces/data.model';
+import { Control, SubControl, Category, Room } from '../interfaces/data.model';
 import { DataService } from './data.service';
 import { LoxBerryService } from '../services/loxberry.service';
 
@@ -13,37 +13,37 @@ export class ControlService {
   }
 
   get controls$(): Observable<Control[]> {
-    return this.dataService.select$((state) => Object.values(state.controls)).pipe(
+    return this.dataService.select$((state) => Object.values(state.structure.controls)).pipe(
       shareReplay()
     );
   }
 
   get categories$(): Observable<Category[]> {
-    return this.dataService.select$((state) => Object.values(state.categories)).pipe(
+    return this.dataService.select$((state) => Object.values(state.structure.categories)).pipe(
       shareReplay()
     );
   }
 
   get rooms$(): Observable<Room[]> {
-    return this.dataService.select$((state) => Object.values(state.rooms)).pipe(
+    return this.dataService.select$((state) => Object.values(state.structure.rooms)).pipe(
       shareReplay()
     );
   }
 
-  getControl$(hwid: string, uuid: string): Observable<Control> {
-    return this.dataService.select$((state) => state.controls[hwid + '/' + uuid]).pipe(
+  getControl$(serialNr: string, uuid: string): Observable<Control> {
+    return this.dataService.select$((state) => state.structure.controls[serialNr + '/' + uuid]).pipe(
       shareReplay()
     );
   }
 
-  getSubcontrol$(hwid: string, uuid: string, subcontrol_uuid: string): Observable<Subcontrol> {
+  getSubControl$(serialNr: string, uuid: string, subControlUuid: string): Observable<SubControl> {
     return this.dataService.select$((state) =>
-      state.controls[hwid + '/' + uuid].subcontrols[hwid + '/' + subcontrol_uuid]).pipe(
+      state.structure.controls[serialNr + '/' + uuid].subControls[serialNr + '/' + subControlUuid]).pipe(
         shareReplay()
       );
   }
 
-  updateControl(control: Control | Subcontrol, msg: string): void {
+  updateControl(control: Control | SubControl, msg: string): void {
     this.loxberryService.sendMessage(control, msg);
   }
 

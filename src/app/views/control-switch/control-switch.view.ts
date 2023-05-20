@@ -21,7 +21,7 @@ export class ControlSwitchView
   buttonType = ButtonAction;
   viewType = View;
   vm$: Observable<RadioVM>;
-  radio_list: RadioListItem[];
+  radioList: RadioListItem[];
 
   constructor(
     public translate: TranslateService,
@@ -42,7 +42,7 @@ export class ControlSwitchView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(
@@ -53,13 +53,13 @@ export class ControlSwitchView
   }
 
   private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
-    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+    let room: Room = rooms.find(room => room.uuid === control.room && room.serialNr === control.serialNr);
+    let category: Category = categories.find(category => category.uuid === control.category && category.serialNr === control.serialNr);
     let switchstate = (control.states.active === "1");
 
-    /* only update radio_list if we have new entries, since it might cause GUI interruptions */
-    if (!this.radio_list) {
-      this.radio_list = [
+    /* only update radioList if we have new entries, since it might cause GUI interruptions */
+    if (!this.radioList) {
+      this.radioList = [
         { id: 0, name: this.translate.instant('Off')},
         { id: 1, name: this.translate.instant('On')}
       ];
@@ -77,8 +77,8 @@ export class ControlSwitchView
         name: control.name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        radio_list: this.radio_list,
-        selected_id: switchstate ? 1 : 0,
+        radioList: this.radioList,
+        selectedId: switchstate ? 1 : 0,
         status: {
           text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
           color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
@@ -104,7 +104,7 @@ export class ControlSwitchView
   radioChange(vm: RadioVM, $event) {
     $event.preventDefault();
     $event.stopPropagation();
-    let idx = vm.ui.radio_list.findIndex( item => item.name === $event.detail.value);
+    let idx = vm.ui.radioList.findIndex( item => item.name === $event.detail.value);
     if (idx) {
       this.controlService.updateControl(vm.control, 'On');
     }

@@ -150,8 +150,8 @@ export class ElementThermostatView
   }
 
   ngOnChanges() {
-    this.props.targetTemperature = this.irc_vm.ui.temp_target;
-    this.props.ambientTemperature = this.irc_vm.ui.temp_actual;
+    this.props.targetTemperature = this.irc_vm.ui.tempTarget;
+    this.props.ambientTemperature = this.irc_vm.ui.tempActual;
   }
 
   ngOnInit() {

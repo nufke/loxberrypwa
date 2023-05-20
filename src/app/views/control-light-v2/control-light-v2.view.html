@@ -1,5 +1,5 @@
 <ng-container *ngIf="view===viewType.LIST_ITEM">
-  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+  <ion-card class="card" *ngIf="vm$ | async as vm" routerLink="{{vm.control.serialNr}}/{{vm.control.uuid}}">
     <ion-card-content class="card-content">
       <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
@@ -19,7 +19,7 @@
 </ng-container>
 
 <ng-container *ngIf="view===viewType.FAVORITE">
-  <ion-card class="card card-fav" *ngIf="vm$ | async as vm" routerLink="{{vm.control.hwid}}/{{vm.control.uuid}}">
+  <ion-card class="card card-fav" *ngIf="vm$ | async as vm" routerLink="{{vm.control.serialNr}}/{{vm.control.uuid}}">
     <ion-card-header class="card-header">
       <ion-item class="item">
         <ion-icon class="icon" color="{{vm.control.icon.color}}" src="{{vm.control.icon.href}}"></ion-icon>
@@ -35,7 +35,7 @@
           <p>{{vm.ui.room}} • {{vm.ui.category}}</p>
           <h1>{{vm.ui.name}}</h1>
           <h2 style="color: {{vm.ui.status.color}};" *ngIf="vm.ui.status.text !== ''">
-            {{vm.ui.status.text}}</h2>
+            {{vm.ui.status.text | translate }}</h2>
         </ion-label>
       </ion-item>
     </ion-card-content>
@@ -75,13 +75,13 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let subcontrol of vm.subcontrols">
-          <card-dimmer-view *ngIf="subcontrol.type === 'Dimmer'" [control]="control" [subcontrol]="subcontrol"
+        <ion-col size="12" size-md="6" *ngFor="let subControl of vm.subControls">
+          <card-dimmer-view *ngIf="subControl.type === 'Dimmer'" [control]="control" [subControl]="subControl"
             [view]="viewType.DETAILED"></card-dimmer-view>
-          <card-dimmer-view *ngIf="subcontrol.type === 'ColorPickerV2'" [control]="control" [subcontrol]="subcontrol"
+          <card-dimmer-view *ngIf="subControl.type === 'ColorPickerV2'" [control]="control" [subControl]="subControl"
             [view]="viewType.DETAILED"></card-dimmer-view>
-          <card-switch-view *ngIf="subcontrol.type === 'Switch'" [control]="control"
-            [subcontrol]="subcontrol"></card-switch-view>
+          <card-switch-view *ngIf="subControl.type === 'Switch'" [control]="control"
+            [subControl]="subControl"></card-switch-view>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -97,7 +97,7 @@
           <h1>{{vm.ui.room}}</h1> <!-- HINT: centrallightcontroller shows room names, not control names -->
         </ion-label>
         <ion-select [cancelText]="'Cancel' | translate" [interfaceOptions]="customActionSheetOptions" interface="action-sheet" style="color: {{vm.ui.status.color}};" class="select-no-icon" [ngModel]="vm.ui.status.text" (ionChange)="selectChange(vm, $event)">
-          <ion-select-option *ngFor="let item of vm.ui.radio_list" [value]="item.name">{{item.name}}</ion-select-option>
+          <ion-select-option *ngFor="let item of vm.ui.radioList" [value]="item.name">{{item.name}}</ion-select-option>
           <ion-select-option *ngIf="vm.ui.status.text === ('Manual' | translate)" translate>Manual</ion-select-option>
         </ion-select>
       </ion-item>

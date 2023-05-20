@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol } from '../../interfaces/data.model';
+import { Control, SubControl } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { SwitchVM } from '../../interfaces/view.model';
@@ -15,7 +15,7 @@ export class CardSwitchView
   implements OnInit, OnDestroy {
 
   @Input() control: Control;
-  @Input() subcontrol: Subcontrol;
+  @Input() subControl: SubControl;
 
   vm$: Observable<SwitchVM>;
 
@@ -32,28 +32,28 @@ export class CardSwitchView
   }
 
   private initVM(): void {
-    if ((this.subcontrol == undefined)||(this.control == undefined)) {
-      console.error('Subcontrol component \'card-switch\' not available for rendering.');
+    if ((this.subControl == undefined)||(this.control == undefined)) {
+      console.error('SubControl component \'card-switch\' not available for rendering.');
       return;
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
-      this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
+      this.controlService.getSubControl$(this.control.serialNr, this.control.uuid, this.subControl.uuid),
     ]).pipe(
-      map(([control, subcontrol]) => {
-        return this.updateVM(control, subcontrol);
+      map(([control, subControl]) => {
+        return this.updateVM(control, subControl);
       })
     );
   }
 
-  private updateVM(control: Control, subcontrol: Subcontrol): SwitchVM {
-    let switchstate = (subcontrol.states.active === "1");
+  private updateVM(control: Control, subControl: SubControl): SwitchVM {
+    let switchstate = (subControl.states.active === "1");
     const vm: SwitchVM = {
       control: control,
-      subcontrol: subcontrol,
+      subControl: subControl,
       ui: {
-        name: subcontrol.name,
+        name: subControl.name,
         status: {
           text: switchstate ? this.translate.instant('On') : this.translate.instant('Off'),
           color: switchstate ? "#69c350" /* primary */ : "#9d9e9e", // TODO select from color palette
@@ -69,10 +69,10 @@ export class CardSwitchView
     $event.stopPropagation();
 
     if (vm.ui.toggle) {
-      this.controlService.updateControl(vm.subcontrol, 'Off');
+      this.controlService.updateControl(vm.subControl, 'Off');
     }
     else {
-      this.controlService.updateControl(vm.subcontrol, 'On');
+      this.controlService.updateControl(vm.subControl, 'On');
     }
   }
 }

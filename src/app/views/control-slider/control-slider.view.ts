@@ -43,7 +43,7 @@ export class ControlSliderView
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(
@@ -54,8 +54,8 @@ export class ControlSliderView
   }
 
   private updateVM(control: Control, categories: Category[], rooms: Room[]): SliderVM {
-    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
+    let room: Room = rooms.find(room => room.uuid === control.room && room.serialNr === control.serialNr);
+    let category: Category = categories.find(category => category.uuid === control.category && category.serialNr === control.serialNr);
     let text = '';
     let position = 0;
 

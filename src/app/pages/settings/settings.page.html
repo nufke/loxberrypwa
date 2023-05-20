@@ -11,24 +11,28 @@
   <form (ngSubmit)="saveSettings()" [formGroup]="mqttForm">
     <div class="input-group">
       <ion-item>
-        <ion-label position="floating" color="medium">MQTT Broker IP Address {{ 'Address' | translate }}</ion-label>
+        <ion-label position="floating" color="medium">MQTT Server IP {{ 'Address' | translate }}</ion-label>
         <ion-input placeholder="IP Address" formControlName="mqtt_hostname"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating" color="medium">MQTT Broker Websocket {{ 'Port' | translate }}</ion-label>
+        <ion-label position="floating" color="medium">MQTT Server Websocket {{ 'Port' | translate }}</ion-label>
         <ion-input placeholder="Port" formControlName="mqtt_port"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating" color="medium">MQTT Broker {{ 'Username' | translate }}</ion-label>
+        <ion-label position="floating" color="medium">MQTT Server {{ 'Username' | translate }}</ion-label>
         <ion-input placeholder="Username" formControlName="mqtt_username"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating" color="medium">MQTT Broker {{ 'Password' | translate }}</ion-label>
+        <ion-label position="floating" color="medium">MQTT Server {{ 'Password' | translate }}</ion-label>
         <ion-input type="password" placeholder="Password" formControlName="mqtt_password"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating" color="medium">LoxBerry App Topic</ion-label>
-        <ion-input placeholder="MQTT Topic" formControlName="mqtt_topic"></ion-input>
+        <ion-input placeholder="MQTT Topic" formControlName="mqtt_app_topic"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" color="medium">Loxone Miniserver Topic</ion-label>
+        <ion-input placeholder="MQTT Topic" formControlName="mqtt_ms_topic"></ion-input>
       </ion-item>
     </div>
     <ion-button type="submit" expand="block" [disabled]="!mqttForm.valid">{{ 'Save settings' | translate }}</ion-button>

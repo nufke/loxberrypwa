@@ -3,7 +3,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
-import { Control, Subcontrol } from '../../interfaces/data.model';
+import { Control, SubControl } from '../../interfaces/data.model';
 import { DimmerVM } from '../../interfaces/view.model';
 import { ButtonAction, View } from '../../types/types';
 import { Utils } from '../../utils/utils';
@@ -17,7 +17,7 @@ export class CardDimmerView
   implements OnInit, OnDestroy {
 
   @Input() control: Control;
-  @Input() subcontrol: Subcontrol;
+  @Input() subControl: SubControl;
   @Input() view: View;
 
   vm$: Observable<DimmerVM>;
@@ -37,40 +37,40 @@ export class CardDimmerView
   }
 
   private initVM(): void {
-    if ((this.subcontrol == undefined) || (this.control == undefined)) {
+    if ((this.subControl == undefined) || (this.control == undefined)) {
       console.error('Component \'card-dimmer\' not available for rendering.');
       return;
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
-      this.controlService.getSubcontrol$(this.control.hwid, this.control.uuid, this.subcontrol.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
+      this.controlService.getSubControl$(this.control.serialNr, this.control.uuid, this.subControl.uuid),
     ]).pipe(
-      map(([control, subcontrol]) => {
-        return this.updateVM(control, subcontrol);
+      map(([control, subControl]) => {
+        return this.updateVM(control, subControl);
       })
     );
   }
 
-  private updateVM(control: Control, subcontrol: Subcontrol): DimmerVM {
+  private updateVM(control: Control, subControl: SubControl): DimmerVM {
     // not all dimmer controls define the limits, instead use some defaults
-    let min = (subcontrol.states.min == undefined || subcontrol.states.min === '') ? 0 : Number(subcontrol.states.min);
-    let max = (subcontrol.states.max == undefined || subcontrol.states.max === '') ? 100 : Number(subcontrol.states.max);
-    let step = (subcontrol.states.step == undefined || subcontrol.states.step === '') ? 1 : Number(subcontrol.states.step);
+    let min = (subControl.states.min == undefined || subControl.states.min === '') ? 0 : Number(subControl.states.min);
+    let max = (subControl.states.max == undefined || subControl.states.max === '') ? 100 : Number(subControl.states.max);
+    let step = (subControl.states.step == undefined || subControl.states.step === '') ? 1 : Number(subControl.states.step);
 
     let position: number = 0;
     let slider_color: string = '';
     let button_color: string = '';
     let rgb: number[] = [];
 
-    if (subcontrol.type === 'Dimmer') {
-      position = Number(subcontrol.states.position);
+    if (subControl.type === 'Dimmer') {
+      position = Number(subControl.states.position);
       slider_color = '-webkit-linear-gradient(left, rgba(49,56,62, 1), rgb(255, 229, 127))';
       button_color = 'rgba(255, 229, 127,' + (position / 100) + ')';
     }
 
-    if (subcontrol.type === 'ColorPickerV2') {
-      let hsv = subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+    if (subControl.type === 'ColorPickerV2') {
+      let hsv = subControl.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
       if (hsv) {
         position = Number(hsv[3]);
         let rgb = Utils.hsv2rgb(Number(hsv[1]), Number(hsv[2]), 100);
@@ -81,10 +81,10 @@ export class CardDimmerView
 
     const vm: DimmerVM = {
       control: control,
-      subcontrol: subcontrol,
+      subControl: subControl,
       ui: {
-        name: (this.view === View.DETAILED) ? subcontrol.name : this.translate.instant('Brightness'),
-        btn_color: (position < 10) ? '#31373e' : button_color, // TODO update for white template
+        name: (this.view === View.DETAILED) ? subControl.name : this.translate.instant('Brightness'),
+        buttonColor: (position < 10) ? '#31373e' : button_color, // TODO update for white template
         slider: {
           position: position,
           min: min,
@@ -99,17 +99,17 @@ export class CardDimmerView
   }
 
   sliderChange(vm: DimmerVM, $event) {
-    if (vm.subcontrol.type === 'Dimmer') {
-      if (vm.subcontrol.states.position != $event.detail.value) {
-        this.controlService.updateControl(vm.subcontrol, String($event.detail.value));
+    if (vm.subControl.type === 'Dimmer') {
+      if (vm.subControl.states.position != $event.detail.value) {
+        this.controlService.updateControl(vm.subControl, String($event.detail.value));
       }
     }
 
-    if (vm.subcontrol.type === 'ColorPickerV2') {
-      let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+    if (vm.subControl.type === 'ColorPickerV2') {
+      let hsv = vm.subControl.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
       if (hsv[3] != $event.detail.value) {
         let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + String($event.detail.value) + ')';
-        this.controlService.updateControl(vm.subcontrol, color);
+        this.controlService.updateControl(vm.subControl, color);
       }
     }
   }
@@ -130,14 +130,14 @@ export class CardDimmerView
     if (position < vm.ui.slider.min) position = vm.ui.slider.min;
     if (position > vm.ui.slider.max) position = vm.ui.slider.max;
 
-    if (vm.subcontrol.type === 'Dimmer') {
-      this.controlService.updateControl(vm.subcontrol, String(position));
+    if (vm.subControl.type === 'Dimmer') {
+      this.controlService.updateControl(vm.subControl, String(position));
     }
 
-    if (vm.subcontrol.type === 'ColorPickerV2') {
-      let hsv = vm.subcontrol.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
+    if (vm.subControl.type === 'ColorPickerV2') {
+      let hsv = vm.subControl.states.color.match(/hsv\(([0-9]*),([0-9]*),([0-9]*)\)/);
       let color = 'hsv(' + hsv[1] + ',' + hsv[2] + ',' + String(position) + ')';
-      this.controlService.updateControl(vm.subcontrol, color);
+      this.controlService.updateControl(vm.subControl, color);
     }
   }
 

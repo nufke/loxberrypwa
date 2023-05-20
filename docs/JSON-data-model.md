@@ -1,20 +1,25 @@
 # JSON data model
 
-**NOTE**: JSON data model under development and will change!
+The JSON data model is based on the Loxone Miniserver structure file (e.g. `LoxAPP3.json`). To support additional features, extensions and constrols, the data model has been extended.
 
-## Top-level structure
+**_NOTE: JSON data model under development and will change!_**
+
+## Main structure
 
 The overall structure is given below:
 
 ```
 {
-  "controls": { ... },
-  "categories": { ... },
-  "rooms": { ... }
+  msInfo: {
+    serialNr: string
+  },
+  controls: { ... },
+  cats: { ... },
+  rooms: { ... }
 }
 ```
 
-Each section `controls`, `categories` and `rooms` contains an array of elements as specified below.
+Each section `controls`, `cats` and `rooms` contains an array of elements as specified below.
 
 ## Interface for controls
 
@@ -24,24 +29,27 @@ Fields indicated with '?' are optional
 
 ```
 interface Control {
-  hwid: string;                       // hardware identifier of the device
+  serialNr: string;                   // serial nr of the device
   uuid: string;                       // unique identifier to identify the control as MQTT topic
-  mqtt_cmd: string;                   // MQTT topic to send command
+  uuidAction: string;                 // unique identifier to identify the control Action (same as uuid)
+  mqtt: string;                       // MQTT topic to send command
   name: string;                       // GUI name
+  defaultIcon: string;                // default icon
+  defaultRating: number;              // default rating
   icon: {
           href: string;               // location or URL of SVG icon
           color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
         }
   type: string;                       // type of control, e.g., switch, button, slider, etc. See below
   room: string;                       // uuid of room
-  category: string;                   // uuid of category
-  is_favorite?: boolean;              // elevate to favorite item (optional)
-  is_visible?: boolean;               // make control invisible
-  is_protected?: boolean;             // passwd/PIN protected control (optional)
-  order?: number[];                   // defines the order for controls (optional)
+  cat: string;                        // uuid of category
+  isFavorite?: boolean;               // elevate to favorite item (optional)
+  isVisible?: boolean;                // make control invisible
+  isSecured?: boolean;                // passwd/PIN protected control (optional)
   details: { ... }                    // details of the control (values control dependent)
   states: { ... }                     // states of the control (values control dependent)
-  subcontrols?: { ... }               // subcontrols (values control dependent) (optional)
+  subControls?: { ... }               // subControls (values control dependent) (optional)
+  order?: number[];                   // defines the order for controls (optional)
 }
 ```
 
@@ -73,17 +81,18 @@ The nested JSON structure for the control `details` and `states` depend on the t
 
 ```
 interface Category {
-  hwid: string;                       // hardware identifier of the device
+  serialNr: string;                   // serial nr of the device
   uuid: string;                       // unique identifier to identify the category as MQTT topic
   name: string;                       // GUI name
+  image: string;                      // default graphic
   icon: {
           href: string;               // location or URL to SVG icon
-          color?: string;             // default color in RGB hex notation, e.g. #FFFFFF (optional)
+          color?: string;             // Color in RGB hex notation, e.g. #FFFFFF (optional)
         }
-  image?: string;                     // bitmap image (optional)
-  is_favorite?: boolean;              // make favorite item (optional)
-  is_visible?: boolean;               // make category invisible
-  is_protected?: boolean;             // passwd/PIN protected control (optional)
+  isFavorite?: boolean;               // make favorite item (optional)
+  isVisible?: boolean;                // make category invisible
+  isSecured?: boolean;                // passwd/PIN protected control (optional)
+  defaultRating: number;              // default rating
   order?: number[];                   // defines the order for categories (optional)
 }
 ```
@@ -92,17 +101,18 @@ interface Category {
 
 ```
 interface Room {
-  hwid: string;                       // hardware identifier of the device
+  serialNr: string;                   // serial nr of the device
   uuid: string;                       // unique identifier to identify the room as MQTT topic
   name: string;                       // GUI name
+  image: string;                      // default graphic
   icon: {
           href: string;               // URL to SVG icon
-          color?: string;             // RGB hex notation, e.g. #FFFFFF (optional)
+          color?: string;             // Color in RGB hex notation, e.g. #FFFFFF (optional)
         }
-  image?: string;                     // bitmap image (optional)
-  is_favorite?: boolean;              // make favorite item (optional)
-  is_visible?: boolean;               // make room invisible
-  is_protected?: boolean;             // passwd/PIN protected control (optional)
+  isFavorite?: boolean;               // make favorite item (optional)
+  isVisible?: boolean;                // make room invisible
+  isSecured?: boolean;                // passwd/PIN protected control (optional)
+  defaultRating: number;              // default rating
   order?: number[];                   // defines the order for rooms (optional)
 }
 ```

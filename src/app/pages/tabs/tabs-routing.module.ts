@@ -19,7 +19,7 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'room/:hwid/:uuid',
+        path: 'room/:serialNr/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
       },
@@ -29,7 +29,7 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'category/:hwid/:uuid',
+        path: 'category/:serialNr/:uuid',
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
       },
@@ -37,22 +37,22 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'app/home/:control_hwid/:control_uuid',
+    path: 'app/home/:controlSerialNr/:control_uuid',
     loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
     //canActivate: [AuthGuard]
   },
   {
-    path: 'app/:domain/:hwid/:uuid/:control_hwid/:control_uuid',
+    path: 'app/:domain/:serialNr/:uuid/:controlSerialNr/:control_uuid',
     loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
     //canActivate: [AuthGuard]
   },
   {
-    path: 'app/:domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid',
+    path: 'app/:domain/:serialNr/:uuid/:controlSerialNr/:control_uuid/:subControlUuid',
     loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
     //canActivate: [AuthGuard]
   },
   {
-    path: 'app/:domain/:hwid/:uuid/:control_hwid/:control_uuid/:subcontrol_uuid/:subcontrol_uuid_ext',
+    path: 'app/:domain/:serialNr/:uuid/:controlSerialNr/:control_uuid/:subControlUuid/:subControlUuidExt',
     loadChildren: () => import('../detailed-control/detailed-control.module').then(m => m.DetailedControlPageModule),
     //canActivate: [AuthGuard]
   },

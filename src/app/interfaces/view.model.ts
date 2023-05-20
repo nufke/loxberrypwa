@@ -1,4 +1,4 @@
-import { Control, Subcontrol, Room, Category } from './data.model';
+import { Control, SubControl, Room, Category } from './data.model';
 
 /**
  * View Models used for Components to store UI specific properties and states
@@ -6,14 +6,14 @@ import { Control, Subcontrol, Room, Category } from './data.model';
 
 export interface CategoryListVM {
   categories: Category[];
-  categories_list: Category[];
-  categories_favs: Category[];
+  categoriesList: Category[];
+  categoriesFavs: Category[];
 }
 
 export interface RoomListVM {
   rooms: Room[];
-  rooms_list: Room[];
-  rooms_favs: Room[];
+  roomsList: Room[];
+  roomsFavs: Room[];
 }
 
 export interface ControlListVM {
@@ -25,7 +25,7 @@ export interface ControlListVM {
 
 export interface ColorPickerVM {
   control: Control;
-  subcontrol: Subcontrol;
+  subControl: SubControl;
   rgb: {
     r: number;
     g: number;
@@ -36,10 +36,10 @@ export interface ColorPickerVM {
 
 export interface DimmerVM {
   control: Control;
-  subcontrol: Subcontrol;
+  subControl: SubControl;
   ui: {
     name: string;
-    btn_color: string;
+    buttonColor: string;
     slider: {
       position: number;
       min: number;
@@ -62,11 +62,11 @@ export interface RadioVM {
     name: string;
     room: string;
     category: string;
-    radio_list: RadioListItem[];
-    selected_id: number;
+    radioList: RadioListItem[];
+    selectedId: number;
     icon?: {
-      temp_base: string;
-      temp_dec: string
+      tempBase: string;
+      tempDec: string
     }
     status: {
       text: string;
@@ -74,7 +74,7 @@ export interface RadioVM {
     }
     toggle?: boolean;
   }
-  subcontrols?: Subcontrol[];
+  subControls?: SubControl[];
 }
 
 export interface IRCVM {
@@ -83,16 +83,16 @@ export interface IRCVM {
     name: string;
     room: string;
     category: string;
-    temp_target: number,
-    temp_actual: number,
-    temp_unit: string,
-    mode_list: RadioListItem[];
+    tempTarget: number,
+    tempActual: number,
+    tempUnit: string,
+    modeList: RadioListItem[];
     mode: number;
-    preset_list: RadioListItem[];
+    presetList: RadioListItem[];
     preset: number;
     icon: {
-      temp_base: string;
-      temp_dec: string
+      tempBase: string;
+      tempDec: string
     }
     status: {
       text: string;
@@ -119,7 +119,7 @@ export interface SliderVM {
 
 export interface SwitchVM {
   control: Control;
-  subcontrol: Subcontrol;
+  subControl: SubControl;
   ui: {
     name: string;
     status: {
@@ -137,8 +137,8 @@ export interface TextVM {
     room: string;
     category: string;
     icon?: {
-      temp_base: string;
-      temp_dec: string
+      tempBase: string;
+      tempDec: string
     }
     status: {
       text: string;
@@ -154,8 +154,8 @@ export interface AlarmVM {
     room: string;
     category: string;
     icon?: {
-      temp_base: string;
-      temp_dec: string
+      tempBase: string;
+      tempDec: string
     }
     status: {
       text: string;

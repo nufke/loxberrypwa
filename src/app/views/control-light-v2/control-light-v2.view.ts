@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from "rxjs/operators";
-import { Control, Subcontrol, Room, Category } from '../../interfaces/data.model';
+import { Control, SubControl, Room, Category } from '../../interfaces/data.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ControlService } from '../../services/control.service';
 import { RadioVM, RadioListItem } from '../../interfaces/view.model';
@@ -22,8 +22,7 @@ export class ControlLightV2View
   viewType = View;
   vm$: Observable<RadioVM>;
   segment: string = 'moods';
-  entries: RadioListItem[];
-  mood_list: RadioListItem[];
+  moodList: RadioListItem[] = [];
   text: string = '';
 
   customActionSheetOptions = {
@@ -50,7 +49,7 @@ export class ControlLightV2View
     }
 
     this.vm$ = combineLatest([
-      this.controlService.getControl$(this.control.hwid, this.control.uuid),
+      this.controlService.getControl$(this.control.serialNr, this.control.uuid),
       this.controlService.categories$,
       this.controlService.rooms$,
     ]).pipe(
@@ -61,27 +60,28 @@ export class ControlLightV2View
   }
 
   private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
-    let room: Room = rooms.find(room => room.uuid === control.room && room.hwid === control.hwid);
-    let category: Category = categories.find(category => category.uuid === control.category && category.hwid === control.hwid);
-    let selected_id = control.states.active_moods[0]; /* if undefined/empty, mode is most likely manual (see below) */
+    let room: Room = rooms.find(room => room.uuid === control.room && room.serialNr === control.serialNr);
+    let category: Category = categories.find(category => category.uuid === control.category && category.serialNr === control.serialNr);
+    let selectedId = control.states.activeMoods[0]; /* if undefined/empty, mode is most likely manual (see below) */
 
-    /* only update radio_list if we have new entries, since it might cause GUI interruptions */
-    if (control.states.mood_list && (this.entries !== control.states.mood_list)) {
-      this.mood_list = control.states.mood_list;
-
-      if (selected_id) {
-        let mood_idx = this.mood_list.findIndex(item => { return item.id == selected_id });
-        this.text = this.mood_list[mood_idx].name;
-      }
-      else /* undefined/empty, so manual */
-        this.text = this.translate.instant('Manual');
+    /* only update radioList if we have new entries, since it might cause GUI interruptions */
+    if (control.states.moodList && (this.moodList !== control.states.moodList)) {
+      this.moodList = control.states.moodList;
     }
 
-    let visibleSubcontrols = [];
+    if (selectedId && control.states.moodList && Array.isArray(this.moodList)) {
+      let moodIdx = this.moodList.findIndex(item => item.id == selectedId );
+      this.text = this.moodList[moodIdx].name;
+    }
+    else { /* undefined/empty, so manual */
+      this.text = this.translate.instant('Manual');
+    }
 
-    if (control.subcontrols) {
-      let allSubcontrols: Subcontrol[] = Object.values(control.subcontrols);
-      visibleSubcontrols = allSubcontrols.filter( subcontrol => subcontrol.is_visible );
+    let visibleSubControls = [];
+
+    if (control.subControls) {
+      let allSubControls: SubControl[] = Object.values(control.subControls);
+      visibleSubControls = allSubControls.filter( subControl => subControl.isVisible );
     }
 
     this.customActionSheetOptions.header = (category.name) + ' ' + (room && room.name) ? room.name : "unknown";
@@ -91,7 +91,7 @@ export class ControlLightV2View
         ...control,
         icon: {
           href: control.icon.href,
-          color: (selected_id !== 778 && this.text.length) ? "primary" : "#9d9e9e" // TODO select from color palette
+          color: (selectedId !== 778 && this.text.length) ? "primary" : "#9d9e9e" // TODO select from color palette
         }
       },
       ui: {
@@ -99,14 +99,14 @@ export class ControlLightV2View
         name: (control.name === this.translate.instant('Lightcontroller')) ? room.name : control.name,
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        radio_list: this.mood_list,
-        selected_id: selected_id,
+        radioList: this.moodList,
+        selectedId: selectedId,
         status: {
           text: this.text,
-          color: (selected_id !== 778 && this.text.length) ? "#69c350" : "#9d9e9e" // TODO select from color palette
+          color: (selectedId !== 778 && this.text.length) ? "#69c350" : "#9d9e9e" // TODO select from color palette
         }
       },
-      subcontrols: visibleSubcontrols,
+      subControls: visibleSubControls,
     };
     return vm;
   }
@@ -119,30 +119,29 @@ export class ControlLightV2View
     $event.preventDefault();
     $event.stopPropagation();
 
-    let id = this.control.states.active_moods[0];
-    let mood_idx;
-    let mood_list = this.control.states.mood_list;
+    let moodIdx;
+    let moodList = this.control.states.moodList;
 
-    let max = vm.ui.radio_list.length - 1;
+    let max = vm.ui.radioList.length - 1;
 
-    if (vm.ui.selected_id && vm.ui.radio_list) {
-      mood_idx = vm.ui.radio_list.findIndex(item => { return item.id == vm.ui.selected_id });
-      mood_idx++;
-      if (mood_idx > max) mood_idx = 0;
+    if (vm.ui.selectedId && vm.ui.radioList) {
+      moodIdx = vm.ui.radioList.findIndex(item => { return item.id == vm.ui.selectedId });
+      moodIdx++;
+      if (moodIdx > max) moodIdx = 0;
     }
     else {
-      mood_idx = 0;
+      moodIdx = 0;
     }
-    this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
+    this.controlService.updateControl(vm.control, 'changeTo/' + String(moodList[moodIdx].id));
   }
 
   selectChange(vm: RadioVM, event) {
-    let mood_list = this.control.states.mood_list;
-    let mood_idx = vm.ui.radio_list.findIndex(item => { return item.name == event.detail.value });
+    let moodList = this.control.states.moodList;
+    let moodIdx = vm.ui.radioList.findIndex(item => { return item.name == event.detail.value });
 
     /* only send update if mood exists and selected_id is different */
-    if (mood_list[mood_idx] && mood_list[mood_idx].id != vm.ui.selected_id)
-      this.controlService.updateControl(vm.control, 'changeTo/' + String(mood_list[mood_idx].id));
+    if (moodList[moodIdx] && moodList[moodIdx].id != vm.ui.selectedId)
+      this.controlService.updateControl(vm.control, 'changeTo/' + String(moodList[moodIdx].id));
   }
 
 }

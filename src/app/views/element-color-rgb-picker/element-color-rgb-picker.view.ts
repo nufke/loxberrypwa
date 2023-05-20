@@ -41,7 +41,7 @@ export class ElementColorRGBPickerView
 
   updateColor(color) {
     let hsv_color = 'hsv(' + Math.round(color.hsv.h) + ',' + Math.round(color.hsv.s) + ',' + this.color_picker_vm.position + ')';
-    this.controlService.updateControl(this.color_picker_vm.subcontrol, hsv_color);
+    this.controlService.updateControl(this.color_picker_vm.subControl, hsv_color);
   }
 
 }

@@ -1,6 +1,6 @@
 # Status
 
-This page lists the development status of the controls and subcontrols, and future requirements and features.
+This page lists the development status of the controls and subControls, and future requirements and features.
 For additional requests or ideas, you can raise an [issue](https://github.com/nufke/loxberrypwa/issues) or submit a [pull request](https://github.com/nufke/loxberrypwa/pulls).
 
 ## Controls

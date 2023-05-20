@@ -6,6 +6,10 @@ import { StateChangeListener } from "@capacitor/app";
 export interface AppState {
   mode: Mode;
   settings: Settings;
+  structure: Structure;
+}
+
+export interface Structure {
   controls: { [key: string]: Control };
   categories: { [key: string]: Category };
   rooms: { [key: string]: Room };
@@ -35,7 +39,8 @@ export interface MqttSettings {
   port: number;
   username: string;
   password: string;
-  topic: string;
+  app_topic: string;
+  ms_topic: string;
 }
 
 /**
@@ -50,7 +55,8 @@ export const INITIAL_MQTT_SETTINGS: MqttSettings = {
   port: null,
   username: '',
   password: '',
-  topic: ''
+  app_topic: '',
+  ms_topic: ''
 }
 
 export const INITIAL_APP_SETTINGS: AppSettings = {
@@ -62,6 +68,12 @@ export const INITIAL_MODE: Mode = {
   connected: false
 }
 
+export const INITIAL_STRUCTURE: Structure = {
+  controls: {},
+  categories: {},
+  rooms: {}
+}
+
 /**
  * Application State initial values
  */
@@ -71,51 +83,51 @@ export const INITIAL_APP_STATE: AppState = {
     app: INITIAL_APP_SETTINGS,
     mqtt: INITIAL_MQTT_SETTINGS
   },
-  controls: {},
-  categories: {},
-  rooms: {}
+  structure: INITIAL_STRUCTURE
 }
 
 /**
  * Properties for Control elements
  */
 export interface Control {
-  hwid: string;                 // hardware identifier of the device
+  serialNr: string;             // serial nr of the device
   uuid: string;                 // unique identifier to identify the control as MQTT topic
-  mqtt_cmd: string;             // topic to publish commands
+  mqtt: string;                 // MQTT topic to publish commands
   name: string;                 // unique identifier to identify the control as MQTT topic
   icon: {
     href: string;               // location or URL of SVG icon
     color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
   }
   type: string;                 // type of control, e.g., switch, button, slider, etc.
-  room: string;                 // uuid of room (hwid of room should match hwid of control)
-  category: string;             // uuid of category (hwid of category should match hwid of control)
-  is_favorite?: boolean;        // elevate to favorite item (optional)
-  is_visible?: boolean;         // make control invisible (optional)
-  is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order?: number[];             // defines the order for the controls (optional)
-  subcontrols?: Subcontrol[];   // subcontrols (optional)
+  room: string;                 // uuid of room (serialNr of room should match serialNr of control)
+  category: string;             // uuid of category (serialNr of category should match serialNr of control)
+  isFavorite: boolean;          // elevate to favorite item (optional)
+  isVisible?: boolean;          // make control invisible (optional)
+  isProtected: boolean;         // passwd/PIN protected control (optional)
+  order: number[];              // defines the order for the controls (optional)
+  subControls: {
+    [key: string]: SubControl;  // subControls (optional)
+  }
   details: any;                 // control details
   states: any;                  // control states
 }
 
 /**
- * Properties for Subcontrol elements
+ * Properties for SubControl elements
  */
-export interface Subcontrol {
+export interface SubControl {
   uuid: string;                 // unique identifier to identify the control as MQTT topic
   name: string;                 // unique identifier to identify the control as MQTT topic
-  mqtt_cmd: string;             // topic to publish commands
+  mqtt: string;                 // MQTT topic to publish commands
   icon: {
     href: string;               // location or URL of SVG icon
     color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
   }
   type: string;                 // type of control, e.g., switch, button, slider, etc.
-  is_favorite?: boolean;        // elevate to favorite item (optional)
-  is_visible?: boolean;         // make control invisible (optional)
-  is_protected?: boolean;       // passwd/PIN protected control (optional)
-  order: number[];              // defines the order of subcontrols (optional)
+  isFavorite?: boolean;         // elevate to favorite item (optional)
+  isVisible?: boolean;          // make control invisible (optional)
+  isSecured?: boolean;          // passwd/PIN protected control (optional)
+  order: number[];              // defines the order of subControls (optional)
   states: any;                  // control states
 }
 
@@ -123,18 +135,19 @@ export interface Subcontrol {
  * Properties to specify Category
  */
 export interface Category {
-  hwid: string;                 // hardware identifier of the device
+  serialNr: string;             // serial nr of the device
   uuid: string;                 // unique identifier to identify the category as MQTT topic
-  mqtt_cmd: string;             // topic to publish commands
+  mqtt: string;                 // MQTT topic to publish commands
   name: string;                 // GUI name
   icon: {
     href: string;               // location or URL of default SVG icon
     color?: string;             // color in RGB hex notation, e.g. #FFFFFF (optional)
   }
+  type: string;                 // type of category
   image?: string;               // location for the bitmap image (optional)
-  is_favorite?: boolean;        // elevate to favorite item (optional)
-  is_visible?: boolean;         // make category invisible (optional)
-  is_protected?: boolean;       // passwd/PIN protected control (optional)
+  isFavorite?: boolean;         // elevate to favorite item (optional)
+  isVisible?: boolean;          // make category invisible (optional)
+  isSecured?: boolean;          // passwd/PIN protected control (optional)
   order?: number[];             // defines the order for categories (optional)
 }
 
@@ -142,17 +155,18 @@ export interface Category {
  * Properties to specify Room
  */
 export interface Room {
-  hwid: string;                 // hardware identifier of the device
+  serialNr: string;             // serial nr of the device
   uuid: string;                 // unique identifier to identify the room as MQTT topic  (device-uuid)
-  mqtt_cmd: string;             // topic to publish commands
+  mqtt: string;                 // MQTT topic to publish commands
   name: string;                 // GUI name
   icon: {
     href: string;               // location or URL to SVG icon
     color?: string;             // color in RGB hex notation, e.g. #FFFFFF (optional)
   }
+  type: string;                 // type of room
   image?: string;               // location for the bitmap image (optional)
-  is_favorite?: boolean;        // elevate to favorite item (optional)
-  is_visible?: boolean;         // make category invisible (optional)
-  is_protected?: boolean;       // passwd/PIN protected control (optional)
+  isFavorite?: boolean;         // elevate to favorite item (optional)
+  isVisible?: boolean;          // make category invisible (optional)
+  isSecured?: boolean;          // passwd/PIN protected control (optional)
   order?: number[];             // defines the order for rooms (optional)
 }

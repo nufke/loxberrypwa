@@ -1,647 +1,416 @@
 # Example
 
-Below a simple example describing the structure to specify controls, categories and rooms. In this example, MQTT messages from/to Node-Red have the prefix `nodered`. The MQTT prefix `loxberry/app` is used to send updates to each control, category or room.
+The example below shows a simple example describing the structure to specify controls, categories and rooms. In this example, the LoxBerry App interacts with  Node-RED. Therefore the App will subscribe to MQTT prefix `nodered`.
 
-Note that the icons and images use relative paths, referencing the source directory of the PWA icon and image sources. Alternatively, URLs could be used, e.g. `http:/myserver.org/my_image.svg`.
+Note that the icons and images may use relative paths, referencing the directory where icon and image sources are stored. Alternatively, URLs could be used, e.g. `http:/myserver.org/my_image.svg`.
 
 ## Load structure
 
-To initialize the App with a structure, send the structure as JSON string with topic `/loxberry/app/structure`:
+To initialize the LoxBerry App with a structure, a JSON structure compatible with the Loxone Miniserver structure `LoxAPP3.json`)should be sent to topic `/nodered/structure`. A minimalistic example is given below.
 
-```
-/loxberry/app/structure '{ "controls": { ... },  "categories": { ... }, "rooms": { ... } }'
-```
-
-Make sure that the keys of the controls, categories and rooms, use the format `hwid/uuid`, and match with the values for `hwid` and `uuid` in each element.
-
-The string values of `room` and `category` should match with the `uuid` of these elements. It is assumed that `uuid` for the room and category in a control belong to the same `hwid`.
-
-Sending updated structures are considered *incremental*, which means changes to existing objects will be overridden and old objects remain available. To reset/flush all elements in the App, an empty string message should be sent to `/loxberry/app/structure`.
-
-### Simple JSON example
+### Minimal JSON structure
 
 ```json
 {
-    "controls": {
-        "9999/1000": {
-            "hwid": "9999",
-            "uuid": "1000",
-            "mqtt_cmd": "nodered/9999/1000/cmd",
-            "name": "Lighting Livingroom",
-            "icon": {
-                "href": "assets/icons/svg/bulb-outline.svg"
-            },
-            "type": "LightControllerV2",
-            "room": "2000",
-            "category": "3000",
-            "is_favorite": true,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                1
-            ],
-            "states": {
-                "active_moods": {
-                    "mqtt": "nodered/9999/8000"
-                },
-                "mood_list": [
-                    {
-                        "name": "Default",
-                        "id": 1
-                    },
-                    {
-                        "name": "On",
-                        "id": 777
-                    },
-                    {
-                        "name": "Off",
-                        "id": 778
-                    }
-                ]
-            }
-        },
-        "9999/1001": {
-            "hwid": "9999",
-            "uuid": "1001",
-            "mqtt_cmd": "nodered/9999/1001/cmd",
-            "name": "Lighting Kitchen",
-            "icon": {
-                "href": "assets/icons/svg/bulb-outline.svg"
-            },
-            "type": "Pushbutton",
-            "room": "2001",
-            "category": "3000",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                1
-            ],
-            "states": {
-                "active": {
-                    "mqtt": "nodered/9999/8002"
-                }
-            }
-        },
-        "9999/1002": {
-            "hwid": "9999",
-            "uuid": "1002",
-            "mqtt_cmd": "nodered/9999/1002/cmd",
-            "name": "Lighting Bath",
-            "icon": {
-                "href": "assets/icons/svg/bulb-outline.svg"
-            },
-            "type": "Switch",
-            "room": "2002",
-            "category": "3000",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "states": {
-                "active": {
-                    "mqtt": "nodered/9999/8003"
-                }
-            }
-        },
-        "9999/1003": {
-            "hwid": "9999",
-            "uuid": "1003",
-            "mqtt_cmd": "nodered/9999/1003/cmd",
-            "name": "Lighting Bed",
-            "icon": {
-                "href": "assets/icons/svg/bulb-outline.svg"
-            },
-            "type": "LightControllerV2",
-            "room": "2003",
-            "category": "3000",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "states": {
-                "active_moods": {
-                    "mqtt": "nodered/9999/8004"
-                },
-                "mood_list": {
-                    "mqtt": "nodered/9999/8005"
-                }
-            }
-        },
-        "9999/1004": {
-            "hwid": "9999",
-            "uuid": "1004",
-            "mqtt_cmd": "nodered/9999/1004/cmd",
-            "name": "Temperature",
-            "icon": {
-                "href": "assets/icons/svg/thermometer-outline.svg"
-            },
-            "type": "InfoOnlyAnalog",
-            "room": "2000",
-            "category": "3001",
-            "is_favorite": true,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8006"
-                }
-            }
-        },
-        "9999/1005": {
-            "hwid": "9999",
-            "uuid": "1005",
-            "mqtt_cmd": "nodered/9999/1005/cmd",
-            "name": "Temperature",
-            "icon": {
-                "href": "assets/icons/svg/thermometer-outline.svg"
-            },
-            "type": "InfoOnlyAnalog",
-            "room": "2001",
-            "category": "3001",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8007"
-                }
-            }
-        },
-        "9999/1006": {
-            "hwid": "9999",
-            "uuid": "1006",
-            "mqtt_cmd": "nodered/9999/1006/cmd",
-            "name": "Temperature",
-            "icon": {
-                "href": "assets/icons/svg/thermometer-outline.svg"
-            },
-            "type": "InfoOnlyAnalog",
-            "room": "2002",
-            "category": "3001",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                1
-            ],
-            "details": {
-                "format": "%s °C"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8008"
-                }
-            }
-        },
-        "9999/1007": {
-            "hwid": "9999",
-            "uuid": "1007",
-            "mqtt_cmd": "nodered/9999/1007/cmd",
-            "name": "Temperature",
-            "icon": {
-                "href": "assets/icons/svg/thermometer-outline.svg"
-            },
-            "type": "InfoOnlyAnalog",
-            "room": "2003",
-            "category": "3001",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8009"
-                }
-            }
-        },
-        "9999/1008": {
-            "hwid": "9999",
-            "uuid": "1008",
-            "mqtt_cmd": "nodered/9999/1008/cmd",
-            "name": "Thermostat",
-            "icon": {
-                "href": "assets/icons/svg/knob-solid.svg"
-            },
-            "type": "Slider",
-            "room": "2000",
-            "category": "3002",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C",
-                "min": "10",
-                "max": "25",
-                "step": "1"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8010"
-                }
-            }
-        },
-        "9999/1009": {
-            "hwid": "9999",
-            "uuid": "1009",
-            "mqtt_cmd": "nodered/9999/1009/cmd",
-            "name": "Thermostat",
-            "icon": {
-                "href": "assets/icons/svg/knob-solid.svg"
-            },
-            "type": "Slider",
-            "room": "2001",
-            "category": "3002",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C",
-                "min": "10",
-                "max": "25",
-                "step": "1"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8011"
-                }
-            }
-        },
-        "9999/1010": {
-            "hwid": "9999",
-            "uuid": "1010",
-            "mqtt_cmd": "nodered/9999/1010/cmd",
-            "name": "Thermostat",
-            "icon": {
-                "href": "assets/icons/svg/knob-solid.svg"
-            },
-            "type": "Slider",
-            "room": "2002",
-            "category": "3002",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C",
-                "min": "10",
-                "max": "25",
-                "step": "1"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8012"
-                }
-            }
-        },
-        "9999/1011": {
-            "hwid": "9999",
-            "uuid": "1011",
-            "mqtt_cmd": "nodered/9999/1011/cmd",
-            "name": "Thermostat",
-            "icon": {
-                "href": "assets/icons/svg/knob-solid.svg"
-            },
-            "type": "Slider",
-            "room": "2003",
-            "category": "3002",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "format": "%s °C",
-                "min": "10",
-                "max": "25",
-                "step": "1"
-            },
-            "states": {
-                "value": {
-                    "mqtt": "nodered/9999/8013"
-                }
-            }
-        },
-        "9999/1012": {
-            "hwid": "9999",
-            "uuid": "1012",
-            "mqtt_cmd": "nodered/9999/1012/cmd",
-            "name": "Musicplayer",
-            "icon": {
-                "href": "assets/icons/svg/music-solid.svg"
-            },
-            "type": "Radio",
-            "room": "2000",
-            "category": "3003",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                1
-            ],
-            "details": {
-                "all_off": "Off",
-                "outputs": {
-                    "1": "Channel 1",
-                    "2": "Channel 2",
-                    "3": "Channel 3"
-                }
-            },
-            "states": {
-                "active_output": {
-                    "mqtt": "nodered/9999/8014"
-                }
-            }
-        },
-        "9999/1013": {
-            "hwid": "9999",
-            "uuid": "1013",
-            "mqtt_cmd": "nodered/9999/1013/cmd",
-            "name": "Musicplayer",
-            "icon": {
-                "href": "assets/icons/svg/music-solid.svg"
-            },
-            "type": "Radio",
-            "room": "2001",
-            "category": "3003",
-            "is_favorite": true,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "all_off": "Off",
-                "outputs": {
-                    "1": "Channel 1",
-                    "2": "Channel 2",
-                    "3": "Channel 3"
-                }
-            },
-            "states": {
-                "active_output": {
-                    "mqtt": "nodered/9999/8015"
-                }
-            }
-        },
-        "9999/1014": {
-            "hwid": "9999",
-            "uuid": "1014",
-            "mqtt_cmd": "nodered/9999/1014/cmd",
-            "name": "Musicplayer",
-            "icon": {
-                "href": "assets/icons/svg/music-solid.svg"
-            },
-            "type": "Radio",
-            "room": "2002",
-            "category": "3003",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "all_off": "Off",
-                "outputs": {
-                    "1": "Channel 1",
-                    "2": "Channel 2",
-                    "3": "Channel 3"
-                }
-            },
-            "states": {
-                "active_output": {
-                    "mqtt": "nodered/9999/8016"
-                }
-            }
-        },
-        "9999/1015": {
-            "hwid": "9999",
-            "uuid": "1015",
-            "name": "Musicplayer",
-            "mqtt_cmd": "nodered/9999/1015/cmd",
-            "icon": {
-                "href": "assets/icons/svg/music-solid.svg"
-            },
-            "type": "Radio",
-            "room": "2003",
-            "category": "3003",
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1,
-                0
-            ],
-            "details": {
-                "all_off": "Off",
-                "outputs": {
-                    "1": "Channel 1",
-                    "2": "Channel 2",
-                    "3": "Channel 3"
-                }
-            },
-            "states": {
-                "active_output": {
-                    "mqtt": "nodered/9999/8017"
-                }
-            }
-        }
+  "msInfo": {
+    "serialNr": "1234567890"
+  },
+  "controls": {
+    "1": {
+      "uuidAction": "1",
+      "name": "Lighting Living room",
+      "defaultIcon": "bulb-outline.svg",
+      "type": "LightControllerV2",
+      "room": "2001",
+      "cat": "1001",
+      "defaultRating": 1,
+      "isFavorite": true,
+      "isVisible": true,
+      "states": {
+        "activeMoods": "8001",
+        "moodList": "8002"
+      }
     },
-    "categories": {
-        "9999/3000": {
-            "hwid": "9999",
-            "uuid": "3000",
-            "name": "Lighting",
-            "icon": {
-                "href": "assets/icons/svg/bulb-outline.svg"
-            },
-            "is_favorite": true,
-            "is_visible": true,
-            "order": [
-                1,
-                2
-            ]
-        },
-        "9999/3001": {
-            "hwid": "9999",
-            "uuid": "3001",
-            "name": "Sensors",
-            "icon": {
-                "href": "assets/icons/svg/map-marker-solid.svg"
-            },
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1
-            ]
-        },
-        "9999/3002": {
-            "hwid": "9999",
-            "uuid": "3002",
-            "name": "Audio",
-            "icon": {
-                "href": "assets/icons/svg/music-solid.svg"
-            },
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1
-            ]
-        },
-        "9999/3003": {
-            "hwid": "9999",
-            "uuid": "3003",
-            "name": "Heating",
-            "icon": {
-                "href": "assets/icons/svg/home-heating-solid.svg"
-            },
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1
-            ]
-        }
+    "2": {
+      "uuidAction": "2",
+      "name": "Lighting Kitchen",
+      "defaultIcon": "bulb-outline.svg",
+      "type": "Pushbutton",
+      "room": "2002",
+      "cat": "1001",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "states": {
+        "active": "8003"
+      }
     },
-    "rooms": {
-        "9999/2000": {
-            "hwid": "9999",
-            "uuid": "2000",
-            "name": "Living Room",
-            "icon": {
-                "href": "assets/icons/svg/couch-solid.svg"
-            },
-            "is_favorite": true,
-            "is_visible": true,
-            "image": "assets/images/living-room.jpg",
-            "order": [
-                1,
-                1
-            ]
-        },
-        "9999/2001": {
-            "hwid": "9999",
-            "uuid": "2001",
-            "name": "Kitchen",
-            "icon": {
-                "href": "assets/icons/svg/utensils-solid.svg"
-            },
-            "is_favorite": false,
-            "is_visible": true,
-            "image": "assets/images/kitchen2.jpg",
-            "order": 1
-        },
-        "9999/2002": {
-            "hwid": "9999",
-            "uuid": "2002",
-            "name": "Bathroom",
-            "icon": {
-                "href": "assets/icons/svg/shower-solid.svg"
-            },
-            "is_favorite": false,
-            "is_visible": true,
-            "image": "assets/images/bathroom.jpg",
-            "order": [
-                1,
-                1
-            ]
-        },
-        "9999/2003": {
-            "hwid": "9999",
-            "uuid": "2003",
-            "name": "Bedroom",
-            "icon": {
-                "href": "assets/icons/svg/bed-outline.svg"
-            },
-            "is_favorite": false,
-            "is_visible": true,
-            "order": [
-                1,
-                1
-            ]
+    "3": {
+      "uuidAction": "3",
+      "name": "Lighting Bath",
+      "defaultIcon": "bulb-outline.svg",
+      "type": "Switch",
+      "room": "2003",
+      "cat": "1001",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "states": {
+        "active": "8004"
+      }
+    },
+    "4": {
+      "uuidAction": "4",
+      "name": "Lighting Bed",
+      "defaultIcon": "bulb-outline.svg",
+      "type": "LightControllerV2",
+      "room": "2004",
+      "cat": "1001",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "states": {
+        "activeMoods": "8005",
+        "moodList": "8006"
+      }
+    },
+    "5": {
+      "uuidAction": "5",
+      "name": "Temperature",
+      "defaultIcon": "thermometer-outline.svg",
+      "type": "InfoOnlyAnalog",
+      "room": "2001",
+      "cat": "1002",
+      "defaultRating": 1,
+      "isFavorite": true,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C"
+      },
+      "states": {
+        "value": "8007"
+      }
+    },
+    "6": {
+      "uuidAction": "6",
+      "name": "Temperature",
+      "defaultIcon": "thermometer-outline.svg",
+      "type": "InfoOnlyAnalog",
+      "room": "2002",
+      "cat": "1002",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C"
+      },
+      "states": {
+        "value": "8008"
+      }
+    },
+    "7": {
+      "uuidAction": "7",
+      "name": "Temperature",
+      "defaultIcon": "thermometer-outline.svg",
+      "type": "InfoOnlyAnalog",
+      "room": "2003",
+      "cat": "1002",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C"
+      },
+      "states": {
+        "value": "8009"
+      }
+    },
+    "8": {
+      "uuidAction": "8",
+      "name": "Temperature",
+      "defaultIcon": "thermometer-outline.svg",
+      "type": "InfoOnlyAnalog",
+      "room": "2004",
+      "cat": "1002",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C"
+      },
+      "states": {
+        "value": "8010"
+      }
+    },
+    "9": {
+      "uuidAction": "9",
+      "name": "Thermostat",
+      "defaultIcon": "knob-solid.svg",
+      "type": "Slider",
+      "room": "2001",
+      "cat": "1004",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C",
+        "min": "10",
+        "max": "25",
+        "step": "1"
+      },
+      "states": {
+        "value": "8011"
+      }
+    },
+    "10": {
+      "uuidAction": "10",
+      "name": "Thermostat",
+      "defaultIcon": "knob-solid.svg",
+      "type": "Slider",
+      "room": "2002",
+      "cat": "1004",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C",
+        "min": "10",
+        "max": "25",
+        "step": "1"
+      },
+      "states": {
+        "value": "8012"
+      }
+    },
+    "11": {
+      "uuidAction": "11",
+      "name": "Thermostat",
+      "defaultIcon": "knob-solid.svg",
+      "type": "Slider",
+      "room": "2003",
+      "cat": "1004",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C",
+        "min": "10",
+        "max": "25",
+        "step": "1"
+      },
+      "states": {
+        "value": "8013"
+      }
+    },
+    "12": {
+      "uuidAction": "12",
+      "name": "Thermostat",
+      "defaultIcon": "knob-solid.svg",
+      "type": "Slider",
+      "room": "2004",
+      "cat": "1004",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "format": "%s °C",
+        "min": "10",
+        "max": "25",
+        "step": "1"
+      },
+      "states": {
+        "value": "8014"
+      }
+    },
+    "13": {
+      "uuidAction": "13",
+      "name": "Musicplayer",
+      "defaultIcon": "music-solid.svg",
+      "type": "Radio",
+      "room": "2001",
+      "cat": "1003",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "allOff": "Off",
+        "outputs": {
+          "1": "Channel 1",
+          "2": "Channel 2",
+          "3": "Channel 3"
         }
+      },
+      "states": {
+        "activeOutput": "8015"
+      }
+    },
+    "14": {
+      "uuidAction": "14",
+      "name": "Musicplayer",
+      "defaultIcon": "music-solid.svg",
+      "type": "Radio",
+      "room": "2002",
+      "cat": "1003",
+      "defaultRating": 1,
+      "isFavorite": true,
+      "isVisible": true,
+      "details": {
+        "allOff": "Off",
+        "outputs": {
+          "1": "Channel 1",
+          "2": "Channel 2",
+          "3": "Channel 3"
+        }
+      },
+      "states": {
+        "activeOutput": "8016"
+      }
+    },
+    "15": {
+      "uuidAction": "15",
+      "name": "Musicplayer",
+      "defaultIcon": "music-solid.svg",
+      "type": "Radio",
+      "room": "2003",
+      "cat": "1003",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "allOff": "Off",
+        "outputs": {
+          "1": "Channel 1",
+          "2": "Channel 2",
+          "3": "Channel 3"
+        }
+      },
+      "states": {
+        "activeOutput": "8017"
+      }
+    },
+    "16": {
+      "uuidAction": "15",
+      "name": "Musicplayer",
+      "defaultIcon": "music-solid.svg",
+      "type": "Radio",
+      "room": "2004",
+      "cat": "1003",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true,
+      "details": {
+        "allOff": "Off",
+        "outputs": {
+          "1": "Channel 1",
+          "2": "Channel 2",
+          "3": "Channel 3"
+        }
+      },
+      "states": {
+        "activeOutput": "8018"
+      }
     }
+  },
+  "cats": {
+    "1001": {
+      "uuid": "1001",
+      "name": "Lighting",
+      "image": "bulb-outline.svg",
+      "defaultRating": 0,
+      "isFavorite": true,
+      "isVisible": true
+    },
+    "1002": {
+      "uuid": "1002",
+      "name": "Sensors",
+      "image": "map-marker-solid.svg",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true
+    },
+    "1003": {
+      "uuid": "1003",
+      "name": "Audio",
+      "image": "music-solid.svg",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true
+    },
+    "1004": {
+      "uuid": "1004",
+      "name": "Heating",
+      "image": "home-heating-solid.svg",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true
+    }
+  },
+  "rooms": {
+    "2001": {
+      "uuid": "2001",
+      "name": "Living Room",
+      "image": "couch-solid.svg",
+      "defaultRating": 0,
+      "isFavorite": true,
+      "isVisible": true
+    },
+    "2002": {
+      "uuid": "2002",
+      "name": "Kitchen",
+      "image": "utensils-solid.svg",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true
+    },
+    "2003": {
+      "uuid": "2003",
+      "name": "Bathroom",
+      "image": "shower-solid.svg",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true
+    },
+    "2004": {
+      "uuid": "2004",
+      "name": "Bedroom",
+      "image": "bed-outline.svg",
+      "defaultRating": 0,
+      "isFavorite": false,
+      "isVisible": true
+    }
+  }
 }
 ```
 
-## Write values
+## Set control state and values
 
-By default, each control, category and room element will subscribe and listen to messages with the MQTT prefix `loxberry/app/hwid/uuid/<key>`. For example, to update the name of the living room, you can send the following message:
-
-```
-loxberry/app/9999/1000/name  "My Living Room"
-```
-
-Alternatively, any key under `states` in a control can subscribe to another MQTT topic if specified as JSON object `{ mqtt: <topic> }`, as shown in the example above. For example, the `mood_list` of the living room light-controller can be defined as JSON Array and send via node-red to the MQTT broker using topic `nodered/9999/8000`. Note that the Array should be stringified.
+By default, each control, category and room element will subscribe and listen to messages with the MQTT prefix `loxberry/app/<serialNr>/<uuid>/<key>`. For example, to update the name in the living room, you can send the following MQTT message:
 
 ```
-nodered/9999/8000
-    [
-        {
-            "name": "Default",
-            "id": 1
-        },
-        {
-            "name": "On",
-            "id": 777
-        },
-        {
-            "name": "Off",
-            "id": 778
-        }
-    ]
+loxberry/app/123456789/1/name  "My Living Room"
 ```
 
-After this, the active mood **Default** can be specified and send in a similar way to MQTT topic `nodered/9999/8000`:
+Alternatively, any key under `states` in a control can subscribe to another MQTT topic if specified as unique ID `<uuid>`, as shown in the example above. For example, the `moodList` of the living room light-controller can be defined as JSON Array and send via node-red to the MQTT server using topic `nodered/1234567890/8002`. Note that the Array should be stringified.
+
+```json
+  [
+    {
+      "name": "Default",
+      "id": 1
+    },
+    {
+      "name": "On",
+      "id": 777
+    },
+    {
+      "name": "Off",
+      "id": 778
+    }
+  ]
+```
+
+After this, the active mood **Default** can be specified and send in a similar way to MQTT topic `nodered/1234567890/8001`:
 
 ```
-nodered/9999/8000  "[1]"
+nodered/1234567890/8001  "[1]"
 ```

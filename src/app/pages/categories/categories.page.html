@@ -9,14 +9,14 @@
 
 <ion-content>
   <ion-grid *ngIf="vm$ | async as vm">
-    <ion-row *ngIf="vm.categories_favs.length">
+    <ion-row *ngIf="vm.categoriesFavs.length">
       <ion-label class="control-label">
         <p translate>Favorites</p>
       </ion-label>
     </ion-row>
     <ion-row>
-      <ion-col size="6" size-md="3" *ngFor="let category of vm.categories_favs">
-        <ion-card class="card" routerLink="{{category.hwid}}/{{category.uuid}}">
+      <ion-col size="6" size-md="3" *ngFor="let category of vm.categoriesFavs">
+        <ion-card class="card" routerLink="{{category.serialNr}}/{{category.uuid}}">
           <ion-card-content class="card-content">
             <ion-item class="item ion-text-center" class="ion-text-center">
               <ion-icon class="icon-list" src="{{category.icon.href}}"></ion-icon>
@@ -30,14 +30,14 @@
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="vm.categories_list.length">
+    <ion-row *ngIf="vm.categoriesList.length">
       <ion-label class="control-label">
         <p translate>Other categories</p>
       </ion-label>
     </ion-row>
     <ion-row>
-      <ion-col size="12" size-md="6" *ngFor="let category of vm.categories_list">
-        <ion-card class="card" routerLink="{{category.hwid}}/{{category.uuid}}">
+      <ion-col size="12" size-md="6" *ngFor="let category of vm.categoriesList">
+        <ion-card class="card" routerLink="{{category.serialNr}}/{{category.uuid}}">
           <ion-card-content class="card-content">
             <ion-item class="item">
               <ion-icon class="icon" src="{{category.icon.href}}"></ion-icon>

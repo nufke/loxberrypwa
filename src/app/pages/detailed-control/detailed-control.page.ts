@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angu
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { Control, Subcontrol, Room } from '../../interfaces/data.model';
+import { Control, SubControl, Room } from '../../interfaces/data.model';
 import { ControlService } from '../../services/control.service';
 import { View } from '../../types/types';
 import { ControlAlarmView } from '../../views/control-alarm/control-alarm.view';
@@ -36,7 +36,7 @@ export class DetailedControlPage
 
   control: Control;
   rooms: Room[];
-  subcontrol: Subcontrol;
+  subControl: SubControl;
   page_name: string;
   type: string;
 
@@ -93,20 +93,20 @@ export class DetailedControlPage
   }
 
   private initVM(): void {
-    const control_hwid = this.route.snapshot.paramMap.get('control_hwid');
+    const controlSerialNr = this.route.snapshot.paramMap.get('controlSerialNr');
     const control_uuid = this.route.snapshot.paramMap.get('control_uuid');
-    const subcontrol_uuid = this.route.snapshot.paramMap.get('subcontrol_uuid');
-    const subcontrol_uuid_ext = this.route.snapshot.paramMap.get('subcontrol_uuid_ext');
+    const subControl_uuid = this.route.snapshot.paramMap.get('subControl_uuid');
+    const subControl_uuid_ext = this.route.snapshot.paramMap.get('subControl_uuid_ext');
 
     this.roomSubscription = this.controlService.rooms$.subscribe(
       rooms => { this.rooms = rooms;
     });
 
-    this.controlSubscription = this.controlService.getControl$(control_hwid, control_uuid).subscribe(
+    this.controlSubscription = this.controlService.getControl$(controlSerialNr, control_uuid).subscribe(
       control => {
         this.control = control;
         this.type = control.type;
-        let room = this.rooms.find( room => (room.uuid === control.room) && (room.hwid === control.hwid));
+        let room = this.rooms.find( room => (room.uuid === control.room) && (room.serialNr === control.serialNr));
 
         switch (control.type) {
           case 'IRoomController':
@@ -123,21 +123,21 @@ export class DetailedControlPage
       }
     );
 
-    if (subcontrol_uuid != null) {
-      if (subcontrol_uuid === 'history') {
-        this.subcontrol = null;
+    if (subControl_uuid != null) {
+      if (subControl_uuid === 'history') {
+        this.subControl = null;
         this.type = 'AlarmHistory';
         this.page_name = 'Meldingsgeschiedenis';
         return;
       }
     }
 
-    if (subcontrol_uuid != null && subcontrol_uuid_ext != null) {
-      this.controlService.getSubcontrol$(control_hwid, control_uuid, subcontrol_uuid + '/' + subcontrol_uuid_ext).subscribe(
-        subcontrol => {
-          this.subcontrol = subcontrol;
-          this.type = subcontrol.type;
-          this.page_name = subcontrol.name;
+    if (subControl_uuid != null && subControl_uuid_ext != null) {
+      this.controlService.getSubControl$(controlSerialNr, control_uuid, subControl_uuid + '/' + subControl_uuid_ext).subscribe(
+        subControl => {
+          this.subControl = subControl;
+          this.type = subControl.type;
+          this.page_name = subControl.name;
         }
       );
     }
@@ -148,8 +148,8 @@ export class DetailedControlPage
       this.componentRef = this.viewContainer.createComponent(this.getControlView(type));
       (this.componentRef.instance).control = control;
       (this.componentRef.instance).view = View.DETAILED;
-      if (this.subcontrol != null) { // for subcontrols we pass this.
-        (this.componentRef.instance).subcontrol = this.subcontrol;
+      if (this.subControl != null) { // for subControls we pass this.
+        (this.componentRef.instance).subControl = this.subControl;
       }
     }
   }
