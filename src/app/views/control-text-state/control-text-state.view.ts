@@ -76,14 +76,14 @@ export class ControlTextStateView
     let text: string;
     switch (control.type) {
       case 'InfoOnlyText':
-        text = sprintf(control.details.format, control.states.text);
+        text = control.states.text ? sprintf(control.details.format, control.states.text) : '';
         break;
       case 'InfoOnlyDigital':
         let active = (control.states.active === "1");
         text = active ? control.details.text.on : control.details.text.off;
         break;
       case 'TextState':
-        text = control.states.textAndIcon; // TODO iconAndColor?
+        text = control.states.textAndIcon ? control.states.textAndIcon : ''; // TODO iconAndColor?
         break;
       case 'InfoOnlyAnalog':
         switch (control.details.format) {

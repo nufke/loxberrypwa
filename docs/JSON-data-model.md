@@ -30,16 +30,16 @@ Fields indicated with '?' are optional
 ```
 interface Control {
   serialNr: string;                   // serial nr of the device
-  uuid: string;                       // unique identifier to identify the control as MQTT topic
-  uuidAction: string;                 // unique identifier to identify the control Action (same as uuid)
+  uuid: string;                       // unique identifier to identify the control
+  uuidAction: string;                 // unique identifier to identify the control action (same as uuid)
   mqtt: string;                       // MQTT topic to send command
-  name: string;                       // GUI name
+  name: string;                       // GUI name of the control
   defaultIcon: string;                // default icon
   defaultRating: number;              // default rating
   icon: {
-          href: string;               // location or URL of SVG icon
-          color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
-        }
+    href: string;               // location or URL of SVG icon
+    color?: string;             // color of icon in RGB hex notation, e.g. #FFFFFF (optional)
+  }
   type: string;                       // type of control, e.g., switch, button, slider, etc. See below
   room: string;                       // uuid of room
   cat: string;                        // uuid of category
@@ -48,7 +48,9 @@ interface Control {
   isSecured?: boolean;                // passwd/PIN protected control (optional)
   details: { ... }                    // details of the control (values control dependent)
   states: { ... }                     // states of the control (values control dependent)
-  subControls?: { ... }               // subControls (values control dependent) (optional)
+  subControls: {
+    [key: string]: SubControl;        // subControls
+  }
   order?: number[];                   // defines the order for controls (optional)
 }
 ```

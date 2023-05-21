@@ -118,10 +118,18 @@ export class ControlIRCView
       }
     })
 
-    let ircModeId = ircModes.findIndex(item => { return item.id == control.states.mode });
+    let ircModeId = null;
+
+    if (control.states.mode) {
+      ircModeId = ircModes.findIndex(item => { return item.id == control.states.mode });
+    }
 
     let subControls = Object.keys(control.subControls);
-    let state = control.subControls[subControls[0]].states.value; // TODO read states from both subControls?
+    let state = null;
+
+    if (control.subControls[subControls[0]].states.value) {
+      state = control.subControls[subControls[0]].states.value; // TODO read states from both subControls?
+    }
 
     let removeIdx = temperatureModes.findIndex( item => item.id === (3-heatCoolId) );
     temperatureModes.splice( removeIdx, 1 );
@@ -131,11 +139,11 @@ export class ControlIRCView
     const vm: IRCVM = {
       control: control,
       ui: {
-        name: ircModes[ircModeId].name,
+        name: ircModeId ? ircModes[ircModeId].name : 'unknown',
         room: (room && room.name) ? room.name : "unknown",
         category: (category && category.name) ? category.name : "unknown",
-        tempTarget: Number(control.states.tempTarget),
-        tempActual: Number(control.states.tempActual),
+        tempTarget: control.states.tempTarget ? Number(control.states.tempTarget) : NaN, // TODO check
+        tempActual: control.states.tempActual ? Number(control.states.tempActual) : NaN, // TODO check
         tempUnit: '°C', // TODO make configurable
         modeList: ircModes,
         mode: ircModeId,
@@ -146,7 +154,7 @@ export class ControlIRCView
           tempDec: temp[1]
         },
         status: {
-          text: presetList[presentId].name, // translate in scss to enable radio selection highlighting
+          text: state ? presetList[presentId].name : "unknown", // translate in scss to enable radio selection highlighting
           color: (presentId > 0) ? "#69c350" : "#9d9e9e" // TODO select from color palette
         }
       }

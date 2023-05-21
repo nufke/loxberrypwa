@@ -38,7 +38,7 @@ export class ControlService {
 
   getSubControl$(serialNr: string, uuid: string, subControlUuid: string): Observable<SubControl> {
     return this.dataService.select$((state) =>
-      state.structure.controls[serialNr + '/' + uuid].subControls[serialNr + '/' + subControlUuid]).pipe(
+      state.structure.controls[serialNr + '/' + uuid].subControls[subControlUuid]).pipe(
         shareReplay()
       );
   }

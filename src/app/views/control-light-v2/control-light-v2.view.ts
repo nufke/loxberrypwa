@@ -62,7 +62,11 @@ export class ControlLightV2View
   private updateVM(control: Control, categories: Category[], rooms: Room[]): RadioVM {
     let room: Room = rooms.find(room => room.uuid === control.room && room.serialNr === control.serialNr);
     let category: Category = categories.find(category => category.uuid === control.category && category.serialNr === control.serialNr);
-    let selectedId = control.states.activeMoods[0]; /* if undefined/empty, mode is most likely manual (see below) */
+    let selectedId;
+
+    if (Array.isArray(control.states.activeMoods)) {
+      selectedId = control.states.activeMoods[0]; /* if undefined/empty, mode is most likely manual (see below) */
+    }
 
     /* only update radioList if we have new entries, since it might cause GUI interruptions */
     if (control.states.moodList && (this.moodList !== control.states.moodList)) {

@@ -88,9 +88,10 @@ export class DataService extends Store<AppState> {
 
   private stateUpdate(obj, name, topic, value) {
     Object.keys(obj).forEach(key => {
+      //console.log('check topic ', name + '/' + key);
       if (name + '/' + key === topic) {
         obj[key] = this.isValidJSONObject(value) ? JSON.parse(value) : value;
-        //console.log('update topic', topic, obj[key] );
+        //console.log('update topic ', topic, obj[key], value );
         return;
       }
       else

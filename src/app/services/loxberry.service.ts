@@ -164,8 +164,8 @@ export class LoxBerryService
         category: control.cat,
         isFavorite: (control.defaultRating > 0),
         isVisible: true,
-        states: this.processStates(control, mqttTopic, deviceSerialNr),
-        subControls: this.processSubControls(control.subControls, mqttTopic, deviceSerialNr),
+        states: this.processStates(control.states, control.uuidAction, mqttTopic, deviceSerialNr),
+        subControls: this.processSubControls(control, mqttTopic, deviceSerialNr),
         order: [
           control.name.toLowerCase().charCodeAt(0) - 86, /* order as listitem (1=highest) */
           control.name.toLowerCase().charCodeAt(0) - 86, /* order as favorite (1=highest) */
@@ -178,35 +178,35 @@ export class LoxBerryService
     this.registerTopics();
   }
 
-  processSubControls(obj: any, mqttTopic: string, serialNr: string) {
+  processSubControls(control: Control, mqttTopic: string, serialNr: string) {
     let subControls = {};
-    if (obj) {
-      Object.keys(obj).forEach(key => {
-        let subControl = obj[key];
-        let subId = serialNr + '/' + subControl.uuidAction;
-        subControls[subId] =
+    if (control.subControls) {
+      Object.keys(control.subControls).forEach(key => {
+        let subControl = control.subControls[key];
+        subControls[subControl.uuidAction] =
         {
           ...subControl,
           uuid: subControl.uuidAction,
+          mqtt: mqttTopic + '/' + subControl.uuidAction + '/cmd',
           isVisible: true,
-          states: this.processStates(subControl, mqttTopic, serialNr)
+          states: this.processStates(subControl.states, control.uuidAction + '/subControls/' + subControl.uuidAction, mqttTopic, serialNr)
         };
       });
     }
     return subControls;
   }
 
-  processStates(obj: any, mqttTopic: string, serialNr: string) {
+  processStates(states: any, ctrlName: string, mqttTopic: string, serialNr: string) {
     let nstates = {};
-    if (obj && obj.states) {
-      Object.keys(obj.states).forEach(key => {
-        let state = obj.states[key];
+    if (states) {
+      Object.keys(states).forEach(key => {
+        let state = states[key];
         if (Array.isArray(state)) { // handle array,
           let list = [];
           state.forEach( (element, index) => {
-            list.push(''); // empty item
+            list.push(undefined); // clear item
             let name = mqttTopic + '/' + element;
-            let name2 = serialNr + '/' + obj.uuidAction + '/states/' + key + '/' + index;
+            let name2 = serialNr + '/' + ctrlName + '/states/' + key + '/' + index;
             this.mqttTopicMapping[name] = name2;
             //console.log('register state1:', name, name2);
             this.registerTopicPrefix(name);
@@ -214,9 +214,9 @@ export class LoxBerryService
           nstates[key] = list;
         }
         else {
-          nstates[key] = ''; // empty item
-          let name = mqttTopic + '/' + obj.states[key];
-          let name2 = serialNr + '/' + obj.uuidAction + '/states/' + key;
+          nstates[key] = undefined; // clear item
+          let name = mqttTopic + '/' + states[key];
+          let name2 = serialNr + '/' + ctrlName + '/states/' + key;
           this.mqttTopicMapping[name] = name2;
           //console.log('register state2:', name, name2);
           this.registerTopicPrefix(name);
@@ -262,7 +262,7 @@ export class LoxBerryService
         console.log("Register topic name:", topicName);
         this.registeredTopics.push(topicName);
         this.mqttSubscription.push(this.mqttService.observe(topicName).pipe(
-          //tap( message => console.log('message', message.topic, message.payload.toString())),
+          tap( message => console.log('message', message.topic, message.payload.toString())),
           map(message => ({ ...message, topic: this.mqttTopicMapping[message.topic] })),
           filter(items => items.length > 0),
           buffer(this.mqttService.observe(topicName).pipe(debounceTime(10))), /* collect all transactions within 10ms */
