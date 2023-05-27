@@ -78,18 +78,18 @@ export class LoxBerryService
     console.log('Subscribe to structure...');
     let topic = this.loxberryMqttMsTopic + '/structure';
     this.mqttSubscription[0] = this.mqttService.observe(topic)
-      .subscribe((message: IMqttMessage) => {
+      .subscribe( async (message: IMqttMessage) => {
         let msg = message.payload.toString();
         if (msg.length == 0)
           this.dataService.flushControlsInStore();
         else {
-          this.processStructure(JSON.parse(msg), this.loxberryMqttMsTopic);
+          await this.processStructure(JSON.parse(msg), this.loxberryMqttMsTopic);
         }
       });
   }
 
   // TODO: only items will be added, not removed
-  private processStructure(obj: any, mqttTopic: string) {
+  private async processStructure(obj: any, mqttTopic: string) {
     let structure: Structure = {
       categories: {},
       rooms: {},
@@ -174,7 +174,7 @@ export class LoxBerryService
       };
     });
 
-    this.dataService.updateStructureInStore(structure);
+    await this.dataService.updateStructureInStore(structure);
     this.registerTopics();
   }
 
@@ -246,9 +246,9 @@ export class LoxBerryService
         this.mqttSubscription.push(this.mqttService.observe(fullTopicName).pipe(
           filter(items => items.length > 0),
           buffer(this.mqttService.observe(fullTopicName).pipe(debounceTime(10))), /* collect all transactions within 10ms */
-        ).subscribe((items: IMqttMessage[]) => {
+        ).subscribe( async (items: IMqttMessage[]) => {
           //console.log('MQTT received: ', items.topic, items.payload.toString());
-          this.dataService.updateElementsInStore(items);
+          await this.dataService.updateElementsInStore(items);
         }));
       }
     });
@@ -266,9 +266,9 @@ export class LoxBerryService
           map(message => ({ ...message, topic: this.mqttTopicMapping[message.topic] })),
           filter(items => items.length > 0),
           buffer(this.mqttService.observe(topicName).pipe(debounceTime(10))), /* collect all transactions within 10ms */
-        ).subscribe((items: IMqttMessage[]) => {
+        ).subscribe( async (items: IMqttMessage[]) => {
           //console.log('MQTT received: ', items.topic, items.payload.toString());
-          this.dataService.updateElementsInStore(items);
+          await this.dataService.updateElementsInStore(items);
         }));
       }
     });

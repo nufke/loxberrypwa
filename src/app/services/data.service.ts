@@ -38,7 +38,7 @@ export class DataService extends Store<AppState> {
     });
   }
 
-  updateStructureInStore(obj: any) {
+  async updateStructureInStore(obj: any) {
     this.setState((state) => {
 
       Object.keys(obj.controls).forEach(key => {
@@ -60,7 +60,7 @@ export class DataService extends Store<AppState> {
     });
   }
 
-  updateElementsInStore(mqttMessage: any) {
+  async updateElementsInStore(mqttMessage: any) {
     //if (mqttMessage.length > 0) console.log('updateElementInStore', mqttMessage);
     this.setState((state) => {
       mqttMessage.forEach(message => {
