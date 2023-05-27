@@ -10,10 +10,10 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle auto-hide="false" *ngFor="let p of Pages; let i = index">
-          <ion-item [routerLink]="p.url" routerLinkActive="selected" routerDirection="root" detail="false">
+          <ion-item [routerLink]="p.url" routerLinkActive="selected" detail="false">
             <ion-icon slot="start" [name]="p.icon"></ion-icon>
               <ion-label>
-                {{  p.title | translate }}
+                {{ p.title | translate }}
               </ion-label>
           </ion-item>
         </ion-menu-toggle>

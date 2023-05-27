@@ -67,7 +67,7 @@ export class DataService extends Store<AppState> {
         if (!message.topic) return;
         let topics = message.topic.split('/');
         let value = message.payload.toString();
-        console.log('updateElementInStore', message.topic, value);
+        //console.log('updateElementInStore', message.topic, value);
         let id = topics[0] + '/' + topics[1];
 
         if (state.structure.controls[id]) {

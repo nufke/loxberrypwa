@@ -14,17 +14,17 @@ export class MenuPage
   Pages = [
     {
       title: 'Home',
-      url: '/home',
+      url: '/app/home',
       icon: 'home-outline'
     },
     {
       title: 'Rooms',
-      url: '/room',
+      url: '/app/room',
       icon: 'grid-sharp'
     },
     {
       title: 'Categories',
-      url: '/category',
+      url: '/app/category',
       icon: 'list-sharp'
     },
     {

@@ -33,7 +33,6 @@ const routes: Routes = [
         loadChildren: () => import('../controls/controls.module').then(m => m.ControlsPageModule),
         //canActivate: [AuthGuard]
       },
-
     ]
   },
   {

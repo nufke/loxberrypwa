@@ -72,7 +72,7 @@ export class ControlTextStateView
     return vm;
   }
 
-  processText(control): string {
+  processText(control: Control): string {
     let text: string;
     switch (control.type) {
       case 'InfoOnlyText':
@@ -134,7 +134,7 @@ export class ControlTextStateView
     return text;
   }
 
-  processColor(control): string {
+  processColor(control: Control): string {
     let color: string;
     switch (control.type) {
       case 'InfoOnlyDigital':

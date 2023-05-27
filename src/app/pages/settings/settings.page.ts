@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController } from '@ionic/angular';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AlertController, LoadingController, IonRouterOutlet } from '@ionic/angular';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { NavController } from '@ionic/angular';
 import { MqttSettings, INITIAL_MQTT_SETTINGS } from '../../interfaces/data.model';
@@ -11,9 +11,14 @@ import { MqttSettings, INITIAL_MQTT_SETTINGS } from '../../interfaces/data.model
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage implements OnInit, OnDestroy {
   mqttForm: FormGroup;
   mqttSettingsForm: MqttSettings = INITIAL_MQTT_SETTINGS;
+  previousUrl: string;
+  canGoBack: boolean;
+
+  private routerEvents: any;
+  private currentUrl: string;
   private action: string;
 
   constructor(
@@ -23,7 +28,8 @@ export class SettingsPage implements OnInit {
     private loadingController: LoadingController,
     private storageService: StorageService,
     private route: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private ionRouterOutlet: IonRouterOutlet
   ) {
     this.mqttForm = this.fb.group({
       mqtt_hostname: ['', Validators.required],
@@ -36,6 +42,16 @@ export class SettingsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.canGoBack = this.ionRouterOutlet.canGoBack();
+    this.currentUrl = this.router.url;
+
+    this.routerEvents = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+          this.previousUrl = this.currentUrl;
+          this.currentUrl  = event.url;
+      }
+    });
+
     // TODO Check action
     // this.action = this.route.snapshot.paramMap.get('action');
     // if (this.action === 'logout') this.logout();
@@ -131,6 +147,10 @@ export class SettingsPage implements OnInit {
       app_topic: mqttForm.value.mqtt_app_topic,
       ms_topic: mqttForm.value.mqtt_ms_topic
     });
+  }
+
+  ngOnDestroy() {
+    this.routerEvents.unsubscribe();
   }
 
 }

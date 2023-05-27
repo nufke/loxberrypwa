@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button *ngIf="canGoBack" defaultHref="previousUrl"></ion-back-button>
+      <ion-menu-button *ngIf="!canGoBack"></ion-menu-button>
     </ion-buttons>
     <ion-title>About</ion-title>
   </ion-toolbar>
@@ -9,7 +10,7 @@
 
 <ion-content fullscreen class="ion-padding">
   <img style="margin: auto; display: block;" src="assets/icons/svg/loxberry_logo.svg" width="100" />
-  <p style="text-align: center;"><b>LoxBerry Progressive Web App (PWA)</b></p>
+  <p style="text-align: center;"><b>LoxBerry App</b></p>
   <hr>
   <p>WARNING - This App is in ALPHA stage and unstable!</p>
 </ion-content>

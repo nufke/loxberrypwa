@@ -1,5 +1,3 @@
-import { StateChangeListener } from "@capacitor/app";
-
 /**
  * In-memory Application State for the PWA
  */
