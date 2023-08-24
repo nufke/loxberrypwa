@@ -1,3 +1,5 @@
+**IMPORTANT: This repository is not in active development anymore. Visit the [LoxBerry-Plugin-LoxBuddy](https://github.com/nufke/LoxBerry-Plugin-LoxBuddy) repo for the latest development of the Smart Home App.**
+
 # loxberrypwa
 
 **LoxBerry Progressive Web App (PWA)**
